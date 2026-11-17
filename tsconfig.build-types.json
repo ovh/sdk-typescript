@@ -1,0 +1,9 @@
+{
+  // Pass 2 of 3: the declarations, with their doc comments.
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "removeComments": false,
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}

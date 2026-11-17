@@ -1,0 +1,15 @@
+{
+  // The published package, pass 1 of 3: the JavaScript of the core and the generated
+  // sections, to dist/, without comments. The doc comments are in the declarations: in the
+  // JavaScript they would double its size. `npm run build` runs the three passes; this one
+  // alone is enough to run the code.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true
+  },
+  "include": ["src"]
+}

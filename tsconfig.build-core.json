@@ -1,0 +1,14 @@
+{
+  // Pass 3 of 3: the core again, with its comments, a source map and a declaration map. It
+  // overwrites what passes 1 and 2 wrote for src/core. The package ships src/core, so
+  // go-to-definition in an editor opens the real source. The generated sections get no maps:
+  // their declarations are the readable form already.
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "removeComments": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["src/core"]
+}

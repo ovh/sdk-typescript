@@ -1,0 +1,34 @@
+# OVHcloud TypeScript SDK
+
+> The TypeScript client for the OVHcloud API (github.com/ovh/sdk-typescript): 77
+> API sections and 6173 operations, as typed methods on one client. OAuth2
+> service-account authentication, typed errors, async iterators over lists, helpers that wait
+> for asynchronous work, and a read-only mode to explore an account safely. No runtime
+> dependency: it runs on Node.js, Deno and Bun. Most of the code is generated from the API's
+> OpenAPI specifications.
+
+Before you write a call, look up the method of its route in the operation index: guessing
+names from the URL is not reliable. The index also gives the IAM actions of each method: the
+ones the program calls are what its service account needs. The types of a section are in
+dist/api/<section>/models.d.ts of the installed package: grep `export interface X ` there.
+
+This is not node-ovh (`npm install ovh`, `require("ovh")`, `requestPromised`). Here:
+`import { Client } from "@ovhcloud/sdk"`, an OAuth2 service account instead of application
+keys and consumer keys, paths with `/v1/` or `/v2/` instead of `/1.0/`, and
+`client.get("/v1/me")` for a route with no method yet. A raw call takes its body as an
+argument, `client.post(path, body)`, and a type for its result, `client.get<T>(...)`, that
+nothing checks at run time. Build a path with values in it with `path("/v1/ip/{ip}", { ip })`:
+it escapes them.
+
+## Docs
+
+- [Guide](README.md): install and run on Node.js, Deno, Bun and edge workers, first program, coming from node-ovh, finding an operation and its types, arguments, updating an object, pagination, waiting for asynchronous work, errors, configuration, raw calls, testing, observability, troubleshooting
+- [Examples](examples/README.md): small programs to run or copy: list with an iterator, create then wait, a DNS record, a cart order, a raw call with `path()`, error handling
+- [Agent notes](AGENTS.md): the conventions in short, for AI coding agents
+- [Operation index](index/README.md): one index/<section>.jsonl per section, 6925 methods in all, each line a method with its route, TypeScript signature and IAM actions
+
+## Optional
+
+- [Changelog](CHANGELOG.md): what changed in each release
+- [Contributing](CONTRIBUTING.md): the src/api/ directory is generated, how to report a problem
+- [OVHcloud API console](https://api.ovh.com): every route, with its parameters
