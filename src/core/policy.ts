@@ -100,7 +100,14 @@ function compile(option: string, patterns: readonly string[]): RegExp[] {
     if ((p.match(/\[/g) ?? []).length !== (p.match(/\]/g) ?? []).length) {
       throw new ConfigurationError(`${option}: pattern "${p}": unbalanced brackets`);
     }
-    return globToRegExp(p);
+    try {
+      return globToRegExp(p);
+    } catch (err) {
+      // RegExp refuses some classes, such as "[z-a]". A bad option is a ConfigurationError.
+      throw new ConfigurationError(`${option}: pattern "${p}": not a valid pattern`, {
+        cause: err,
+      });
+    }
   });
 }
 
@@ -111,6 +118,9 @@ function matchAny(patterns: readonly RegExp[], name: string): boolean {
 /**
  * Python's fnmatch.fnmatchcase pattern as a RegExp: "*" is any run of characters, "?" one
  * character, "[seq]" one character of seq, "[!seq]" one character not in seq. Case-sensitive.
+ * "[!]" is any one character. A class RegExp refuses, such as "[z-a]", throws a SyntaxError.
+ * Both are as in the Java SDK. Python's fnmatch differs: "[!]" is the text "[!]", and "[z-a]"
+ * matches nothing.
  */
 export function globToRegExp(pattern: string): RegExp {
   let re = "";

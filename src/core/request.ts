@@ -8,7 +8,7 @@
  * @module
  */
 
-import { InvalidRequestError } from "./errors.js";
+import { InvalidRequestError, ResponseTooLargeError } from "./errors.js";
 import type { Operation } from "./registry.js";
 
 /** Name and value pairs of a query or headers. A name may come several times. */
@@ -149,6 +149,9 @@ export function checkPath(path: string, method: string, operation: Operation | u
   }
 }
 
+// What a raw path keeps as it is: the characters RFC 3986 allows in a path, and "%".
+const RAW_PATH_ENCODED = /[^A-Za-z0-9\-._~!$&'()*+,;=:@/%]/gu;
+
 /**
  * The path without its version: "/1.0/me" gives "/me". A path with no version is returned as
  * it is.
@@ -167,6 +170,31 @@ function versioned(path: string, operation: Operation | undefined): string {
     version = `/${operation.path.split("/", 2)[1]}`;
   }
   return version + unversioned(path);
+}
+
+/**
+ * Make a path, without its query, safe to put in a URL. The path is taken as already escaped.
+ *
+ * Like the Java SDK: letters, digits, "-._~!$&'()*+,;=:@/" and "%" are kept, and any other
+ * character is percent-encoded as UTF-8. So a "#" is sent as "%23", part of the path: URL
+ * would make it a fragment. A "\" is sent as "%5C": URL would make it a "/" and then remove
+ * the ".." segments around it. In both cases the path sent would not be the one the registry
+ * and the policy checked. A "%" that does not start an escape ("%zz") and a lone surrogate
+ * are an InvalidRequestError. The Python SDK does not encode or check a raw path this way yet.
+ */
+export function escapeRawPath(path: string): string {
+  if (/%(?![0-9A-Fa-f]{2})/.test(path)) {
+    throw new InvalidRequestError(`path "${path}": a % must start an escape such as %2F`);
+  }
+  try {
+    return path.replace(RAW_PATH_ENCODED, (c) => encodeURIComponent(c));
+  } catch (err) {
+    // encodeURIComponent throws a URIError on a lone surrogate.
+    throw new InvalidRequestError(
+      "cannot send a value with a lone surrogate in a path or a query",
+      { cause: err },
+    );
+  }
 }
 
 /**
@@ -363,4 +391,45 @@ function toBase64(bytes: Uint8Array): string {
     binary += String.fromCharCode(b);
   }
   return btoa(binary);
+}
+
+/** The message of a response larger than the cap. */
+export function tooLarge(cap: number): string {
+  return `the response exceeds the maximum response size (${cap} bytes)`;
+}
+
+/**
+ * Read a response body, failing (never truncating) past cap bytes (0: no cap). Past the cap,
+ * it cancels the body and throws a ResponseTooLargeError. Other errors are those of the body.
+ */
+export async function readBody(response: Response, cap: number): Promise<Uint8Array> {
+  if (!response.body) {
+    return new Uint8Array();
+  }
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      size += value.length;
+      if (cap > 0 && size > cap) {
+        void reader.cancel().catch(() => undefined);
+        throw new ResponseTooLargeError(tooLarge(cap));
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const out = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    out.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return out;
 }

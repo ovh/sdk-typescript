@@ -499,10 +499,10 @@ prints a useful line.
 | Error | When |
 |---|---|
 | `ConfigurationError` | the client cannot be created: no credentials, an unknown region |
-| `TokenError` | the token endpoint refused the credentials, did not answer in time, or could not be reached. The message never holds the secret. |
+| `TokenError` | the token endpoint refused the credentials, did not answer in time, answered with more than 1 MiB, or could not be reached. The message never holds the secret. |
 | `TransportError` | no response, or the body could not be read: connection refused, DNS, TLS. Never retried. fetch's error is the `cause`. |
 | `RequestTimeoutError` | a `TransportError`: the request took more than its `timeout`. Never retried: the server may have done the work. Match it with `instanceof`, its `name` is not `"TimeoutError"`. |
-| `InvalidRequestError` | refused before sending: a path without `/v1/` or `/v2/`, an empty path parameter, a `.` or `..` path segment, a header value that is not ASCII |
+| `InvalidRequestError` | refused before sending: a path without `/v1/` or `/v2/`, an empty path parameter, a `.` or `..` path segment, a `%` that does not start an escape, a header value that is not ASCII |
 | `NotAllowedError` | refused by `readOnly` or `allowedOperations`. Nothing was sent. |
 | `ResponseTooLargeError` | the body is larger than `maxResponseBytes` |
 | `DecodeError` | a 2xx body is not JSON, or a page of a list is not a list |
@@ -542,6 +542,10 @@ token. So does `client.vrack.withOptions(...)` for one section.
 seconds. Only `GET`, `HEAD` and `DELETE` are retried, on 429, 503 and 504, and a `Retry-After`
 header is followed. `POST`, `PUT` and `PATCH` are never retried: on this API they can start
 tasks or place orders.
+
+**Token requests.** The SDK gets the OAuth2 token of `clientId` and `clientSecret` with the
+`timeout` of the client, or 30 seconds when there is none. A token response larger than 1 MiB
+is a `TokenError`.
 
 **Redirects are not followed.** The API does not redirect. A `3xx` comes back as an
 `ApiError`, so you see it. Following it would send the request, and its token, to a route
@@ -618,6 +622,11 @@ for await (const policy of client.iterate("/v2/iam/policy")) {
 
 The client's policy, retries, errors and debug logs apply the same way.
 [examples/raw-call.ts](examples/raw-call.ts) is a full program.
+
+The path is sent as you give it, already escaped. Any character a path cannot hold is
+percent-encoded: a `#` is part of the path, sent as `%23`, and never a fragment. A `\` is sent
+as `%5C`, never as a `/`. A `%` must start an escape such as `%2F`, or the call is an
+`InvalidRequestError`.
 
 ---
 

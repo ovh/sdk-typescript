@@ -8,11 +8,17 @@
  * @module
  */
 
-import { TokenError } from "./errors.js";
-import { escapeQuery } from "./request.js";
+import { ResponseTooLargeError, TokenError } from "./errors.js";
+import { escapeQuery, readBody } from "./request.js";
 
 // A token is renewed this many milliseconds before it expires, as golang.org/x/oauth2 does.
 const EXPIRY_DELTA = 10_000;
+
+/** The timeout of a token request when none is given, in milliseconds. */
+const DEFAULT_TIMEOUT = 30_000;
+
+// A token response is small. A larger body is an error, not a memory problem.
+const MAX_BODY = 1 << 20;
 
 /**
  * Gives the bearer token of each request.
@@ -58,7 +64,7 @@ export interface OAuth2ClientCredentialsOptions {
   fetchOptions?: RequestInit | undefined;
   /**
    * Milliseconds one token request may take, from sending it to the end of the response
-   * body. Default: no timeout. Client gives its own `timeout`.
+   * body. 0: no timeout. Default: 30 seconds. Client gives its own `timeout`.
    */
   timeout?: number | undefined;
   /** The clock, in milliseconds. Tests replace it. */
@@ -71,11 +77,10 @@ export interface OAuth2ClientCredentialsOptions {
  * The token is fetched on first use, reused until 10 seconds before it expires, then fetched
  * again. Calls that need a token at the same time share one fetch.
  *
- * With a `timeout`, a token request that takes longer throws a TokenError, as in Python. The
- * timeout covers the whole token request and its body. Python's httpx timeout is per step
- * (connect, each read) and has a 30s connect timeout by default. Here there is no limit
- * unless a timeout is set. A caller's signal stops that caller's wait at once, but not the
- * shared fetch: the others may still need it.
+ * Each token request has a timeout (see `timeout`), and a response larger than 1 MiB is a
+ * TokenError. A redirect is a TokenError too, and is never followed. The timeout and the size
+ * cap are those of the Java SDK. A caller's signal stops that caller's wait at once, but not
+ * the shared fetch: the others may still need it.
  */
 export class OAuth2ClientCredentials implements TokenSource {
   readonly tokenUrl: string;
@@ -101,7 +106,7 @@ export class OAuth2ClientCredentials implements TokenSource {
     this.#fetch = options.fetch ?? ((input, init) => fetch(input, init));
     this.#fetchOptions = options.fetchOptions ?? {};
     this.#clock = options.clock ?? (() => performance.now());
-    const timeout = options.timeout ?? 0;
+    const timeout = options.timeout ?? DEFAULT_TIMEOUT;
     if (!(timeout >= 0) || !Number.isFinite(timeout)) {
       throw new TypeError(
         `OAuth2ClientCredentials: timeout must be milliseconds, 0 or more, not ${timeout}`,
@@ -122,7 +127,7 @@ export class OAuth2ClientCredentials implements TokenSource {
       return Promise.resolve(this.#token);
     }
     // One fetch for every caller that needs a token now. The fetch does not use a caller's
-    // signal: one caller giving up must not fail the others.
+    // signal: one caller giving up must not fail the others. It has its own timeout.
     this.#pending ??= this.#fetchToken().finally(() => {
       this.#pending = undefined;
     });
@@ -175,9 +180,12 @@ export class OAuth2ClientCredentials implements TokenSource {
       const pair = `${formEscape(this.#clientId)}:${formEscape(this.#clientSecret)}`;
       headers.set("Authorization", `Basic ${btoa(pair)}`);
     }
-    // The timer covers the request and its body. It is the only signal of the fetch: see
-    // token().
+    const where = `obtaining an OAuth2 token from ${this.tokenUrl}`;
+    // The timer covers the request and its body. A caller's signal never stops the shared
+    // fetch (see token()), but a signal of fetchOptions does.
     const timer = this.#timeout > 0 ? AbortSignal.timeout(this.#timeout) : undefined;
+    const own = this.#fetchOptions.signal;
+    const signal = own && timer ? AbortSignal.any([own, timer]) : (timer ?? own);
     let resp: Response;
     let body: string;
     try {
@@ -187,16 +195,17 @@ export class OAuth2ClientCredentials implements TokenSource {
         headers,
         body: form.toString(),
         redirect: "error",
-        ...(timer ? { signal: timer } : {}),
+        ...(signal ? { signal } : {}),
       });
-      body = await resp.text();
+      body = new TextDecoder().decode(await readBody(resp, MAX_BODY));
     } catch (err) {
-      const detail = timer?.aborted
-        ? `timed out: the request took more than ${this.#timeout}ms`
-        : String(err);
-      throw new TokenError(
-        this.#hide(`obtaining an OAuth2 token from ${this.tokenUrl}: ${detail}`),
-      );
+      if (err instanceof ResponseTooLargeError) {
+        throw new TokenError(`${where}: ${err.message}`);
+      }
+      if (timer?.aborted) {
+        throw new TokenError(`${where}: timed out: the request took more than ${this.#timeout}ms`);
+      }
+      throw new TokenError(this.#hide(`${where}: ${String(err)}`));
     }
     const start = this.#clock();
     if (resp.status < 200 || resp.status > 299) {

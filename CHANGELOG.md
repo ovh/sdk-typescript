@@ -2,6 +2,12 @@
 
 Notable changes to the SDK. Changes of behaviour are called out.
 
+## 0.2.1 (2026-11-18)
+
+Compared with 0.2.0.
+
+No change.
+
 ## 0.2.0 (2026-11-17)
 
 First release.

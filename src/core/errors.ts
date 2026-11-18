@@ -283,7 +283,8 @@ export class TransportError extends OvhError {}
 export class RequestTimeoutError extends TransportError {}
 
 /**
- * The OAuth2 token endpoint refused the credentials or could not be reached.
+ * The OAuth2 token endpoint refused the credentials, timed out, answered with more than 1 MiB,
+ * or could not be reached.
  *
  * The message never contains the client secret.
  */

@@ -58,8 +58,7 @@ export interface ClientOptions {
    * the Go SDK's WithTimeout. Each retry attempt has its own. A request that takes longer
    * throws RequestTimeoutError. The OAuth2 token request has the same timeout, and throws
    * TokenError. withOptions does not change the token request timeout: the token source is
-   * shared. Default: no timeout, so no limit on the token request either. Python has a 30s
-   * connect timeout by default.
+   * shared. Default: no timeout. The token request then has one of 30 seconds.
    */
   timeout?: number | undefined;
   /** A RetryPolicy, or true for RETRY_DEFAULT. Off by default. */
@@ -168,7 +167,14 @@ export class Client {
       endpoint,
       fetch: fetchFn,
       fetchOptions,
-      tokens: tokenSource(options, region, fetchFn, fetchOptions, timeout),
+      // The token request has the client's timeout, or 30 seconds when there is none.
+      tokens: tokenSource(
+        options,
+        region,
+        fetchFn,
+        fetchOptions,
+        options.timeout === undefined ? undefined : timeout,
+      ),
       userAgent,
       headers: checkHeaders(options.headers),
       retry: retryPolicy(options.retry),
@@ -245,9 +251,10 @@ export class Client {
    * Call any route and return the decoded JSON, or undefined.
    *
    * path has the API version: "/v1/me", "/v2/iam/policy". A path without it, "/me" or
-   * "/1.0/me", throws InvalidRequestError. Build a path with values in it with `path()`, which
-   * escapes them. A response that is a bare, unquoted string is returned as a string. An error
-   * status throws ApiError, like the generated methods:
+   * "/1.0/me", throws InvalidRequestError. It is sent already escaped: a "#" or a "\" is part
+   * of the path, and a "%" must start an escape. Build a path with values in it with `path()`,
+   * which escapes them. A response that is a bare, unquoted string is returned as a string. An
+   * error status throws ApiError, like the generated methods:
    *
    * ```ts
    * const me = await client.request<{ nichandle: string }>("GET", "/v1/me");
@@ -362,7 +369,7 @@ function tokenSource(
   region: Region,
   fetchFn: typeof fetch,
   fetchOptions: RequestInit,
-  timeout: number,
+  timeout: number | undefined,
 ): TokenSource {
   if (options.tokenSource !== undefined) {
     if (typeof options.tokenSource?.token !== "function") {

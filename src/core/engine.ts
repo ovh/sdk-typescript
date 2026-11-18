@@ -28,8 +28,11 @@ import {
   checkHeader,
   checkPath,
   encodeBody,
+  escapeRawPath,
   isVersioned,
   type Request,
+  readBody,
+  tooLarge,
   unversioned,
 } from "./request.js";
 import {
@@ -170,9 +173,10 @@ export class Engine {
 
     const [path, existing = ""] = splitOnce(req.path, "?");
     const query = buildQuery(existing, req.query ?? []);
+    const sent = escapeRawPath(path);
     let url: URL;
     try {
-      url = new URL(this.config.endpoint + path + (query ? `?${query}` : ""));
+      url = new URL(this.config.endpoint + sent + (query ? `?${query}` : ""));
     } catch (err) {
       throw new InvalidRequestError(`path "${req.path}": ${String(err)}`);
     }
@@ -337,40 +341,14 @@ async function read(
   timer: AbortSignal | undefined,
   timeout: number,
 ): Promise<Uint8Array> {
-  if (!response.body) {
-    return new Uint8Array();
-  }
-  const reader = response.body.getReader();
-  const chunks: Uint8Array[] = [];
-  let size = 0;
   try {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-      size += value.length;
-      if (cap > 0 && size > cap) {
-        void reader.cancel().catch(() => undefined);
-        throw new ResponseTooLargeError(tooLarge(cap));
-      }
-      chunks.push(value);
-    }
+    return await readBody(response, cap);
   } catch (err) {
     if (err instanceof ResponseTooLargeError) {
       throw err;
     }
     throw transportError(what, err, signal, timer, timeout);
-  } finally {
-    reader.releaseLock();
   }
-  const out = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    out.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return out;
 }
 
 /**
@@ -430,10 +408,6 @@ function setHeader(pairs: Array<[string, string]>, name: string, value: string):
 function splitOnce(s: string, sep: string): [string, string?] {
   const i = s.indexOf(sep);
   return i < 0 ? [s] : [s.slice(0, i), s.slice(i + 1)];
-}
-
-function tooLarge(cap: number): string {
-  return `the response exceeds the maximum response size (${cap} bytes)`;
 }
 
 export { sleep as defaultSleep };
