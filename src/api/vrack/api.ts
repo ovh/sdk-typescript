@@ -34,7 +34,7 @@ import { OPS } from "./registry.js";
  */
 export class VrackApi extends SectionApi {
   /**
-   * listVracks calls GET /v1/vrack: List vRacks. Returns the service names of the vRacks of the account.
+   * listVracks calls GET /v1/vrack: List vRacks
    *
    * Requires the IAM action vrack:apiovh:get.
    *
@@ -90,7 +90,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getVrack calls GET /v1/vrack/{serviceName}: Get a vRack. Returns the name and description of the vRack.
+   * getVrack calls GET /v1/vrack/{serviceName}: Get a vRack
    *
    * Requires the IAM action vrack:apiovh:get.
    *
@@ -113,7 +113,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allVracks iterates over GET /v1/vrack (List vRacks. Returns the service names of the vRacks of the account.).
+   * allVracks iterates over GET /v1/vrack (List vRacks).
    *
    * It lists the IDs with {@link VrackApi.listVracks}, then gets each object with
    * {@link VrackApi.getVrack}, only when the loop reaches it. An object deleted in the
@@ -142,7 +142,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * updateVrack calls PUT /v1/vrack/{serviceName}: Update a vRack. Updates the name or description of the vRack.
+   * updateVrack calls PUT /v1/vrack/{serviceName}: Update a vRack
    *
    * Requires the IAM action vrack:apiovh:put.
    *
@@ -213,7 +213,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listCloudProjects calls GET /v1/vrack/{serviceName}/cloudProject: List projects. Returns the identifiers of the Public Cloud projects attached to the vRack.
+   * listCloudProjects calls GET /v1/vrack/{serviceName}/cloudProject: List attached Public Cloud projects
    *
    * Requires the IAM action vrack:apiovh:cloudProject/get.
    *
@@ -235,7 +235,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createCloudProject calls POST /v1/vrack/{serviceName}/cloudProject: Attach a project. Attaches a Public Cloud project to the vRack. Returns the task that performs it.
+   * createCloudProject calls POST /v1/vrack/{serviceName}/cloudProject: Attach a Public Cloud project
    *
    * Requires the IAM actions vrack:apiovh:cloudProject/attach,
    * publicCloudProject:apiovh:vrack/attach.
@@ -265,7 +265,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getCloudProject calls GET /v1/vrack/{serviceName}/cloudProject/{project}: Get a project. Returns the attached Public Cloud project and its vRack.
+   * getCloudProject calls GET /v1/vrack/{serviceName}/cloudProject/{project}: Get an attached Public Cloud project
    *
    * Requires the IAM action vrack:apiovh:cloudProject/get.
    *
@@ -293,7 +293,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allCloudProjects iterates over GET /v1/vrack/{serviceName}/cloudProject (List projects. Returns the identifiers of the Public Cloud projects attached to the vRack.).
+   * allCloudProjects iterates over GET /v1/vrack/{serviceName}/cloudProject (List attached Public Cloud projects).
    *
    * It lists the IDs with {@link VrackApi.listCloudProjects}, then gets each object with
    * {@link VrackApi.getCloudProject}, only when the loop reaches it. An object deleted in the
@@ -319,7 +319,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteCloudProject calls DELETE /v1/vrack/{serviceName}/cloudProject/{project}: Detach a project
+   * deleteCloudProject calls DELETE /v1/vrack/{serviceName}/cloudProject/{project}: Detach a Public Cloud project
    *
    * Detaches the Public Cloud project from the vRack. Returns the task that performs it.
    *
@@ -380,7 +380,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedClouds calls GET /v1/vrack/{serviceName}/dedicatedCloud: List services. Returns the Hosted Private Cloud services attached to the vRack.
+   * listDedicatedClouds calls GET /v1/vrack/{serviceName}/dedicatedCloud: List attached Managed VMware vSphere services
    *
    * Requires the IAM action vrack:apiovh:pccVMware/get.
    *
@@ -402,7 +402,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createDedicatedCloud calls POST /v1/vrack/{serviceName}/dedicatedCloud: Attach a service
+   * createDedicatedCloud calls POST /v1/vrack/{serviceName}/dedicatedCloud: Attach a Managed VMware vSphere service
    *
    * Attaches a Hosted Private Cloud service to the vRack. Returns the task that performs it.
    *
@@ -433,7 +433,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getDedicatedCloud calls GET /v1/vrack/{serviceName}/dedicatedCloud/{dedicatedCloud}: Get a service. Returns the attached Hosted Private Cloud service and its vRack.
+   * getDedicatedCloud calls GET /v1/vrack/{serviceName}/dedicatedCloud/{dedicatedCloud}: Get an attached Managed VMware vSphere service
    *
    * Requires the IAM action vrack:apiovh:pccVMware/get.
    *
@@ -461,7 +461,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allDedicatedClouds iterates over GET /v1/vrack/{serviceName}/dedicatedCloud (List services. Returns the Hosted Private Cloud services attached to the vRack.).
+   * allDedicatedClouds iterates over GET /v1/vrack/{serviceName}/dedicatedCloud (List attached Managed VMware vSphere services).
    *
    * It lists the IDs with {@link VrackApi.listDedicatedClouds}, then gets each object with
    * {@link VrackApi.getDedicatedCloud}, only when the loop reaches it. An object deleted in the
@@ -487,7 +487,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteDedicatedCloud calls DELETE /v1/vrack/{serviceName}/dedicatedCloud/{dedicatedCloud}: Detach a service
+   * deleteDedicatedCloud calls DELETE /v1/vrack/{serviceName}/dedicatedCloud/{dedicatedCloud}: Detach a Managed VMware vSphere service
    *
    * Detaches the Hosted Private Cloud service from the vRack. Returns the task that performs it.
    *
@@ -517,7 +517,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedCloudDatacenters calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter: List datacenters. Returns the Private Cloud datacenters attached to the vRack.
+   * listDedicatedCloudDatacenters calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter: List attached Managed VMware vSphere datacenters
    *
    * Requires the IAM action vrack:apiovh:dedicatedCloudDatacenter/get.
    *
@@ -539,7 +539,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getDedicatedCloudDatacenter calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}: Get a datacenter. Returns the attached Private Cloud datacenter and its vRack.
+   * getDedicatedCloudDatacenter calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}: Get an attached Managed VMware vSphere datacenter
    *
    * Requires the IAM action vrack:apiovh:dedicatedCloudDatacenter/get.
    *
@@ -567,7 +567,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allDedicatedCloudDatacenters iterates over GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter (List datacenters. Returns the Private Cloud datacenters attached to the vRack.).
+   * allDedicatedCloudDatacenters iterates over GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter (List attached Managed VMware vSphere datacenters).
    *
    * It lists the IDs with {@link VrackApi.listDedicatedCloudDatacenters}, then gets each object with
    * {@link VrackApi.getDedicatedCloudDatacenter}, only when the loop reaches it. An object deleted in the
@@ -593,7 +593,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedCloudDatacenterAllowedVracks calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}/allowedVrack: List target vRacks. Returns the vRacks the Private Cloud datacenter can be moved to.
+   * listDedicatedCloudDatacenterAllowedVracks calls GET /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}/allowedVrack: List vRacks a datacenter can move to
    *
    * Requires the IAM action vrack:apiovh:dedicatedCloudDatacenter/allowedVrack/get.
    *
@@ -620,7 +620,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * moveDedicatedCloudDatacenter calls POST /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}/move: Move a datacenter
+   * moveDedicatedCloudDatacenter calls POST /v1/vrack/{serviceName}/dedicatedCloudDatacenter/{datacenter}/move: Move a Managed VMware vSphere datacenter
    *
    * Moves the Private Cloud datacenter to another vRack. Returns the task that performs it.
    *
@@ -653,7 +653,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedConnects calls GET /v1/vrack/{serviceName}/dedicatedConnect: List links. Returns the names of the Dedicated Connect links attached to the vRack.
+   * listDedicatedConnects calls GET /v1/vrack/{serviceName}/dedicatedConnect: List attached Dedicated Connect links
    *
    * Requires the IAM action vrack:apiovh:dedicatedConnect/get.
    *
@@ -675,7 +675,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getDedicatedConnect calls GET /v1/vrack/{serviceName}/dedicatedConnect/{name}: Get a link. Returns the name of the Dedicated Connect link.
+   * getDedicatedConnect calls GET /v1/vrack/{serviceName}/dedicatedConnect/{name}: Get a Dedicated Connect link
    *
    * Requires the IAM action vrack:apiovh:dedicatedConnect/get.
    *
@@ -703,7 +703,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allDedicatedConnects iterates over GET /v1/vrack/{serviceName}/dedicatedConnect (List links. Returns the names of the Dedicated Connect links attached to the vRack.).
+   * allDedicatedConnects iterates over GET /v1/vrack/{serviceName}/dedicatedConnect (List attached Dedicated Connect links).
    *
    * It lists the IDs with {@link VrackApi.listDedicatedConnects}, then gets each object with
    * {@link VrackApi.getDedicatedConnect}, only when the loop reaches it. An object deleted in the
@@ -729,7 +729,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * updateDedicatedConnect calls PUT /v1/vrack/{serviceName}/dedicatedConnect/{name}: Update a link. Updates the name of the Dedicated Connect link.
+   * updateDedicatedConnect calls PUT /v1/vrack/{serviceName}/dedicatedConnect/{name}: Update a Dedicated Connect link
    *
    * Requires the IAM action vrack:apiovh:dedicatedConnect/edit.
    *
@@ -759,7 +759,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedServers calls GET /v1/vrack/{serviceName}/dedicatedServer: List servers (legacy)
+   * listDedicatedServers calls GET /v1/vrack/{serviceName}/dedicatedServer: List attached dedicated servers (legacy)
    *
    * Returns the dedicated servers attached as a whole to the vRack, in the legacy mode. Attaching
    * by interface replaces it.
@@ -784,7 +784,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createDedicatedServer calls POST /v1/vrack/{serviceName}/dedicatedServer: Attach a server (legacy)
+   * createDedicatedServer calls POST /v1/vrack/{serviceName}/dedicatedServer: Attach a dedicated server (legacy)
    *
    * Attaches a whole dedicated server to the vRack, in the legacy mode. Prefer attaching one of its
    * interfaces. Returns the task that performs it.
@@ -817,7 +817,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getDedicatedServer calls GET /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}: Get a server link (legacy)
+   * getDedicatedServer calls GET /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}: Get an attached dedicated server (legacy)
    *
    * Returns the attached server and its vRack. This is the legacy whole-server link, not an
    * interface link.
@@ -848,7 +848,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allDedicatedServers iterates over GET /v1/vrack/{serviceName}/dedicatedServer (List servers (legacy)).
+   * allDedicatedServers iterates over GET /v1/vrack/{serviceName}/dedicatedServer (List attached dedicated servers (legacy)).
    *
    * It lists the IDs with {@link VrackApi.listDedicatedServers}, then gets each object with
    * {@link VrackApi.getDedicatedServer}, only when the loop reaches it. An object deleted in the
@@ -874,7 +874,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteDedicatedServer calls DELETE /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}: Detach a server (legacy)
+   * deleteDedicatedServer calls DELETE /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}: Detach a dedicated server (legacy)
    *
    * Detaches a whole dedicated server from the vRack, in the legacy mode. Returns the task that
    * performs it.
@@ -905,7 +905,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedServerMrtgs calls GET /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}/mrtg: Get traffic graph values (deprecated)
+   * listDedicatedServerMrtgs calls GET /v1/vrack/{serviceName}/dedicatedServer/{dedicatedServer}/mrtg: Get dedicated server traffic values (deprecated)
    *
    * Returns the traffic, packets or errors measured on the vRack port of the server, for a period
    * from hourly to yearly. Deprecated: use the dedicated server statistics instead.
@@ -947,7 +947,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedServerInterfaces calls GET /v1/vrack/{serviceName}/dedicatedServerInterface: List server interfaces. Returns the dedicated server network interfaces attached to the vRack.
+   * listDedicatedServerInterfaces calls GET /v1/vrack/{serviceName}/dedicatedServerInterface: List attached dedicated server interfaces
    *
    * Requires the IAM action vrack:apiovh:dedicatedServerInterface/get.
    *
@@ -969,7 +969,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createDedicatedServerInterface calls POST /v1/vrack/{serviceName}/dedicatedServerInterface: Attach a server interface
+   * createDedicatedServerInterface calls POST /v1/vrack/{serviceName}/dedicatedServerInterface: Attach a dedicated server interface
    *
    * Attaches a dedicated server network interface to the vRack. Returns the task that performs it.
    *
@@ -1001,7 +1001,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getDedicatedServerInterface calls GET /v1/vrack/{serviceName}/dedicatedServerInterface/{dedicatedServerInterface}: Get a server interface. Returns the attached interface and its vRack.
+   * getDedicatedServerInterface calls GET /v1/vrack/{serviceName}/dedicatedServerInterface/{dedicatedServerInterface}: Get an attached dedicated server interface
    *
    * Requires the IAM action vrack:apiovh:dedicatedServerInterface/get.
    *
@@ -1029,7 +1029,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allDedicatedServerInterfaces iterates over GET /v1/vrack/{serviceName}/dedicatedServerInterface (List server interfaces. Returns the dedicated server network interfaces attached to the vRack.).
+   * allDedicatedServerInterfaces iterates over GET /v1/vrack/{serviceName}/dedicatedServerInterface (List attached dedicated server interfaces).
    *
    * It lists the IDs with {@link VrackApi.listDedicatedServerInterfaces}, then gets each object with
    * {@link VrackApi.getDedicatedServerInterface}, only when the loop reaches it. An object deleted in the
@@ -1055,7 +1055,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteDedicatedServerInterface calls DELETE /v1/vrack/{serviceName}/dedicatedServerInterface/{dedicatedServerInterface}: Detach a server interface. Detaches the interface from the vRack. Returns the task that performs it.
+   * deleteDedicatedServerInterface calls DELETE /v1/vrack/{serviceName}/dedicatedServerInterface/{dedicatedServerInterface}: Detach a dedicated server interface
    *
    * Requires the IAM action vrack:apiovh:dedicatedServerInterface/detach.
    *
@@ -1083,7 +1083,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listDedicatedServerInterfaceDetails calls GET /v1/vrack/{serviceName}/dedicatedServerInterfaceDetails: List server interface details. Returns the attached interfaces with the server each one belongs to.
+   * listDedicatedServerInterfaceDetails calls GET /v1/vrack/{serviceName}/dedicatedServerInterfaceDetails: List attached dedicated server interface details
    *
    * Requires the IAM action vrack:apiovh:dedicatedServerInterfaceDetails/get.
    *
@@ -1155,7 +1155,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listIps calls GET /v1/vrack/{serviceName}/ip: List blocks. Returns the Additional IPv4 blocks routed in the vRack.
+   * listIps calls GET /v1/vrack/{serviceName}/ip: List attached Additional IPv4 blocks
    *
    * Requires the IAM action vrack:apiovh:ip/get.
    *
@@ -1177,7 +1177,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createIp calls POST /v1/vrack/{serviceName}/ip: Attach a block
+   * createIp calls POST /v1/vrack/{serviceName}/ip: Attach an Additional IPv4 block
    *
    * Routes an Additional IPv4 block in the vRack, in the given region. Returns the task that
    * performs it.
@@ -1209,7 +1209,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getIp calls GET /v1/vrack/{serviceName}/ip/{ip}: Get a block. Returns the Additional IPv4 block, its gateway, its region and its public routing type.
+   * getIp calls GET /v1/vrack/{serviceName}/ip/{ip}: Get an attached Additional IPv4 block
    *
    * Requires the IAM action vrack:apiovh:ip/get.
    *
@@ -1237,7 +1237,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allIps iterates over GET /v1/vrack/{serviceName}/ip (List blocks. Returns the Additional IPv4 blocks routed in the vRack.).
+   * allIps iterates over GET /v1/vrack/{serviceName}/ip (List attached Additional IPv4 blocks).
    *
    * It lists the IDs with {@link VrackApi.listIps}, then gets each object with
    * {@link VrackApi.getIp}, only when the loop reaches it. An object deleted in the
@@ -1260,7 +1260,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteIp calls DELETE /v1/vrack/{serviceName}/ip/{ip}: Detach a block. Removes the Additional IPv4 block from the vRack. Returns the task that performs it.
+   * deleteIp calls DELETE /v1/vrack/{serviceName}/ip/{ip}: Detach an Additional IPv4 block
    *
    * Requires the IAM action vrack:apiovh:ip/detach.
    *
@@ -1288,7 +1288,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listIpLoadbalancings calls GET /v1/vrack/{serviceName}/ipLoadbalancing: List load balancers. Returns the IP Load Balancer services attached to the vRack.
+   * listIpLoadbalancings calls GET /v1/vrack/{serviceName}/ipLoadbalancing: List attached IP Load Balancer services
    *
    * Requires the IAM action vrack:apiovh:ipLoadbalancing/get.
    *
@@ -1310,7 +1310,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createIpLoadbalancing calls POST /v1/vrack/{serviceName}/ipLoadbalancing: Attach a load balancer
+   * createIpLoadbalancing calls POST /v1/vrack/{serviceName}/ipLoadbalancing: Attach an IP Load Balancer service
    *
    * Attaches an IP Load Balancer service to the vRack. Returns the task that performs it.
    *
@@ -1342,7 +1342,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getIpLoadbalancing calls GET /v1/vrack/{serviceName}/ipLoadbalancing/{ipLoadbalancing}: Get a load balancer. Returns the attached IP Load Balancer service and its vRack.
+   * getIpLoadbalancing calls GET /v1/vrack/{serviceName}/ipLoadbalancing/{ipLoadbalancing}: Get an attached IP Load Balancer service
    *
    * Requires the IAM action vrack:apiovh:ipLoadbalancing/get.
    *
@@ -1370,7 +1370,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allIpLoadbalancings iterates over GET /v1/vrack/{serviceName}/ipLoadbalancing (List load balancers. Returns the IP Load Balancer services attached to the vRack.).
+   * allIpLoadbalancings iterates over GET /v1/vrack/{serviceName}/ipLoadbalancing (List attached IP Load Balancer services).
    *
    * It lists the IDs with {@link VrackApi.listIpLoadbalancings}, then gets each object with
    * {@link VrackApi.getIpLoadbalancing}, only when the loop reaches it. An object deleted in the
@@ -1396,7 +1396,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteIpLoadbalancing calls DELETE /v1/vrack/{serviceName}/ipLoadbalancing/{ipLoadbalancing}: Detach a load balancer
+   * deleteIpLoadbalancing calls DELETE /v1/vrack/{serviceName}/ipLoadbalancing/{ipLoadbalancing}: Detach an IP Load Balancer service
    *
    * Detaches the IP Load Balancer service from the vRack. Returns the task that performs it.
    *
@@ -1426,7 +1426,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listIpv6s calls GET /v1/vrack/{serviceName}/ipv6: List blocks. Returns the Additional IPv6 blocks attached to the vRack.
+   * listIpv6s calls GET /v1/vrack/{serviceName}/ipv6: List attached Additional IPv6 blocks
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1448,7 +1448,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createIpv6 calls POST /v1/vrack/{serviceName}/ipv6: Attach a block. Attaches an Additional IPv6 block to the vRack. Returns the task that performs it.
+   * createIpv6 calls POST /v1/vrack/{serviceName}/ipv6: Attach an Additional IPv6 block
    *
    * Requires the IAM actions vrack:apiovh:ipv6/attach, ip:apiovh:vrack/attach.
    *
@@ -1477,7 +1477,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getIpv6 calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}: Get a block. Returns the attached Additional IPv6 block.
+   * getIpv6 calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}: Get an attached Additional IPv6 block
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1505,7 +1505,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allIpv6s iterates over GET /v1/vrack/{serviceName}/ipv6 (List blocks. Returns the Additional IPv6 blocks attached to the vRack.).
+   * allIpv6s iterates over GET /v1/vrack/{serviceName}/ipv6 (List attached Additional IPv6 blocks).
    *
    * It lists the IDs with {@link VrackApi.listIpv6s}, then gets each object with
    * {@link VrackApi.getIpv6}, only when the loop reaches it. An object deleted in the
@@ -1528,7 +1528,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteIpv6 calls DELETE /v1/vrack/{serviceName}/ipv6/{ipv6}: Detach a block. Removes the Additional IPv6 block from the vRack. Returns the task that performs it.
+   * deleteIpv6 calls DELETE /v1/vrack/{serviceName}/ipv6/{ipv6}: Detach an Additional IPv6 block
    *
    * Requires the IAM action vrack:apiovh:ipv6/detach.
    *
@@ -1556,7 +1556,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listIpv6BridgedSubranges calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange: List bridged subranges. Returns the subranges of the block bridged in the vRack.
+   * listIpv6BridgedSubranges calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange: List bridged IPv6 subranges
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1583,7 +1583,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getIpv6BridgedSubrange calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange/{bridgedSubrange}: Get a bridged subrange. Returns the subrange, its gateway and whether SLAAC is enabled.
+   * getIpv6BridgedSubrange calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange/{bridgedSubrange}: Get a bridged IPv6 subrange
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1613,7 +1613,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allIpv6BridgedSubranges iterates over GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange (List bridged subranges. Returns the subranges of the block bridged in the vRack.).
+   * allIpv6BridgedSubranges iterates over GET /v1/vrack/{serviceName}/ipv6/{ipv6}/bridgedSubrange (List bridged IPv6 subranges).
    *
    * It lists the IDs with {@link VrackApi.listIpv6BridgedSubranges}, then gets each object with
    * {@link VrackApi.getIpv6BridgedSubrange}, only when the loop reaches it. An object deleted in the
@@ -1676,7 +1676,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listIpv6RoutedSubranges calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange: List routed subranges. Returns the subranges of the block routed in the vRack.
+   * listIpv6RoutedSubranges calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange: List routed IPv6 subranges
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1703,7 +1703,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createIpv6RoutedSubrange calls POST /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange: Route a subrange
+   * createIpv6RoutedSubrange calls POST /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange: Route an IPv6 subrange
    *
    * Routes a subrange of the block to a next hop. The next hop must belong to a bridged subrange.
    * Returns the task that performs it.
@@ -1738,7 +1738,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getIpv6RoutedSubrange calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange/{routedSubrange}: Get a routed subrange. Returns the subrange and its next hop.
+   * getIpv6RoutedSubrange calls GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange/{routedSubrange}: Get a routed IPv6 subrange
    *
    * Requires the IAM action vrack:apiovh:ipv6/get.
    *
@@ -1768,7 +1768,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allIpv6RoutedSubranges iterates over GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange (List routed subranges. Returns the subranges of the block routed in the vRack.).
+   * allIpv6RoutedSubranges iterates over GET /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange (List routed IPv6 subranges).
    *
    * It lists the IDs with {@link VrackApi.listIpv6RoutedSubranges}, then gets each object with
    * {@link VrackApi.getIpv6RoutedSubrange}, only when the loop reaches it. An object deleted in the
@@ -1796,7 +1796,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteIpv6RoutedSubrange calls DELETE /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange/{routedSubrange}: Unroute a subrange. Removes the route of the subrange. Returns the task that performs it.
+   * deleteIpv6RoutedSubrange calls DELETE /v1/vrack/{serviceName}/ipv6/{ipv6}/routedSubrange/{routedSubrange}: Unroute an IPv6 subrange
    *
    * Requires the IAM actions vrack:apiovh:ipv6/routedSubrange/delete,
    * ip:apiovh:vrack/routedSubrange/delete.
@@ -1827,7 +1827,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listLegacyVracks calls GET /v1/vrack/{serviceName}/legacyVrack: List legacy vRacks (deprecated). Returns the legacy vRacks (vrackXXXX) bridged in the vRack.
+   * listLegacyVracks calls GET /v1/vrack/{serviceName}/legacyVrack: List attached legacy vRacks (deprecated)
    *
    * Requires the IAM action vrack:apiovh:legacyVrack/get.
    *
@@ -1886,7 +1886,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getLegacyVrack calls GET /v1/vrack/{serviceName}/legacyVrack/{legacyVrack}: Get a legacy vRack (deprecated). Returns the bridged legacy vRack.
+   * getLegacyVrack calls GET /v1/vrack/{serviceName}/legacyVrack/{legacyVrack}: Get an attached legacy vRack (deprecated)
    *
    * Requires the IAM action vrack:apiovh:legacyVrack/get.
    *
@@ -1917,7 +1917,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allLegacyVracks iterates over GET /v1/vrack/{serviceName}/legacyVrack (List legacy vRacks (deprecated). Returns the legacy vRacks (vrackXXXX) bridged in the vRack.).
+   * allLegacyVracks iterates over GET /v1/vrack/{serviceName}/legacyVrack (List attached legacy vRacks (deprecated)).
    *
    * It lists the IDs with {@link VrackApi.listLegacyVracks}, then gets each object with
    * {@link VrackApi.getLegacyVrack}, only when the loop reaches it. An object deleted in the
@@ -1977,7 +1977,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listOvhCloudConnects calls GET /v1/vrack/{serviceName}/ovhCloudConnect: List services. Returns the identifiers of the OVHcloud Connect services attached to the vRack.
+   * listOvhCloudConnects calls GET /v1/vrack/{serviceName}/ovhCloudConnect: List attached OVHcloud Connect services
    *
    * Requires the IAM action vrack:apiovh:ovhCloudConnect/get.
    *
@@ -1999,7 +1999,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createOvhCloudConnect calls POST /v1/vrack/{serviceName}/ovhCloudConnect: Attach a service
+   * createOvhCloudConnect calls POST /v1/vrack/{serviceName}/ovhCloudConnect: Attach an OVHcloud Connect service
    *
    * Attaches an OVHcloud Connect service to the vRack. Returns the task that performs it.
    *
@@ -2031,7 +2031,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getOvhCloudConnect calls GET /v1/vrack/{serviceName}/ovhCloudConnect/{ovhCloudConnect}: Get a service. Returns the attached OVHcloud Connect service and its vRack.
+   * getOvhCloudConnect calls GET /v1/vrack/{serviceName}/ovhCloudConnect/{ovhCloudConnect}: Get an attached OVHcloud Connect service
    *
    * Requires the IAM action vrack:apiovh:ovhCloudConnect/get.
    *
@@ -2059,7 +2059,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allOvhCloudConnects iterates over GET /v1/vrack/{serviceName}/ovhCloudConnect (List services. Returns the identifiers of the OVHcloud Connect services attached to the vRack.).
+   * allOvhCloudConnects iterates over GET /v1/vrack/{serviceName}/ovhCloudConnect (List attached OVHcloud Connect services).
    *
    * It lists the IDs with {@link VrackApi.listOvhCloudConnects}, then gets each object with
    * {@link VrackApi.getOvhCloudConnect}, only when the loop reaches it. An object deleted in the
@@ -2085,7 +2085,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteOvhCloudConnect calls DELETE /v1/vrack/{serviceName}/ovhCloudConnect/{ovhCloudConnect}: Detach a service
+   * deleteOvhCloudConnect calls DELETE /v1/vrack/{serviceName}/ovhCloudConnect/{ovhCloudConnect}: Detach an OVHcloud Connect service
    *
    * Detaches the OVHcloud Connect service from the vRack. Returns the task that performs it.
    *
@@ -2149,7 +2149,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listPublicRoutingPriorities calls GET /v1/vrack/{serviceName}/publicRoutingPriority: List priorities. Returns the identifiers of the 3-AZ failover priorities of the vRack.
+   * listPublicRoutingPriorities calls GET /v1/vrack/{serviceName}/publicRoutingPriority: List 3-AZ failover priorities
    *
    * Requires the IAM action vrack:apiovh:publicRoutingPriority/get.
    *
@@ -2253,7 +2253,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allPublicRoutingPriorities iterates over GET /v1/vrack/{serviceName}/publicRoutingPriority (List priorities. Returns the identifiers of the 3-AZ failover priorities of the vRack.).
+   * allPublicRoutingPriorities iterates over GET /v1/vrack/{serviceName}/publicRoutingPriority (List 3-AZ failover priorities).
    *
    * It lists the IDs with {@link VrackApi.listPublicRoutingPriorities}, then gets each object with
    * {@link VrackApi.getPublicRoutingPriority}, only when the loop reaches it. An object deleted in the
@@ -2344,7 +2344,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/vrack/{serviceName}/task: List tasks. Returns the identifiers of the tasks run on the vRack.
+   * listTasks calls GET /v1/vrack/{serviceName}/task: List vRack tasks
    *
    * Requires the IAM action vrack:apiovh:task/get.
    *
@@ -2366,7 +2366,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getTask calls GET /v1/vrack/{serviceName}/task/{taskId}: Get a task. Returns the function, status, target and dates of the task.
+   * getTask calls GET /v1/vrack/{serviceName}/task/{taskId}: Get a vRack task
    *
    * Requires the IAM action vrack:apiovh:task/get.
    *
@@ -2394,7 +2394,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/vrack/{serviceName}/task (List tasks. Returns the identifiers of the tasks run on the vRack.).
+   * allTasks iterates over GET /v1/vrack/{serviceName}/task (List vRack tasks).
    *
    * It lists the IDs with {@link VrackApi.listTasks}, then gets each object with
    * {@link VrackApi.getTask}, only when the loop reaches it. An object deleted in the
@@ -2442,7 +2442,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listVmwareCloudDirectorVirtualDataCenters calls GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter: List datacenters. Returns the Public VCF as-a-Service virtual datacenters attached to the vRack.
+   * listVmwareCloudDirectorVirtualDataCenters calls GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter: List attached Public VCF virtual datacenters
    *
    * Requires the IAM action vrack:apiovh:vmwareCloudDirectoryVirtualDataCenter/get.
    *
@@ -2467,7 +2467,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * createVmwareCloudDirectorVirtualDataCenter calls POST /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter: Attach a datacenter
+   * createVmwareCloudDirectorVirtualDataCenter calls POST /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter: Attach a Public VCF virtual datacenter
    *
    * Attaches a Public VCF as-a-Service virtual datacenter to the vRack. Returns the task that
    * performs it.
@@ -2500,7 +2500,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getVmwareCloudDirectorVirtualDataCenter calls GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter/{vmwareCloudDirectorVirtualDataCenter}: Get a datacenter. Returns the attached Public VCF virtual datacenter and its vRack.
+   * getVmwareCloudDirectorVirtualDataCenter calls GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter/{vmwareCloudDirectorVirtualDataCenter}: Get an attached Public VCF virtual datacenter
    *
    * Requires the IAM action vrack:apiovh:vmwareCloudDirectoryVirtualDataCenter/get.
    *
@@ -2531,7 +2531,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allVmwareCloudDirectorVirtualDataCenters iterates over GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter (List datacenters. Returns the Public VCF as-a-Service virtual datacenters attached to the vRack.).
+   * allVmwareCloudDirectorVirtualDataCenters iterates over GET /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter (List attached Public VCF virtual datacenters).
    *
    * It lists the IDs with {@link VrackApi.listVmwareCloudDirectorVirtualDataCenters}, then gets each object with
    * {@link VrackApi.getVmwareCloudDirectorVirtualDataCenter}, only when the loop reaches it. An object deleted in the
@@ -2557,7 +2557,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * deleteVmwareCloudDirectorVirtualDataCenter calls DELETE /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter/{vmwareCloudDirectorVirtualDataCenter}: Detach a datacenter
+   * deleteVmwareCloudDirectorVirtualDataCenter calls DELETE /v1/vrack/{serviceName}/vmwareCloudDirectorVirtualDataCenter/{vmwareCloudDirectorVirtualDataCenter}: Detach a Public VCF virtual datacenter
    *
    * Detaches the Public VCF virtual datacenter from the vRack. Returns the task that performs it.
    *
@@ -2590,7 +2590,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * listVrackServices calls GET /v1/vrack/{serviceName}/vrackServices: List vRack Services. Returns the vRack Services attached to the vRack.
+   * listVrackServices calls GET /v1/vrack/{serviceName}/vrackServices: List attached vRack Services
    *
    * Requires the IAM action vrack:apiovh:vrackServices/get.
    *
@@ -2644,7 +2644,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * getVrackServices calls GET /v1/vrack/{serviceName}/vrackServices/{vrackServices}: Get a vRack Services. Returns the attached vRack Services and its vRack.
+   * getVrackServices calls GET /v1/vrack/{serviceName}/vrackServices/{vrackServices}: Get an attached vRack Services
    *
    * Requires the IAM action vrack:apiovh:vrackServices/get.
    *
@@ -2672,7 +2672,7 @@ export class VrackApi extends SectionApi {
   }
 
   /**
-   * allVrackServices iterates over GET /v1/vrack/{serviceName}/vrackServices (List vRack Services. Returns the vRack Services attached to the vRack.).
+   * allVrackServices iterates over GET /v1/vrack/{serviceName}/vrackServices (List attached vRack Services).
    *
    * It lists the IDs with {@link VrackApi.listVrackServices}, then gets each object with
    * {@link VrackApi.getVrackServices}, only when the loop reaches it. An object deleted in the

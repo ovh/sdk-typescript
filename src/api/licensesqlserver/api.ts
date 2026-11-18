@@ -32,7 +32,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensesqlserverApi extends SectionApi {
   /**
-   * listSqlservers calls GET /v1/license/sqlserver: List available services
+   * listSqlservers calls GET /v1/license/sqlserver: List your SQL Server licenses
+   *
+   * Returns the names of the SQL Server licenses of the account; each name is the service name used
+   * by the other calls.
    *
    * Requires the IAM action licenseSqlServer:apiovh:get.
    *
@@ -60,7 +63,9 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * listOrderableVersions calls GET /v1/license/sqlserver/orderableVersions: Get the orderable Sql Server versions
+   * listOrderableVersions calls GET /v1/license/sqlserver/orderableVersions: Get the orderable SQL Server versions
+   *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
    *
    * Requires the IAM action account:apiovh:licenseSqlServer/orderableVersions/get.
    *
@@ -85,7 +90,10 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * getSqlserver calls GET /v1/license/sqlserver/{serviceName}: Get this object properties
+   * getSqlserver calls GET /v1/license/sqlserver/{serviceName}: Get a SQL Server license
+   *
+   * Returns the license ID, version, status, the IP address the license is attached to, and the
+   * creation date.
    *
    * Requires the IAM action licenseSqlServer:apiovh:get.
    *
@@ -111,7 +119,7 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * allSqlservers iterates over GET /v1/license/sqlserver (List available services).
+   * allSqlservers iterates over GET /v1/license/sqlserver (List your SQL Server licenses).
    *
    * It lists the IDs with {@link LicensesqlserverApi.listSqlservers}, then gets each object with
    * {@link LicensesqlserverApi.getSqlserver}, only when the loop reaches it. An object deleted in the
@@ -228,7 +236,10 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/sqlserver/{serviceName}/tasks: Tasks linked to this license
+   * listTasks calls GET /v1/license/sqlserver/{serviceName}/tasks: List the tasks of a SQL Server license
+   *
+   * Returns the IDs of the tasks linked to the license, each task records an action such as a
+   * version upgrade.
    *
    * Requires the IAM action licenseSqlServer:apiovh:tasks/get.
    *
@@ -264,7 +275,10 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/sqlserver/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/sqlserver/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseSqlServer:apiovh:tasks/get.
    *
@@ -292,7 +306,7 @@ export class LicensesqlserverApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/sqlserver/{serviceName}/tasks (Tasks linked to this license).
+   * allTasks iterates over GET /v1/license/sqlserver/{serviceName}/tasks (List the tasks of a SQL Server license).
    *
    * It lists the IDs with {@link LicensesqlserverApi.listTasks}, then gets each object with
    * {@link LicensesqlserverApi.getTasks}, only when the loop reaches it. An object deleted in the

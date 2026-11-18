@@ -36,6 +36,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTelephonies calls GET /v1/telephony: List billing accounts
    *
+   * Returns the billing accounts of the customer. A billing account groups telephony services
+   * billed together.
+   *
    * Requires the IAM action voip:apiovh:get.
    *
    * @param params - the optional parameters
@@ -94,6 +97,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listAliases calls GET /v1/telephony/aliases: List numbers
    *
+   * Returns the numbers of the customer, across all billing accounts. Get a number service for its
+   * billing account and settings.
+   *
    * Requires the IAM action voip:apiovh:aliases/get.
    *
    * @param params - the optional parameters
@@ -121,6 +127,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getAliases calls GET /v1/telephony/aliases/{serviceName}: Get a number service
+   *
+   * Returns the number service, without its billing account. Use it to find a number across all
+   * billing accounts.
    *
    * Requires the IAM action voip:apiovh:aliases/get.
    *
@@ -289,6 +298,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listCurrentOrderIds calls GET /v1/telephony/currentOrderIds: List current order IDs
    *
+   * Returns the identifiers of the telephony orders of the customer that are still in progress.
+   *
    * Requires the IAM action account:apiovh:voip/currentOrderIds/get.
    *
    * @param options - the options of this call: signal, timeout, headers
@@ -428,6 +439,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLines calls GET /v1/telephony/lines: List lines
    *
+   * Returns the lines of the customer, across all billing accounts. Get a line or trunk for the
+   * service without its billing account.
+   *
    * Requires the IAM action voip:apiovh:lines/get.
    *
    * @param params - the optional parameters
@@ -455,6 +469,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLines calls GET /v1/telephony/lines/{serviceName}: Get a line or trunk
+   *
+   * Returns the line or trunk service, without its billing account. Use it to find a service across
+   * all billing accounts.
    *
    * Requires the IAM action voip:apiovh:lines/get.
    *
@@ -719,6 +736,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listProcedures calls GET /v1/telephony/procedure: List procedures
    *
+   * Returns the identifiers of the procedures of the customer, such as identity checks needed to
+   * order telephony products.
+   *
    * Requires the IAM action account:apiovh:voip/procedure/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2027-06-01.
@@ -735,6 +755,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createProcedure calls POST /v1/telephony/procedure: Create a procedure
+   *
+   * Creates a procedure needed to order telephony products. A SEPA payment mean is given by its ID,
+   * or by the owner name, address, IBAN and BIC.
    *
    * Requires the IAM action account:apiovh:voip/procedure/create.
    *
@@ -765,6 +788,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getProcedureRequired calls GET /v1/telephony/procedure/required: Check if a procedure is required
    *
+   * Returns true when a procedure, such as an identity check, is required before ordering telephony
+   * products.
+   *
    * Requires the IAM action account:apiovh:voip/procedure/required/get.
    *
    * @param options - the options of this call: signal, timeout, headers
@@ -778,6 +804,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getProcedure calls GET /v1/telephony/procedure/{id}: Get a procedure
+   *
+   * Returns the procedure: status (pretodo, todo, doing, done, stop or cancel), request date,
+   * finish date and the URL of its document.
    *
    * Requires the IAM action account:apiovh:voip/procedure/get.
    *
@@ -825,6 +854,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * cancelProcedure calls POST /v1/telephony/procedure/{id}/cancel: Cancel a procedure
    *
+   * Cancels the procedure linked to the account. Its status becomes cancel and it is no longer
+   * processed.
+   *
    * Requires the IAM action account:apiovh:voip/procedure/cancel.
    *
    * @param id - Procedure ID
@@ -847,6 +879,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * generatePasswordResellerPanel calls POST /v1/telephony/resellerPanel/generatePassword: Generate a reseller panel password
    *
+   * Generates a new password for the reseller panel. Follow the update with the reseller panel
+   * status.
+   *
    * Requires the IAM action account:apiovh:voip/resellerPanel/generatePassword.
    *
    * @param options - the options of this call: signal, timeout, headers
@@ -860,6 +895,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getResellerPanelStatus calls GET /v1/telephony/resellerPanel/status: Get the reseller panel status
+   *
+   * Returns whether the reseller panel of the customer is enabled, and the status of the last
+   * password update.
    *
    * Requires the IAM action account:apiovh:voip/resellerPanel/status/get.
    *
@@ -875,6 +913,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listSearchServices calls GET /v1/telephony/searchServices: Search a service
+   *
+   * Finds services whose number matches the search value, and returns for each one its billing
+   * account and service type.
    *
    * Requires the IAM action account:apiovh:voip/searchServices/get.
    *
@@ -900,6 +941,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * setDefaultSipDomain calls POST /v1/telephony/setDefaultSipDomain: Set the default SIP domain
+   *
+   * Sets the default SIP domain of the customer for a country and a product type. List the default
+   * SIP domains for the available domains.
    *
    * Requires the IAM action account:apiovh:voip/setDefaultSipDomain.
    *
@@ -1011,6 +1055,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * createSounds calls POST /v1/telephony/sounds: Create a sound
    *
+   * Creates a sound from an uploaded file. Sets its filename and description, and returns the sound
+   * with the URL to upload the file.
+   *
    * Requires the IAM action account:apiovh:voip/sounds/create.
    *
    * @param body - the request body
@@ -1036,6 +1083,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getSounds calls GET /v1/telephony/sounds/{id}: Get a sound
+   *
+   * Returns the sound: filename, description, creation date, size, and the URLs to download and
+   * upload the sound file.
    *
    * Requires the IAM action account:apiovh:voip/sounds/get.
    *
@@ -1082,6 +1132,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateSounds calls PUT /v1/telephony/sounds/{id}: Update a sound
    *
+   * Updates the sound filename and description. The sound file itself is uploaded with the upload
+   * URL of the sound.
+   *
    * Requires the IAM action account:apiovh:voip/sounds/edit.
    *
    * @param id - Sound ID
@@ -1110,6 +1163,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteSounds calls DELETE /v1/telephony/sounds/{id}: Delete a sound
    *
+   * Deletes the sound and its file. It can no longer be played by the telephony services.
+   *
    * Requires the IAM action account:apiovh:voip/sounds/delete.
    *
    * @param id - Sound ID
@@ -1131,6 +1186,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listSpares calls GET /v1/telephony/spare: List spare phones
+   *
+   * Returns the spare phones of the customer. A spare phone can replace a phone of a line, with the
+   * same protocol.
    *
    * Requires the IAM action voip:apiovh:spare/get.
    *
@@ -1170,6 +1228,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getSpare calls GET /v1/telephony/spare/{spare}: Get a spare phone
+   *
+   * Returns the spare phone: MAC address, brand and model, and its telephony protocol.
    *
    * Requires the IAM action voip:apiovh:spare/get.
    *
@@ -1226,6 +1286,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteSpare calls DELETE /v1/telephony/spare/{spare}: Delete a spare phone
    *
+   * Removes the spare phone from the customer account, as if it no longer belonged to OVHcloud.
+   *
    * Requires the IAM action voip:apiovh:spare/delete.
    *
    * @param spare - The internal name of your spare
@@ -1248,6 +1310,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listSpareCompatibleReplacements calls GET /v1/telephony/spare/{spare}/compatibleReplacement: List phones replaceable by the spare
    *
+   * Returns the phones that the spare can replace. Use one of them to replace a phone with the
+   * spare.
+   *
    * Requires the IAM action voip:apiovh:spare/compatibleReplacement/get.
    *
    * @param spare - The internal name of your spare
@@ -1269,6 +1334,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * replaceSpare calls POST /v1/telephony/spare/{spare}/replace: Replace a phone with the spare
+   *
+   * Replaces the phone of a line, given by its domain and public IP address, with the spare. The
+   * replaced phone becomes a spare if it was bought.
    *
    * Requires the IAM action voip:apiovh:spare/replace.
    *
@@ -1355,6 +1423,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTrunks calls GET /v1/telephony/trunks: List trunks
    *
+   * Returns the trunks of the customer, across all billing accounts. A trunk connects a customer
+   * PBX to OVHcloud over SIP.
+   *
    * Requires the IAM action voip:apiovh:trunks/get.
    *
    * @param params - the optional parameters
@@ -1382,6 +1453,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTrunks calls GET /v1/telephony/trunks/{serviceName}: Get a line or trunk
+   *
+   * Returns the line or trunk service, without its billing account. Use it to find a service across
+   * all billing accounts.
    *
    * Requires the IAM action voip:apiovh:trunks/get.
    *
@@ -1528,6 +1602,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getTelephony calls GET /v1/telephony/{billingAccount}: Get a billing account
    *
+   * Returns the billing account: description, status, credit threshold, security deposit and
+   * current out-of-plan amount.
+   *
    * Requires the IAM action voip:apiovh:get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1583,6 +1660,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateTelephony calls PUT /v1/telephony/{billingAccount}: Update a billing account
    *
+   * Updates the billing account settings: description, credit threshold, and the displayed or
+   * hidden external number.
+   *
    * Requires the IAM action voip:apiovh:put.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1610,6 +1690,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * deleteTelephony calls DELETE /v1/telephony/{billingAccount}: Terminate a billing account
+   *
+   * Requests the termination of the billing account, with a reason and optional details. The
+   * termination can be cancelled until it is executed.
    *
    * Requires the IAM action voip:apiovh:delete.
    *
@@ -1647,6 +1730,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listAbbreviatedNumbers calls GET /v1/telephony/{billingAccount}/abbreviatedNumber: List speed dial numbers
    *
+   * Returns the speed dial numbers shared by all the lines of the billing account. A speed dial
+   * number is a short code for a number.
+   *
    * Requires the IAM action voip:apiovh:abbreviatedNumber/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1668,6 +1754,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createAbbreviatedNumber calls POST /v1/telephony/{billingAccount}/abbreviatedNumber: Create a speed dial number
+   *
+   * Creates a speed dial number shared by all the lines of the billing account. The short code
+   * starts with 7 and has 3 or 4 digits.
    *
    * Requires the IAM action voip:apiovh:abbreviatedNumber/create.
    *
@@ -1697,6 +1786,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getAbbreviatedNumber calls GET /v1/telephony/{billingAccount}/abbreviatedNumber/{abbreviatedNumber}: Get a speed dial number
+   *
+   * Returns the speed dial number of the billing account: short code, destination number, name and
+   * surname. The short code starts with 7.
    *
    * Requires the IAM action voip:apiovh:abbreviatedNumber/get.
    *
@@ -1752,6 +1844,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateAbbreviatedNumber calls PUT /v1/telephony/{billingAccount}/abbreviatedNumber/{abbreviatedNumber}: Update a speed dial number
    *
+   * Updates the speed dial number of the billing account: destination number, name and surname. The
+   * short code starts with 7 and has 3 or 4 digits.
+   *
    * Requires the IAM action voip:apiovh:abbreviatedNumber/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1782,6 +1877,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteAbbreviatedNumber calls DELETE /v1/telephony/{billingAccount}/abbreviatedNumber/{abbreviatedNumber}: Delete a speed dial number
    *
+   * Deletes the speed dial number of the billing account. Its short code no longer calls the
+   * destination number from the lines.
+   *
    * Requires the IAM action voip:apiovh:abbreviatedNumber/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1809,6 +1907,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listAllowedCreditThresholds calls GET /v1/telephony/{billingAccount}/allowedCreditThreshold: List allowed credit thresholds
    *
+   * Returns the credit thresholds allowed for the billing account. Use one of them to update the
+   * billing account.
+   *
    * Requires the IAM action voip:apiovh:allowedCreditThreshold/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1833,6 +1934,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listAmountSecurityDeposits calls GET /v1/telephony/{billingAccount}/amountSecurityDeposit: List security deposit amounts
+   *
+   * Returns the security deposit amounts that can be ordered for the billing account, as prices.
    *
    * Requires the IAM action voip:apiovh:amountSecurityDeposit/get.
    *
@@ -1859,6 +1962,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listAvailableDevices calls GET /v1/telephony/{billingAccount}/availableDevices: List phone devices
    *
+   * Returns the phone devices of the billing account: brand, MAC address, maximum and available
+   * lines, and the lines assigned to each one.
+   *
    * Requires the IAM action voip:apiovh:availableDevices/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1884,6 +1990,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getBillingAccountSite calls GET /v1/telephony/{billingAccount}/billingAccountSite: Get the billing account site
    *
+   * Returns the site attached to the billing account. The site settings override the billing
+   * account settings.
+   *
    * Requires the IAM action voip:apiovh:billingAccountSite/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1905,6 +2014,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createBillingAccountSite calls POST /v1/telephony/{billingAccount}/billingAccountSite: Set the billing account site
+   *
+   * Attaches a site to the billing account. The site settings override the billing account
+   * settings.
    *
    * Requires the IAM action voip:apiovh:billingAccountSite/create.
    *
@@ -1934,6 +2046,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * canTransferSecurityDeposit calls POST /v1/telephony/{billingAccount}/canTransferSecurityDeposit: Check a security deposit transfer
    *
+   * Checks whether the security deposit can be transferred to another billing account, given by its
+   * name.
+   *
    * Requires the IAM action voip:apiovh:canTransferSecurityDeposit/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1962,6 +2077,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * cancelTermination calls POST /v1/telephony/{billingAccount}/cancelTermination: Cancel the billing account termination
    *
+   * Cancels the termination requested on the billing account, before it is executed.
+   *
    * Requires the IAM action voip:apiovh:cancelTermination.
    *
    * @param billingAccount - The name of your billingAccount
@@ -1984,6 +2101,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listCarrierSips calls GET /v1/telephony/{billingAccount}/carrierSip: List Carrier SIP services
    *
+   * Returns the Carrier SIP services of the billing account. Carrier SIP connects an operator
+   * network to OVHcloud over SIP.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2005,6 +2125,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getCarrierSip calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}: Get a Carrier SIP service
+   *
+   * Returns the Carrier SIP service and its description. Settings, SIP endpoints and VNO mandates
+   * have their own routes.
    *
    * Requires the IAM action voip:apiovh:carrierSip/get.
    *
@@ -2060,6 +2183,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getCarrierSipCdrs calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/cdrs: Get call detail records
    *
+   * Returns the call detail records (CDR) of the Carrier SIP service for a month (YYYY-MM), the
+   * current month by default, as a document.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/cdrs/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2094,6 +2220,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getCarrierSipClusterDetails calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/clusterDetails: Get the cluster details
    *
+   * Returns the details of the Carrier SIP cluster the service runs on: its name and its zones.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/clusterDetails/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2122,6 +2250,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listCarrierSipEndpoints calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/endpoints: List SIP endpoints
    *
+   * Returns the identifiers of the remote SIP endpoints of the service. Get an endpoint for its IP
+   * address, port, protocol and priority.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/endpoints/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2148,6 +2279,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getCarrierSipEndpoints calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/endpoints/{id}: Get a SIP endpoint
+   *
+   * Returns the remote SIP endpoint: IP address, port, protocol (udp, tcp or tls), DNS SRV priority
+   * and weight, and whether it receives incoming calls.
    *
    * Requires the IAM action voip:apiovh:carrierSip/endpoints/get.
    *
@@ -2207,6 +2341,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getCarrierSipSettings calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/settings: Get the settings
    *
+   * Returns the Carrier SIP settings: description, maximum call establishments per second and
+   * maximum concurrent calls.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/settings/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2234,6 +2371,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateCarrierSipSettings calls PUT /v1/telephony/{billingAccount}/carrierSip/{serviceName}/settings: Update the settings
+   *
+   * Updates the Carrier SIP settings. Only the description can be changed; the call limits are read
+   * only.
    *
    * Requires the IAM action voip:apiovh:carrierSip/settings/edit.
    *
@@ -2265,6 +2405,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listCarrierSipVnos calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/vno: List VNO mandates
    *
+   * Returns the references of the VNO mandates of the service. A mandate covers number ranges
+   * routed from its application date.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/vno/mandates/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2291,6 +2434,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getCarrierSipVno calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/vno/{contractReference}: Get a VNO mandate
+   *
+   * Returns the VNO mandate: the reference written on the VNO contract and the date from which its
+   * ranges are routed.
    *
    * Requires the IAM action voip:apiovh:carrierSip/vno/mandates/get.
    *
@@ -2354,6 +2500,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listCarrierSipVnoRanges calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/vno/{contractReference}/ranges: List mandate number ranges
    *
+   * Returns the prefixes of the number ranges covered by the VNO mandate. Get a range for its
+   * description.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/vno/ranges/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2386,6 +2535,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getCarrierSipVnoRanges calls GET /v1/telephony/{billingAccount}/carrierSip/{serviceName}/vno/{contractReference}/ranges/{prefix}: Get a number range
+   *
+   * Returns the number range of the mandate: its phone range prefix and its description, which can
+   * be updated.
    *
    * Requires the IAM action voip:apiovh:carrierSip/vno/ranges/get.
    *
@@ -2461,6 +2613,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateCarrierSipVnoRanges calls PUT /v1/telephony/{billingAccount}/carrierSip/{serviceName}/vno/{contractReference}/ranges/{prefix}: Update a number range
    *
+   * Updates the description of the number range of the mandate. The prefix cannot be changed.
+   *
    * Requires the IAM action voip:apiovh:carrierSip/vno/ranges/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2530,6 +2684,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferences calls GET /v1/telephony/{billingAccount}/conference: List conference services
    *
+   * Returns the conference services of the billing account. A conference service hosts calls
+   * between several participants.
+   *
    * Requires the IAM action voip:apiovh:conference/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2551,6 +2708,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConference calls GET /v1/telephony/{billingAccount}/conference/{serviceName}: Get a conference service
+   *
+   * Returns the conference service: description and offers. Settings, rooms and participants have
+   * their own routes.
    *
    * Requires the IAM action voip:apiovh:conference/get.
    *
@@ -2606,6 +2766,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * announceUploadConference calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/announceUpload: Upload the welcome announcement
    *
+   * Uploads the sound played to participants when they join the conference.
+   *
    * Requires the IAM action voip:apiovh:conference/announceUpload.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2636,6 +2798,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listConferenceHistories calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/histories: List past conferences
+   *
+   * Returns the identifiers of the past conferences, filtered by start date. Get one for its
+   * duration, participants and recording.
    *
    * Requires the IAM action voip:apiovh:conference/histories/get.
    *
@@ -2674,6 +2839,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceHistories calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/histories/{id}: Get a past conference
+   *
+   * Returns the past conference: start and end dates, duration, participants and connections,
+   * events, and the recording URL if recorded.
    *
    * Requires the IAM action voip:apiovh:conference/histories/get.
    *
@@ -2740,6 +2908,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getConferenceInformations calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/informations: Get live conference information
    *
+   * Returns live information about the conference: start date, lock state and number of members.
+   *
    * Requires the IAM action voip:apiovh:conference/informations/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2767,6 +2937,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * lockConference calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/lock: Lock the conference room
+   *
+   * Locks the conference room. No new participant can join. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:conference/lock.
    *
@@ -2796,6 +2968,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferenceParticipants calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/participants: List participants
    *
+   * Returns the identifiers of the participants currently in the conference. Get a participant for
+   * its number, name and audio state.
+   *
    * Requires the IAM action voip:apiovh:conference/participants/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2822,6 +2997,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceParticipants calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}: Get a participant
+   *
+   * Returns the participant: number, name, arrival time and audio state (talking, can speak, can
+   * hear, audio level).
    *
    * Requires the IAM action voip:apiovh:conference/participants/get.
    *
@@ -2881,6 +3059,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deafConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/deaf: Deafen a participant
    *
+   * Stops the participant from hearing the conference. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/participants/deaf.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2910,6 +3090,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * energyConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/energy: Change a participant audio level
+   *
+   * Changes the audio level (energy) the participant must reach to be heard. Returns the task that
+   * performs it.
    *
    * Requires the IAM action voip:apiovh:conference/participants/energy/create.
    *
@@ -2944,6 +3127,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * kickConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/kick: Eject a participant
    *
+   * Removes the participant from the conference room. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/participants/kick.
    *
    * @param billingAccount - The name of your billingAccount
@@ -2973,6 +3158,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * muteConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/mute: Mute a participant
+   *
+   * Mutes the participant, who can still hear the conference. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:conference/participants/mute.
    *
@@ -3004,6 +3191,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * undeafConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/undeaf: Undeafen a participant
    *
+   * Lets the participant hear the conference again. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/participants/undeaf.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3033,6 +3222,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * unmuteConferenceParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/participants/{id}/unmute: Unmute a participant
+   *
+   * Unmutes the participant, who can talk in the conference again. Returns the task that performs
+   * it.
    *
    * Requires the IAM action voip:apiovh:conference/participants/unmute.
    *
@@ -3064,6 +3256,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferenceRooms calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms: List conference rooms
    *
+   * Returns the room numbers of the conference service. Each room has its own PIN, language and
+   * recording settings.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3090,6 +3285,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createConferenceRooms calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms: Create a conference room
+   *
+   * Creates a conference room with the given room number, or a random one if not specified. Returns
+   * the room.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/create.
    *
@@ -3121,6 +3319,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceRooms calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}: Get a conference room
+   *
+   * Returns the conference room and its settings: PIN, language, recording, announcement, report
+   * and expiration date.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/get.
    *
@@ -3180,6 +3381,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateConferenceRooms calls PUT /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}: Update a conference room
    *
+   * Updates the room settings: PIN, language, muted entry, recording, anonymous rejection,
+   * announcement, report and expiration date.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3211,6 +3415,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listConferenceRoomsHistories calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/histories: List past conferences
+   *
+   * Returns the identifiers of the past conferences, filtered by start date. Get one for its
+   * duration, participants and recording.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/histories/get.
    *
@@ -3251,6 +3458,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceRoomsHistories calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/histories/{id}: Get a past conference
+   *
+   * Returns the past conference: start and end dates, duration, participants and connections,
+   * events, and the recording URL if recorded.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/histories/get.
    *
@@ -3334,6 +3544,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * lockConferenceRooms calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/lock: Lock the conference room
    *
+   * Locks the conference room. No new participant can join. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/lock.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3364,6 +3576,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferenceRoomsParticipants calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants: List participants
    *
+   * Returns the identifiers of the participants currently in the conference. Get a participant for
+   * its number, name and audio state.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3392,6 +3607,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceRoomsParticipants calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}: Get a participant
+   *
+   * Returns the participant: number, name, arrival time and audio state (talking, can speak, can
+   * hear, audio level).
    *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/get.
    *
@@ -3467,6 +3685,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deafConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/deaf: Deafen a participant
    *
+   * Stops the participant from hearing the conference. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/deaf.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3503,6 +3723,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * energyConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/energy: Change a participant audio level
+   *
+   * Changes the audio level (energy) the participant must reach to be heard. Returns the task that
+   * performs it.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/energy/create.
    *
@@ -3544,6 +3767,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * kickConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/kick: Eject a participant
    *
+   * Removes the participant from the conference room. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/kick.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3580,6 +3805,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * muteConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/mute: Mute a participant
+   *
+   * Mutes the participant, who can still hear the conference. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/mute.
    *
@@ -3618,6 +3845,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * undeafConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/undeaf: Undeafen a participant
    *
+   * Lets the participant hear the conference again. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/undeaf.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3654,6 +3883,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * unmuteConferenceRoomsParticipants calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/participants/{id}/unmute: Unmute a participant
+   *
+   * Unmutes the participant, who can talk in the conference again. Returns the task that performs
+   * it.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/participants/unmute.
    *
@@ -3692,6 +3924,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * unlockConferenceRooms calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/unlock: Unlock the conference room
    *
+   * Unlocks the conference room. New participants can join again. Returns the task that performs
+   * it.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/unlock.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3722,6 +3957,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferenceRoomsWebAccess calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/webAccess: List web accesses
    *
+   * Returns the identifiers of the public web accesses to the conference. A web access gives a read
+   * or write URL to follow the conference.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/webAccess/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3750,6 +3988,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createConferenceRoomsWebAccess calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/webAccess: Create a web access
+   *
+   * Creates a public web access to follow and manage the conference. Returns its URL.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/webAccess/create.
    *
@@ -3783,6 +4023,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceRoomsWebAccess calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/webAccess/{id}: Get a web access
+   *
+   * Returns the public web access to the conference: its type (read or write) and its URL.
    *
    * Requires the IAM action voip:apiovh:conference/rooms/webAccess/get.
    *
@@ -3858,6 +4100,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteConferenceRoomsWebAccess calls DELETE /v1/telephony/{billingAccount}/conference/{serviceName}/rooms/{roomNumber}/webAccess/{id}: Delete a web access
    *
+   * Deletes the public web access. Its URL no longer gives access to the conference.
+   *
    * Requires the IAM action voip:apiovh:conference/rooms/webAccess/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3894,6 +4138,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getConferenceRoomsStats calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/roomsStats: Get live room statistics
    *
+   * Returns live statistics for all the rooms of the conference service: number of rooms, active
+   * rooms and participants.
+   *
    * Requires the IAM action voip:apiovh:conference/roomsStats/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3922,6 +4169,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getConferenceSettings calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/settings: Get the conference settings
    *
+   * Returns the conference settings: PIN, language, announcements and other options.
+   *
    * Requires the IAM action voip:apiovh:conference/settings/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -3949,6 +4198,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateConferenceSettings calls PUT /v1/telephony/{billingAccount}/conference/{serviceName}/settings: Update the conference settings
+   *
+   * Updates the PIN, language, muted entry, recording, anonymous rejection, announcement and report
+   * settings of the conference.
    *
    * Requires the IAM action voip:apiovh:conference/settings/edit.
    *
@@ -3980,6 +4232,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * unlockConference calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/unlock: Unlock the conference room
    *
+   * Unlocks the conference room. New participants can join again. Returns the task that performs
+   * it.
+   *
    * Requires the IAM action voip:apiovh:conference/unlock.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4008,6 +4263,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listConferenceWebAccess calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/webAccess: List web accesses
    *
+   * Returns the identifiers of the public web accesses to the conference. A web access gives a read
+   * or write URL to follow the conference.
+   *
    * Requires the IAM action voip:apiovh:conference/webAccess/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4034,6 +4292,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createConferenceWebAccess calls POST /v1/telephony/{billingAccount}/conference/{serviceName}/webAccess: Create a web access
+   *
+   * Creates a public web access to follow and manage the conference. Returns its URL.
    *
    * Requires the IAM action voip:apiovh:conference/webAccess/create.
    *
@@ -4065,6 +4325,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getConferenceWebAccess calls GET /v1/telephony/{billingAccount}/conference/{serviceName}/webAccess/{id}: Get a web access
+   *
+   * Returns the public web access to the conference: its type (read or write) and its URL.
    *
    * Requires the IAM action voip:apiovh:conference/webAccess/get.
    *
@@ -4124,6 +4386,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteConferenceWebAccess calls DELETE /v1/telephony/{billingAccount}/conference/{serviceName}/webAccess/{id}: Delete a web access
    *
+   * Deletes the public web access. Its URL no longer gives access to the conference.
+   *
    * Requires the IAM action voip:apiovh:conference/webAccess/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4153,6 +4417,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listDdis calls GET /v1/telephony/{billingAccount}/ddi: List DDI numbers
    *
+   * Returns the DDI numbers of the billing account. A DDI number forwards calls to a destination.
+   *
    * Requires the IAM action voip:apiovh:ddi/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4174,6 +4440,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getDdi calls GET /v1/telephony/{billingAccount}/ddi/{serviceName}: Get a DDI number
+   *
+   * Returns the DDI (direct dial-in) number: feature type and description. The destination is
+   * changed with the changeDestination call.
    *
    * Requires the IAM action voip:apiovh:ddi/get.
    *
@@ -4226,6 +4495,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateDdi calls PUT /v1/telephony/{billingAccount}/ddi/{serviceName}: Update a DDI number
    *
+   * Updates the description of the DDI number. The destination is changed with the
+   * changeDestination call.
+   *
    * Requires the IAM action voip:apiovh:ddi/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4255,6 +4527,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeDestinationDdi calls POST /v1/telephony/{billingAccount}/ddi/{serviceName}/changeDestination: Change the DDI destination
+   *
+   * Changes the number calls to the DDI number are forwarded to. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:ddi/changeDestination.
    *
@@ -4287,6 +4561,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntings calls GET /v1/telephony/{billingAccount}/easyHunting: List contact center services
    *
+   * Returns the contact center services of the billing account. A contact center routes calls to
+   * agents through queues.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4308,6 +4585,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHunting calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}: Get a contact center service
+   *
+   * Returns the contact center service: queue strategy and size, maximum wait time, tones,
+   * voicemail and caller number presentation.
    *
    * Requires the IAM action voip:apiovh:easyHunting/get.
    *
@@ -4363,6 +4643,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHunting calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}: Update a contact center service
    *
+   * Updates the queue strategy and size, the maximum wait time, the tones, the voicemail, anonymous
+   * call rejection and the status IVR.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4393,6 +4676,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingHunting calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting: Get the queue system settings
    *
+   * Returns the queue system settings of the service: offer name, CRM URL template opened by the
+   * agent banner, G729 codec and status change IVR.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4420,6 +4706,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateEasyHuntingHunting calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting: Update the queue system settings
+   *
+   * Updates the queue system settings: the CRM URL template opened by the agent banner, the G729
+   * codec and the status change IVR.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/edit.
    *
@@ -4451,6 +4740,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingAgents calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent: List agents
    *
+   * Returns the identifiers of the agents. An agent is a phone number that answers the calls of one
+   * or several queues.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4477,6 +4769,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingAgent calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent: Create an agent
+   *
+   * Creates an agent: a number that answers calls from the queues. Sets its status, ring timeout,
+   * wrap-up time and maximum simultaneous calls.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/create.
    *
@@ -4508,6 +4803,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgent calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}: Get an agent
+   *
+   * Returns the agent: number, description, status, break status, type (internal or external), ring
+   * timeout, wrap-up time and simultaneous calls.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/get.
    *
@@ -4567,6 +4865,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingHuntingAgent calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}: Update an agent
    *
+   * Updates the agent: number, description, status (available, logged out or on break), break
+   * status, ring timeout, wrap-up time and simultaneous calls.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4599,6 +4900,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingAgent calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}: Delete an agent
    *
+   * Deletes the agent. It is removed from all its queues and no longer receives calls from the
+   * queue system.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4627,6 +4931,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgentBannerAccess calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/bannerAccess: Get the agent banner access
+   *
+   * Returns the web access to the agent banner application: its URL and creation date.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/bannerAccess/get.
    *
@@ -4658,6 +4964,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * createEasyHuntingHuntingAgentBannerAccess calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/bannerAccess: Create the agent banner access
    *
+   * Creates a web access to the agent banner application. Returns its URL.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/bannerAccess/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4688,6 +4996,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingAgentBannerAccess calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/bannerAccess: Delete the agent banner access
    *
+   * Deletes the web access to the agent banner application. Its URL no longer gives access to the
+   * banner.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/bannerAccess/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4717,6 +5028,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingAgentCalls calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls: List agent calls
    *
+   * Returns the identifiers of the calls the agent is handling. Get a live call for its caller,
+   * queue, state and dates.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4745,6 +5059,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgentCalls calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}: Get a live call
+   *
+   * Returns the live call: caller number and name, destination number, agent, queue, state (waiting
+   * or answered), hold status and begin, answer and end dates.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/get.
    *
@@ -4820,6 +5137,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * eavesdropEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/eavesdrop: Eavesdrop on a call
    *
+   * Listens to the live call without being heard. The given phone number is called and bridged in
+   * the communication. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/eavesdrop/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4860,6 +5180,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * hangupEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/hangup: Hang up a call
    *
+   * Ends the live call for all participants, the caller and the agent. Returns the task that
+   * performs the hang up.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/hangup.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4897,6 +5220,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * holdEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/hold: Toggle hold on a call
    *
+   * Puts the live call on hold, or resumes it if it is already on hold. Returns the task that
+   * performs it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/hold.
    *
    * @param billingAccount - The name of your billingAccount
@@ -4933,6 +5259,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * interceptEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/intercept: Intercept an unanswered call
+   *
+   * Answers a call that is ringing on another line. The given phone number is called and takes the
+   * communication. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/intercept.
    *
@@ -4974,6 +5303,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/transfer: Transfer an answered call
    *
+   * Transfers the answered call to another phone number, given as a parameter. Returns the task
+   * that performs the transfer.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/transfer.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5013,6 +5345,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * whisperEasyHuntingHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/calls/{id}/whisper: Whisper on a call
+   *
+   * Speaks during the live call from the given phone number, heard by the agent only or by all
+   * participants, depending on the whispering mode.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/calls/whisper.
    *
@@ -5054,6 +5389,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingHuntingAgentEventToken calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/eventToken: Get the event token
    *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/eventToken/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5083,6 +5421,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingAgentEventToken calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/eventToken/create.
    *
@@ -5116,6 +5457,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingAgentEventToken calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/eventToken: Delete the event token
    *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/eventToken/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5144,6 +5487,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgentLiveStatus calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/liveStatus/get.
    *
@@ -5175,6 +5521,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingAgentQueues calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue: List the queues of an agent
    *
+   * Returns the identifiers of the queues the agent belongs to. Get an agent position in a queue to
+   * see its order in that queue.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5203,6 +5552,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingAgentQueue calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue: Assign an agent to a queue
+   *
+   * Adds an agent to a queue, with a position. The position sets the order in which agents receive
+   * calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/create.
    *
@@ -5236,6 +5588,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgentQueue calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Get an agent position in a queue
+   *
+   * Returns the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/get.
    *
@@ -5311,6 +5666,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingHuntingAgentQueue calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Update an agent position in a queue
    *
+   * Updates the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5350,6 +5708,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingAgentQueue calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Remove an agent from a queue
    *
+   * Removes the agent from the queue. The agent no longer receives calls from this queue but stays
+   * assigned to its other queues.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5385,6 +5746,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingAgentQueueLiveStatus calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/agent/{agentId}/queue/{queueId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/agent/queue/liveStatus/get.
    *
@@ -5423,6 +5787,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingCustomStatus calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/customStatus: List custom statuses
    *
+   * Returns the identifiers of the custom statuses agents can set, such as a break. Each status has
+   * a name, a description and a color.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/customStatus/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5449,6 +5816,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingCustomStatus calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/customStatus: Create a custom status
+   *
+   * Creates a custom status agents can set, such as a break. Sets its name, short description and
+   * the color shown on the agent banner.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/customStatus/create.
    *
@@ -5480,6 +5850,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingCustomStatus calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/customStatus/{id}: Get a custom status
+   *
+   * Returns the custom status: name, short description and color displayed on the agent banner web
+   * application.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/customStatus/get.
    *
@@ -5540,6 +5913,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingCustomStatus calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/customStatus/{id}: Delete a custom status
    *
+   * Deletes the custom status. Agents can no longer select it on the agent banner web application.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/customStatus/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5569,6 +5944,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingHuntingEventToken calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/eventToken: Get the event token
    *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/eventToken/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5596,6 +5974,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingEventToken calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/eventToken/create.
    *
@@ -5627,6 +6008,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingEventToken calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/eventToken: Delete the event token
    *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/eventToken/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5654,6 +6037,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingQueues calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue: List queues
    *
+   * Returns the identifiers of the queues. A queue holds incoming calls and dispatches them to its
+   * agents with a strategy.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5680,6 +6066,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEasyHuntingHuntingQueue calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue: Create a queue
+   *
+   * Creates a queue that distributes calls to its agents. Sets the dispatching strategy, the
+   * maximum wait time and callers, and the overflow and closure actions.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/create.
    *
@@ -5711,6 +6100,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingQueue calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}: Get a queue
+   *
+   * Returns the queue: name, strategy, maximum waiting callers and wait time, sound on hold, call
+   * recording, and actions on overflow and on closure.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/get.
    *
@@ -5770,6 +6162,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingHuntingQueue calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}: Update a queue
    *
+   * Updates the queue: name, dispatching strategy, maximum waiting callers and wait time, sound on
+   * hold, call recording and overflow and closure actions.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5802,6 +6197,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingQueue calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}: Delete a queue
    *
+   * Deletes the queue. Its agents are no longer assigned to it, and calls are no longer dispatched
+   * through it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5831,6 +6229,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingQueueAgents calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/agent: List the agents of a queue
    *
+   * Returns the identifiers of the agents of the queue. Get an agent position in the queue to see
+   * the order in which agents receive calls.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/agent/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5859,6 +6260,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingQueueAgent calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Get an agent position in a queue
+   *
+   * Returns the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/agent/get.
    *
@@ -5934,6 +6338,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingHuntingQueueAgent calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Update an agent position in a queue
    *
+   * Updates the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/agent/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -5973,6 +6380,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingHuntingQueueAgent calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Remove an agent from a queue
    *
+   * Removes the agent from the queue. The agent no longer receives calls from this queue but stays
+   * assigned to its other queues.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/agent/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6008,6 +6418,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingQueueAgentLiveStatus calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/agent/{agentId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/agent/liveStatus/get.
    *
@@ -6046,6 +6459,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingHuntingQueueLiveCalls calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls: List queue live calls
    *
+   * Returns the identifiers of the calls waiting or answered in the queue. Get a live call for its
+   * caller, agent, state and dates.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6074,6 +6490,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingHuntingQueueLiveCalls calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}: Get a live call
+   *
+   * Returns the live call: caller number and name, destination number, agent, queue, state (waiting
+   * or answered), hold status and begin, answer and end dates.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/get.
    *
@@ -6150,6 +6569,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * eavesdropEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/eavesdrop: Eavesdrop on a call
    *
+   * Listens to the live call without being heard. The given phone number is called and bridged in
+   * the communication. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/eavesdrop.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6190,6 +6612,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * hangupEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/hangup: Hang up a call
    *
+   * Ends the live call for all participants, the caller and the agent. Returns the task that
+   * performs the hang up.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/hangup.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6227,6 +6652,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * holdEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/hold: Toggle hold on a call
    *
+   * Puts the live call on hold, or resumes it if it is already on hold. Returns the task that
+   * performs it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/hold.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6263,6 +6691,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * interceptEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/intercept: Intercept an unanswered call
+   *
+   * Answers a call that is ringing on another line. The given phone number is called and takes the
+   * communication. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/intercept.
    *
@@ -6304,6 +6735,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/transfer: Transfer an answered call
    *
+   * Transfers the answered call to another phone number, given as a parameter. Returns the task
+   * that performs the transfer.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/transfer.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6343,6 +6777,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * whisperEasyHuntingHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/whisper: Whisper on a call
+   *
+   * Speaks during the live call from the given phone number, heard by the agent only or by all
+   * participants, depending on the whispering mode.
    *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveCalls/whisper.
    *
@@ -6384,6 +6821,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingHuntingQueueLiveStatistics calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/hunting/queue/{queueId}/liveStatistics: Get queue live statistics
    *
+   * Returns the live statistics of the queue since the last reset at midnight: total, answered and
+   * lost calls, and total waiting and call durations.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/hunting/queue/liveStatistics/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6414,6 +6854,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingRecords calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/records: List call recordings
    *
+   * Returns the identifiers of the recordings of the calls handled by the service. Get a call
+   * recording for its details.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/records/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6440,6 +6883,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingRecords calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/records/{id}: Get a call recording
+   *
+   * Returns the call recording and the URL to download it, with the caller and destination numbers,
+   * agent, start and end dates and duration.
    *
    * Requires the IAM action voip:apiovh:easyHunting/records/get.
    *
@@ -6499,6 +6945,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingRecords calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/records/{id}: Delete a call recording
    *
+   * Deletes the call recording of the service. Its sound file can no longer be downloaded from its
+   * URL.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/records/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6528,6 +6977,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingScreenListConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions: Get the filtering condition settings
    *
+   * Returns the call filtering settings of the contact center: whether filtering is disabled, or
+   * uses the incoming whitelist or the incoming blacklist.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6555,6 +7007,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateEasyHuntingScreenListConditions calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions: Update the filtering condition settings
+   *
+   * Updates the call filtering status of the contact center: disabled, incoming whitelist or
+   * incoming blacklist.
    *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/edit.
    *
@@ -6585,6 +7040,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listEasyHuntingScreenListConditionsConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions/conditions: List filtering conditions
+   *
+   * Returns the identifiers of the filtering conditions checked when a call is received. The list
+   * can be filtered by screen list type.
    *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/conditions/get.
    *
@@ -6621,6 +7079,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * createEasyHuntingScreenListConditionsConditions calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions/conditions: Create a filtering condition
    *
+   * Creates a filtering condition based on the caller or the called number. The screen list type
+   * sets whether matching calls are allowed or blocked.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/conditions/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6651,6 +7112,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingScreenListConditionsConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions/conditions/{conditionId}: Get a filtering condition
+   *
+   * Returns the filtering condition of the contact center: caller number or destination number, and
+   * screen list type (whitelist or blacklist).
    *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/conditions/get.
    *
@@ -6734,6 +7198,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingScreenListConditionsConditions calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions/conditions/{conditionId}: Update a filtering condition
    *
+   * Updates the caller number or the destination number checked by the filtering condition of the
+   * contact center.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/conditions/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6770,6 +7237,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingScreenListConditionsConditions calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/screenListConditions/conditions/{conditionId}: Delete a filtering condition
    *
+   * Deletes the filtering condition. Calls are no longer checked against its caller number or
+   * destination number.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/screenListConditions/conditions/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6803,6 +7273,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listEasyHuntingSounds calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/sound: List sounds
    *
+   * Returns the identifiers of the sound files of the service. Add a sound with the soundUpload
+   * call, from /me/document or a URL.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/sound/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6829,6 +7302,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingSound calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/sound/{soundId}: Get a sound
+   *
+   * Returns the sound of the service: its identifier and filename. Sounds are played by queues and
+   * voice menus.
    *
    * Requires the IAM action voip:apiovh:easyHunting/sound/get.
    *
@@ -6888,6 +7364,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingSound calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/sound/{soundId}: Delete a sound
    *
+   * Deletes the sound of the service, identified by its ID. Queues and voice menus can no longer
+   * play it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/sound/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6916,6 +7395,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * soundUploadEasyHunting calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/soundUpload: Upload a sound
+   *
+   * Uploads a sound file to the service, from a /me/document identifier or a URL, with an optional
+   * name. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:easyHunting/soundUpload.
    *
@@ -6948,6 +7430,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEasyHuntingTimeConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions: Get the time condition settings
    *
+   * Returns the time condition settings of the contact center: status, and the action (number or
+   * voicemail) of each slot and of the unavailable slot.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -6975,6 +7460,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateEasyHuntingTimeConditions calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions: Update the time condition settings
+   *
+   * Enables or disables the time conditions of the contact center, and sets the action (number or
+   * voicemail) and number of each slot.
    *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/edit.
    *
@@ -7005,6 +7493,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listEasyHuntingTimeConditionsConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions/conditions: List time conditions
+   *
+   * Returns the identifiers of the time conditions of the contact center, optionally filtered by
+   * policy. Each one defines a day and a time slot.
    *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/conditions/get.
    *
@@ -7039,6 +7530,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * createEasyHuntingTimeConditionsConditions calls POST /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions/conditions: Create a time condition
    *
+   * Creates a time condition on the contact center: a day of the week, start and end times, and the
+   * policy to apply during it.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/conditions/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7069,6 +7563,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getEasyHuntingTimeConditionsConditions calls GET /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions/conditions/{conditionId}: Get a time condition
+   *
+   * Returns the time condition of the contact center: day of the week, start and end times, and
+   * policy (slot1, slot2, slot3 or available).
    *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/conditions/get.
    *
@@ -7139,6 +7636,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateEasyHuntingTimeConditionsConditions calls PUT /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions/conditions/{conditionId}: Update a time condition
    *
+   * Updates the day of the week, the start and end times and the policy of the time condition of
+   * the contact center.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/conditions/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7175,6 +7675,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteEasyHuntingTimeConditionsConditions calls DELETE /v1/telephony/{billingAccount}/easyHunting/{serviceName}/timeConditions/conditions/{conditionId}: Delete a time condition
    *
+   * Deletes the time condition of the contact center. Its time slot no longer applies to the calls
+   * received.
+   *
    * Requires the IAM action voip:apiovh:easyHunting/timeConditions/conditions/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7208,6 +7711,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getEventToken calls GET /v1/telephony/{billingAccount}/eventToken: Get the event token
    *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
+   *
    * Requires the IAM action voip:apiovh:eventToken/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7233,6 +7739,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createEventToken calls POST /v1/telephony/{billingAccount}/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:eventToken/create.
    *
@@ -7261,6 +7770,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * deleteEventToken calls DELETE /v1/telephony/{billingAccount}/eventToken: Delete the event token
+   *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
    *
    * Requires the IAM action voip:apiovh:eventToken/delete.
    *
@@ -7936,6 +8447,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getHasSpecialNumbers calls GET /v1/telephony/{billingAccount}/hasSpecialNumbers: Check for special numbers
    *
+   * Returns true when the billing account has at least one special number, such as a premium rate
+   * number.
+   *
    * Requires the IAM action voip:apiovh:hasSpecialNumbers/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7958,6 +8472,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listHistoryConsumptions calls GET /v1/telephony/{billingAccount}/historyConsumption: List billed consumptions
    *
+   * Returns the dates of the billed consumptions. Get a billed consumption for its price,
+   * out-of-plan price and status.
+   *
    * Requires the IAM action voip:apiovh:historyConsumption/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -7979,6 +8496,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getHistoryConsumption calls GET /v1/telephony/{billingAccount}/historyConsumption/{date}: Get a billed consumption
+   *
+   * Returns the billed consumption: date, price, out-of-plan price and status of the bill.
    *
    * Requires the IAM action voip:apiovh:historyConsumption/get.
    *
@@ -8034,6 +8553,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getHistoryConsumptionFile calls GET /v1/telephony/{billingAccount}/historyConsumption/{date}/file: Get billed consumption files
    *
+   * Returns a file of the billed consumption to download, in received.csv, csv, pdf or xml format.
+   *
    * Requires the IAM action voip:apiovh:historyConsumption/file/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8065,6 +8586,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listHistoryRepaymentConsumptions calls GET /v1/telephony/{billingAccount}/historyRepaymentConsumption: List repayment bills
    *
+   * Returns the dates of the repayment bills. Get a repayment bill for its amount, bill number and
+   * status.
+   *
    * Requires the IAM action voip:apiovh:historyRepaymentConsumption/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8089,6 +8613,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createHistoryRepaymentConsumption calls POST /v1/telephony/{billingAccount}/historyRepaymentConsumption: Request a repayment
+   *
+   * Requests a repayment for the repayable calls, with the number of the bill. Returns the
+   * repayment bill.
    *
    * Requires the IAM action voip:apiovh:historyRepaymentConsumption/create.
    *
@@ -8118,6 +8645,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getHistoryRepaymentConsumption calls GET /v1/telephony/{billingAccount}/historyRepaymentConsumption/{date}: Get a repayment bill
+   *
+   * Returns the repayment bill: date, amount repaid, bill number and status of the repayment.
    *
    * Requires the IAM action voip:apiovh:historyRepaymentConsumption/get.
    *
@@ -8173,6 +8702,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getHistoryRepaymentConsumptionDocument calls GET /v1/telephony/{billingAccount}/historyRepaymentConsumption/{date}/document: Get the bill as CSV
    *
+   * Returns a file to download the repayment bill as a CSV document, with its URL and expiration
+   * date.
+   *
    * Requires the IAM action voip:apiovh:historyRepaymentConsumption/document/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8201,6 +8733,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listHistoryTollfreeConsumptions calls GET /v1/telephony/{billingAccount}/historyTollfreeConsumption: List toll-free bills
    *
+   * Returns the dates of the toll-free bills. Get a toll-free bill for the amount paid by the
+   * called number.
+   *
    * Requires the IAM action voip:apiovh:historyTollfreeConsumption/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8225,6 +8760,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getHistoryTollfreeConsumption calls GET /v1/telephony/{billingAccount}/historyTollfreeConsumption/{date}: Get a toll-free bill
+   *
+   * Returns the toll-free bill: date, amount paid by the called number, and status of the bill.
    *
    * Requires the IAM action voip:apiovh:historyTollfreeConsumption/get.
    *
@@ -8280,6 +8817,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getHistoryTollfreeConsumptionDocument calls GET /v1/telephony/{billingAccount}/historyTollfreeConsumption/{date}/document: Get the bill as CSV
    *
+   * Returns a file to download the toll-free bill as a CSV document, with its URL and expiration
+   * date.
+   *
    * Requires the IAM action voip:apiovh:historyTollfreeConsumption/document/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8308,6 +8848,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listByBillingAccountLine calls GET /v1/telephony/{billingAccount}/line: List lines
    *
+   * Returns the lines of the billing account. Get a line for its settings, phone, options and
+   * simultaneous calls.
+   *
    * Requires the IAM action voip:apiovh:line/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8329,6 +8872,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLine calls GET /v1/telephony/{billingAccount}/line/{serviceName}: Get a line
+   *
+   * Returns the line: description, offer, number of simultaneous lines, infrastructure, diagnostic
+   * notification settings and position on its phone.
    *
    * Requires the IAM action voip:apiovh:line/get.
    *
@@ -8384,6 +8930,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLine calls PUT /v1/telephony/{billingAccount}/line/{serviceName}: Update a line
    *
+   * Updates the description of the line and the notifications sent about its diagnostic reports.
+   *
    * Requires the IAM action voip:apiovh:line/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8414,6 +8962,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineAbbreviatedNumbers calls GET /v1/telephony/{billingAccount}/line/{serviceName}/abbreviatedNumber: List speed dial numbers
    *
+   * Returns the speed dial numbers of the line. A speed dial number is a short code of 3 or 4
+   * digits, starting with 2, that calls a destination.
+   *
    * Requires the IAM action voip:apiovh:line/abbreviatedNumber/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8440,6 +8991,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineAbbreviatedNumber calls POST /v1/telephony/{billingAccount}/line/{serviceName}/abbreviatedNumber: Create a speed dial number
+   *
+   * Creates a speed dial number: a short code that calls a full number from the line.
    *
    * Requires the IAM action voip:apiovh:line/abbreviatedNumber/create.
    *
@@ -8471,6 +9024,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineAbbreviatedNumber calls GET /v1/telephony/{billingAccount}/line/{serviceName}/abbreviatedNumber/{abbreviatedNumber}: Get a speed dial number
+   *
+   * Returns the speed dial number of the line: short code, destination number, name and surname.
+   * The short code starts with 2 and has 3 or 4 digits.
    *
    * Requires the IAM action voip:apiovh:line/abbreviatedNumber/get.
    *
@@ -8534,6 +9090,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLineAbbreviatedNumber calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/abbreviatedNumber/{abbreviatedNumber}: Update a speed dial number
    *
+   * Updates the speed dial number of the line: destination number, name and surname. The short code
+   * starts with 2 and has 3 or 4 digits.
+   *
    * Requires the IAM action voip:apiovh:line/abbreviatedNumber/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8570,6 +9129,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLineAbbreviatedNumber calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/abbreviatedNumber/{abbreviatedNumber}: Delete a speed dial number
    *
+   * Deletes the speed dial number of the line. Its short code no longer calls the destination
+   * number.
+   *
    * Requires the IAM action voip:apiovh:line/abbreviatedNumber/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8603,6 +9165,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineActivateNewPhone calls GET /v1/telephony/{billingAccount}/line/{serviceName}/activateNewPhone: Check for a new phone to activate
    *
+   * Checks whether a new phone is waiting to be activated on the line, after a phone switch.
+   *
    * Requires the IAM action voip:apiovh:line/activateNewPhone/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8629,6 +9193,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineActivateNewPhone calls POST /v1/telephony/{billingAccount}/line/{serviceName}/activateNewPhone: Activate a new phone
+   *
+   * Activates the new phone on the line, after a phone switch. Check first that a new phone is
+   * waiting to be activated.
    *
    * Requires the IAM action voip:apiovh:line/activateNewPhone/create.
    *
@@ -8657,6 +9224,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineAntihacks calls GET /v1/telephony/{billingAccount}/line/{serviceName}/antihack: List numbers blocked by antihack
    *
+   * Returns the numbers and short codes blocked by the automatic antihack protection of the line.
+   *
    * Requires the IAM action voip:apiovh:line/antihack/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8683,6 +9252,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineAntihack calls POST /v1/telephony/{billingAccount}/line/{serviceName}/antihack: Clean antihack restrictions
+   *
+   * Authorizes or blocks one number, or all the numbers, restricted by the antihack protection of
+   * the line.
    *
    * Requires the IAM action voip:apiovh:line/antihack/create.
    *
@@ -8714,6 +9286,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * associateDeviceLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/associateDevice: Associate a device
    *
+   * Associates a phone with the line, using the phone MAC address (AABBCCDDEEFF), its public IP
+   * address and the slot of the line on the phone.
+   *
    * Requires the IAM action voip:apiovh:line/associateDevice/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8744,6 +9319,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineAutomaticCalls calls GET /v1/telephony/{billingAccount}/line/{serviceName}/automaticCall: List automatic calls
    *
+   * Returns the identifiers of the automatic calls made from the line by the call generator. Get an
+   * automatic call for its dates, duration and result.
+   *
    * Requires the IAM action voip:apiovh:line/automaticCall/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8770,6 +9348,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineAutomaticCall calls POST /v1/telephony/{billingAccount}/line/{serviceName}/automaticCall: Make an automatic call
+   *
+   * Calls a number from the line with a dialplan, such as a text read by TTS, an audio file or a
+   * transfer. Returns the call identifier.
    *
    * Requires the IAM action voip:apiovh:line/automaticCall/create.
    *
@@ -8800,6 +9381,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineAutomaticCall calls GET /v1/telephony/{billingAccount}/line/{serviceName}/automaticCall/{identifier}: Get an automatic call
+   *
+   * Returns the automatic call: caller, callee, creation, answer and hangup dates, duration, hangup
+   * cause, DTMF received and application result.
    *
    * Requires the IAM action voip:apiovh:line/automaticCall/get.
    *
@@ -8859,6 +9443,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineAvailableSipDomains calls GET /v1/telephony/{billingAccount}/line/{serviceName}/availableSipDomains: List available SIP domains
    *
+   * Returns the SIP domains the line can use, for the SIP configuration of its phone or softphone.
+   *
    * Requires the IAM action voip:apiovh:line/availableSipDomains/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -8885,6 +9471,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * blockLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/block: Block the line
+   *
+   * Blocks the incoming calls, the outgoing calls or both, depending on the mode. Without a mode,
+   * both directions are blocked.
    *
    * Requires the IAM action voip:apiovh:line/block.
    *
@@ -8916,6 +9505,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineCalls calls GET /v1/telephony/{billingAccount}/line/{serviceName}/calls: List live calls
    *
+   * Returns the identifiers of the live calls of the line, when it is a call center agent. Get a
+   * live call for its state, numbers and dates.
+   *
    * Requires the IAM action voip:apiovh:line/calls/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-23.
@@ -8945,6 +9537,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineCalls calls GET /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}: Get a live call
+   *
+   * Returns the live call: caller number and name, destination number, agent, queue, state (waiting
+   * or answered), hold status and begin, answer and end dates.
    *
    * Requires the IAM action voip:apiovh:line/calls/get.
    *
@@ -9008,6 +9603,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * eavesdropLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/eavesdrop: Eavesdrop on a call
    *
+   * Listens to the live call without being heard. The given phone number is called and bridged in
+   * the communication. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:line/calls/eavesdrop.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-23.
@@ -9044,6 +9642,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * hangupLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/hangup: Hang up a call
    *
+   * Ends the live call for all participants, the caller and the agent. Returns the task that
+   * performs the hang up.
+   *
    * Requires the IAM action voip:apiovh:line/calls/hangup.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-23.
@@ -9077,6 +9678,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * holdLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/hold: Toggle hold on a call
    *
+   * Puts the live call on hold, or resumes it if it is already on hold. Returns the task that
+   * performs it.
+   *
    * Requires the IAM action voip:apiovh:line/calls/hold.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-23.
@@ -9109,6 +9713,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * interceptLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/intercept: Intercept an unanswered call
+   *
+   * Answers a call that is ringing on another line. The given phone number is called and takes the
+   * communication. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:line/calls/intercept.
    *
@@ -9146,6 +9753,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/transfer: Transfer an answered call
    *
+   * Transfers the answered call to another phone number, given as a parameter. Returns the task
+   * that performs the transfer.
+   *
    * Requires the IAM action voip:apiovh:line/calls/transfer.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-23.
@@ -9181,6 +9791,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * whisperLineCalls calls POST /v1/telephony/{billingAccount}/line/{serviceName}/calls/{id}/whisper: Whisper on a call
+   *
+   * Speaks during the live call from the given phone number, heard by the agent only or by all
+   * participants, depending on the whispering mode.
    *
    * Requires the IAM action voip:apiovh:line/calls/whisper.
    *
@@ -9218,6 +9831,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineCanChangePassword calls GET /v1/telephony/{billingAccount}/line/{serviceName}/canChangePassword: Check if the SIP password can change
    *
+   * Returns whether the SIP password of the line can be changed. Change it with the changePassword
+   * call.
+   *
    * Requires the IAM action voip:apiovh:line/canChangePassword/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2018-04-01. Use
@@ -9249,6 +9865,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * cancelConvertToNumberLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/cancelConvertToNumber: Cancel a scheduled conversion to number
    *
+   * Cancels the scheduled conversion of the line to a number without a phone.
+   *
    * Requires the IAM action voip:apiovh:line/cancelConvertToNumber.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9275,6 +9893,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changePasswordLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/changePassword: Change the SIP password
+   *
+   * Changes the SIP password of the line, used by the phone or softphone to register. The new
+   * password is given in the password parameter.
    *
    * Requires the IAM action voip:apiovh:line/changePassword.
    *
@@ -9306,6 +9927,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * click2CallLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/click2Call: Start a call from the line
    *
+   * Calls a number from the line: the line rings first, then the call is placed. Intercom mode can
+   * pick up and enable the speaker automatically.
+   *
    * Requires the IAM action voip:apiovh:line/click2Call/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9336,6 +9960,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineClick2CallUsers calls GET /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser: List click2call users
    *
+   * Returns the identifiers of the click2call users of the line. A click2call user starts calls
+   * from the line with its own login.
+   *
    * Requires the IAM action voip:apiovh:line/click2CallUser/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9362,6 +9989,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineClick2CallUser calls POST /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser: Create a click2call user
+   *
+   * Creates a user that can make click2call calls from the line. Returns its identifier.
    *
    * Requires the IAM action voip:apiovh:line/click2CallUser/create.
    *
@@ -9392,6 +10021,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineClick2CallUser calls GET /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser/{id}: Get a click2call user
+   *
+   * Returns the click2call user: identifier, login and creation date. The user starts calls from
+   * the line with its login and password.
    *
    * Requires the IAM action voip:apiovh:line/click2CallUser/get.
    *
@@ -9451,6 +10083,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLineClick2CallUser calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser/{id}: Delete a click2call user
    *
+   * Deletes the click2call user. Its login can no longer start calls from the line.
+   *
    * Requires the IAM action voip:apiovh:line/click2CallUser/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9479,6 +10113,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changePasswordLineClick2CallUser calls POST /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser/{id}/changePassword: Change the user password
+   *
+   * Changes the password of the click2call user, used with its login to start calls from the line.
    *
    * Requires the IAM action voip:apiovh:line/click2CallUser/changePassword.
    *
@@ -9512,6 +10148,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * click2CallLineClick2CallUser calls POST /v1/telephony/{billingAccount}/line/{serviceName}/click2CallUser/{id}/click2Call: Start a call from the line
    *
+   * Calls a number from the line, as the click2call user: the line rings first, then the call is
+   * placed.
+   *
    * Requires the IAM action voip:apiovh:line/click2CallUser/click2Call/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9544,6 +10183,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * convertToNumberLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/convertToNumber: Schedule a conversion to number
    *
+   * Schedules the conversion of the line to a number without a phone. Returns the offer task.
+   *
    * Requires the IAM action voip:apiovh:line/convertToNumber.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9571,6 +10212,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * dissociateDeviceLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/dissociateDevice: Dissociate a device
+   *
+   * Dissociates a phone from the line, using the phone MAC address (AABBCCDDEEFF) and its public IP
+   * address.
    *
    * Requires the IAM action voip:apiovh:line/dissociateDevice/create.
    *
@@ -9602,6 +10246,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineIps calls GET /v1/telephony/{billingAccount}/line/{serviceName}/ips: List last registered IPs
    *
+   * Returns the last IP addresses the line registered from, with the date of each registration.
+   *
    * Requires the IAM action voip:apiovh:line/ips/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9628,6 +10274,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listLineLastRegistrations calls GET /v1/telephony/{billingAccount}/line/{serviceName}/lastRegistrations: List last registrations
+   *
+   * Returns the last registrations of the line: date, public and local IP addresses and ports, user
+   * agent and SIP domain.
    *
    * Requires the IAM action voip:apiovh:line/lastRegistrations/get.
    *
@@ -9656,6 +10305,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineListAssociablePhones calls GET /v1/telephony/{billingAccount}/line/{serviceName}/listAssociablePhones: List associable phones
    *
+   * Returns the phones with a free slot that the line can be attached to, with their brand,
+   * protocol, attached lines and maximum number of lines.
+   *
    * Requires the IAM action voip:apiovh:line/listAssociablePhones/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9683,6 +10335,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineMaximumAvailableSimultaneousLines calls GET /v1/telephony/{billingAccount}/line/{serviceName}/maximumAvailableSimultaneousLines: Get the maximum simultaneous lines
    *
+   * Returns the maximum number of simultaneous calls available for the line. The current, basic and
+   * extra channels are in the simultaneous channels details.
+   *
    * Requires the IAM action voip:apiovh:line/maximumAvailableSimultaneousLines/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9709,6 +10364,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineOffer calls GET /v1/telephony/{billingAccount}/line/{serviceName}/offer: Get the line offer
+   *
+   * Returns the public offer of the line: its name, its description and its price. It replaces the
+   * deprecated offers property of the line.
    *
    * Requires the IAM action voip:apiovh:line/offer/get.
    *
@@ -9738,6 +10396,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineOptions calls GET /v1/telephony/{billingAccount}/line/{serviceName}/options: Get the line options
    *
+   * Returns the line options: codecs, caller identification, forwarding, do not disturb and other
+   * call options.
+   *
    * Requires the IAM action voip:apiovh:line/options/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9765,6 +10426,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateLineOptions calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/options: Update the line options
+   *
+   * Updates the line options: forwarding rules, do not disturb, caller identification, call
+   * waiting, codecs, IP restrictions and call restrictions.
    *
    * Requires the IAM action voip:apiovh:line/options/edit.
    *
@@ -9796,6 +10460,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineOptionsAvailableCodecs calls GET /v1/telephony/{billingAccount}/line/{serviceName}/options/availableCodecs: List available codecs
    *
+   * Returns the codec combinations available for the line. One of them can be set as the codecs
+   * preferences in the line options.
+   *
    * Requires the IAM action voip:apiovh:line/options/availableCodecs/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9822,6 +10489,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineOptionsDefaultCodecs calls GET /v1/telephony/{billingAccount}/line/{serviceName}/options/defaultCodecs: Get the default codecs
+   *
+   * Returns the codecs used when none are set on the line. Set the codecs preferences in the line
+   * options.
    *
    * Requires the IAM action voip:apiovh:line/options/defaultCodecs/get.
    *
@@ -9850,6 +10520,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLinePhone calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone: Get the phone
    *
+   * Returns the phone attached to the line: brand, MAC address, protocol, description, maximum
+   * lines and simultaneous calls, and configuration.
+   *
    * Requires the IAM action voip:apiovh:line/phone/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9877,6 +10550,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateLinePhone calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/phone: Update the phone
+   *
+   * Updates the phone attached to the line: the IP address restriction of an MGCP phone.
    *
    * Requires the IAM action voip:apiovh:line/phone/edit.
    *
@@ -9908,6 +10583,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLinePhoneAdminCredentials calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/adminCredentials: Get the phone admin credentials
    *
+   * Returns the administration login and password of the phone. Available to VIP customers only.
+   *
    * Requires the IAM action voip:apiovh:line/phone/adminCredentials/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9935,6 +10612,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changePhoneConfigurationLinePhone calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/changePhoneConfiguration: Change the phone configuration
+   *
+   * Changes the phone configuration remotely with name value pairs of provisioning options, and can
+   * reboot the phone to apply them.
    *
    * Requires the IAM action voip:apiovh:line/phone/changePhoneConfiguration.
    *
@@ -9966,6 +10646,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhoneFunctionKeys calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/functionKey: List function keys
    *
+   * Returns the numbers (keyNum) of the function keys of the phone. Get a function key for its
+   * label, type and active function.
+   *
    * Requires the IAM action voip:apiovh:line/phone/functionKey/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -9992,6 +10675,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLinePhoneFunctionKey calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/functionKey/{keyNum}: Get a function key
+   *
+   * Returns the function key of the phone: number, label, type, default function, active function
+   * and its parameter.
    *
    * Requires the IAM action voip:apiovh:line/phone/functionKey/get.
    *
@@ -10051,6 +10737,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLinePhoneFunctionKey calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/phone/functionKey/{keyNum}: Update a function key
    *
+   * Updates the function active on the key and its parameter. The available functions are listed
+   * for each key.
+   *
    * Requires the IAM action voip:apiovh:line/phone/functionKey/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10083,6 +10772,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhoneFunctionKeyAvailableFunctions calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/functionKey/{keyNum}/availableFunction: List available functions
    *
+   * Returns the functions that can be set on the function key. Set one with the function and
+   * parameter of the key.
+   *
    * Requires the IAM action voip:apiovh:line/phone/functionKey/availableFunction/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10112,6 +10804,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhoneMerchandiseAvailables calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/merchandiseAvailable: List exchange phones
    *
+   * Returns the phones available to exchange the current phone, with their name, description, URL
+   * and price.
+   *
    * Requires the IAM action voip:apiovh:line/phone/merchandiseAvailable/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10139,6 +10834,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhonePhonebooks calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook: List phonebooks
    *
+   * Returns the identifiers (bookKey) of the phonebooks of the phone. Check first that the phone
+   * supports phonebooks.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10165,6 +10863,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLinePhonePhonebook calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook: Create a phonebook
+   *
+   * Creates a phonebook on the phone of the line, if the phone supports phonebooks. Returns its
+   * identifier (bookKey).
    *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/create.
    *
@@ -10195,6 +10896,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLinePhonePhonebook calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}: Get a phonebook
+   *
+   * Returns the phonebook of the phone: name, identifier (bookKey), phone key and whether it is
+   * read-only.
    *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/get.
    *
@@ -10254,6 +10958,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLinePhonePhonebook calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}: Update a phonebook
    *
+   * Updates the name of the phonebook of the phone. Contacts are updated one by one with the
+   * phonebookContact route.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10286,6 +10993,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLinePhonePhonebook calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}: Delete a phonebook
    *
+   * Deletes the phonebook of the phone and its contacts. Export the contacts first to keep a copy.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10314,6 +11023,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLinePhonePhonebookExport calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/export: Export contacts
+   *
+   * Exports the contacts of the phonebook to a file in CSV format. Returns the file to download.
    *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/export/get.
    *
@@ -10348,6 +11059,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * importLinePhonePhonebook calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/import: Import contacts
    *
+   * Imports contacts into the phonebook from an Excel (.xls, .xlsx) or CSV file in /me/document.
+   * Returns the task that performs the import.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/import.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10381,6 +11095,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhonePhonebookPhonebookContacts calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/phonebookContact: List contacts
    *
+   * Returns the identifiers of the contacts of the phonebook. Get a contact for its name, group and
+   * phone numbers.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/phonebookContact/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10409,6 +11126,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLinePhonePhonebookPhonebookContact calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/phonebookContact: Create a contact
+   *
+   * Creates a contact in the phonebook with a name, surname, group and phone numbers. Returns its
+   * identifier.
    *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/phonebookContact/create.
    *
@@ -10441,6 +11161,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLinePhonePhonebookPhonebookContact calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/phonebookContact/{id}: Get a contact
+   *
+   * Returns the contact of the phonebook: name, surname, group, and office and home phone numbers,
+   * landline and mobile.
    *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/phonebookContact/get.
    *
@@ -10517,6 +11240,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLinePhonePhonebookPhonebookContact calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/phonebookContact/{id}: Update a contact
    *
+   * Updates the contact of the phonebook: name, surname, group, and office and home phone numbers,
+   * landline and mobile.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/phonebookContact/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10556,6 +11282,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLinePhonePhonebookPhonebookContact calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/phone/phonebook/{bookKey}/phonebookContact/{id}: Delete a contact
    *
+   * Deletes the contact from the phonebook, with its name, group and office and home phone numbers.
+   *
    * Requires the IAM action voip:apiovh:line/phone/phonebook/phonebookContact/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10592,6 +11320,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * rebootLinePhone calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/reboot: Reboot the phone
    *
+   * Reboots the phone attached to the line. Returns the task that tracks the reboot, to follow its
+   * status.
+   *
    * Requires the IAM action voip:apiovh:line/phone/reboot.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10620,6 +11351,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * refreshScreenLinePhone calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/refreshScreen: Refresh the phone screen
    *
+   * Refreshes the screen of the MGCP phone. Returns the task that tracks the refresh.
+   *
    * Requires the IAM action voip:apiovh:line/phone/refreshScreen.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10647,6 +11380,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * resetConfigLinePhone calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/resetConfig: Reset the phone configuration
+   *
+   * Resets the phone configuration to its default values, for the given public IP address. Returns
+   * the reset code and the reset method.
    *
    * Requires the IAM action voip:apiovh:line/phone/resetConfig.
    *
@@ -10679,6 +11415,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLinePhoneRmas calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma: List RMAs
    *
+   * Returns the identifiers of the RMAs of the phone. An RMA is a request to return or exchange a
+   * phone.
+   *
    * Requires the IAM action voip:apiovh:line/phone/rma/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10705,6 +11444,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLinePhoneRma calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma: Create an RMA
+   *
+   * Creates an RMA to return the phone and keep the service, or to exchange it for another phone.
+   * Returns the RMA identifier.
    *
    * Requires the IAM action voip:apiovh:line/phone/rma/create.
    *
@@ -10736,6 +11478,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLinePhoneRma calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma/{id}: Get an RMA
+   *
+   * Returns the RMA: type, process, status and steps, creation, reception and termination dates,
+   * equipment reference and shipping contact.
    *
    * Requires the IAM action voip:apiovh:line/phone/rma/get.
    *
@@ -10795,6 +11540,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateLinePhoneRma calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma/{id}: Update an RMA
    *
+   * Updates the shipping contact used for an exchange and the process determined for the returned
+   * phone.
+   *
    * Requires the IAM action voip:apiovh:line/phone/rma/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10827,6 +11575,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLinePhoneRma calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma/{id}: Cancel an RMA
    *
+   * Cancels the RMA of the phone. Only an RMA marked as cancellable, as returned when getting the
+   * RMA, can be cancelled.
+   *
    * Requires the IAM action voip:apiovh:line/phone/rma/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10855,6 +11606,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeTypeLinePhoneRma calls POST /v1/telephony/{billingAccount}/line/{serviceName}/phone/rma/{id}/changeType: Change the RMA type
+   *
+   * Changes the type of the RMA to a termination (resiliate) or a phone restitution (toSip).
    *
    * Requires the IAM action voip:apiovh:line/phone/rma/changeType.
    *
@@ -10888,6 +11641,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLinePhoneSupportsPhonebook calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phone/supportsPhonebook: Check phonebook support
    *
+   * Returns whether the phone supports phonebooks. Phonebooks can be created on the phone only when
+   * it does.
+   *
    * Requires the IAM action voip:apiovh:line/phone/supportsPhonebook/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10914,6 +11670,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listLinePhoneCanBeAssociables calls GET /v1/telephony/{billingAccount}/line/{serviceName}/phoneCanBeAssociable: List phones with a free SIP slot
+   *
+   * Returns the phones with a free SIP slot for the line: brand, protocol, maximum number of lines,
+   * price and fees.
    *
    * Requires the IAM action voip:apiovh:line/phoneCanBeAssociable/get.
    *
@@ -10946,6 +11705,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineRecords calls GET /v1/telephony/{billingAccount}/line/{serviceName}/records: List call recordings
    *
+   * Returns the identifiers of the call recordings of the line. Get a recording for its numbers,
+   * dates, duration and download URL.
+   *
    * Requires the IAM action voip:apiovh:line/records/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -10972,6 +11734,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineRecords calls GET /v1/telephony/{billingAccount}/line/{serviceName}/records/{id}: Get a call recording
+   *
+   * Returns the call recording and the URL to download it, with the caller and destination numbers,
+   * agent, start and end dates and duration.
    *
    * Requires the IAM action voip:apiovh:line/records/get.
    *
@@ -11031,6 +11796,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLineRecords calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/records/{id}: Delete a call recording
    *
+   * Deletes the call recording of the service. Its sound file can no longer be downloaded from its
+   * URL.
+   *
    * Requires the IAM action voip:apiovh:line/records/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11059,6 +11827,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * removeSimultaneousLinesLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/removeSimultaneousLines: Remove extra simultaneous lines
+   *
+   * Removes the given quantity of extra simultaneous lines from the line. The extra channels are
+   * listed in the simultaneous channels details.
    *
    * Requires the IAM action voip:apiovh:line/removeSimultaneousLines.
    *
@@ -11089,6 +11860,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineSimultaneousChannelsDetails calls GET /v1/telephony/{billingAccount}/line/{serviceName}/simultaneousChannelsDetails: Get simultaneous channels details
+   *
+   * Returns the simultaneous call channels of the line: current, basic, extra, to be deleted and
+   * maximum.
    *
    * Requires the IAM action voip:apiovh:line/simultaneousChannelsDetails/get.
    *
@@ -11519,6 +12293,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineStatistics calls GET /v1/telephony/{billingAccount}/line/{serviceName}/statistics: Get line statistics
    *
+   * Returns quality statistics of the line over an hourly to yearly timeframe: maximum jitter,
+   * maximum delay, lost RTP packets or MOS score.
+   *
    * Requires the IAM action voip:apiovh:line/statistics/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2022-06-17.
@@ -11558,6 +12335,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getLineTones calls GET /v1/telephony/{billingAccount}/line/{serviceName}/tones: Get the tones
    *
+   * Returns the tones of the line: ringback, on hold, call waiting and end of call. Each tone is a
+   * default sound, none or a custom sound.
+   *
    * Requires the IAM action voip:apiovh:line/tones/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11585,6 +12365,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateLineTones calls PUT /v1/telephony/{billingAccount}/line/{serviceName}/tones: Update the tones
+   *
+   * Updates the tones of the line: ringback, on hold, call waiting and end of call. Custom sounds
+   * are uploaded with the tone upload call.
    *
    * Requires the IAM action voip:apiovh:line/tones/edit.
    *
@@ -11615,6 +12398,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * toneUploadLineTones calls POST /v1/telephony/{billingAccount}/line/{serviceName}/tones/toneUpload: Upload a tone
+   *
+   * Uploads a sound file to use as a tone: ringback, on hold, call waiting or closure. The file is
+   * given by a /me/document ID or a URL. Returns the task that tracks the upload.
    *
    * Requires the IAM action voip:apiovh:line/tones/toneUpload.
    *
@@ -11647,6 +12433,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listLineTrafficExtracts calls GET /v1/telephony/{billingAccount}/line/{serviceName}/trafficExtracts: List traffic extracts
    *
+   * Returns the identifiers of the SIP traffic extracts of the line. A traffic extract is a PCAP
+   * capture of the SIP traffic over a time range.
+   *
    * Requires the IAM action voip:apiovh:line/trafficExtracts/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11673,6 +12462,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createLineTrafficExtracts calls POST /v1/telephony/{billingAccount}/line/{serviceName}/trafficExtracts: Start a traffic extract
+   *
+   * Starts capturing the SIP traffic of the line between a start date and an end date. The result
+   * is a PCAP file.
    *
    * Requires the IAM action voip:apiovh:line/trafficExtracts/create.
    *
@@ -11704,6 +12496,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getLineTrafficExtracts calls GET /v1/telephony/{billingAccount}/line/{serviceName}/trafficExtracts/{id}: Get a traffic extract
+   *
+   * Returns the traffic extract: start and end dates, status, and the URL and size of the PCAP
+   * file.
    *
    * Requires the IAM action voip:apiovh:line/trafficExtracts/get.
    *
@@ -11763,6 +12558,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteLineTrafficExtracts calls DELETE /v1/telephony/{billingAccount}/line/{serviceName}/trafficExtracts/{id}: Delete a traffic extract
    *
+   * Deletes the traffic extract and its PCAP file of the SIP traffic of the line.
+   *
    * Requires the IAM action voip:apiovh:line/trafficExtracts/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11792,6 +12589,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * unblockLine calls POST /v1/telephony/{billingAccount}/line/{serviceName}/unblock: Unblock the line
    *
+   * Unblocks the line and removes every incoming and outgoing block set with the block call.
+   *
    * Requires the IAM action voip:apiovh:line/unblock.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11819,6 +12618,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listNumbers calls GET /v1/telephony/{billingAccount}/number: List numbers
    *
+   * Returns the numbers of the billing account. A number has no phone: it routes incoming calls
+   * with a feature.
+   *
    * Requires the IAM action voip:apiovh:number/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11840,6 +12642,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getNumber calls GET /v1/telephony/{billingAccount}/number/{serviceName}: Get a number
+   *
+   * Returns the number: feature type, description, service type, and the pool it belongs to if it
+   * is part of one.
    *
    * Requires the IAM action voip:apiovh:number/get.
    *
@@ -11895,6 +12700,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateNumber calls PUT /v1/telephony/{billingAccount}/number/{serviceName}: Update a number
    *
+   * Updates the description of the number. The feature type is changed with the changeFeatureType
+   * call.
+   *
    * Requires the IAM action voip:apiovh:number/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11925,6 +12733,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * cancelConvertToLineNumber calls POST /v1/telephony/{billingAccount}/number/{serviceName}/cancelConvertToLine: Cancel a scheduled conversion to line
    *
+   * Cancels the scheduled conversion of the number to a line. The number keeps its current feature.
+   *
    * Requires the IAM action voip:apiovh:number/cancelConvertToLine.
    *
    * @param billingAccount - The name of your billingAccount
@@ -11951,6 +12761,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeFeatureTypeNumber calls POST /v1/telephony/{billingAccount}/number/{serviceName}/changeFeatureType: Change the number feature type
+   *
+   * Changes the feature of the number, such as redirect, conference, contact center or PBX. The
+   * previous configuration is lost.
    *
    * Requires the IAM action voip:apiovh:number/changeFeatureType.
    *
@@ -11983,6 +12796,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * convertToLineNumber calls POST /v1/telephony/{billingAccount}/number/{serviceName}/convertToLine: Schedule a conversion to line
    *
+   * Schedules the conversion of the number to a line with a phone. Returns the offer task.
+   *
    * Requires the IAM action voip:apiovh:number/convertToLine.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12014,6 +12829,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getNumberConvertToLineAvailableOffers calls GET /v1/telephony/{billingAccount}/number/{serviceName}/convertToLineAvailableOffers: List line offers for conversion
    *
+   * Returns the line offers and contracts available to convert the number to a line.
+   *
    * Requires the IAM action voip:apiovh:number/convertToLineAvailableOffers/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12041,6 +12858,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listOfferTasks calls GET /v1/telephony/{billingAccount}/offerTask: List offer tasks
+   *
+   * Returns the identifiers of the scheduled offer operations of the billing account, such as an
+   * offer change or a termination.
    *
    * Requires the IAM action voip:apiovh:offerTask/get.
    *
@@ -12080,6 +12900,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOfferTask calls GET /v1/telephony/{billingAccount}/offerTask/{taskId}: Get an offer task
+   *
+   * Returns the offer operation: type, action such as termination or upgrade, planned execution
+   * date and status.
    *
    * Requires the IAM action voip:apiovh:offerTask/get.
    *
@@ -12144,6 +12967,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOfferTask calls PUT /v1/telephony/{billingAccount}/offerTask/{taskId}: Update an offer task
    *
+   * Updates the scheduled offer operation. Only its planned execution date can be changed.
+   *
    * Requires the IAM action voip:apiovh:offerTask/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12174,6 +12999,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOldPhones calls GET /v1/telephony/{billingAccount}/oldPhone: List unreturned old phones
    *
+   * Returns the old phones not returned after an RMA, with their model and MAC address.
+   *
    * Requires the IAM action voip:apiovh:oldPhone/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12199,6 +13026,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOutplanNotifications calls GET /v1/telephony/{billingAccount}/outplanNotification: List out-of-plan alerts
    *
+   * Returns the identifiers of the out-of-plan alerts. An alert notifies when out-of-plan
+   * consumption reaches a threshold.
+   *
    * Requires the IAM action voip:apiovh:outplanNotification/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12220,6 +13050,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOutplanNotification calls POST /v1/telephony/{billingAccount}/outplanNotification: Create an out-of-plan alert
+   *
+   * Creates an alert at a percentage of the maximum out-of-plan, with a block (none, incoming,
+   * outgoing or all calls) and an optional email.
    *
    * Requires the IAM action voip:apiovh:outplanNotification/create.
    *
@@ -12249,6 +13082,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOutplanNotification calls GET /v1/telephony/{billingAccount}/outplanNotification/{id}: Get an out-of-plan alert
+   *
+   * Returns the out-of-plan alert: percentage of the maximum out-of-plan, block applied to the
+   * lines and notification email.
    *
    * Requires the IAM action voip:apiovh:outplanNotification/get.
    *
@@ -12304,6 +13140,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOutplanNotification calls DELETE /v1/telephony/{billingAccount}/outplanNotification/{id}: Delete an out-of-plan alert
    *
+   * Deletes the out-of-plan alert. No notification or block is applied any more when its threshold
+   * is reached.
+   *
    * Requires the IAM action voip:apiovh:outplanNotification/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12331,6 +13170,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxes calls GET /v1/telephony/{billingAccount}/ovhPabx: List PBX services
    *
+   * Returns the PBX services of the billing account: voice menus (IVR), dialplans and call queues.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12352,6 +13193,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabx calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}: Get a PBX service
+   *
+   * Returns the PBX service (call queues and IVR): feature type, description and whether the
+   * extended CCS options are enabled.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/get.
    *
@@ -12407,6 +13251,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabx calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}: Update a PBX service
    *
+   * Updates the description of the PBX service. Its dialplans, menus and queues are managed with
+   * their own routes.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12437,6 +13284,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxDialplans calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan: List dialplans
    *
+   * Returns the identifiers of the dialplans of the PBX. A dialplan routes calls through
+   * extensions.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12463,6 +13313,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxDialplan calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan: Create a dialplan
+   *
+   * Creates a dialplan on the PABX with a name, a transfer timeout, anonymous call rejection and
+   * the number presented when bridging calls.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/create.
    *
@@ -12494,6 +13347,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxDialplan calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}: Get a dialplan
+   *
+   * Returns the dialplan: name, last update, transfer timeout, anonymous call rejection and number
+   * presented when bridging calls.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/get.
    *
@@ -12553,6 +13409,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxDialplan calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}: Update a dialplan
    *
+   * Updates the dialplan name, transfer timeout, anonymous call rejection and number presented when
+   * bridging calls.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12585,6 +13444,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxDialplan calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}: Delete a dialplan
    *
+   * Deletes the dialplan and its extensions from the PABX. A dialplan holds the extensions applied
+   * to the calls received.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12614,6 +13476,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxDialplanExtensions calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension: List extensions
    *
+   * Returns the identifiers of the extensions of the dialplan. An extension is a step that applies
+   * rules when its conditions match.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12642,6 +13507,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxDialplanExtension calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension: Create an extension
+   *
+   * Creates an extension in the dialplan at a position, enabled or not, with a scheduler category
+   * and a screen list type. Extensions run in order.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/create.
    *
@@ -12675,6 +13543,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxDialplanExtension calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}: Get an extension
+   *
+   * Returns the extension: position in the dialplan, status, scheduler category and screen list
+   * type.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/get.
    *
@@ -12750,6 +13621,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxDialplanExtension calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}: Update an extension
    *
+   * Updates the position of the extension in the dialplan, its status, its scheduler category and
+   * its screen list type.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12789,6 +13663,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxDialplanExtension calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}: Delete an extension
    *
+   * Deletes the extension from the dialplan. The extension and its rules no longer apply to the
+   * calls received.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12825,6 +13702,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxDialplanExtensionConditionScreenLists calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionScreenList: List filtering conditions
    *
+   * Returns the identifiers of the filtering conditions of the extension, checked against the
+   * screen list type of the extension.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionScreenList/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -12860,6 +13740,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxDialplanExtensionConditionScreenList calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionScreenList: Create a filtering condition
+   *
+   * Creates a filtering condition on the caller or the called number. The screen list type sets
+   * whether matching calls are allowed or blocked.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionScreenList/create.
    *
@@ -12900,6 +13783,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxDialplanExtensionConditionScreenList calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionScreenList/{conditionId}: Get a filtering condition
+   *
+   * Returns the filtering condition of the extension: caller number or destination number, and
+   * screen list type (whitelist or blacklist).
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionScreenList/get.
    *
@@ -12989,6 +13875,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxDialplanExtensionConditionScreenList calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionScreenList/{conditionId}: Delete a filtering condition
    *
+   * Deletes the filtering condition. Calls are no longer checked against its caller number or
+   * destination number.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionScreenList/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13028,6 +13917,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxDialplanExtensionConditionTimes calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionTime: List time conditions
    *
+   * Returns the identifiers of the time conditions of the extension. The extension runs on the days
+   * and time slots they define.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionTime/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13063,6 +13955,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxDialplanExtensionConditionTime calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionTime: Create a time condition
+   *
+   * Creates a time condition on the extension: a day of the week and the start and end times when
+   * the extension runs.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionTime/create.
    *
@@ -13103,6 +13998,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxDialplanExtensionConditionTime calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionTime/{conditionId}: Get a time condition
+   *
+   * Returns the time condition of the extension: day of the week and the start and end times when
+   * the extension runs.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionTime/get.
    *
@@ -13191,6 +14089,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxDialplanExtensionConditionTime calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionTime/{conditionId}: Update a time condition
    *
+   * Updates the day of the week and the start and end times when the extension of the dialplan
+   * runs.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionTime/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13233,6 +14134,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxDialplanExtensionConditionTime calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/conditionTime/{conditionId}: Delete a time condition
    *
+   * Deletes the time condition of the extension. Its day and time slot no longer restrict when the
+   * extension runs.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/conditionTime/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13272,6 +14176,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxDialplanExtensionRules calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/rule: List extension rules
    *
+   * Returns the identifiers of the rules of the extension. A rule is an action, such as play a
+   * sound or forward the call.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/rule/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13307,6 +14214,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxDialplanExtensionRule calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/rule: Create an extension rule
+   *
+   * Creates a rule in the extension: an action such as playback, bridge, IVR, voicemail or TTS, its
+   * parameter and its position.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/rule/create.
    *
@@ -13347,6 +14257,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxDialplanExtensionRule calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/rule/{ruleId}: Get an extension rule
+   *
+   * Returns the rule: action (such as playback, bridge, voicemail or TTS), parameter, position and
+   * whether it runs when the conditions are false.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/rule/get.
    *
@@ -13435,6 +14348,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxDialplanExtensionRule calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/rule/{ruleId}: Update an extension rule
    *
+   * Updates the action of the rule, its parameter, its position in the extension and whether it
+   * runs when the conditions are false.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/rule/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13477,6 +14393,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxDialplanExtensionRule calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/dialplan/{dialplanId}/extension/{extensionId}/rule/{ruleId}: Delete an extension rule
    *
+   * Deletes the rule from the extension of the dialplan. Its action no longer runs when the
+   * extension is executed.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/dialplan/extension/rule/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13516,6 +14435,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getOvhPabxHunting calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting: Get the queue system settings
    *
+   * Returns the queue system settings of the service: offer name, CRM URL template opened by the
+   * agent banner, G729 codec and status change IVR.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13543,6 +14465,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateOvhPabxHunting calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting: Update the queue system settings
+   *
+   * Updates the queue system settings: the CRM URL template opened by the agent banner, the G729
+   * codec and the status change IVR.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/edit.
    *
@@ -13574,6 +14499,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingAgents calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent: List agents
    *
+   * Returns the identifiers of the agents. An agent is a phone number that answers the calls of one
+   * or several queues.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13600,6 +14528,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingAgent calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent: Create an agent
+   *
+   * Creates an agent: a number that answers calls from the queues. Sets its status, ring timeout,
+   * wrap-up time and maximum simultaneous calls.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/create.
    *
@@ -13631,6 +14562,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgent calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}: Get an agent
+   *
+   * Returns the agent: number, description, status, break status, type (internal or external), ring
+   * timeout, wrap-up time and simultaneous calls.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/get.
    *
@@ -13690,6 +14624,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxHuntingAgent calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}: Update an agent
    *
+   * Updates the agent: number, description, status (available, logged out or on break), break
+   * status, ring timeout, wrap-up time and simultaneous calls.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13722,6 +14659,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingAgent calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}: Delete an agent
    *
+   * Deletes the agent. It is removed from all its queues and no longer receives calls from the
+   * queue system.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13750,6 +14690,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgentBannerAccess calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/bannerAccess: Get the agent banner access
+   *
+   * Returns the web access to the agent banner application: its URL and creation date.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/bannerAccess/get.
    *
@@ -13781,6 +14723,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * createOvhPabxHuntingAgentBannerAccess calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/bannerAccess: Create the agent banner access
    *
+   * Creates a web access to the agent banner application. Returns its URL.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/bannerAccess/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13811,6 +14755,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingAgentBannerAccess calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/bannerAccess: Delete the agent banner access
    *
+   * Deletes the web access to the agent banner application. Its URL no longer gives access to the
+   * banner.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/bannerAccess/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13840,6 +14787,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingAgentCalls calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls: List agent calls
    *
+   * Returns the identifiers of the calls the agent is handling. Get a live call for its caller,
+   * queue, state and dates.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13868,6 +14818,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgentCalls calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}: Get a live call
+   *
+   * Returns the live call: caller number and name, destination number, agent, queue, state (waiting
+   * or answered), hold status and begin, answer and end dates.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/get.
    *
@@ -13937,6 +14890,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * eavesdropOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/eavesdrop: Eavesdrop on a call
    *
+   * Listens to the live call without being heard. The given phone number is called and bridged in
+   * the communication. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/eavesdrop.
    *
    * @param billingAccount - The name of your billingAccount
@@ -13977,6 +14933,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * hangupOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/hangup: Hang up a call
    *
+   * Ends the live call for all participants, the caller and the agent. Returns the task that
+   * performs the hang up.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/hangup.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14014,6 +14973,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * holdOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/hold: Toggle hold on a call
    *
+   * Puts the live call on hold, or resumes it if it is already on hold. Returns the task that
+   * performs it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/hold.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14050,6 +15012,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * interceptOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/intercept: Intercept an unanswered call
+   *
+   * Answers a call that is ringing on another line. The given phone number is called and takes the
+   * communication. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/intercept.
    *
@@ -14091,6 +15056,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/transfer: Transfer an answered call
    *
+   * Transfers the answered call to another phone number, given as a parameter. Returns the task
+   * that performs the transfer.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/transfer.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14130,6 +15098,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * whisperOvhPabxHuntingAgentCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/calls/{id}/whisper: Whisper on a call
+   *
+   * Speaks during the live call from the given phone number, heard by the agent only or by all
+   * participants, depending on the whispering mode.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/calls/whisper.
    *
@@ -14171,6 +15142,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getOvhPabxHuntingAgentEventToken calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/eventToken: Get the event token
    *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/eventToken/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14200,6 +15174,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingAgentEventToken calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/eventToken/create.
    *
@@ -14233,6 +15210,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingAgentEventToken calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/eventToken: Delete the event token
    *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/eventToken/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14261,6 +15240,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgentLiveStatus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/liveStatus/get.
    *
@@ -14292,6 +15274,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingAgentQueues calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue: List the queues of an agent
    *
+   * Returns the identifiers of the queues the agent belongs to. Get an agent position in a queue to
+   * see its order in that queue.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14320,6 +15305,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingAgentQueue calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue: Assign an agent to a queue
+   *
+   * Adds an agent to a queue, with a position. The position sets the order in which agents receive
+   * calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/create.
    *
@@ -14353,6 +15341,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgentQueue calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Get an agent position in a queue
+   *
+   * Returns the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/get.
    *
@@ -14422,6 +15413,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxHuntingAgentQueue calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Update an agent position in a queue
    *
+   * Updates the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14461,6 +15455,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingAgentQueue calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue/{queueId}: Remove an agent from a queue
    *
+   * Removes the agent from the queue. The agent no longer receives calls from this queue but stays
+   * assigned to its other queues.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14496,6 +15493,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingAgentQueueLiveStatus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/agent/{agentId}/queue/{queueId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/agent/queue/liveStatus/get.
    *
@@ -14534,6 +15534,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingCustomStatus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/customStatus: List custom statuses
    *
+   * Returns the identifiers of the custom statuses agents can set, such as a break. Each status has
+   * a name, a description and a color.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/customStatus/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14560,6 +15563,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingCustomStatus calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/customStatus: Create a custom status
+   *
+   * Creates a custom status agents can set, such as a break. Sets its name, short description and
+   * the color shown on the agent banner.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/customStatus/create.
    *
@@ -14591,6 +15597,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingCustomStatus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/customStatus/{id}: Get a custom status
+   *
+   * Returns the custom status: name, short description and color displayed on the agent banner web
+   * application.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/customStatus/get.
    *
@@ -14651,6 +15660,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingCustomStatus calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/customStatus/{id}: Delete a custom status
    *
+   * Deletes the custom status. Agents can no longer select it on the agent banner web application.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/customStatus/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14680,6 +15691,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getOvhPabxHuntingEventToken calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/eventToken: Get the event token
    *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/eventToken/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14707,6 +15721,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingEventToken calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/eventToken/create.
    *
@@ -14738,6 +15755,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingEventToken calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/eventToken: Delete the event token
    *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/eventToken/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14765,6 +15784,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingQueues calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue: List queues
    *
+   * Returns the identifiers of the queues. A queue holds incoming calls and dispatches them to its
+   * agents with a strategy.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14791,6 +15813,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxHuntingQueue calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue: Create a queue
+   *
+   * Creates a queue that distributes calls to its agents. Sets the dispatching strategy, the
+   * maximum wait time and callers, and the overflow and closure actions.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/create.
    *
@@ -14822,6 +15847,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingQueue calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}: Get a queue
+   *
+   * Returns the queue: name, strategy, maximum waiting callers and wait time, sound on hold, call
+   * recording, and actions on overflow and on closure.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/get.
    *
@@ -14881,6 +15909,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxHuntingQueue calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}: Update a queue
    *
+   * Updates the queue: name, dispatching strategy, maximum waiting callers and wait time, sound on
+   * hold, call recording and overflow and closure actions.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14913,6 +15944,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingQueue calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}: Delete a queue
    *
+   * Deletes the queue. Its agents are no longer assigned to it, and calls are no longer dispatched
+   * through it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14942,6 +15976,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingQueueAgents calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/agent: List the agents of a queue
    *
+   * Returns the identifiers of the agents of the queue. Get an agent position in the queue to see
+   * the order in which agents receive calls.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/agent/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -14970,6 +16007,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingQueueAgent calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Get an agent position in a queue
+   *
+   * Returns the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/agent/get.
    *
@@ -15039,6 +16079,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxHuntingQueueAgent calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Update an agent position in a queue
    *
+   * Updates the position of the agent in the queue. The position sets the order in which agents
+   * receive calls, depending on the queue strategy.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/agent/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15078,6 +16121,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxHuntingQueueAgent calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/agent/{agentId}: Remove an agent from a queue
    *
+   * Removes the agent from the queue. The agent no longer receives calls from this queue but stays
+   * assigned to its other queues.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/agent/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15113,6 +16159,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingQueueAgentLiveStatus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/agent/{agentId}/liveStatus: Get the agent live status
+   *
+   * Returns the live status of the agent: state, last status change, and the number and total
+   * duration of the calls taken on the current day.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/agent/liveStatus/get.
    *
@@ -15151,6 +16200,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxHuntingQueueLiveCalls calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls: List queue live calls
    *
+   * Returns the identifiers of the calls waiting or answered in the queue. Get a live call for its
+   * caller, agent, state and dates.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15179,6 +16231,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxHuntingQueueLiveCalls calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}: Get a live call
+   *
+   * Returns the live call: caller number and name, destination number, agent, queue, state (waiting
+   * or answered), hold status and begin, answer and end dates.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/get.
    *
@@ -15254,6 +16309,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * eavesdropOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/eavesdrop: Eavesdrop on a call
    *
+   * Listens to the live call without being heard. The given phone number is called and bridged in
+   * the communication. Returns the task that performs it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/eavesdrop.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15294,6 +16352,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * hangupOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/hangup: Hang up a call
    *
+   * Ends the live call for all participants, the caller and the agent. Returns the task that
+   * performs the hang up.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/hangup.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15331,6 +16392,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * holdOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/hold: Toggle hold on a call
    *
+   * Puts the live call on hold, or resumes it if it is already on hold. Returns the task that
+   * performs it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/hold.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15367,6 +16431,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * interceptOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/intercept: Intercept an unanswered call
+   *
+   * Answers a call that is ringing on another line. The given phone number is called and takes the
+   * communication. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/intercept.
    *
@@ -15408,6 +16475,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/transfer: Transfer an answered call
    *
+   * Transfers the answered call to another phone number, given as a parameter. Returns the task
+   * that performs the transfer.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/transfer.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15447,6 +16517,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * whisperOvhPabxHuntingQueueLiveCalls calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveCalls/{id}/whisper: Whisper on a call
+   *
+   * Speaks during the live call from the given phone number, heard by the agent only or by all
+   * participants, depending on the whispering mode.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveCalls/whisper.
    *
@@ -15488,6 +16561,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getOvhPabxHuntingQueueLiveStatistics calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/hunting/queue/{queueId}/liveStatistics: Get queue live statistics
    *
+   * Returns the live statistics of the queue since the last reset at midnight: total, answered and
+   * lost calls, and total waiting and call durations.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/hunting/queue/liveStatistics/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15518,6 +16594,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxMenus calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu: List menus
    *
+   * Returns the identifiers of the voice menus (IVR) of the PBX. A menu plays a sound and routes
+   * the call according to the key pressed.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15544,6 +16623,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxMenu calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu: Create a menu
+   *
+   * Creates a voice menu: a greeting and the keys callers can press. Add the keys and their actions
+   * afterwards with menu entries.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/create.
    *
@@ -15575,6 +16657,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxMenu calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}: Get a menu
+   *
+   * Returns the voice menu: name, greeting sound or text to speech, invalid key sound or text to
+   * speech, and the key entry and menu timeouts.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/get.
    *
@@ -15634,6 +16719,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxMenu calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}: Update a menu
    *
+   * Updates the voice menu: name, greeting and invalid key sounds or text to speech, and the key
+   * entry and menu timeouts in milliseconds.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15666,6 +16754,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxMenu calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}: Delete a menu
    *
+   * Deletes the voice menu and its entries. Callers no longer hear its greeting or reach its
+   * actions.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15695,6 +16786,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxMenuEntries calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}/entry: List menu entries
    *
+   * Returns the identifiers of the entries of the voice menu. An entry maps a key to an action.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/entry/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15723,6 +16816,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxMenuEntry calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}/entry: Create a menu entry
+   *
+   * Creates an entry: the key pressed by the caller and the action to run, such as bridge,
+   * playback, sub menu or call center, with its parameter.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/entry/create.
    *
@@ -15756,6 +16852,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxMenuEntry calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}/entry/{entryId}: Get a menu entry
+   *
+   * Returns the menu entry: position, key (DTMF) pressed by the caller, action triggered and its
+   * additional parameter.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/entry/get.
    *
@@ -15825,6 +16924,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxMenuEntry calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}/entry/{entryId}: Update a menu entry
    *
+   * Updates the menu entry: position, key (DTMF), action such as bridge, playback, sub menu or call
+   * center, and its parameter.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/entry/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15864,6 +16966,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxMenuEntry calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/menu/{menuId}/entry/{entryId}: Delete a menu entry
    *
+   * Deletes the menu entry. The key it used no longer triggers an action in the voice menu.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/menu/entry/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15900,6 +17004,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxRecords calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/records: List call recordings
    *
+   * Returns the identifiers of the recordings of the calls handled by the service. Get a call
+   * recording for its details.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/records/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -15926,6 +17033,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxRecords calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/records/{id}: Get a call recording
+   *
+   * Returns the call recording and the URL to download it, with the caller and destination numbers,
+   * agent, start and end dates and duration.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/records/get.
    *
@@ -15985,6 +17095,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxRecords calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/records/{id}: Delete a call recording
    *
+   * Deletes the call recording of the service. Its sound file can no longer be downloaded from its
+   * URL.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/records/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16014,6 +17127,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxSounds calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/sound: List sounds
    *
+   * Returns the identifiers of the sound files of the service. Add a sound with the soundUpload
+   * call, from /me/document or a URL.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/sound/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16040,6 +17156,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxSound calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/sound/{soundId}: Get a sound
+   *
+   * Returns the sound of the service: its identifier and filename. Sounds are played by queues and
+   * voice menus.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/sound/get.
    *
@@ -16099,6 +17218,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxSound calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/sound/{soundId}: Delete a sound
    *
+   * Deletes the sound of the service, identified by its ID. Queues and voice menus can no longer
+   * play it.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/sound/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16127,6 +17249,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * soundUploadOvhPabx calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/soundUpload: Upload a sound
+   *
+   * Uploads a sound file to the service, from a /me/document identifier or a URL, with an optional
+   * name. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/soundUpload.
    *
@@ -16159,6 +17284,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listOvhPabxTts calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/tts: List TTS prompts
    *
+   * Returns the identifiers of the text to speech prompts of the PBX. A prompt is a text read by a
+   * synthetic voice.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/tts/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16185,6 +17313,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createOvhPabxTts calls POST /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/tts: Create a TTS prompt
+   *
+   * Creates a text to speech prompt: a text read by a synthetic voice. The voice is Helene, Loic,
+   * Jenny or Bruce.
    *
    * Requires the IAM action voip:apiovh:ovhPabx/tts/create.
    *
@@ -16215,6 +17346,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getOvhPabxTts calls GET /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/tts/{id}: Get a TTS prompt
+   *
+   * Returns the text to speech prompt: the text played and the voice that reads it (Helene, Loic,
+   * Jenny or Bruce).
    *
    * Requires the IAM action voip:apiovh:ovhPabx/tts/get.
    *
@@ -16274,6 +17408,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateOvhPabxTts calls PUT /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/tts/{id}: Update a TTS prompt
    *
+   * Updates the text to speech prompt: the text played and the voice that reads it (Helene, Loic,
+   * Jenny or Bruce).
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/tts/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16306,6 +17443,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteOvhPabxTts calls DELETE /v1/telephony/{billingAccount}/ovhPabx/{serviceName}/tts/{id}: Delete a TTS prompt
    *
+   * Deletes the text to speech prompt. It can no longer be played by the voice menus of the PBX.
+   *
    * Requires the IAM action voip:apiovh:ovhPabx/tts/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16335,6 +17474,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listPhonebooks calls GET /v1/telephony/{billingAccount}/phonebook: List phonebooks
    *
+   * Returns the identifiers (bookKey) of the phonebooks shared by the billing account. A phonebook
+   * stores contacts with their phone numbers.
+   *
    * Requires the IAM action voip:apiovh:phonebook/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16356,6 +17498,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createPhonebook calls POST /v1/telephony/{billingAccount}/phonebook: Create a phonebook
+   *
+   * Creates a phonebook shared by the billing account. Returns its identifier (bookKey).
    *
    * Requires the IAM action voip:apiovh:phonebook/create.
    *
@@ -16384,6 +17528,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPhonebook calls GET /v1/telephony/{billingAccount}/phonebook/{bookKey}: Get a phonebook
+   *
+   * Returns the name and the identifier (bookKey) of the phonebook shared by the billing account.
    *
    * Requires the IAM action voip:apiovh:phonebook/get.
    *
@@ -16439,6 +17585,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updatePhonebook calls PUT /v1/telephony/{billingAccount}/phonebook/{bookKey}: Update a phonebook
    *
+   * Updates the name of the phonebook shared by the billing account. Contacts are updated one by
+   * one.
+   *
    * Requires the IAM action voip:apiovh:phonebook/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16469,6 +17618,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deletePhonebook calls DELETE /v1/telephony/{billingAccount}/phonebook/{bookKey}: Delete a phonebook
    *
+   * Deletes the phonebook shared by the billing account and its contacts. Export the contacts first
+   * to keep a copy.
+   *
    * Requires the IAM action voip:apiovh:phonebook/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16495,6 +17647,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPhonebookExport calls GET /v1/telephony/{billingAccount}/phonebook/{bookKey}/export: Export contacts
+   *
+   * Exports the contacts of the phonebook to a file in CSV format. Returns the file to download.
    *
    * Requires the IAM action voip:apiovh:phonebook/export/get.
    *
@@ -16527,6 +17681,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * importPhonebook calls POST /v1/telephony/{billingAccount}/phonebook/{bookKey}/import: Import contacts
    *
+   * Imports contacts into the phonebook from an Excel (.xls, .xlsx) or CSV file in /me/document.
+   * Returns the task that performs the import.
+   *
    * Requires the IAM action voip:apiovh:phonebook/import.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16558,6 +17715,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listPhonebookPhonebookContacts calls GET /v1/telephony/{billingAccount}/phonebook/{bookKey}/phonebookContact: List contacts
    *
+   * Returns the identifiers of the contacts of the phonebook. Get a contact for its name, group and
+   * phone numbers.
+   *
    * Requires the IAM action voip:apiovh:phonebook/phonebookContact/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16584,6 +17744,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createPhonebookPhonebookContact calls POST /v1/telephony/{billingAccount}/phonebook/{bookKey}/phonebookContact: Create a contact
+   *
+   * Creates a contact in the phonebook with a name, surname, group and phone numbers. Returns its
+   * identifier.
    *
    * Requires the IAM action voip:apiovh:phonebook/phonebookContact/create.
    *
@@ -16614,6 +17777,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPhonebookPhonebookContact calls GET /v1/telephony/{billingAccount}/phonebook/{bookKey}/phonebookContact/{id}: Get a contact
+   *
+   * Returns the contact of the phonebook: name, surname, group, and office and home phone numbers,
+   * landline and mobile.
    *
    * Requires the IAM action voip:apiovh:phonebook/phonebookContact/get.
    *
@@ -16673,6 +17839,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updatePhonebookPhonebookContact calls PUT /v1/telephony/{billingAccount}/phonebook/{bookKey}/phonebookContact/{id}: Update a contact
    *
+   * Updates the contact of the phonebook: name, surname, group, and office and home phone numbers,
+   * landline and mobile.
+   *
    * Requires the IAM action voip:apiovh:phonebook/phonebookContact/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16705,6 +17874,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deletePhonebookPhonebookContact calls DELETE /v1/telephony/{billingAccount}/phonebook/{bookKey}/phonebookContact/{id}: Delete a contact
    *
+   * Deletes the contact from the phonebook, with its name, group and office and home phone numbers.
+   *
    * Requires the IAM action voip:apiovh:phonebook/phonebookContact/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16734,6 +17905,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listPortabilities calls GET /v1/telephony/{billingAccount}/portability: List number portings
    *
+   * Returns the identifiers of the number portings. A number porting transfers a number from
+   * another operator.
+   *
    * Requires the IAM action voip:apiovh:portability/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16755,6 +17929,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPortability calls GET /v1/telephony/{billingAccount}/portability/{id}: Get a number porting
+   *
+   * Returns the number porting: numbers, current operator, desired execution date, redirection,
+   * error codes, customer information and RIO (France only).
    *
    * Requires the IAM action voip:apiovh:portability/get.
    *
@@ -16810,6 +17987,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getPortabilityCanBeCancelled calls GET /v1/telephony/{billingAccount}/portability/{id}/canBeCancelled: Check if the porting can be canceled
    *
+   * Returns whether the number porting can still be canceled. Cancel the porting with the cancel
+   * call.
+   *
    * Requires the IAM action voip:apiovh:portability/canBeCancelled/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16837,6 +18017,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getPortabilityCanBeExecuted calls GET /v1/telephony/{billingAccount}/portability/{id}/canBeExecuted: Check if the porting can be executed
    *
+   * Returns whether the number porting can be executed now. Execute the porting with the execute
+   * call.
+   *
    * Requires the IAM action voip:apiovh:portability/canBeExecuted/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16863,6 +18046,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * cancelPortability calls POST /v1/telephony/{billingAccount}/portability/{id}/cancel: Cancel the porting
+   *
+   * Requests the cancellation of the number porting, with a reason. Check first that the porting
+   * can still be canceled.
    *
    * Requires the IAM action voip:apiovh:portability/cancel.
    *
@@ -16894,6 +18080,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * changeDatePortability calls POST /v1/telephony/{billingAccount}/portability/{id}/changeDate: Change the porting date
    *
+   * Requests a new date for the number porting. Check first that the porting date can still be
+   * changed.
+   *
    * Requires the IAM action voip:apiovh:portability/changeDate.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16924,6 +18113,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getPortabilityDateCanBeChanged calls GET /v1/telephony/{billingAccount}/portability/{id}/dateCanBeChanged: Check if the porting date can change
    *
+   * Returns whether the date of the number porting can be changed. Request a new date with the
+   * change date call.
+   *
    * Requires the IAM action voip:apiovh:portability/dateCanBeChanged/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16951,6 +18143,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listPortabilityDocuments calls GET /v1/telephony/{billingAccount}/portability/{id}/document: List porting documents
    *
+   * Returns the identifiers of the documents attached to the number porting. Get a porting document
+   * for its name, size and download URL.
+   *
    * Requires the IAM action voip:apiovh:portability/document/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -16977,6 +18172,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createPortabilityDocument calls POST /v1/telephony/{billingAccount}/portability/{id}/document: Create a porting document
+   *
+   * Creates a document for the number porting. Returns the URL to upload the file.
    *
    * Requires the IAM action voip:apiovh:portability/document/create.
    *
@@ -17008,6 +18205,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPortabilityDocument calls GET /v1/telephony/{billingAccount}/portability/{id}/document/{documentId}: Get a porting document
+   *
+   * Returns the porting document: name, description, size, and the URLs to download and upload the
+   * file.
    *
    * Requires the IAM action voip:apiovh:portability/document/get.
    *
@@ -17067,6 +18267,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updatePortabilityDocument calls PUT /v1/telephony/{billingAccount}/portability/{id}/document/{documentId}: Update a porting document
    *
+   * Updates the name and the description of the porting document. The file itself is uploaded with
+   * the upload URL of the document.
+   *
    * Requires the IAM action voip:apiovh:portability/document/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17099,6 +18302,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deletePortabilityDocument calls DELETE /v1/telephony/{billingAccount}/portability/{id}/document/{documentId}: Delete a porting document
    *
+   * Deletes the porting document and its file. It is no longer attached to the number porting.
+   *
    * Requires the IAM action voip:apiovh:portability/document/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17128,6 +18333,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * executePortability calls POST /v1/telephony/{billingAccount}/portability/{id}/execute: Execute the porting
    *
+   * Executes the number porting now, without waiting for the planned date. Check first that the
+   * porting can be executed.
+   *
    * Requires the IAM action voip:apiovh:portability/execute.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17150,6 +18358,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getPortabilityRelaunch calls GET /v1/telephony/{billingAccount}/portability/{id}/relaunch: Check if the porting can be relaunched
+   *
+   * Returns whether the porting error can be fixed, and the fields to correct.
    *
    * Requires the IAM action voip:apiovh:portability/relaunch/get.
    *
@@ -17178,6 +18388,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createPortabilityRelaunch calls POST /v1/telephony/{billingAccount}/portability/{id}/relaunch: Relaunch the porting
+   *
+   * Fixes the porting error with the given values and relaunches the number porting.
    *
    * Requires the IAM action voip:apiovh:portability/relaunch/create.
    *
@@ -17209,6 +18421,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listPortabilityStatus calls GET /v1/telephony/{billingAccount}/portability/{id}/status: Get the porting status
    *
+   * Returns the status of the number porting, step by step: name, description, status, completion
+   * date and duration of each step.
+   *
    * Requires the IAM action voip:apiovh:portability/status/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17236,6 +18451,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listRedirects calls GET /v1/telephony/{billingAccount}/redirect: List redirect numbers
    *
+   * Returns the redirect numbers of the billing account. A redirect number forwards calls to a
+   * destination.
+   *
    * Requires the IAM action voip:apiovh:redirect/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17257,6 +18475,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getRedirect calls GET /v1/telephony/{billingAccount}/redirect/{serviceName}: Get a redirect number
+   *
+   * Returns the redirect number: feature type and description. The destination is changed with the
+   * changeDestination call.
    *
    * Requires the IAM action voip:apiovh:redirect/get.
    *
@@ -17312,6 +18533,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateRedirect calls PUT /v1/telephony/{billingAccount}/redirect/{serviceName}: Update a redirect number
    *
+   * Updates the description of the redirect number. The destination is changed with the
+   * changeDestination call.
+   *
    * Requires the IAM action voip:apiovh:redirect/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17341,6 +18565,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeDestinationRedirect calls POST /v1/telephony/{billingAccount}/redirect/{serviceName}/changeDestination: Change the redirect destination
+   *
+   * Changes the number calls are forwarded to. Returns the task that performs it.
    *
    * Requires the IAM action voip:apiovh:redirect/changeDestination.
    *
@@ -17373,6 +18599,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listRsvas calls GET /v1/telephony/{billingAccount}/rsva: List premium rate numbers
    *
+   * Returns the premium rate numbers of the billing account, subject to the French RSVA rules.
+   *
    * Requires the IAM action voip:apiovh:rsva/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17394,6 +18622,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getRsva calls GET /v1/telephony/{billingAccount}/rsva/{serviceName}: Get a premium rate number
+   *
+   * Returns the premium rate number (French SVA numbers subject to the RSVA reform) and its
+   * typology, the category of the service.
    *
    * Requires the IAM action voip:apiovh:rsva/get.
    *
@@ -17446,6 +18677,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateRsva calls PUT /v1/telephony/{billingAccount}/rsva/{serviceName}: Update a premium rate number
    *
+   * Updates the typology of the premium rate number, such as relationship, contents, games,
+   * directory or conferencing.
+   *
    * Requires the IAM action voip:apiovh:rsva/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17476,6 +18710,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listRsvaAllowedRateCodes calls GET /v1/telephony/{billingAccount}/rsva/{serviceName}/allowedRateCodes: List allowed rate codes
    *
+   * Returns the rate codes the premium rate number can use, with the price per minute and per call
+   * without tax of each.
+   *
    * Requires the IAM action voip:apiovh:rsva/allowedRateCodes/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17502,6 +18739,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * cancelScheduledRateCodeRsva calls POST /v1/telephony/{billingAccount}/rsva/{serviceName}/cancelScheduledRateCode: Cancel the scheduled rate code
+   *
+   * Cancels the scheduled change of rate code. It must be done before the cancellation limit date
+   * of the scheduled rate code.
    *
    * Requires the IAM action voip:apiovh:rsva/cancelScheduledRateCode.
    *
@@ -17530,6 +18770,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getRsvaCurrentRateCode calls GET /v1/telephony/{billingAccount}/rsva/{serviceName}/currentRateCode: Get the current rate code
    *
+   * Returns the rate code currently applied to the premium rate number, with its prices and
+   * repayment prices without tax.
+   *
    * Requires the IAM action voip:apiovh:rsva/currentRateCode/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17557,6 +18800,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * scheduleRateCodeRsva calls POST /v1/telephony/{billingAccount}/rsva/{serviceName}/scheduleRateCode: Schedule a rate code
+   *
+   * Schedules a new rate code for the premium rate number. Returns the rate code with its effective
+   * date and the price of the change.
    *
    * Requires the IAM action voip:apiovh:rsva/scheduleRateCode/create.
    *
@@ -17589,6 +18835,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getRsvaScheduledRateCode calls GET /v1/telephony/{billingAccount}/rsva/{serviceName}/scheduledRateCode: Get the scheduled rate code
    *
+   * Returns the rate code scheduled for the premium rate number, with its effective date and the
+   * date until which it can be cancelled.
+   *
    * Requires the IAM action voip:apiovh:rsva/scheduledRateCode/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17617,6 +18866,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listSchedulers calls GET /v1/telephony/{billingAccount}/scheduler: List schedulers
    *
+   * Returns the services of the billing account that have a scheduler. A scheduler holds calendar
+   * events, such as closing days.
+   *
    * Requires the IAM action voip:apiovh:scheduler/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17638,6 +18890,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getScheduler calls GET /v1/telephony/{billingAccount}/scheduler/{serviceName}: Get a scheduler
+   *
+   * Returns the scheduler of the service and its timezone. The scheduler holds calendar events,
+   * such as closing days.
    *
    * Requires the IAM action voip:apiovh:scheduler/get.
    *
@@ -17693,6 +18948,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateScheduler calls PUT /v1/telephony/{billingAccount}/scheduler/{serviceName}: Update a scheduler
    *
+   * Updates the scheduler of the service. Only its timezone can be changed, the events are managed
+   * separately.
+   *
    * Requires the IAM action voip:apiovh:scheduler/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17722,6 +18980,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listSchedulerEvents calls GET /v1/telephony/{billingAccount}/scheduler/{serviceName}/events: List scheduler events
+   *
+   * Returns the identifiers of the events of the scheduler. Get an event for its dates, category
+   * and description.
    *
    * Requires the IAM action voip:apiovh:scheduler/events/get.
    *
@@ -17770,6 +19031,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * createSchedulerEvents calls POST /v1/telephony/{billingAccount}/scheduler/{serviceName}/events: Create a scheduler event
    *
+   * Creates an event in the scheduler, such as a closing day, with a title, start and end dates and
+   * a category (holidays or scheduler1 to scheduler3).
+   *
    * Requires the IAM action voip:apiovh:scheduler/events/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17799,6 +19063,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getSchedulerEvents calls GET /v1/telephony/{billingAccount}/scheduler/{serviceName}/events/{uid}: Get a scheduler event
+   *
+   * Returns the scheduler event: title, description, start and end dates, and category.
    *
    * Requires the IAM action voip:apiovh:scheduler/events/get.
    *
@@ -17871,6 +19137,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateSchedulerEvents calls PUT /v1/telephony/{billingAccount}/scheduler/{serviceName}/events/{uid}: Update a scheduler event
    *
+   * Updates the scheduler event: title, description, start and end dates, and category.
+   *
    * Requires the IAM action voip:apiovh:scheduler/events/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17903,6 +19171,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteSchedulerEvents calls DELETE /v1/telephony/{billingAccount}/scheduler/{serviceName}/events/{uid}: Delete a scheduler event
    *
+   * Deletes the scheduler event. It no longer applies to the calls of the service.
+   *
    * Requires the IAM action voip:apiovh:scheduler/events/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17931,6 +19201,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * importIcsCalendarScheduler calls POST /v1/telephony/{billingAccount}/scheduler/{serviceName}/importIcsCalendar: Import an ICS calendar
+   *
+   * Imports scheduler events from a calendar file in ICS format, given by its URL. Returns the task
+   * that performs the import.
    *
    * Requires the IAM action voip:apiovh:scheduler/importIcsCalendar.
    *
@@ -17963,6 +19236,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listScreens calls GET /v1/telephony/{billingAccount}/screen: List call filtering services
    *
+   * Returns the services of the billing account that support call filtering with allowed or blocked
+   * numbers.
+   *
    * Requires the IAM action voip:apiovh:screen/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -17984,6 +19260,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getScreen calls GET /v1/telephony/{billingAccount}/screen/{serviceName}: Get call filtering settings
+   *
+   * Returns the call filtering settings of the service: incoming and outgoing filtering mode.
    *
    * Requires the IAM action voip:apiovh:screen/get.
    *
@@ -18039,6 +19317,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateScreen calls PUT /v1/telephony/{billingAccount}/screen/{serviceName}: Update call filtering settings
    *
+   * Updates the incoming and outgoing filtering mode of the service: whitelist, blacklist or
+   * disabled.
+   *
    * Requires the IAM action voip:apiovh:screen/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18069,6 +19350,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listScreenScreenLists calls GET /v1/telephony/{billingAccount}/screen/{serviceName}/screenLists: List filtering rules
    *
+   * Returns the identifiers of the call filtering rules of the service. Each rule allows or blocks
+   * a number.
+   *
    * Requires the IAM action voip:apiovh:screen/screenLists/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18095,6 +19379,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createScreenScreenLists calls POST /v1/telephony/{billingAccount}/screen/{serviceName}/screenLists: Create a filtering rule
+   *
+   * Creates a call filtering rule that allows or blocks a number or a nature of numbers (special,
+   * international, voicemail, services or fax), for incoming or outgoing calls.
    *
    * Requires the IAM action voip:apiovh:screen/screenLists/create.
    *
@@ -18125,6 +19412,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getScreenScreenLists calls GET /v1/telephony/{billingAccount}/screen/{serviceName}/screenLists/{id}: Get a filtering rule
+   *
+   * Returns the call filtering rule: number, nature, list type (incoming or outgoing, whitelist or
+   * blacklist) and status.
    *
    * Requires the IAM action voip:apiovh:screen/screenLists/get.
    *
@@ -18184,6 +19474,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteScreenScreenLists calls DELETE /v1/telephony/{billingAccount}/screen/{serviceName}/screenLists/{id}: Delete a filtering rule
    *
+   * Deletes the call filtering rule. The number or nature of numbers it covered is no longer
+   * allowed or blocked by it.
+   *
    * Requires the IAM action voip:apiovh:screen/screenLists/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18213,6 +19506,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServices calls GET /v1/telephony/{billingAccount}/service: List services
    *
+   * Returns the services of the billing account: lines, numbers, fax, trunks. Get a service for its
+   * type, offers and status.
+   *
    * Requires the IAM action voip:apiovh:service/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18234,6 +19530,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getService calls GET /v1/telephony/{billingAccount}/service/{serviceName}: Get a service
+   *
+   * Returns the service: type, feature type, description, offers, properties, fax capabilities,
+   * associated device and country.
    *
    * Requires the IAM action voip:apiovh:service/get.
    *
@@ -18289,6 +19588,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateService calls PUT /v1/telephony/{billingAccount}/service/{serviceName}: Update a service
    *
+   * Updates the service description. The other properties of the service, such as its type and
+   * offers, are read-only.
+   *
    * Requires the IAM action voip:apiovh:service/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18318,6 +19620,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * deleteService calls DELETE /v1/telephony/{billingAccount}/service/{serviceName}: Terminate a service
+   *
+   * Requests the termination of the service, with a reason and optional details. The termination
+   * can be cancelled until it is executed.
    *
    * Requires the IAM action voip:apiovh:service/delete.
    *
@@ -18357,6 +19662,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * cancelTerminationService calls POST /v1/telephony/{billingAccount}/service/{serviceName}/cancelTermination: Cancel the service termination
    *
+   * Cancels the termination requested on the service, before it is executed.
+   *
    * Requires the IAM action voip:apiovh:service/cancelTermination.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18383,6 +19690,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeOfBillingAccountService calls POST /v1/telephony/{billingAccount}/service/{serviceName}/changeOfBillingAccount: Move a service to another billing account
+   *
+   * Moves the service to another billing account of the same customer, given by its name.
    *
    * Requires the IAM action voip:apiovh:service/changeOfBillingAccount.
    *
@@ -18413,6 +19722,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listServiceDiagnosticReports calls GET /v1/telephony/{billingAccount}/service/{serviceName}/diagnosticReports: Get diagnostic reports
+   *
+   * Returns the diagnostic reports of the service: call quality problems detected on the network,
+   * for today or one of the last three days.
    *
    * Requires the IAM action voip:apiovh:service/diagnosticReports/get.
    *
@@ -18447,6 +19759,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getServiceDirectory calls GET /v1/telephony/{billingAccount}/service/{serviceName}/directory: Get the directory listing
    *
+   * Returns the directory listing of the service: name, address and display options.
+   *
    * Requires the IAM action voip:apiovh:service/directory/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18474,6 +19788,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateServiceDirectory calls PUT /v1/telephony/{billingAccount}/service/{serviceName}/directory: Update the directory listing
+   *
+   * Updates the directory listing of the service: name, company details, address, contact email and
+   * display options in the directories.
    *
    * Requires the IAM action voip:apiovh:service/directory/edit.
    *
@@ -18504,6 +19821,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * fetchEntrepriseInformationsServiceDirectory calls POST /v1/telephony/{billingAccount}/service/{serviceName}/directory/fetchEntrepriseInformations: Fetch company information
+   *
+   * Returns the company information for a company registration number. The result is given by a
+   * task to check until it ends.
    *
    * Requires the IAM action voip:apiovh:service/directory/fetchEntrepriseInformations.
    *
@@ -18536,6 +19856,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceDirectoryGetDirectoryServiceCodes calls GET /v1/telephony/{billingAccount}/service/{serviceName}/directory/getDirectoryServiceCode: Get the directory service code
    *
+   * Returns the directory service codes for an APE code (main business activity code).
+   *
    * Requires the IAM action voip:apiovh:service/directory/getDirectoryServiceCode/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18566,6 +19888,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceDirectoryGetWayTypes calls GET /v1/telephony/{billingAccount}/service/{serviceName}/directory/getWayTypes: List street types
    *
+   * Returns the street types available for a directory listing address, with their full and
+   * abbreviated names.
+   *
    * Requires the IAM action voip:apiovh:service/directory/getWayTypes/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18592,6 +19917,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceEventToken calls GET /v1/telephony/{billingAccount}/service/{serviceName}/eventToken: Get the event token
+   *
+   * Returns the token used to receive real-time call events. Create a new token when it is missing
+   * or expired.
    *
    * Requires the IAM action voip:apiovh:service/eventToken/get.
    *
@@ -18620,6 +19948,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createServiceEventToken calls POST /v1/telephony/{billingAccount}/service/{serviceName}/eventToken: Create an event token
+   *
+   * Creates a token to receive real-time call events, valid 5 minutes, 1 hour, 1 day, 30 days or
+   * without limit. Returns the token.
    *
    * Requires the IAM action voip:apiovh:service/eventToken/create.
    *
@@ -18651,6 +19982,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteServiceEventToken calls DELETE /v1/telephony/{billingAccount}/service/{serviceName}/eventToken: Delete the event token
    *
+   * Deletes the event token. It can no longer be used to receive real-time call events.
+   *
    * Requires the IAM action voip:apiovh:service/eventToken/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18677,6 +20010,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listServiceFaxConsumptions calls GET /v1/telephony/{billingAccount}/service/{serviceName}/faxConsumption: List fax records
+   *
+   * Returns the identifiers of the fax records of the current month. Get a fax record for its
+   * called number, pages and price excluding tax.
    *
    * Requires the IAM action voip:apiovh:service/faxConsumption/get.
    *
@@ -18718,6 +20054,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceFaxConsumption calls GET /v1/telephony/{billingAccount}/service/{serviceName}/faxConsumption/{consumptionId}: Get a fax record
+   *
+   * Returns the fax record: date, calling and called numbers, direction (sent or received), pages
+   * and price without tax.
    *
    * Requires the IAM action voip:apiovh:service/faxConsumption/get.
    *
@@ -18790,6 +20129,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getServiceOfferChange calls GET /v1/telephony/{billingAccount}/service/{serviceName}/offerChange: Get the scheduled offer change
    *
+   * Returns the offer that will replace the current offer of the service on the next renewal.
+   *
    * Requires the IAM action voip:apiovh:service/offerChange/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18817,6 +20158,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createServiceOfferChange calls POST /v1/telephony/{billingAccount}/service/{serviceName}/offerChange: Schedule an offer change
+   *
+   * Schedules a change of offer for the service. The new offer replaces the current one on the next
+   * renewal.
    *
    * Requires the IAM action voip:apiovh:service/offerChange/create.
    *
@@ -18848,6 +20192,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteServiceOfferChange calls DELETE /v1/telephony/{billingAccount}/service/{serviceName}/offerChange: Cancel the scheduled offer change
    *
+   * Cancels the scheduled offer change. The service keeps its current offer on the next renewal.
+   *
    * Requires the IAM action voip:apiovh:service/offerChange/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18875,6 +20221,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceOfferChanges calls GET /v1/telephony/{billingAccount}/service/{serviceName}/offerChanges: List available offer changes
    *
+   * Returns the offers the service can change to. Use one of them to schedule an offer change.
+   *
    * Requires the IAM action voip:apiovh:service/offerChanges/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -18901,6 +20249,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listServiceOfferTasks calls GET /v1/telephony/{billingAccount}/service/{serviceName}/offerTask: List offer tasks
+   *
+   * Returns the identifiers of the scheduled offer operations of the service, such as an offer
+   * change or a termination.
    *
    * Requires the IAM action voip:apiovh:service/offerTask/get.
    *
@@ -18942,6 +20293,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceOfferTask calls GET /v1/telephony/{billingAccount}/service/{serviceName}/offerTask/{taskId}: Get an offer task
+   *
+   * Returns the offer operation: type, action such as termination or upgrade, planned execution
+   * date and status.
    *
    * Requires the IAM action voip:apiovh:service/offerTask/get.
    *
@@ -19010,6 +20364,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateServiceOfferTask calls PUT /v1/telephony/{billingAccount}/service/{serviceName}/offerTask/{taskId}: Update an offer task
    *
+   * Updates the scheduled offer operation. Only its planned execution date can be changed.
+   *
    * Requires the IAM action voip:apiovh:service/offerTask/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19041,6 +20397,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listServicePreviousVoiceConsumptions calls GET /v1/telephony/{billingAccount}/service/{serviceName}/previousVoiceConsumption: List last month call records
+   *
+   * Returns the identifiers of the call records of the previous month. Get a call record for its
+   * called number, duration and price excluding tax.
    *
    * Requires the IAM action voip:apiovh:service/previousVoiceConsumption/get.
    *
@@ -19088,6 +20447,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServicePreviousVoiceConsumption calls GET /v1/telephony/{billingAccount}/service/{serviceName}/previousVoiceConsumption/{consumptionId}: Get a last month call record
+   *
+   * Returns the call record of the previous month: date, numbers, destination, duration, hangup
+   * cause and price without tax.
    *
    * Requires the IAM action voip:apiovh:service/previousVoiceConsumption/get.
    *
@@ -19165,6 +20527,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceRepaymentConsumptions calls GET /v1/telephony/{billingAccount}/service/{serviceName}/repaymentConsumption: List repayable calls
    *
+   * Returns the identifiers of the calls that can be repaid. Request a repayment on the billing
+   * account to get them repaid.
+   *
    * Requires the IAM action voip:apiovh:service/repaymentConsumption/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19202,6 +20567,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceRepaymentConsumption calls GET /v1/telephony/{billingAccount}/service/{serviceName}/repaymentConsumption/{consumptionId}: Get a repayable call
+   *
+   * Returns the repayable call: date, calling, called and dialed numbers, operator, duration,
+   * repaid price and whether it is repayable now.
    *
    * Requires the IAM action voip:apiovh:service/repaymentConsumption/get.
    *
@@ -19273,6 +20641,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceTasks calls GET /v1/telephony/{billingAccount}/service/{serviceName}/task: List tasks
    *
+   * Returns the identifiers of the operations in progress on the service. Get a task for its
+   * action, status and failure message.
+   *
    * Requires the IAM action voip:apiovh:service/task/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19313,6 +20684,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceTask calls GET /v1/telephony/{billingAccount}/service/{serviceName}/task/{taskId}: Get a task
+   *
+   * Returns the operation on the telephony service: action, status (todo, doing, done, error or
+   * pause), created object and failure message.
    *
    * Requires the IAM action voip:apiovh:service/task/get.
    *
@@ -19381,6 +20755,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listServiceVoiceConsumptions calls GET /v1/telephony/{billingAccount}/service/{serviceName}/voiceConsumption: List call records
    *
+   * Returns the identifiers of the call records of the current month. Get a call record for its
+   * called number, duration and price excluding tax.
+   *
    * Requires the IAM action voip:apiovh:service/voiceConsumption/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19427,6 +20804,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getServiceVoiceConsumption calls GET /v1/telephony/{billingAccount}/service/{serviceName}/voiceConsumption/{consumptionId}: Get a call record
+   *
+   * Returns the call record: date, calling, called and dialed numbers, destination, duration,
+   * hangup cause, plan and price without tax.
    *
    * Requires the IAM action voip:apiovh:service/voiceConsumption/get.
    *
@@ -19705,6 +21085,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTasks calls GET /v1/telephony/{billingAccount}/task: List tasks
    *
+   * Returns the identifiers of the operations in progress on the billing account. Get a task for
+   * its action, status and failure message.
+   *
    * Requires the IAM action voip:apiovh:task/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19743,6 +21126,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTask calls GET /v1/telephony/{billingAccount}/task/{taskId}: Get a task
+   *
+   * Returns the operation on the telephony service: action, status (todo, doing, done, error or
+   * pause), created object and failure message.
    *
    * Requires the IAM action voip:apiovh:task/get.
    *
@@ -19807,6 +21193,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTimeConditions calls GET /v1/telephony/{billingAccount}/timeCondition: List time condition services
    *
+   * Returns the services of the billing account that support time conditions. A time condition
+   * routes calls by time slot.
+   *
    * Requires the IAM action voip:apiovh:timeCondition/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19828,6 +21217,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTimeCondition calls GET /v1/telephony/{billingAccount}/timeCondition/{serviceName}: Get a time condition service
+   *
+   * Returns the time condition service. Its time conditions route calls by time slot.
    *
    * Requires the IAM action voip:apiovh:timeCondition/get.
    *
@@ -19883,6 +21274,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTimeConditionConditions calls GET /v1/telephony/{billingAccount}/timeCondition/{serviceName}/condition: List time conditions
    *
+   * Returns the identifiers of the time conditions of the service. A time condition routes calls by
+   * time slot.
+   *
    * Requires the IAM action voip:apiovh:timeCondition/condition/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -19909,6 +21303,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createTimeConditionCondition calls POST /v1/telephony/{billingAccount}/timeCondition/{serviceName}/condition: Create a time condition
+   *
+   * Creates a time condition: a day (or holiday), start and end hours in hhmm format, and the
+   * routing policy to apply during that time slot.
    *
    * Requires the IAM action voip:apiovh:timeCondition/condition/create.
    *
@@ -19940,6 +21337,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTimeConditionCondition calls GET /v1/telephony/{billingAccount}/timeCondition/{serviceName}/condition/{id}: Get a time condition
+   *
+   * Returns the time condition: day, start and end hours (hhmm), status, and the routing policy
+   * applied during the time slot.
    *
    * Requires the IAM action voip:apiovh:timeCondition/condition/get.
    *
@@ -19999,6 +21399,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateTimeConditionCondition calls PUT /v1/telephony/{billingAccount}/timeCondition/{serviceName}/condition/{id}: Update a time condition
    *
+   * Updates the day, the start and end hours (hhmm), the status and the routing policy (slot1,
+   * slot2, slot3 or available) of the time condition.
+   *
    * Requires the IAM action voip:apiovh:timeCondition/condition/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20031,6 +21434,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteTimeConditionCondition calls DELETE /v1/telephony/{billingAccount}/timeCondition/{serviceName}/condition/{id}: Delete a time condition
    *
+   * Deletes the time condition. Calls received during its time slot are no longer routed by its
+   * policy.
+   *
    * Requires the IAM action voip:apiovh:timeCondition/condition/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20060,6 +21466,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getTimeConditionOptions calls GET /v1/telephony/{billingAccount}/timeCondition/{serviceName}/options: Get time condition options
    *
+   * Returns the time condition options of the service: status and routing outside time slots.
+   *
    * Requires the IAM action voip:apiovh:timeCondition/options/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20087,6 +21495,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateTimeConditionOptions calls PUT /v1/telephony/{billingAccount}/timeCondition/{serviceName}/options: Update time condition options
+   *
+   * Updates the time condition options: global status, the action (voicemail or number) of each
+   * slot and when unavailable, and the timeout.
    *
    * Requires the IAM action voip:apiovh:timeCondition/options/edit.
    *
@@ -20118,6 +21529,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * transferSecurityDeposit calls POST /v1/telephony/{billingAccount}/transferSecurityDeposit: Transfer the security deposit
    *
+   * Transfers an amount of the security deposit, in euros, to another billing account given by its
+   * name.
+   *
    * Requires the IAM action voip:apiovh:transferSecurityDeposit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20146,6 +21560,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listByBillingAccountTrunk calls GET /v1/telephony/{billingAccount}/trunk: List trunks
    *
+   * Returns the trunks of the billing account. A trunk connects a customer PBX to OVHcloud over
+   * SIP.
+   *
    * Requires the IAM action voip:apiovh:trunk/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20167,6 +21584,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTrunk calls GET /v1/telephony/{billingAccount}/trunk/{serviceName}: Get a trunk
+   *
+   * Returns the trunk service: service name, service type and description. External displayed
+   * numbers and channel packs have their own calls.
    *
    * Requires the IAM action voip:apiovh:trunk/get.
    *
@@ -20222,6 +21642,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getTrunkChannelsPacksRepartition calls GET /v1/telephony/{billingAccount}/trunk/{serviceName}/channelsPacksRepartition: Get the best channel packs
    *
+   * Returns the best combination of channel packs for a number of simultaneous channels.
+   *
    * Requires the IAM action voip:apiovh:trunk/channelsPacksRepartition/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20253,6 +21675,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listTrunkExternalDisplayedNumbers calls GET /v1/telephony/{billingAccount}/trunk/{serviceName}/externalDisplayedNumber: List external displayed numbers
    *
+   * Returns the external numbers the trunk can display to callees. Each number must be validated by
+   * a phone call before use.
+   *
    * Requires the IAM action voip:apiovh:trunk/externalDisplayedNumber/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20279,6 +21704,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * createTrunkExternalDisplayedNumber calls POST /v1/telephony/{billingAccount}/trunk/{serviceName}/externalDisplayedNumber: Create an external displayed number
+   *
+   * Adds an external number the trunk can display to callees. The number must then be validated.
    *
    * Requires the IAM action voip:apiovh:trunk/externalDisplayedNumber/create.
    *
@@ -20310,6 +21737,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getTrunkExternalDisplayedNumber calls GET /v1/telephony/{billingAccount}/trunk/{serviceName}/externalDisplayedNumber/{number}: Get an external displayed number
+   *
+   * Returns the external displayed number, its creation and validation dates and its status:
+   * waitingValidation, enabled, toDelete or refused.
    *
    * Requires the IAM action voip:apiovh:trunk/externalDisplayedNumber/get.
    *
@@ -20370,6 +21800,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteTrunkExternalDisplayedNumber calls DELETE /v1/telephony/{billingAccount}/trunk/{serviceName}/externalDisplayedNumber/{number}: Delete an external displayed number
    *
+   * Deletes the external displayed number. The trunk can no longer display it to callees.
+   *
    * Requires the IAM action voip:apiovh:trunk/externalDisplayedNumber/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20398,6 +21830,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * validateTrunkExternalDisplayedNumber calls POST /v1/telephony/{billingAccount}/trunk/{serviceName}/externalDisplayedNumber/{number}/validate: Validate an external displayed number
+   *
+   * Calls the external number to validate it. Type the returned validation code when the call asks
+   * for it.
    *
    * Requires the IAM action voip:apiovh:trunk/externalDisplayedNumber/validate/create.
    *
@@ -20429,6 +21864,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listVoicemails calls GET /v1/telephony/{billingAccount}/voicemail: List voicemails
    *
+   * Returns the voicemails of the billing account. Get the voicemail settings for its greetings and
+   * email notifications.
+   *
    * Requires the IAM action voip:apiovh:voicemail/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20450,6 +21888,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemail calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}: Get a voicemail
+   *
+   * Returns the voicemail service: description and offers. Settings, messages and greetings have
+   * their own routes.
    *
    * Requires the IAM action voip:apiovh:voicemail/get.
    *
@@ -20505,6 +21946,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * updateVoicemail calls PUT /v1/telephony/{billingAccount}/voicemail/{serviceName}: Update a voicemail
    *
+   * Updates the description of the voicemail service. The voicemail behaviour is changed in its
+   * settings.
+   *
    * Requires the IAM action voip:apiovh:voicemail/edit.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20534,6 +21978,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listVoicemailDirectories calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/directories: List voicemail messages
+   *
+   * Returns the identifiers of the voicemail messages, filtered by folder. Get a message for its
+   * caller, date and duration.
    *
    * Requires the IAM action voip:apiovh:voicemail/directories/get.
    *
@@ -20567,6 +22014,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailDirectories calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/directories/{id}: Get a voicemail message
+   *
+   * Returns the voicemail message: caller and callee numbers, folder, creation date and duration in
+   * seconds.
    *
    * Requires the IAM action voip:apiovh:voicemail/directories/get.
    *
@@ -20631,6 +22081,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteVoicemailDirectories calls DELETE /v1/telephony/{billingAccount}/voicemail/{serviceName}/directories/{id}: Delete a voicemail message
    *
+   * Deletes the voicemail message. It no longer appears in the folders of the voicemail.
+   *
    * Requires the IAM action voip:apiovh:voicemail/directories/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20659,6 +22111,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailDirectoriesDownload calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/directories/{id}/download: Download a voicemail message
+   *
+   * Returns a file to download the voicemail message as a sound file, in wav, mp3, aiff, flac, ogg
+   * or au format.
    *
    * Requires the IAM action voip:apiovh:voicemail/directories/download/get.
    *
@@ -20696,6 +22151,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * moveVoicemailDirectories calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/directories/{id}/move: Move a voicemail message
    *
+   * Moves the voicemail message to another folder: inbox, old, work, family, friends or urgent.
+   *
    * Requires the IAM action voip:apiovh:voicemail/directories/move.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20727,6 +22184,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * listVoicemailGreetings calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings: List greetings
+   *
+   * Returns the identifiers of the custom greetings of the voicemail, filtered by folder. Greetings
+   * can also be added with this route.
    *
    * Requires the IAM action voip:apiovh:voicemail/greetings/get.
    *
@@ -20761,6 +22221,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * createVoicemailGreetings calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings: Upload a greeting
    *
+   * Uploads a sound file from /me/document as a custom greeting, in the given greeting folder.
+   * Returns the task identifier.
+   *
    * Requires the IAM action voip:apiovh:voicemail/greetings/create.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20790,6 +22253,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailGreetings calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings/{id}: Get a greeting
+   *
+   * Returns the custom greeting: its identifier, the callee number and the greeting folder
+   * (unavail, busy, greet or temp).
    *
    * Requires the IAM action voip:apiovh:voicemail/greetings/get.
    *
@@ -20854,6 +22320,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * deleteVoicemailGreetings calls DELETE /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings/{id}: Delete a greeting
    *
+   * Deletes the custom greeting. It is no longer played to callers who reach the voicemail.
+   *
    * Requires the IAM action voip:apiovh:voicemail/greetings/delete.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20882,6 +22350,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailGreetingsDownload calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings/{id}/download: Download a greeting
+   *
+   * Returns a file to download the greeting as a sound file, in wav, mp3, aiff, flac, ogg or au
+   * format.
    *
    * Requires the IAM action voip:apiovh:voicemail/greetings/download/get.
    *
@@ -20919,6 +22390,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * moveVoicemailGreetings calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/greetings/{id}/move: Move a greeting
    *
+   * Moves the greeting to another greeting folder: unavail, busy, greet or temp. The folder sets
+   * when the greeting is played.
+   *
    * Requires the IAM action voip:apiovh:voicemail/greetings/move.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20951,6 +22425,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * migrateOnNewVersionVoicemail calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/migrateOnNewVersion: Migrate the voicemail to the new version
    *
+   * Migrates the voicemail to the new version, with greetings, folders and extra features.
+   *
    * Requires the IAM action voip:apiovh:voicemail/migrateOnNewVersion.
    *
    * @param billingAccount - The name of your billingAccount
@@ -20977,6 +22453,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailSettings calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings: Get the voicemail settings
+   *
+   * Returns the voicemail settings: greeting, email notification, audio format and other options.
    *
    * Requires the IAM action voip:apiovh:voicemail/settings/get.
    *
@@ -21005,6 +22483,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateVoicemailSettings calls PUT /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings: Update the voicemail settings
+   *
+   * Updates the voicemail settings: greetings, sender of the notification emails, notified
+   * addresses, audio format, and message recording and storage.
    *
    * Requires the IAM action voip:apiovh:voicemail/settings/edit.
    *
@@ -21036,6 +22517,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * changePasswordVoicemailSettings calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings/changePassword: Change the voicemail password
    *
+   * Changes the password used to access the voicemail panel. The password must be 4 digits.
+   *
    * Requires the IAM action voip:apiovh:voicemail/settings/changePassword.
    *
    * @param billingAccount - The name of your billingAccount
@@ -21065,6 +22548,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * changeRoutingVoicemailSettings calls POST /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings/changeRouting: Enable or disable the voicemail
+   *
+   * Routes the calls of the line to the voicemail or to the fax. Available only on a line with fax
+   * capabilities.
    *
    * Requires the IAM action voip:apiovh:voicemail/settings/changeRouting.
    *
@@ -21096,6 +22582,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * getVoicemailSettingsRouting calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings/routing: Get the voicemail status
    *
+   * Returns whether calls are routed to the voicemail or to the fax. Available only on a line with
+   * fax capabilities.
+   *
    * Requires the IAM action voip:apiovh:voicemail/settings/routing/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -21123,6 +22612,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVoicemailSettingsVoicemailNumbers calls GET /v1/telephony/{billingAccount}/voicemail/{serviceName}/settings/voicemailNumbers: Get the voicemail numbers
+   *
+   * Returns the numbers to call the voicemail from inside and outside the network.
    *
    * Requires the IAM action voip:apiovh:voicemail/settings/voicemailNumbers/get.
    *
@@ -21152,6 +22643,9 @@ export class TelephonyApi extends SectionApi {
   /**
    * listVxmls calls GET /v1/telephony/{billingAccount}/vxml: List VXML services
    *
+   * Returns the VXML services of the billing account. A VXML service runs a voice application
+   * hosted on a web server.
+   *
    * Requires the IAM action voip:apiovh:vxml/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -21173,6 +22667,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * getVxml calls GET /v1/telephony/{billingAccount}/vxml/{serviceName}: Get a VXML service
+   *
+   * Returns the VXML service: description and offers. The VXML application URLs are in its
+   * settings.
    *
    * Requires the IAM action voip:apiovh:vxml/get.
    *
@@ -21225,6 +22722,8 @@ export class TelephonyApi extends SectionApi {
   /**
    * getVxmlSettings calls GET /v1/telephony/{billingAccount}/vxml/{serviceName}/settings: Get the VXML settings
    *
+   * Returns the VXML settings: URL of the VXML application and URL used for recordings.
+   *
    * Requires the IAM action voip:apiovh:vxml/settings/get.
    *
    * @param billingAccount - The name of your billingAccount
@@ -21252,6 +22751,8 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * updateVxmlSettings calls PUT /v1/telephony/{billingAccount}/vxml/{serviceName}/settings: Update the VXML settings
+   *
+   * Updates the URL of the VXML application and the URL used for recordings of the VXML service.
    *
    * Requires the IAM action voip:apiovh:vxml/settings/edit.
    *
@@ -21282,6 +22783,9 @@ export class TelephonyApi extends SectionApi {
 
   /**
    * logsVxmlSettings calls POST /v1/telephony/{billingAccount}/vxml/{serviceName}/settings/logs: Generate a logs URL
+   *
+   * Generates a temporary URL to download the logs of the VXML service. Returns the URL and its
+   * expiration date.
    *
    * Requires the IAM action voip:apiovh:vxml/settings/logs/create.
    *

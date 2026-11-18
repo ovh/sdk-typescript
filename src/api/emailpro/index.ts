@@ -10,9 +10,10 @@
  * Its operations are a client property, `client.emailpro`, or a class of their
  * own: `new EmailproApi(client)`. Its types are exported here too.
  *
- * It has 32 operations, on the routes under /v1/email/pro.
+ * It has 60 operations, on the routes under /v1/email/pro.
  *
- * To start, list what the account has: listDomainDkimSelectors.
+ * To start, list what the account has: listPros, listAccounts, listDomains, listExternalContacts,
+ * listTasks, listAccountAlias, listAccountFullAccess, listAccountSendAs, and 5 more.
  *
  * To find the method for a route, search index/emailpro.jsonl: one line per method, with its route,
  * its signature and the IAM actions it requires. It is at the root of the SDK repository, and in

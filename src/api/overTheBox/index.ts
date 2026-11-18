@@ -10,7 +10,7 @@
  * Its operations are a client property, `client.overTheBox`, or a class of their
  * own: `new OverTheBoxApi(client)`. Its types are exported here too.
  *
- * It has 46 operations, on the routes under /v1/overTheBox.
+ * It has 47 operations, on the routes under /v1/overTheBox.
  *
  * To start, list what the account has: listOverTheBoxes, listAvailableOffers, listHardwares,
  * listHardwareAvailables, listAvailableReleaseChannels, listBackups, listRemoteAccesses, listTasks,

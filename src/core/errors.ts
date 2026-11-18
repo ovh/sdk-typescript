@@ -19,6 +19,8 @@
  * | ErrTooManyRequests  | TooManyRequestsError (429)  |
  * | ErrInvalidRequest   | InvalidRequestError         |
  * | ErrNotAllowed       | NotAllowedError             |
+ * | ErrDryRun           | DryRunError                 |
+ * | (a hook's error)    | HookRefusedError            |
  * | ErrResponseTooLarge | ResponseTooLargeError       |
  * | ErrWaitFailed       | WaitFailedError             |
  *
@@ -253,6 +255,90 @@ export class NotAllowedError extends OvhError {
     this.method = init.method;
     this.path = init.path;
     this.reason = init.reason;
+  }
+}
+
+/**
+ * A before hook refused the call. Nothing was sent. What the hook threw is the `cause`.
+ *
+ * The Go SDK wraps the hook's error the same way: errors.Is finds it there, `cause` here.
+ */
+export class HookRefusedError extends OvhError {
+  /** The operation's name, or "" when the registry does not know the route. */
+  readonly operation: string;
+  readonly method: string;
+  readonly path: string;
+
+  constructor(init: { operation: string; method: string; path: string; cause: unknown }) {
+    const why = init.cause instanceof Error ? init.cause.message : String(init.cause);
+    super(
+      `${init.operation || "request"} (${init.method} ${init.path}) not sent: refused by a hook: ${why}`,
+      { cause: init.cause },
+    );
+    this.operation = init.operation;
+    this.method = init.method;
+    this.path = init.path;
+  }
+}
+
+/**
+ * A call that the `dryRun` option did not send. It holds what the call would have sent,
+ * except the credentials: no token is fetched, and the Authorization header (with the other
+ * credential headers, such as Cookie) is left out.
+ *
+ * It is not a NotAllowedError: the policy is checked first, and a call it refuses stays a
+ * NotAllowedError.
+ *
+ * ```ts
+ * try {
+ *   await client.post("/v1/me/contact", { email: "ops@example.com" });
+ * } catch (err) {
+ *   if (err instanceof DryRunError) {
+ *     console.log(err.method, err.url, err.body);
+ *   }
+ * }
+ * ```
+ */
+export class DryRunError extends OvhError {
+  /** The operation's name, or "" when the registry does not know the route. */
+  readonly operation: string;
+  readonly method: string;
+  /** The full URL: the endpoint, the path and the encoded query. */
+  readonly url: string;
+  /**
+   * The headers: Accept, Content-Type, User-Agent, X-Schemas-Version, those of the headers
+   * options and of the header parameters.
+   */
+  readonly headers: Headers;
+  /** The JSON body, or undefined when the call has none. */
+  readonly body: string | undefined;
+
+  constructor(init: {
+    operation: string;
+    method: string;
+    url: string;
+    headers: Headers;
+    body: string | undefined;
+  }) {
+    super(`${init.operation || "request"} (${init.method} ${init.url}) not sent: dry run`);
+    this.operation = init.operation;
+    this.method = init.method;
+    this.url = init.url;
+    this.headers = init.headers;
+    this.body = init.body;
+  }
+
+  /** The fields of the error, for JSON.stringify and loggers. */
+  toJSON(): Record<string, unknown> {
+    return {
+      name: this.name,
+      message: this.message,
+      operation: this.operation,
+      method: this.method,
+      url: this.url,
+      headers: Object.fromEntries(this.headers),
+      body: this.body,
+    };
   }
 }
 

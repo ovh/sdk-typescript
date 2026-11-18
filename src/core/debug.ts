@@ -35,6 +35,11 @@ const SENSITIVE_HEADERS = new Set([
   "X-Ovh-Signature",
 ]);
 
+/** True for a header that carries credentials: its value must never be shown. */
+export function isSensitiveHeader(name: string): boolean {
+  return SENSITIVE_HEADERS.has(canonicalHeaderKey(name));
+}
+
 /**
  * Go's http.CanonicalHeaderKey: "x-ovh-consumer" gives "X-Ovh-Consumer".
  *

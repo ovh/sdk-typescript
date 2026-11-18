@@ -153,6 +153,164 @@ export interface UpdateResourceServiceKey400Response {
 /** Can be anything (text, int, bool, json, html, etc.) */
 export type Any = unknown;
 
+/** A kind of log a service can emit, which you can subscribe to and forward into a stream */
+export interface DbaasLogsLogKind {
+  /**
+   * List of additional log fields managed in this log kind
+   *
+   * Read-only: the API sets it.
+   */
+  additionalReturnedFields?: string[] | undefined;
+  /**
+   * Creation date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Identifier of the log kind
+   *
+   * Read-only: the API sets it.
+   */
+  kindId?: string | undefined;
+  /**
+   * Log kind name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Last update date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** A live forwarding of one kind of log from a service into a Logs Data Platform stream */
+export interface DbaasLogsLogSubscription {
+  /**
+   * Creation date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind name of this subscription
+   *
+   * Read-only: the API sets it.
+   */
+  kind?: string | undefined;
+  /**
+   * Subscribed resource, where the logs come from
+   *
+   * Read-only: the API sets it.
+   */
+  resource?: DbaasLogsLogSubscriptionResource | undefined;
+  /**
+   * Name of the destination log service
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * Identifier of the destination log stream
+   *
+   * Read-only: the API sets it.
+   */
+  streamId?: string | undefined;
+  /**
+   * Unique identifier of the subscription, used to change or stop the forwarding
+   *
+   * Read-only: the API sets it.
+   */
+  subscriptionId?: string | undefined;
+  /**
+   * Last update date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Log subscription creation payload */
+export interface DbaasLogsLogSubscriptionCreation {
+  /** Log kind name to subscribe to */
+  kind: string;
+  /** Identifier of the customer log stream */
+  streamId: string;
+}
+
+/** The service a log subscription collects its logs from */
+export interface DbaasLogsLogSubscriptionResource {
+  /**
+   * Name of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Type of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  type?: string | undefined;
+}
+
+/** Asynchronous operation after subscribing or unsubscribing to a resource logs */
+export interface DbaasLogsLogSubscriptionResponse {
+  /**
+   * Identifier of the operation
+   *
+   * Read-only: the API sets it.
+   */
+  operationId?: string | undefined;
+  /**
+   * Operation owner's service name
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+}
+
+/** Log temporary URL creation payload */
+export interface DbaasLogsLogURLCreation {
+  /** Log kind name */
+  kind: string;
+}
+
+/** Temporary url information */
+export interface DbaasLogsTemporaryLogsLink {
+  /**
+   * Temporary url expiration date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expirationDate?: string | undefined;
+  /**
+   * Temporary url
+   *
+   * Read-only: the API sets it.
+   */
+  url?: string | undefined;
+}
+
 /** IAM resource metadata embedded in services models */
 export interface IAMResourceMetadata {
   /**

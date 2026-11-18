@@ -23,7 +23,7 @@ So the most useful contributions are:
 
 - **Issues**: a wrong type, a missing operation, a confusing name, a bug in the core. Please
   give the API route (every method's doc comment starts with it, for example
-  `getVrack calls GET /v1/vrack/{serviceName}`).
+  `getAccountDetails calls GET /v1/me`).
 - **Pull requests**, on `src/core/` or on `src/api/`, as a precise description of a fix.
   Say what was wrong and how to see it: a short script or the failing call helps most.
 

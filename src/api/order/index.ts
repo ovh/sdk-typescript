@@ -10,10 +10,10 @@
  * Its operations are a client property, `client.order`, or a class of their
  * own: `new OrderApi(client)`. Its types are exported here too.
  *
- * It has 662 operations, on the routes under /v1/order.
+ * It has 665 operations, on the routes under /v1/order.
  *
  * To start, list what the account has: listCarts, listDedicatedClouds, listFreefaxes,
- * listOverTheBoxes, listSms, listTelephonies, listVeeamCloudConnects, listVps, and 276 more.
+ * listOverTheBoxes, listSms, listTelephonies, listVeeamCloudConnects, listVps, and 278 more.
  *
  * To find the method for a route, search index/order.jsonl: one line per method, with its route,
  * its signature and the IAM actions it requires. It is at the root of the SDK repository, and in

@@ -19,10 +19,11 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 191 operations, on the routes under /v2/publicCloud.
+ * It has 613 operations, on the routes under /v2/publicCloud.
  *
- * To start, list what the account has: allProjects, allGateways, allLoadBalancers, allNetworks,
- * allPublicIps, allProjectRanchers, allSecurityGroups, allSshKeys, and 45 more.
+ * To start, list what the account has: allProjects, allGateways, allLoadBalancers,
+ * allProjectManagedKubernetes, allAllManagedRegistries, allNetworks, allPublicIps,
+ * allProjectRanchers, and 169 more.
  *
  * To find the method for a route, search index/publicCloud.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,
@@ -87,530 +88,6 @@ export class PublicCloudApi extends SectionApi {
       OPS.getProject,
       {
         path: { projectId: projectId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * allProjectAiAgentsAgents iterates over GET /v2/publicCloud/project/{projectId}/ai/agents/agent (List AI agents).
-   *
-   * It yields one item at a time, and gets the next page only when the loop reaches it. An
-   * error is thrown and stops the loop.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/get.
-   *
-   * @param projectId - Project ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns each {@link models.PublicCloudAiAgentsAgent}, one at a time: loop with `for await`
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * for await (const item of client.publicCloud.allProjectAiAgentsAgents(projectId)) console.log(item);
-   */
-  allProjectAiAgentsAgents(
-    projectId: string,
-    options?: RequestOptions,
-  ): AsyncIterable<models.PublicCloudAiAgentsAgent> {
-    return this._pages(
-      OPS.allProjectAiAgentsAgents,
-      {
-        path: { projectId: projectId },
-      },
-      options,
-    );
-  }
-
-  /**
-   * createProjectAiAgentsAgent calls POST /v2/publicCloud/project/{projectId}/ai/agents/agent: Create an AI agent
-   *
-   * Creates an AI agent: a hosted assistant that answers on its own URL, given by
-   * `currentState.endpointUrl`, and reached with a token from the `token` action. An agent runs a
-   * model with a persona, plus whatever tools, memory and channels its configuration gives it. That
-   * configuration can come from a ready-made one published by OVHcloud, from a template of your
-   * own, or from settings supplied here — or from none of them, leaving an agent that cannot answer
-   * until it is given a model. Parts of it that OVHcloud manages are rejected here; the
-   * `globalSettings` preset says which. This is the only point at which this API sets an agent's
-   * configuration: from here on the agent holds its own and is configured through its endpoint.
-   * Create it paused to finish preparing it before it answers anyone.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/create.
-   *
-   * @param projectId - Project ID
-   * @param body - the request body
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgent} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.createProjectAiAgentsAgent(projectId, body);
-   */
-  createProjectAiAgentsAgent(
-    projectId: string,
-    body: models.PublicCloudAiAgentsAgentCreation,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgent> {
-    return this._call(
-      OPS.createProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId },
-        body: body,
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * getProjectAiAgentsAgent calls GET /v2/publicCloud/project/{projectId}/ai/agents/agent/{agentId}: Get an AI agent
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/get.
-   *
-   * @param projectId - Project ID
-   * @param agentId - Agent ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgent} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.getProjectAiAgentsAgent(projectId, agentId);
-   */
-  getProjectAiAgentsAgent(
-    projectId: string,
-    agentId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgent> {
-    return this._call(
-      OPS.getProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId, agentId: agentId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * updateProjectAiAgentsAgent calls PUT /v2/publicCloud/project/{projectId}/ai/agents/agent/{agentId}: Update an AI agent
-   *
-   * `targetSpec.enabled` is mandatory, including on an update whose only intent is a rename.
-   * Restating the agent's current running state changes nothing; stating the other one pauses or
-   * resumes it. `targetSpec.name` is optional: omitting it, or restating the current name, leaves
-   * it untouched. Any other name renames the agent and redeploys it, keeping its identifier, its
-   * access tokens, its configuration and its data, and re-applying its paused state. A name another
-   * agent in the project already holds is rejected. The configuration is not settable here; it is
-   * read and changed through the agent itself.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/edit.
-   *
-   * @param projectId - Project ID
-   * @param agentId - Agent ID
-   * @param body - the request body
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgent} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.updateProjectAiAgentsAgent(projectId, agentId, body);
-   */
-  updateProjectAiAgentsAgent(
-    projectId: string,
-    agentId: string,
-    body: models.PublicCloudAiAgentsAgentUpdate,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgent> {
-    return this._call(
-      OPS.updateProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId, agentId: agentId },
-        body: body,
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * deleteProjectAiAgentsAgent calls DELETE /v2/publicCloud/project/{projectId}/ai/agents/agent/{agentId}: Delete an AI agent
-   *
-   * Deletion is asynchronous: the response describes the agent with `resourceStatus: DELETING`.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/delete.
-   *
-   * @param projectId - Project ID
-   * @param agentId - Agent ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgent} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.deleteProjectAiAgentsAgent(projectId, agentId);
-   */
-  deleteProjectAiAgentsAgent(
-    projectId: string,
-    agentId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgent> {
-    return this._call(
-      OPS.deleteProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId, agentId: agentId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * redeployProjectAiAgentsAgent calls POST /v2/publicCloud/project/{projectId}/ai/agents/agent/{agentId}/redeploy: Redeploy an AI agent, refreshing its runtime while keeping its data
-   *
-   * Refreshes the agent's runtime without touching its configuration or the data it holds.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/redeploy.
-   *
-   * @param projectId - Project ID
-   * @param agentId - Agent ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgent} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.redeployProjectAiAgentsAgent(projectId, agentId);
-   */
-  redeployProjectAiAgentsAgent(
-    projectId: string,
-    agentId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgent> {
-    return this._call(
-      OPS.redeployProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId, agentId: agentId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * tokenProjectAiAgentsAgent calls POST /v2/publicCloud/project/{projectId}/ai/agents/agent/{agentId}/token: Issue a scoped access token for an AI agent
-   *
-   * Returns a bearer token to present to the agent at `currentState.endpointUrl`. The token is
-   * returned once, here, and is never readable afterwards. Both body fields are optional: send `{}`
-   * for the defaults, which are the VIEWER role and the agent's own default lifetime. A lifetime
-   * longer than the agent's own maximum is rejected.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/agent/token/create.
-   *
-   * @param projectId - Project ID
-   * @param agentId - Agent ID
-   * @param body - the request body
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAgentToken} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.tokenProjectAiAgentsAgent(projectId, agentId, body);
-   */
-  tokenProjectAiAgentsAgent(
-    projectId: string,
-    agentId: string,
-    body: models.PublicCloudAiAgentsAgentTokenCreation,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAgentToken> {
-    return this._call(
-      OPS.tokenProjectAiAgentsAgent,
-      {
-        path: { projectId: projectId, agentId: agentId },
-        body: body,
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * getProjectAiAgentsPresetGlobalSettings calls GET /v2/publicCloud/project/{projectId}/ai/agents/preset/globalSettings: Get the AI agent configuration settings fixed by OVHcloud
-   *
-   * Part of an AI agent's configuration is managed by OVHcloud rather than by you: how callers
-   * authenticate to the agent, and whether the agent can run code. This route says which parts
-   * those are, so a configuration can be prepared knowing what will be accepted — anything OVHcloud
-   * manages is rejected if you set it yourself, whether on an agent or on a template. What it
-   * reports does not change from one agent to the next.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/preset/globalSettings/get.
-   *
-   * @param projectId - Project ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsGlobalSettings} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.getProjectAiAgentsPresetGlobalSettings(projectId);
-   */
-  getProjectAiAgentsPresetGlobalSettings(
-    projectId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsGlobalSettings> {
-    return this._call(
-      OPS.getProjectAiAgentsPresetGlobalSettings,
-      {
-        path: { projectId: projectId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * getProjectAiAgentsPresetModelAiEndpointsProvider calls GET /v2/publicCloud/project/{projectId}/ai/agents/preset/model/aiEndpointsProvider: Get the OVHcloud AI Endpoints provider preset
-   *
-   * States whether the OVHcloud AI Endpoints provider preset can be selected, whether OVHcloud
-   * provisions its credential so the caller need not supply one, the base URL whose `/models`
-   * sub-path lists the models available, and the model used when the caller names none.
-   *
-   * Requires the IAM action
-   * publicCloudProject:apiovh:ai/agents/preset/model/aiEndpointsProvider/get.
-   *
-   * @param projectId - Project ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsAIEndpointsPreset} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.getProjectAiAgentsPresetModelAiEndpointsProvider(projectId);
-   */
-  getProjectAiAgentsPresetModelAiEndpointsProvider(
-    projectId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsAIEndpointsPreset> {
-    return this._call(
-      OPS.getProjectAiAgentsPresetModelAiEndpointsProvider,
-      {
-        path: { projectId: projectId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * allProjectAiAgentsPresetTemplates iterates over GET /v2/publicCloud/project/{projectId}/ai/agents/preset/template (List built-in AI agent template presets).
-   *
-   * It yields one item at a time, and gets the next page only when the loop reaches it. An
-   * error is thrown and stops the loop.
-   *
-   * Presets are ready-made configurations OVHcloud publishes, offered alongside the templates a
-   * caller writes for themselves. Pass a preset's `id` as `targetSpec.template.id` on an agent
-   * creation to build an agent from it. Identifiers carry a reserved prefix, so a client can tell a
-   * preset from a template of its own.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/preset/template/get.
-   *
-   * @param projectId - Project ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns each {@link models.PublicCloudAiAgentsTemplatePreset}, one at a time: loop with `for await`
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * for await (const item of client.publicCloud.allProjectAiAgentsPresetTemplates(projectId)) console.log(item);
-   */
-  allProjectAiAgentsPresetTemplates(
-    projectId: string,
-    options?: RequestOptions,
-  ): AsyncIterable<models.PublicCloudAiAgentsTemplatePreset> {
-    return this._pages(
-      OPS.allProjectAiAgentsPresetTemplates,
-      {
-        path: { projectId: projectId },
-      },
-      options,
-    );
-  }
-
-  /**
-   * getProjectAiAgentsPresetTemplate calls GET /v2/publicCloud/project/{projectId}/ai/agents/preset/template/{templatePresetId}: Get an AI agent template preset
-   *
-   * A preset is a ready-made configuration OVHcloud publishes, offered alongside the templates a
-   * caller writes for themselves. Pass its `id` as `targetSpec.template.id` on an agent creation to
-   * build an agent from it. The identifier carries a reserved prefix, so a client can tell a preset
-   * from a template of its own.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/preset/template/get.
-   *
-   * @param projectId - Project ID
-   * @param templatePresetId - Template preset ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsTemplatePreset} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.getProjectAiAgentsPresetTemplate(projectId, templatePresetId);
-   */
-  getProjectAiAgentsPresetTemplate(
-    projectId: string,
-    templatePresetId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsTemplatePreset> {
-    return this._call(
-      OPS.getProjectAiAgentsPresetTemplate,
-      {
-        path: { projectId: projectId, templatePresetId: templatePresetId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * allProjectAiAgentsTemplates iterates over GET /v2/publicCloud/project/{projectId}/ai/agents/template (List AI agent templates).
-   *
-   * It yields one item at a time, and gets the next page only when the loop reaches it. An
-   * error is thrown and stops the loop.
-   *
-   * The ready-made configurations OVHcloud publishes are absent from this list. They are served by
-   * the `preset/template` node.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/template/get.
-   *
-   * @param projectId - Project ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns each {@link models.PublicCloudAiAgentsTemplate}, one at a time: loop with `for await`
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * for await (const item of client.publicCloud.allProjectAiAgentsTemplates(projectId)) console.log(item);
-   */
-  allProjectAiAgentsTemplates(
-    projectId: string,
-    options?: RequestOptions,
-  ): AsyncIterable<models.PublicCloudAiAgentsTemplate> {
-    return this._pages(
-      OPS.allProjectAiAgentsTemplates,
-      {
-        path: { projectId: projectId },
-      },
-      options,
-    );
-  }
-
-  /**
-   * createProjectAiAgentsTemplate calls POST /v2/publicCloud/project/{projectId}/ai/agents/template: Create an AI agent template
-   *
-   * Registers a reusable configuration that a later agent creation can name through
-   * `targetSpec.template.id`. A template stores a configuration. It runs nothing by itself.
-   * `targetSpec.name` must be unique within the project's namespace.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/template/create.
-   *
-   * @param projectId - Project ID
-   * @param body - the request body
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsTemplate} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.createProjectAiAgentsTemplate(projectId, body);
-   */
-  createProjectAiAgentsTemplate(
-    projectId: string,
-    body: models.PublicCloudAiAgentsTemplateCreation,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsTemplate> {
-    return this._call(
-      OPS.createProjectAiAgentsTemplate,
-      {
-        path: { projectId: projectId },
-        body: body,
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * getProjectAiAgentsTemplate calls GET /v2/publicCloud/project/{projectId}/ai/agents/template/{templateId}: Get an AI agent template
-   *
-   * The ready-made configurations OVHcloud publishes are not returned here. They are served by the
-   * `preset/template` node.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/template/get.
-   *
-   * @param projectId - Project ID
-   * @param templateId - Template ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsTemplate} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.getProjectAiAgentsTemplate(projectId, templateId);
-   */
-  getProjectAiAgentsTemplate(
-    projectId: string,
-    templateId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsTemplate> {
-    return this._call(
-      OPS.getProjectAiAgentsTemplate,
-      {
-        path: { projectId: projectId, templateId: templateId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * updateProjectAiAgentsTemplate calls PUT /v2/publicCloud/project/{projectId}/ai/agents/template/{templateId}: Update an AI agent template
-   *
-   * Replaces the template's target spec as a whole: a field left out of the body is not preserved,
-   * and `targetSpec.config` is mandatory. Secrets inside that configuration read back as
-   * `[REDACTED]`. Send the sentinel back unchanged to keep the stored value. Configuration blocks
-   * OVHcloud reserves or does not offer are left out of a read, and a body that does not restate
-   * them drops them from the stored template. Agents already created from this template are
-   * unaffected, since a template is read once, at agent creation time.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/template/edit.
-   *
-   * @param projectId - Project ID
-   * @param templateId - Template ID
-   * @param body - the request body
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsTemplate} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.updateProjectAiAgentsTemplate(projectId, templateId, body);
-   */
-  updateProjectAiAgentsTemplate(
-    projectId: string,
-    templateId: string,
-    body: models.PublicCloudAiAgentsTemplateUpdate,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsTemplate> {
-    return this._call(
-      OPS.updateProjectAiAgentsTemplate,
-      {
-        path: { projectId: projectId, templateId: templateId },
-        body: body,
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * deleteProjectAiAgentsTemplate calls DELETE /v2/publicCloud/project/{projectId}/ai/agents/template/{templateId}: Delete an AI agent template
-   *
-   * Deletion is asynchronous: the response describes the template with `resourceStatus: DELETING`.
-   * Agents already created from it are unaffected, since a template is read once, at agent creation
-   * time.
-   *
-   * Requires the IAM action publicCloudProject:apiovh:ai/agents/template/delete.
-   *
-   * @param projectId - Project ID
-   * @param templateId - Template ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.PublicCloudAiAgentsTemplate} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.publicCloud.deleteProjectAiAgentsTemplate(projectId, templateId);
-   */
-  deleteProjectAiAgentsTemplate(
-    projectId: string,
-    templateId: string,
-    options?: RequestOptions,
-  ): Promise<models.PublicCloudAiAgentsTemplate> {
-    return this._call(
-      OPS.deleteProjectAiAgentsTemplate,
-      {
-        path: { projectId: projectId, templateId: templateId },
       },
       "json",
       options,
@@ -712,6 +189,22 @@ export class PublicCloudApi extends SectionApi {
    * `targetSpec.volumes` is a declarative list of block-volume references attached to the instance.
    * Supply the volumes to attach at boot. On a subsequent `PUT` the list is diffed to attach or
    * detach volumes (see the `PUT` route). There is no imperative attach/detach endpoint.
+   *
+   * Boot source: image or volume
+   *
+   * An instance needs exactly one boot source:
+   *
+   * - `targetSpec.image` — the instance boots from that image on the local disk of its flavor.
+   * - one entry of `targetSpec.volumes` with `role: BOOT`, with `image` omitted — the instance
+   *   boots from that existing block storage volume. The volume must be bootable, `available`, not
+   *   multi-attach, and in the instance's region. A bootable volume can be created from an image
+   *   with `createFrom.imageId` on the block storage volume route. At most one entry may be `BOOT`,
+   *   and the other volumes of the list are attached once the instance is running.
+   *
+   * Setting both an image and a boot volume, or neither, is rejected. The boot volume is chosen at
+   * creation only: it cannot be detached or replaced afterward, and it is kept when the instance is
+   * deleted. An instance booted from a volume has `image` set to null and cannot be rebuilt: `PUT`
+   * rejects a new `image` or a change of `userData` for it.
    *
    * Declarative `shares`
    *
@@ -845,7 +338,9 @@ export class PublicCloudApi extends SectionApi {
    * - Resize (flavor) — changing `flavor` migrates the instance to the new flavor.
    * - Volume attach / detach — done declaratively by diffing the `volumes` list: adding a volume
    *   reference attaches that volume, removing one detaches it. There is no imperative
-   *   attach/detach endpoint — the diff is the only mechanism.
+   *   attach/detach endpoint — the diff is the only mechanism. The boot volume of an instance
+   *   booted from a volume (`role: BOOT`) must stay in the list: it cannot be detached, and no
+   *   other volume can become `BOOT`.
    * - Network attach / detach — done declaratively by diffing the `networks` list, whose entries
    *   are `{id?, subnetId?, ip?, autoAssignPublicIp?}`: a platform-assigned Ext-Net IP
    *   (`{"autoAssignPublicIp": true}`, at most one entry), a public IP the project already owns —
@@ -866,7 +361,9 @@ export class PublicCloudApi extends SectionApi {
    *
    * `location`, `sshKeyName`, and `group` are set only at creation and are not part of the update.
    * In particular, placement-group (`group`) membership cannot change post-create. OpenStack/Nova
-   * server groups are immutable and there is deliberately no group `PUT`.
+   * server groups are immutable and there is deliberately no group `PUT`. The boot source is fixed
+   * at creation too: an instance booted from a volume keeps `image` null, so a `PUT` carrying an
+   * `image` or changing `userData` is rejected for it, since both require a rebuild from an image.
    *
    * Destructive update (`userData`)
    *
@@ -3283,6 +2780,14372 @@ export class PublicCloudApi extends SectionApi {
   }
 
   /**
+   * allProjectManagedAnalyticsAvailabilities iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/availability (List Analytics availabilities).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the combinations of Analytics engine, version, plan and region that can be ordered,
+   * with their specifications. Use clusterId with action and target to get the options available
+   * for an existing service, for example the plans it can be updated to.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/availability/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseAvailability}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsAvailabilities(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsAvailabilities(
+    projectId: string,
+    params?: {
+      /** Filter availabilities by action type */
+      action?: models.PublicCloudDatabaseAvailabilityActionEnum | undefined;
+      /** Restrict availabilities to a specific cluster */
+      clusterId?: string | undefined;
+      /** Filter availabilities by target type */
+      target?: models.PublicCloudDatabaseAvailabilityTargetEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseAvailability> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsAvailabilities,
+      {
+        path: { projectId: projectId },
+        query: [
+          ["action", params?.action],
+          ["clusterId", params?.clusterId],
+          ["target", params?.target],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsAvailabilitySuggestions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/availability/suggestion (List Analytics availability suggestions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns suggested combinations of Analytics engine, version, plan, flavor and region. The
+   * default suggestion is marked.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/availability/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseAvailabilitySuggestion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsAvailabilitySuggestions(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsAvailabilitySuggestions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseAvailabilitySuggestion> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsAvailabilitySuggestions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsBackups iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/backup (List backups).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the backups of all analytics services of the project, across engines. Filter them by
+   * service with the serviceId parameter.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/backup/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseBackup}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsBackups(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsBackups(
+    projectId: string,
+    params?: {
+      /** Filter backups by service identifier */
+      serviceId?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseBackup> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsBackups,
+      {
+        path: { projectId: projectId },
+        query: [["serviceId", params?.serviceId]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsBackup calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/backup/{backupId}: Get a backup
+   *
+   * Returns the backup type, size, status and storage regions, and the date until which
+   * point-in-time recovery is available.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/backup/get.
+   *
+   * @param projectId - Project ID
+   * @param backupId - Backup ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseBackup} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsBackup(projectId, backupId);
+   */
+  getProjectManagedAnalyticsBackup(
+    projectId: string,
+    backupId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseBackup> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsBackup,
+      {
+        path: { projectId: projectId, backupId: backupId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesDisks iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/disks (List Analytics disk types).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the disk types available for Analytics services, with their IOPS and throughput
+   * specifications.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesDiskType}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesDisks(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesDisks(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesDiskType> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesDisks,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesEngines iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/engines (List Analytics engines).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the available Analytics engines with their versions, default version and supported TLS
+   * modes.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseEngineCapability}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesEngines(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesEngines(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseEngineCapability> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesEngines,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesFlavors iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/flavors (List Analytics flavors).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the compute flavors available for Analytics services, with their technical
+   * specifications and lifecycle.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesFlavor}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesFlavors(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesFlavors(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesFlavor> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesFlavors,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesOptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/options (List Analytics options).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the options available for Analytics services and their data type.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesOption}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesOptions(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesOptions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesOption> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesOptions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesPlans iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/plans (List Analytics plans).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the plans available for Analytics services, with their description and automatic backup
+   * retention.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesPlan}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesPlans(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesPlans(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesPlan> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesPlans,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsCapabilitiesRegions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/capabilities/regions (List Analytics regions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the regions available for Analytics services, with their type and lifecycle.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesRegion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsCapabilitiesRegions(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsCapabilitiesRegions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesRegion> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsCapabilitiesRegions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouses iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse (List ClickHouse services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the ClickHouse services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouses(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouses(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouses,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouse calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse: Create a ClickHouse service
+   *
+   * Creates a ClickHouse service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouse(projectId, body);
+   */
+  createProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouse calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}: Get a ClickHouse service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouse(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsClickhouse calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}: Update a ClickHouse service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsClickhouse(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsClickhouse calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}: Partially update a ClickHouse service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsClickhouse(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsClickhouse calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}: Delete a ClickHouse service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsClickhouse(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseCertificates calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/certificates: Get the TLS certificates
+   *
+   * Returns the CA certificate, in PEM format, used to verify the connection to the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/certificates/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCertificates} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseCertificates(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsClickhouseCertificates(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCertificates> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseCertificates,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseCurrentQueries iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/currentQueries (List running queries).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the queries running on the service, with their client, user, state and duration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCurrentQuery}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseCurrentQueries(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCurrentQuery> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseCurrentQueries calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/currentQueries/{queryPid}: Get a running query
+   *
+   * Returns the SQL text, state and duration of a running query, identified by its process ID.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCurrentQuery} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseCurrentQueries(projectId, serviceId, queryPid);
+   */
+  getProjectManagedAnalyticsClickhouseCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    params?: {
+      /** Maximum number of queries to return */
+      limit?: number | undefined;
+      /** Number of queries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCurrentQuery> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * cancelProjectManagedAnalyticsClickhouseCurrentQueries calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/currentQueries/{queryPid}/cancel: Cancel a running query
+   *
+   * Cancels a running query gracefully. Set terminate to true to force its termination instead.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/currentQueries/cancel.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseQueryCancelResult} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.cancelProjectManagedAnalyticsClickhouseCurrentQueries(projectId, serviceId, queryPid, body);
+   */
+  cancelProjectManagedAnalyticsClickhouseCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    body: models.PublicCloudDatabaseQueryCancelRequest,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseQueryCancelResult> {
+    return this._call(
+      OPS.cancelProjectManagedAnalyticsClickhouseCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseDatabases iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/database (List databases).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the databases of the service, including the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseDatabase}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseDatabases(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseDatabases(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseDatabase> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseDatabases,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouseDatabase calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/database: Create a database
+   *
+   * Creates a database with the given name.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/database/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouseDatabase(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsClickhouseDatabase(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseDatabaseCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouseDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseDatabase calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/database/{databaseId}: Get a database
+   *
+   * Returns the database name and whether it is the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseDatabase(projectId, serviceId, databaseId);
+   */
+  getProjectManagedAnalyticsClickhouseDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsClickhouseDatabase calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/database/{databaseId}: Delete a database
+   *
+   * Permanently deletes the database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/database/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsClickhouseDatabase(projectId, serviceId, databaseId);
+   */
+  deleteProjectManagedAnalyticsClickhouseDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsClickhouseDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * enableWritesProjectManagedAnalyticsClickhouse calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/enableWrites: Enable temporary writes
+   *
+   * Enables temporary write permissions on a service locked in read-only mode because its disk is
+   * full. Returns the date when they are revoked.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/enableWrites.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseTemporaryWriteDeadline} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.enableWritesProjectManagedAnalyticsClickhouse(projectId, serviceId);
+   */
+  enableWritesProjectManagedAnalyticsClickhouse(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseTemporaryWriteDeadline> {
+    return this._call(
+      OPS.enableWritesProjectManagedAnalyticsClickhouse,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouseIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouseIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsClickhouseIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouseIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsClickhouseIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsClickhouseIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsClickhouseIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsClickhouseIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsClickhouseIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds ClickHouse emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsClickhouseLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the ClickHouse log subscriptions. Set `kind` to restrict the list to
+   * one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouseLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards ClickHouse logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouseLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsClickhouseLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouseLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsClickhouseLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsClickhouseLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding ClickHouse logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsClickhouseLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsClickhouseLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsClickhouseLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsClickhouseLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsClickhouseLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsClickhouseLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsClickhouseLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouseMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouseMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsClickhouseMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouseMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsClickhouseMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsClickhouseMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhousePrometheus calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhousePrometheus(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsClickhousePrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhousePrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedAnalyticsClickhousePrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/clickhouse/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedAnalyticsClickhousePrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedAnalyticsClickhousePrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedAnalyticsClickhousePrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseQueryStatistics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/queryStatistics (List query statistics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns execution statistics for each query pattern: number of calls, rows and execution times.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/queryStatistics/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseQueryStatistic}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseQueryStatistics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseQueryStatistics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Maximum number of entries to return */
+      limit?: number | undefined;
+      /** Number of entries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseQueryStatistic> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseQueryStatistics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseRoles iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/roles (List roles).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the roles that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseRole}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseRoles(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseRoles(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseRole> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseRoles calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/roles/{roleId}: Get a role
+   *
+   * Returns a role that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param roleId - Role ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseRole} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseRoles(projectId, serviceId, roleId);
+   */
+  getProjectManagedAnalyticsClickhouseRoles(
+    projectId: string,
+    serviceId: string,
+    roleId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseRole> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId, roleId: roleId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsClickhouseUsers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their roles and status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUserWithRoles}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsClickhouseUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsClickhouseUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUserWithRoles> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsClickhouseUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsClickhouseUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user: Create a user
+   *
+   * Creates a user and generates its password. The password is returned only on creation and on
+   * password reset. Roles are assigned in the cluster and cannot be set through this API.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsClickhouseUser(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsClickhouseUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsClickhouseUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsClickhouseUser calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user, its roles and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsClickhouseUser(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsClickhouseUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsClickhouseUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsClickhouseUser calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user/{userId}: Reset user credentials
+   *
+   * Resets the password of the user when credentialsLastUpdatedAt is set. The new password is
+   * returned in the response. Roles are assigned in the cluster and cannot be changed through this
+   * API.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsClickhouseUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedAnalyticsClickhouseUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserCredentialsUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsClickhouseUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsClickhouseUser calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsClickhouseUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedAnalyticsClickhouseUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsClickhouseUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedAnalyticsClickhouseUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/clickhouse/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/clickhouse/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedAnalyticsClickhouseUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedAnalyticsClickhouseUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.resetPasswordProjectManagedAnalyticsClickhouseUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanas iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana (List Grafana services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Grafana services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanas(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanas(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanas,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsGrafana calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana: Create a Grafana service
+   *
+   * Creates a Grafana service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsGrafana(projectId, body);
+   */
+  createProjectManagedAnalyticsGrafana(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsGrafana,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafana calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}: Get a Grafana service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafana(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsGrafana(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafana,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsGrafana calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}: Update a Grafana service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsGrafana(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsGrafana(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsGrafana,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsGrafana calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}: Partially update a Grafana service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsGrafana(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsGrafana(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsGrafana,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsGrafana calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}: Delete a Grafana service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsGrafana(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsGrafana(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsGrafana,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsGrafanaIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsGrafanaIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsGrafanaIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsGrafanaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsGrafanaIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsGrafanaIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsGrafanaIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsGrafanaIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsGrafanaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Managed Dashboards emits, which can be forwarded to a
+   * stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsGrafanaLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Managed Dashboards log subscriptions. Set `kind` to restrict the
+   * list to one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsGrafanaLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards Managed Dashboards logs of one kind to a Logs Data Platform stream. The subscription
+   * is created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsGrafanaLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsGrafanaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsGrafanaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsGrafanaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsGrafanaLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Managed Dashboards logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsGrafanaLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsGrafanaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsGrafanaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsGrafanaLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsGrafanaLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsGrafanaLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsGrafanaLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsGrafanaMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsGrafanaMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsGrafanaMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsGrafanaMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsGrafanaMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsGrafanaMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsGrafanaUsers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their status. Users are provisioned by the service and
+   * cannot be created or deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsGrafanaUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsGrafanaUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUser> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsGrafanaUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsGrafanaUser calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsGrafanaUser(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsGrafanaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsGrafanaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsGrafanaUser calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/user/{userId}: Reset user credentials
+   *
+   * Resets the password of the user when credentialsLastUpdatedAt is set. The new password is
+   * returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsGrafanaUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedAnalyticsGrafanaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserCredentialsUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsGrafanaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedAnalyticsGrafanaUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/grafana/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/grafana/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedAnalyticsGrafanaUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedAnalyticsGrafanaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedAnalyticsGrafanaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkas iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka (List Kafka services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Kafka services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkas(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkas(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkas,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafka calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka: Create a Kafka service
+   *
+   * Creates a Kafka service from a plan, a flavor and an engine version. Creation is asynchronous:
+   * follow resourceStatus until READY. Set forkSourceServiceId to create it from a backup of
+   * another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafka(projectId, body);
+   */
+  createProjectManagedAnalyticsKafka(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafka,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafka calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}: Get a Kafka service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafka(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafka(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafka,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafka calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}: Update a Kafka service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafka(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsKafka(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafka,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafka calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}: Partially update a Kafka service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafka(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsKafka(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafka,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafka calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}: Delete a Kafka service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafka(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsKafka(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafka,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaAcls iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/acl (List topic ACLs).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the topic ACL entries of the service, each granting a user a permission on a topic name
+   * pattern.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/acl/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaACL}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaAcls(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaAcls(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaACL> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaAcls,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaAcl calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/acl: Create a topic ACL
+   *
+   * Grants a user a permission on the topics matching a name pattern. Use * to match all topics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/acl/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaAcl(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaAcl(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseKafkaACLCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaACL> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaAcl,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaAcl calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/acl/{aclId}: Get a topic ACL
+   *
+   * Returns the user, the topic name pattern and the permission of the ACL entry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/acl/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param aclId - Acl ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaAcl(projectId, serviceId, aclId);
+   */
+  getProjectManagedAnalyticsKafkaAcl(
+    projectId: string,
+    serviceId: string,
+    aclId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaACL> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaAcl,
+      {
+        path: { projectId: projectId, serviceId: serviceId, aclId: aclId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaAcl calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/acl/{aclId}: Delete a topic ACL
+   *
+   * Deletes the ACL entry and revokes the permission it granted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/acl/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param aclId - Acl ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaAcl(projectId, serviceId, aclId);
+   */
+  deleteProjectManagedAnalyticsKafkaAcl(
+    projectId: string,
+    serviceId: string,
+    aclId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaACL> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaAcl,
+      {
+        path: { projectId: projectId, serviceId: serviceId, aclId: aclId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaCertificates calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/certificates: Get the TLS certificates
+   *
+   * Returns the CA certificate, in PEM format, used to verify the connection to the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/certificates/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCertificates} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaCertificates(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaCertificates(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCertificates> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaCertificates,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsKafkaIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsKafkaIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Kafka emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsKafkaLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Kafka log subscriptions. Set `kind` to restrict the list to one
+   * log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards Kafka logs of one kind to a Logs Data Platform stream. The subscription is created
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsKafkaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Kafka logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsKafkaLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsKafkaLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsKafkaLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsKafkaLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsKafkaLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsKafkaMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsKafkaMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsKafkaMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaPermissions calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/permissions: List ACL permissions
+   *
+   * Returns the permission names available for topic ACLs and for Schema Registry ACLs.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/permissions/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaPermissions} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaPermissions(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaPermissions(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaPermissions> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaPermissions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaPrometheus calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaPrometheus(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedAnalyticsKafkaPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedAnalyticsKafkaPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedAnalyticsKafkaPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedAnalyticsKafkaPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaSchemaRegistryAcls iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/schemaRegistryAcl (List Schema Registry ACLs).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Schema Registry ACL entries of the service, each granting a user a permission on a
+   * resource pattern.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/schemaRegistryAcl/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaSchemaRegistryACL}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaSchemaRegistryAcls(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaSchemaRegistryAcls(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaSchemaRegistryACL> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaSchemaRegistryAcls,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaSchemaRegistryAcl calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/schemaRegistryAcl: Create a Schema Registry ACL
+   *
+   * Grants a user a permission on the Schema Registry resources matching a pattern. Use * to match
+   * all subjects.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/schemaRegistryAcl/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaSchemaRegistryACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaSchemaRegistryAcl(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaSchemaRegistryAcl(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseKafkaSchemaRegistryACLCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaSchemaRegistryACL> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaSchemaRegistryAcl,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaSchemaRegistryAcl calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/schemaRegistryAcl/{schemaRegistryAclId}: Get a Schema Registry ACL
+   *
+   * Returns the user, the resource pattern and the permission of the ACL entry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/schemaRegistryAcl/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param schemaRegistryAclId - Schema registry acl ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaSchemaRegistryACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaSchemaRegistryAcl(projectId, serviceId, schemaRegistryAclId);
+   */
+  getProjectManagedAnalyticsKafkaSchemaRegistryAcl(
+    projectId: string,
+    serviceId: string,
+    schemaRegistryAclId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaSchemaRegistryACL> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaSchemaRegistryAcl,
+      {
+        path: {
+          projectId: projectId,
+          serviceId: serviceId,
+          schemaRegistryAclId: schemaRegistryAclId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaSchemaRegistryAcl calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/schemaRegistryAcl/{schemaRegistryAclId}: Delete a Schema Registry ACL
+   *
+   * Deletes the ACL entry and revokes the permission it granted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/schemaRegistryAcl/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param schemaRegistryAclId - Schema registry acl ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaSchemaRegistryACL} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaSchemaRegistryAcl(projectId, serviceId, schemaRegistryAclId);
+   */
+  deleteProjectManagedAnalyticsKafkaSchemaRegistryAcl(
+    projectId: string,
+    serviceId: string,
+    schemaRegistryAclId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaSchemaRegistryACL> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaSchemaRegistryAcl,
+      {
+        path: {
+          projectId: projectId,
+          serviceId: serviceId,
+          schemaRegistryAclId: schemaRegistryAclId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaTopics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic (List topics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the topics of the service with their partitions, replication and retention settings.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaTopic}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaTopics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaTopics(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaTopic> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaTopics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaTopic calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic: Create a topic
+   *
+   * Creates a topic. By default it has 1 partition, a replication factor of 1 and a retention of
+   * 168 hours (7 days). The replication factor must not exceed the number of brokers.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaTopic} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaTopic(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaTopic(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseKafkaTopicCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaTopic> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaTopic,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaTopic calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic/{topicId}: Get a topic
+   *
+   * Returns the partitions, replication factor, minimum in-sync replicas and retention settings of
+   * the topic.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param topicId - Topic ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaTopic} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaTopic(projectId, serviceId, topicId);
+   */
+  getProjectManagedAnalyticsKafkaTopic(
+    projectId: string,
+    serviceId: string,
+    topicId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaTopic> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaTopic,
+      {
+        path: { projectId: projectId, serviceId: serviceId, topicId: topicId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaTopic calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic/{topicId}: Update a topic
+   *
+   * Updates the partitions, replication, minimum in-sync replicas and retention of the topic. Every
+   * field is required. The number of partitions can only be increased.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param topicId - Topic ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaTopic} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaTopic(projectId, serviceId, topicId, body);
+   */
+  updateProjectManagedAnalyticsKafkaTopic(
+    projectId: string,
+    serviceId: string,
+    topicId: string,
+    body: models.PublicCloudDatabaseKafkaTopicReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaTopic> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaTopic,
+      {
+        path: { projectId: projectId, serviceId: serviceId, topicId: topicId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafkaTopic calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic/{topicId}: Partially update a topic
+   *
+   * Partially updates the partitions, replication, minimum in-sync replicas or retention of the
+   * topic. The number of partitions can only be increased.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param topicId - Topic ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaTopic} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafkaTopic(projectId, serviceId, topicId, body);
+   */
+  patchProjectManagedAnalyticsKafkaTopic(
+    projectId: string,
+    serviceId: string,
+    topicId: string,
+    body: models.PublicCloudDatabaseKafkaTopicUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaTopic> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafkaTopic,
+      {
+        path: { projectId: projectId, serviceId: serviceId, topicId: topicId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaTopic calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/topic/{topicId}: Delete a topic
+   *
+   * Permanently deletes the topic and its messages.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/topic/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param topicId - Topic ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaTopic} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaTopic(projectId, serviceId, topicId);
+   */
+  deleteProjectManagedAnalyticsKafkaTopic(
+    projectId: string,
+    serviceId: string,
+    topicId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaTopic> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaTopic,
+      {
+        path: { projectId: projectId, serviceId: serviceId, topicId: topicId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaUsers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUser> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user: Create a user
+   *
+   * Creates a user and generates its password. The password is returned only on creation and on
+   * password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaUser(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaUser calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaUser(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsKafkaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaUser calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user/{userId}: Reset user credentials
+   *
+   * Resets the password of the user when credentialsLastUpdatedAt is set. The new password is
+   * returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedAnalyticsKafkaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserCredentialsUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaUser calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedAnalyticsKafkaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaUserAccess calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user/{userId}/access: Get the user certificate
+   *
+   * Returns the client certificate, in PEM format, and its private key, used for SSL authentication
+   * of the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/access/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaUserAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaUserAccess(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsKafkaUserAccess(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaUserAccess> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaUserAccess,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedAnalyticsKafkaUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafka/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafka/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedAnalyticsKafkaUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedAnalyticsKafkaUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedAnalyticsKafkaUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnects iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect (List Kafka Connect services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Kafka Connect services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnects(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnects(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnects,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnect calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect: Create a Kafka Connect service
+   *
+   * Creates a Kafka Connect service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnect(projectId, body);
+   */
+  createProjectManagedAnalyticsKafkaConnect(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnect,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnect calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}: Get a Kafka Connect service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnect(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaConnect(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnect,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaConnect calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}: Update a Kafka Connect service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaConnect(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsKafkaConnect(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaConnect,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafkaConnect calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}: Partially update a Kafka Connect service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafkaConnect(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsKafkaConnect(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafkaConnect,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaConnect calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}: Delete a Kafka Connect service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaConnect(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsKafkaConnect(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaConnect,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectConnectors iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector (List connectors).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the connectors of the service with their status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaConnectConnector}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectConnectors(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectConnectors(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectConnectors,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnectConnector calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector: Create a connector
+   *
+   * Creates a connector of a type listed in the capabilities, with its configuration key-value
+   * pairs.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnector} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnectConnector(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaConnectConnector(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseKafkaConnectConnectorCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnectConnector,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectConnector calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}: Get a connector
+   *
+   * Returns the connector type, its configuration and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnector} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectConnector(projectId, serviceId, connectorId);
+   */
+  getProjectManagedAnalyticsKafkaConnectConnector(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectConnector,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectorId: connectorId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaConnectConnector calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}: Update a connector configuration
+   *
+   * Updates the configuration of the connector. Keys omitted from the request are removed.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnector} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaConnectConnector(projectId, serviceId, connectorId, body);
+   */
+  updateProjectManagedAnalyticsKafkaConnectConnector(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    body: models.PublicCloudDatabaseKafkaConnectConnectorReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaConnectConnector,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectorId: connectorId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafkaConnectConnector calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}: Change the connector status
+   *
+   * Pauses, resumes or restarts the connector, depending on the requested action.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnector} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafkaConnectConnector(projectId, serviceId, connectorId, body);
+   */
+  patchProjectManagedAnalyticsKafkaConnectConnector(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    body: models.PublicCloudDatabaseKafkaConnectConnectorStatusUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafkaConnectConnector,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectorId: connectorId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaConnectConnector calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}: Delete a connector
+   *
+   * Deletes the connector.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnector} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaConnectConnector(projectId, serviceId, connectorId);
+   */
+  deleteProjectManagedAnalyticsKafkaConnectConnector(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnector> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaConnectConnector,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectorId: connectorId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectConnectorTasks iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}/task (List connector tasks).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the tasks of the connector with their status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/task/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaConnectConnectorTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectConnectorTasks(projectId, serviceId, connectorId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectConnectorTasks(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaConnectConnectorTask> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectConnectorTasks,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectorId: connectorId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectConnectorTask calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}/task/{taskId}: Get a connector task
+   *
+   * Returns the status of the task and, when it failed, its error trace.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/connector/task/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param taskId - Task ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnectorTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectConnectorTask(projectId, serviceId, connectorId, taskId);
+   */
+  getProjectManagedAnalyticsKafkaConnectConnectorTask(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    taskId: number,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnectorTask> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectConnectorTask,
+      {
+        path: {
+          projectId: projectId,
+          serviceId: serviceId,
+          connectorId: connectorId,
+          taskId: taskId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * restartProjectManagedAnalyticsKafkaConnectConnectorTask calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/connector/{connectorId}/task/{taskId}/restart: Restart a connector task
+   *
+   * Restarts the task and returns it with its new status.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaConnect/connector/task/restart.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectorId - Connector ID
+   * @param taskId - Task ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaConnectConnectorTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.restartProjectManagedAnalyticsKafkaConnectConnectorTask(projectId, serviceId, connectorId, taskId);
+   */
+  restartProjectManagedAnalyticsKafkaConnectConnectorTask(
+    projectId: string,
+    serviceId: string,
+    connectorId: string,
+    taskId: number,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaConnectConnectorTask> {
+    return this._call(
+      OPS.restartProjectManagedAnalyticsKafkaConnectConnectorTask,
+      {
+        path: {
+          projectId: projectId,
+          serviceId: serviceId,
+          connectorId: connectorId,
+          taskId: taskId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnectIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnectIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaConnectIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnectIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsKafkaConnectIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaConnectIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaConnectIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsKafkaConnectIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaConnectIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Kafka Connect emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsKafkaConnectLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Kafka Connect log subscriptions. Set `kind` to restrict the list
+   * to one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnectLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards Kafka Connect logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaConnect/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnectLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaConnectLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnectLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsKafkaConnectLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaConnectLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Kafka Connect logs to the stream.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaConnect/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaConnectLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsKafkaConnectLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaConnectLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsKafkaConnectLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsKafkaConnectLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsKafkaConnectLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsKafkaConnectLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnectMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnectMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsKafkaConnectMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnectMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsKafkaConnectMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsKafkaConnectMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectPrometheus calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectPrometheus(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaConnectPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedAnalyticsKafkaConnectPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaConnect/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedAnalyticsKafkaConnectPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedAnalyticsKafkaConnectPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedAnalyticsKafkaConnectPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaConnectUsers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaConnectUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaConnectUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUser> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaConnectUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaConnectUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user: Create a user
+   *
+   * Creates a user and generates its password. The password is returned only on creation and on
+   * password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaConnectUser(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaConnectUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaConnectUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaConnectUser calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaConnectUser(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsKafkaConnectUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaConnectUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaConnectUser calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user/{userId}: Reset user credentials
+   *
+   * Resets the password of the user when credentialsLastUpdatedAt is set. The new password is
+   * returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaConnectUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedAnalyticsKafkaConnectUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserCredentialsUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaConnectUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaConnectUser calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaConnect/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaConnectUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedAnalyticsKafkaConnectUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaConnectUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedAnalyticsKafkaConnectUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaConnect/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaConnect/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedAnalyticsKafkaConnectUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedAnalyticsKafkaConnectUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedAnalyticsKafkaConnectUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker (List Kafka MirrorMaker services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Kafka MirrorMaker services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakers(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakers(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakers,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMirrorMaker calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker: Create a Kafka MirrorMaker service
+   *
+   * Creates a Kafka MirrorMaker service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMirrorMaker(projectId, body);
+   */
+  createProjectManagedAnalyticsKafkaMirrorMaker(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMirrorMaker,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMaker calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}: Get a Kafka MirrorMaker service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMaker(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMaker(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMaker,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaMirrorMaker calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}: Update a Kafka MirrorMaker service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaMirrorMaker(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsKafkaMirrorMaker(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaMirrorMaker,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafkaMirrorMaker calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}: Partially update a Kafka MirrorMaker service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafkaMirrorMaker(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsKafkaMirrorMaker(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafkaMirrorMaker,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaMirrorMaker calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}: Delete a Kafka MirrorMaker service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaMirrorMaker(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsKafkaMirrorMaker(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaMirrorMaker,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMirrorMakerIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMirrorMakerIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaMirrorMakerIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMirrorMakerIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaMirrorMakerIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaMirrorMakerIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsKafkaMirrorMakerIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaMirrorMakerIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Kafka MirrorMaker emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Kafka MirrorMaker log subscriptions. Set `kind` to restrict the
+   * list to one log kind.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMirrorMakerLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards Kafka MirrorMaker logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMirrorMakerLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaMirrorMakerLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Kafka MirrorMaker logs to the stream.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsKafkaMirrorMakerLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaMirrorMakerLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsKafkaMirrorMakerLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsKafkaMirrorMakerLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsKafkaMirrorMakerLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsKafkaMirrorMakerLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMirrorMakerMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMirrorMakerMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsKafkaMirrorMakerMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMirrorMakerMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerPrometheus calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerPrometheus(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedAnalyticsKafkaMirrorMakerPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedAnalyticsKafkaMirrorMakerPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedAnalyticsKafkaMirrorMakerPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedAnalyticsKafkaMirrorMakerPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsKafkaMirrorMakerReplications iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication (List replication flows).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the replication flows of the service, with their source and target integrations and
+   * whether they are enabled.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsKafkaMirrorMakerReplications(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsKafkaMirrorMakerReplications(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsKafkaMirrorMakerReplications,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsKafkaMirrorMakerReplication calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication: Create a replication flow
+   *
+   * Creates a replication flow from a source integration to a target integration. Topics matching
+   * the include patterns are replicated, except those matching the exclude patterns.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsKafkaMirrorMakerReplication(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsKafkaMirrorMakerReplication(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseKafkaMirrorMakerReplicationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsKafkaMirrorMakerReplication,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsKafkaMirrorMakerReplication calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication/{replicationId}: Get a replication flow
+   *
+   * Returns the source and target integrations of the flow, its topic patterns and its sync
+   * settings.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param replicationId - Replication ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsKafkaMirrorMakerReplication(projectId, serviceId, replicationId);
+   */
+  getProjectManagedAnalyticsKafkaMirrorMakerReplication(
+    projectId: string,
+    serviceId: string,
+    replicationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsKafkaMirrorMakerReplication,
+      {
+        path: { projectId: projectId, serviceId: serviceId, replicationId: replicationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsKafkaMirrorMakerReplication calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication/{replicationId}: Update a replication flow
+   *
+   * Updates the topic patterns, sync settings and state of the flow. Every field is required. The
+   * source and target integrations cannot be changed.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param replicationId - Replication ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsKafkaMirrorMakerReplication(projectId, serviceId, replicationId, body);
+   */
+  updateProjectManagedAnalyticsKafkaMirrorMakerReplication(
+    projectId: string,
+    serviceId: string,
+    replicationId: string,
+    body: models.PublicCloudDatabaseKafkaMirrorMakerReplicationReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsKafkaMirrorMakerReplication,
+      {
+        path: { projectId: projectId, serviceId: serviceId, replicationId: replicationId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsKafkaMirrorMakerReplication calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication/{replicationId}: Partially update a replication flow
+   *
+   * Partially updates the topic patterns, sync settings or state of the flow. The source and target
+   * integrations cannot be changed.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param replicationId - Replication ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsKafkaMirrorMakerReplication(projectId, serviceId, replicationId, body);
+   */
+  patchProjectManagedAnalyticsKafkaMirrorMakerReplication(
+    projectId: string,
+    serviceId: string,
+    replicationId: string,
+    body: models.PublicCloudDatabaseKafkaMirrorMakerReplicationUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsKafkaMirrorMakerReplication,
+      {
+        path: { projectId: projectId, serviceId: serviceId, replicationId: replicationId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsKafkaMirrorMakerReplication calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/kafkaMirrorMaker/{serviceId}/replication/{replicationId}: Delete a replication flow
+   *
+   * Deletes the replication flow and stops the replication.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/kafkaMirrorMaker/replication/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param replicationId - Replication ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseKafkaMirrorMakerReplication} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsKafkaMirrorMakerReplication(projectId, serviceId, replicationId);
+   */
+  deleteProjectManagedAnalyticsKafkaMirrorMakerReplication(
+    projectId: string,
+    serviceId: string,
+    replicationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseKafkaMirrorMakerReplication> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsKafkaMirrorMakerReplication,
+      {
+        path: { projectId: projectId, serviceId: serviceId, replicationId: replicationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearches iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch (List OpenSearch services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the OpenSearch services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearches(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearches(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearches,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearch calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch: Create an OpenSearch service
+   *
+   * Creates an OpenSearch service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearch(projectId, body);
+   */
+  createProjectManagedAnalyticsOpensearch(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearch,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearch calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}: Get an OpenSearch service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearch(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsOpensearch(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearch,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsOpensearch calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}: Update an OpenSearch service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsOpensearch(projectId, serviceId, body);
+   */
+  updateProjectManagedAnalyticsOpensearch(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsOpensearch,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsOpensearch calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}: Partially update an OpenSearch service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsOpensearch(projectId, serviceId, body);
+   */
+  patchProjectManagedAnalyticsOpensearch(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsOpensearch,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsOpensearch calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}: Delete an OpenSearch service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsOpensearch(projectId, serviceId);
+   */
+  deleteProjectManagedAnalyticsOpensearch(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsOpensearch,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchIndexes iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/index (List indexes).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the indexes of the service with their document count, size and shards.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/index/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseOpensearchIndex}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchIndexes(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchIndexes(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseOpensearchIndex> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchIndexes,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchIndex calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/index/{indexId}: Get an index
+   *
+   * Returns the document count, the size in bytes and the primary and replica shard counts of the
+   * index.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/index/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param indexId - Index ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchIndex} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchIndex(projectId, serviceId, indexId);
+   */
+  getProjectManagedAnalyticsOpensearchIndex(
+    projectId: string,
+    serviceId: string,
+    indexId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchIndex> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchIndex,
+      {
+        path: { projectId: projectId, serviceId: serviceId, indexId: indexId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearchIntegration calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearchIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsOpensearchIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearchIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchIntegration calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedAnalyticsOpensearchIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsOpensearchIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsOpensearchIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedAnalyticsOpensearchIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsOpensearchIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds OpenSearch emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchLogKind calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedAnalyticsOpensearchLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the OpenSearch log subscriptions. Set `kind` to restrict the list to
+   * one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearchLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards OpenSearch logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearchLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsOpensearchLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearchLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedAnalyticsOpensearchLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsOpensearchLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding OpenSearch logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsOpensearchLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedAnalyticsOpensearchLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsOpensearchLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedAnalyticsOpensearchLog calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedAnalyticsOpensearchLog(projectId, serviceId, body);
+   */
+  urlProjectManagedAnalyticsOpensearchLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedAnalyticsOpensearchLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearchMaintenance calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearchMaintenance(projectId, serviceId);
+   */
+  createProjectManagedAnalyticsOpensearchMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearchMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchMaintenance calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedAnalyticsOpensearchMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchMetric calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedAnalyticsOpensearchMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchPatterns iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/pattern (List index patterns).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the index patterns of the service with their maximum number of indexes.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/pattern/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseOpensearchPattern}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchPatterns(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchPatterns(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseOpensearchPattern> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchPatterns,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearchPattern calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/pattern: Create an index pattern
+   *
+   * Creates a glob pattern matching index names, with a maximum number of matching indexes. When
+   * the limit is reached, the oldest indexes are deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/pattern/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchPattern} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearchPattern(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsOpensearchPattern(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseOpensearchPatternCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchPattern> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearchPattern,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchPattern calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/pattern/{patternId}: Get an index pattern
+   *
+   * Returns the glob pattern and the maximum number of indexes it keeps.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/pattern/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param patternId - Pattern ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchPattern} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchPattern(projectId, serviceId, patternId);
+   */
+  getProjectManagedAnalyticsOpensearchPattern(
+    projectId: string,
+    serviceId: string,
+    patternId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchPattern> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchPattern,
+      {
+        path: { projectId: projectId, serviceId: serviceId, patternId: patternId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsOpensearchPattern calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/pattern/{patternId}: Delete an index pattern
+   *
+   * Deletes the index pattern and the indexes matching it.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/pattern/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param patternId - Pattern ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchPattern} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsOpensearchPattern(projectId, serviceId, patternId);
+   */
+  deleteProjectManagedAnalyticsOpensearchPattern(
+    projectId: string,
+    serviceId: string,
+    patternId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchPattern> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsOpensearchPattern,
+      {
+        path: { projectId: projectId, serviceId: serviceId, patternId: patternId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchPermissions iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/permissions (List user permissions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the permissions that can be granted to users on an index pattern.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/permissions/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchPermissions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchPermissions(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchPermissions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchPrometheus calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchPrometheus(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsOpensearchPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedAnalyticsOpensearchPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:analytics/opensearch/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedAnalyticsOpensearchPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedAnalyticsOpensearchPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedAnalyticsOpensearchPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsOpensearchUsers iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their ACL entries and status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseOpensearchUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsOpensearchUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedAnalyticsOpensearchUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseOpensearchUser> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsOpensearchUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedAnalyticsOpensearchUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user: Create a user
+   *
+   * Creates a user with ACL entries, each granting a permission on an index pattern. The generated
+   * password is returned only on creation and on password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedAnalyticsOpensearchUser(projectId, serviceId, body);
+   */
+  createProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseOpensearchUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.createProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsOpensearchUser calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user, its ACL entries and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsOpensearchUser(projectId, serviceId, userId);
+   */
+  getProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedAnalyticsOpensearchUser calls PUT /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user/{userId}: Update a user
+   *
+   * Updates the ACL entries of the user. The ACL list replaces the current entries. To reset the
+   * password, use the resetPassword route of the user or a partial update with
+   * credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedAnalyticsOpensearchUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseOpensearchUserReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.updateProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedAnalyticsOpensearchUser calls PATCH /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user/{userId}: Partially update a user
+   *
+   * Partially updates the ACL entries of the user. The ACL list replaces the current entries.
+   * Setting credentialsLastUpdatedAt resets the password and returns the new one.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedAnalyticsOpensearchUser(projectId, serviceId, userId, body);
+   */
+  patchProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseOpensearchUserUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.patchProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedAnalyticsOpensearchUser calls DELETE /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedAnalyticsOpensearchUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.deleteProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedAnalyticsOpensearchUser calls POST /v2/publicCloud/project/{projectId}/managedAnalytics/opensearch/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/opensearch/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseOpensearchUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedAnalyticsOpensearchUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedAnalyticsOpensearchUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseOpensearchUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedAnalyticsOpensearchUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedAnalyticsServices iterates over GET /v2/publicCloud/project/{projectId}/managedAnalytics/service (List services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the analytics services of the project, across all engines.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/service/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedAnalyticsServices(projectId)) console.log(item);
+   */
+  allProjectManagedAnalyticsServices(
+    projectId: string,
+    params?: {
+      /** Filter services by engine category */
+      category?: models.PublicCloudDatabaseCategoryEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedAnalyticsServices,
+      {
+        path: { projectId: projectId },
+        query: [["category", params?.category]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedAnalyticsService calls GET /v2/publicCloud/project/{projectId}/managedAnalytics/service/{serviceId}: Get a service
+   *
+   * Returns an analytics service whatever its engine, with its target specification, current state
+   * and running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:analytics/service/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedAnalyticsService(projectId, serviceId);
+   */
+  getProjectManagedAnalyticsService(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedAnalyticsService,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseAvailabilities iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/availability (List Databases availabilities).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the combinations of Databases engine, version, plan and region that can be ordered,
+   * with their specifications. Use clusterId with action and target to get the options available
+   * for an existing service, for example the plans it can be updated to.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/availability/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseAvailability}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseAvailabilities(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseAvailabilities(
+    projectId: string,
+    params?: {
+      /** Filter availabilities by action type */
+      action?: models.PublicCloudDatabaseAvailabilityActionEnum | undefined;
+      /** Restrict availabilities to a specific cluster */
+      clusterId?: string | undefined;
+      /** Filter availabilities by target type */
+      target?: models.PublicCloudDatabaseAvailabilityTargetEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseAvailability> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseAvailabilities,
+      {
+        path: { projectId: projectId },
+        query: [
+          ["action", params?.action],
+          ["clusterId", params?.clusterId],
+          ["target", params?.target],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseAvailabilitySuggestions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/availability/suggestion (List Databases availability suggestions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns suggested combinations of Databases engine, version, plan, flavor and region. The
+   * default suggestion is marked.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/availability/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseAvailabilitySuggestion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseAvailabilitySuggestions(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseAvailabilitySuggestions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseAvailabilitySuggestion> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseAvailabilitySuggestions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseBackups iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/backup (List backups).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the backups of all database services of the project, across engines. Filter them by
+   * service with the serviceId parameter.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/backup/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseBackup}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseBackups(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseBackups(
+    projectId: string,
+    params?: {
+      /** Filter backups by service identifier */
+      serviceId?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseBackup> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseBackups,
+      {
+        path: { projectId: projectId },
+        query: [["serviceId", params?.serviceId]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseBackup calls GET /v2/publicCloud/project/{projectId}/managedDatabase/backup/{backupId}: Get a backup
+   *
+   * Returns the backup type, size, status and storage regions, and the date until which
+   * point-in-time recovery is available.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/backup/get.
+   *
+   * @param projectId - Project ID
+   * @param backupId - Backup ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseBackup} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseBackup(projectId, backupId);
+   */
+  getProjectManagedDatabaseBackup(
+    projectId: string,
+    backupId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseBackup> {
+    return this._call(
+      OPS.getProjectManagedDatabaseBackup,
+      {
+        path: { projectId: projectId, backupId: backupId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesDisks iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/disks (List Databases disk types).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the disk types available for Databases services, with their IOPS and throughput
+   * specifications.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesDiskType}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesDisks(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesDisks(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesDiskType> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesDisks,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesEngines iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/engines (List Databases engines).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the available Databases engines with their versions, default version and supported TLS
+   * modes.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseEngineCapability}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesEngines(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesEngines(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseEngineCapability> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesEngines,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesFlavors iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/flavors (List Databases flavors).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the compute flavors available for Databases services, with their technical
+   * specifications and lifecycle.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesFlavor}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesFlavors(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesFlavors(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesFlavor> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesFlavors,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesOptions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/options (List Databases options).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the options available for Databases services and their data type.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesOption}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesOptions(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesOptions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesOption> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesOptions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesPlans iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/plans (List Databases plans).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the plans available for Databases services, with their description and automatic backup
+   * retention.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesPlan}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesPlans(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesPlans(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesPlan> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesPlans,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseCapabilitiesRegions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/capabilities/regions (List Databases regions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the regions available for Databases services, with their type and lifecycle.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/capabilities/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCapabilitiesRegion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseCapabilitiesRegions(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseCapabilitiesRegions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCapabilitiesRegion> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseCapabilitiesRegions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbs iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb (List MongoDB services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the MongoDB services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbs(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbs(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbs,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMongodb calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb: Create a MongoDB service
+   *
+   * Creates a MongoDB service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMongodb(projectId, body);
+   */
+  createProjectManagedDatabaseMongodb(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodb calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}: Get a MongoDB service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodb(projectId, serviceId);
+   */
+  getProjectManagedDatabaseMongodb(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseMongodb calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}: Update a MongoDB service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseMongodb(projectId, serviceId, body);
+   */
+  updateProjectManagedDatabaseMongodb(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabaseMongodb calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}: Partially update a MongoDB service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabaseMongodb(projectId, serviceId, body);
+   */
+  patchProjectManagedDatabaseMongodb(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMongodb calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}: Delete a MongoDB service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMongodb(projectId, serviceId);
+   */
+  deleteProjectManagedDatabaseMongodb(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds MongoDB emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbLogKind calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedDatabaseMongodbLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the MongoDB log subscriptions. Set `kind` to restrict the list to
+   * one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMongodbLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards MongoDB logs of one kind to a Logs Data Platform stream. The subscription is created
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMongodbLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMongodbLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMongodbLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedDatabaseMongodbLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMongodbLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding MongoDB logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMongodbLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedDatabaseMongodbLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMongodbLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedDatabaseMongodbLog calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedDatabaseMongodbLog(projectId, serviceId, body);
+   */
+  urlProjectManagedDatabaseMongodbLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedDatabaseMongodbLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMongodbMaintenance calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMongodbMaintenance(projectId, serviceId);
+   */
+  createProjectManagedDatabaseMongodbMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMongodbMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbMaintenance calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedDatabaseMongodbMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbMetric calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedDatabaseMongodbMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbPrometheus calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the domain of the DNS SRV record that lists the scraping targets, and the username for
+   * Prometheus authentication. The password is returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMongodbPrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbPrometheus(projectId, serviceId);
+   */
+  getProjectManagedDatabaseMongodbPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMongodbPrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabaseMongodbPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:database/mongodb/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedDatabaseMongodbPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedDatabaseMongodbPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedDatabaseMongodbPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * restoreProjectManagedDatabaseMongodb calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/restore: Restore the service
+   *
+   * Restores the service from a backup, to the given pointInTime. Without pointInTime, the latest
+   * backup is restored. The current data of the service is replaced and the restore is
+   * asynchronous: follow resourceStatus until READY.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/restore.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.restoreProjectManagedDatabaseMongodb(projectId, serviceId, body);
+   */
+  restoreProjectManagedDatabaseMongodb(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseRestoreRequest,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.restoreProjectManagedDatabaseMongodb,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbRoles iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/roles (List roles).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the roles that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseRole}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbRoles(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbRoles(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseRole> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbRoles calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/roles/{roleId}: Get a role
+   *
+   * Returns a role that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param roleId - Role ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseRole} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbRoles(projectId, serviceId, roleId);
+   */
+  getProjectManagedDatabaseMongodbRoles(
+    projectId: string,
+    serviceId: string,
+    roleId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseRole> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId, roleId: roleId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMongodbUsers iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their roles and status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUserWithRoles}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMongodbUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMongodbUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUserWithRoles> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMongodbUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMongodbUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user: Create a user
+   *
+   * Creates a user with the given roles and generates its password. The password is returned only
+   * on creation and on password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMongodbUser(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserWithRolesCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMongodbUser calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user, its roles and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMongodbUser(projectId, serviceId, userId);
+   */
+  getProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseMongodbUser calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user/{userId}: Update a user
+   *
+   * Updates the roles of the user. The roles list replaces the current roles. To reset the
+   * password, use the resetPassword route of the user or a partial update with
+   * credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseMongodbUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabaseMongodbUser calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user/{userId}: Partially update a user
+   *
+   * Partially updates the roles of the user. The roles list replaces the current roles. Setting
+   * credentialsLastUpdatedAt resets the password and returns the new one.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabaseMongodbUser(projectId, serviceId, userId, body);
+   */
+  patchProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.patchProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMongodbUser calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMongodbUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedDatabaseMongodbUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mongodb/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mongodb/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedDatabaseMongodbUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedDatabaseMongodbUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.resetPasswordProjectManagedDatabaseMongodbUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqls iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql (List MySQL services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the MySQL services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqls(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqls(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqls,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysql calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql: Create a MySQL service
+   *
+   * Creates a MySQL service from a plan, a flavor and an engine version. Creation is asynchronous:
+   * follow resourceStatus until READY. Set forkSourceServiceId to create it from a backup of
+   * another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysql(projectId, body);
+   */
+  createProjectManagedDatabaseMysql(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysql calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}: Get a MySQL service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysql(projectId, serviceId);
+   */
+  getProjectManagedDatabaseMysql(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseMysql calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}: Update a MySQL service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseMysql(projectId, serviceId, body);
+   */
+  updateProjectManagedDatabaseMysql(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabaseMysql calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}: Partially update a MySQL service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabaseMysql(projectId, serviceId, body);
+   */
+  patchProjectManagedDatabaseMysql(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMysql calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}: Delete a MySQL service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMysql(projectId, serviceId);
+   */
+  deleteProjectManagedDatabaseMysql(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlCertificates calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/certificates: Get the TLS certificates
+   *
+   * Returns the CA certificate, in PEM format, used to verify the connection to the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/certificates/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCertificates} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlCertificates(projectId, serviceId);
+   */
+  getProjectManagedDatabaseMysqlCertificates(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCertificates> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlCertificates,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlCurrentQueries iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/currentQueries (List running queries).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the queries running on the service, with their client, user, state and duration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCurrentQuery}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlCurrentQueries(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCurrentQuery> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlCurrentQueries calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/currentQueries/{queryPid}: Get a running query
+   *
+   * Returns the SQL text, state and duration of a running query, identified by its process ID.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCurrentQuery} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlCurrentQueries(projectId, serviceId, queryPid);
+   */
+  getProjectManagedDatabaseMysqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    params?: {
+      /** Maximum number of queries to return */
+      limit?: number | undefined;
+      /** Number of queries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCurrentQuery> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * cancelProjectManagedDatabaseMysqlCurrentQueries calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/currentQueries/{queryPid}/cancel: Cancel a running query
+   *
+   * Cancels a running query gracefully. Set terminate to true to force its termination instead.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/currentQueries/cancel.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseQueryCancelResult} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.cancelProjectManagedDatabaseMysqlCurrentQueries(projectId, serviceId, queryPid, body);
+   */
+  cancelProjectManagedDatabaseMysqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    body: models.PublicCloudDatabaseQueryCancelRequest,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseQueryCancelResult> {
+    return this._call(
+      OPS.cancelProjectManagedDatabaseMysqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlDatabases iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/database (List databases).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the databases of the service, including the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseDatabase}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlDatabases(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlDatabases(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseDatabase> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlDatabases,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysqlDatabase calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/database: Create a database
+   *
+   * Creates a database with the given name.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/database/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysqlDatabase(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMysqlDatabase(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseDatabaseCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlDatabase calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/database/{databaseId}: Get a database
+   *
+   * Returns the database name and whether it is the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlDatabase(projectId, serviceId, databaseId);
+   */
+  getProjectManagedDatabaseMysqlDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMysqlDatabase calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/database/{databaseId}: Delete a database
+   *
+   * Permanently deletes the database. The engine default database cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/database/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMysqlDatabase(projectId, serviceId, databaseId);
+   */
+  deleteProjectManagedDatabaseMysqlDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMysqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * enableWritesProjectManagedDatabaseMysql calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/enableWrites: Enable temporary writes
+   *
+   * Enables temporary write permissions on a service locked in read-only mode because its disk is
+   * full. Returns the date when they are revoked.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/enableWrites.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseTemporaryWriteDeadline} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.enableWritesProjectManagedDatabaseMysql(projectId, serviceId);
+   */
+  enableWritesProjectManagedDatabaseMysql(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseTemporaryWriteDeadline> {
+    return this._call(
+      OPS.enableWritesProjectManagedDatabaseMysql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysqlIntegration calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysqlIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMysqlIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlIntegration calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedDatabaseMysqlIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMysqlIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMysqlIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedDatabaseMysqlIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMysqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds MySQL emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlLogKind calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedDatabaseMysqlLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the MySQL log subscriptions. Set `kind` to restrict the list to one
+   * log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysqlLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards MySQL logs of one kind to a Logs Data Platform stream. The subscription is created
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysqlLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMysqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedDatabaseMysqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMysqlLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding MySQL logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMysqlLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedDatabaseMysqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMysqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedDatabaseMysqlLog calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedDatabaseMysqlLog(projectId, serviceId, body);
+   */
+  urlProjectManagedDatabaseMysqlLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedDatabaseMysqlLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysqlMaintenance calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysqlMaintenance(projectId, serviceId);
+   */
+  createProjectManagedDatabaseMysqlMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysqlMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlMaintenance calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedDatabaseMysqlMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlMetric calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedDatabaseMysqlMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlPrometheus calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlPrometheus(projectId, serviceId);
+   */
+  getProjectManagedDatabaseMysqlPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabaseMysqlPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedDatabaseMysqlPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedDatabaseMysqlPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedDatabaseMysqlPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlQueryStatistics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/queryStatistics (List query statistics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns execution statistics for each query pattern: number of calls, rows and execution times.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/queryStatistics/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseQueryStatistic}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlQueryStatistics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlQueryStatistics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Maximum number of entries to return */
+      limit?: number | undefined;
+      /** Number of entries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseQueryStatistic> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlQueryStatistics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabaseMysqlQueryStatistics calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/queryStatistics/reset: Reset query statistics
+   *
+   * Resets all aggregated query statistics of the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/queryStatistics/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.publicCloud.resetProjectManagedDatabaseMysqlQueryStatistics(projectId, serviceId);
+   */
+  resetProjectManagedDatabaseMysqlQueryStatistics(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.resetProjectManagedDatabaseMysqlQueryStatistics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseMysqlUsers iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseMysqlUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseMysqlUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUser> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseMysqlUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseMysqlUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user: Create a user
+   *
+   * Creates a user and generates its password. The password is returned only on creation and on
+   * password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseMysqlUser(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseMysqlUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.createProjectManagedDatabaseMysqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseMysqlUser calls GET /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseMysqlUser(projectId, serviceId, userId);
+   */
+  getProjectManagedDatabaseMysqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.getProjectManagedDatabaseMysqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseMysqlUser calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user/{userId}: Reset user credentials
+   *
+   * Resets the password of the user when credentialsLastUpdatedAt is set. The new password is
+   * returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseMysqlUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedDatabaseMysqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserCredentialsUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseMysqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseMysqlUser calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseMysqlUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedDatabaseMysqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseMysqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedDatabaseMysqlUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/mysql/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/mysql/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedDatabaseMysqlUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedDatabaseMysqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedDatabaseMysqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqls iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql (List PostgreSQL services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the PostgreSQL services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqls(projectId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqls(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqls,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresql calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql: Create a PostgreSQL service
+   *
+   * Creates a PostgreSQL service from a plan, a flavor and an engine version. Creation is
+   * asynchronous: follow resourceStatus until READY. Set forkSourceServiceId to create it from a
+   * backup of another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresql(projectId, body);
+   */
+  createProjectManagedDatabasePostgresql(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresql calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}: Get a PostgreSQL service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresql(projectId, serviceId);
+   */
+  getProjectManagedDatabasePostgresql(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabasePostgresql calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}: Update a PostgreSQL service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabasePostgresql(projectId, serviceId, body);
+   */
+  updateProjectManagedDatabasePostgresql(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabasePostgresql calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}: Partially update a PostgreSQL service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabasePostgresql(projectId, serviceId, body);
+   */
+  patchProjectManagedDatabasePostgresql(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresql calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}: Delete a PostgreSQL service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted. By default,
+   * the service's backups are kept, and a last backup is taken once the service is stopped. They
+   * stay listed and can be forked until they expire, at the end of the retention configured when
+   * the service was deleted. They are billed until they expire, then deleted. Set `deleteBackups`
+   * to true to delete them with the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresql(projectId, serviceId);
+   */
+  deleteProjectManagedDatabasePostgresql(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Whether to also delete the service's backups. Defaults to false. */
+      deleteBackups?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["deleteBackups", params?.deleteBackups]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlCertificates calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/certificates: Get the TLS certificates
+   *
+   * Returns the CA certificate, in PEM format, used to verify the connection to the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/certificates/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCertificates} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlCertificates(projectId, serviceId);
+   */
+  getProjectManagedDatabasePostgresqlCertificates(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCertificates> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlCertificates,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlConnectionPools iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool (List connection pools).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the connection pools of the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabasePostgresqlConnectionPool}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlConnectionPools(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlConnectionPools(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlConnectionPools,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlConnectionPool calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool: Create a connection pool
+   *
+   * Creates a connection pool on a database, with a pooling mode and a maximum number of server
+   * connections. Without userId, a system user opens the server connections.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePostgresqlConnectionPool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlConnectionPool(projectId, serviceId, body);
+   */
+  createProjectManagedDatabasePostgresqlConnectionPool(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabasePostgresqlConnectionPoolCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlConnectionPool,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlConnectionPool calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool/{connectionPoolId}: Get a connection pool
+   *
+   * Returns the connection pool settings and its connection URI.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectionPoolId - Connection pool ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePostgresqlConnectionPool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlConnectionPool(projectId, serviceId, connectionPoolId);
+   */
+  getProjectManagedDatabasePostgresqlConnectionPool(
+    projectId: string,
+    serviceId: string,
+    connectionPoolId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlConnectionPool,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectionPoolId: connectionPoolId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabasePostgresqlConnectionPool calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool/{connectionPoolId}: Update a connection pool
+   *
+   * Updates the database, pooling mode, size and user of the connection pool. Every field is
+   * required. Setting userId to null removes the user assignment.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectionPoolId - Connection pool ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePostgresqlConnectionPool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabasePostgresqlConnectionPool(projectId, serviceId, connectionPoolId, body);
+   */
+  updateProjectManagedDatabasePostgresqlConnectionPool(
+    projectId: string,
+    serviceId: string,
+    connectionPoolId: string,
+    body: models.PublicCloudDatabasePostgresqlConnectionPoolReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._call(
+      OPS.updateProjectManagedDatabasePostgresqlConnectionPool,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectionPoolId: connectionPoolId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabasePostgresqlConnectionPool calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool/{connectionPoolId}: Partially update a connection pool
+   *
+   * Partially updates the database, pooling mode, size or user of the connection pool. Setting
+   * userId to null removes the user assignment.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectionPoolId - Connection pool ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePostgresqlConnectionPool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabasePostgresqlConnectionPool(projectId, serviceId, connectionPoolId, body);
+   */
+  patchProjectManagedDatabasePostgresqlConnectionPool(
+    projectId: string,
+    serviceId: string,
+    connectionPoolId: string,
+    body: models.PublicCloudDatabasePostgresqlConnectionPoolUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._call(
+      OPS.patchProjectManagedDatabasePostgresqlConnectionPool,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectionPoolId: connectionPoolId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresqlConnectionPool calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/connectionPool/{connectionPoolId}: Delete a connection pool
+   *
+   * Deletes the connection pool.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/connectionPool/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param connectionPoolId - Connection pool ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePostgresqlConnectionPool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresqlConnectionPool(projectId, serviceId, connectionPoolId);
+   */
+  deleteProjectManagedDatabasePostgresqlConnectionPool(
+    projectId: string,
+    serviceId: string,
+    connectionPoolId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePostgresqlConnectionPool> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresqlConnectionPool,
+      {
+        path: { projectId: projectId, serviceId: serviceId, connectionPoolId: connectionPoolId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlCurrentQueries iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/currentQueries (List running queries).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the queries running on the service, with their client, user, state and duration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseCurrentQuery}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlCurrentQueries(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseCurrentQuery> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlCurrentQueries calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/currentQueries/{queryPid}: Get a running query
+   *
+   * Returns the SQL text, state and duration of a running query, identified by its process ID.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/currentQueries/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseCurrentQuery} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlCurrentQueries(projectId, serviceId, queryPid);
+   */
+  getProjectManagedDatabasePostgresqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    params?: {
+      /** Maximum number of queries to return */
+      limit?: number | undefined;
+      /** Number of queries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseCurrentQuery> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * cancelProjectManagedDatabasePostgresqlCurrentQueries calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/currentQueries/{queryPid}/cancel: Cancel a running query
+   *
+   * Cancels a running query gracefully. Set terminate to true to force its termination instead.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/currentQueries/cancel.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param queryPid - Query pid
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseQueryCancelResult} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.cancelProjectManagedDatabasePostgresqlCurrentQueries(projectId, serviceId, queryPid, body);
+   */
+  cancelProjectManagedDatabasePostgresqlCurrentQueries(
+    projectId: string,
+    serviceId: string,
+    queryPid: number,
+    body: models.PublicCloudDatabaseQueryCancelRequest,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseQueryCancelResult> {
+    return this._call(
+      OPS.cancelProjectManagedDatabasePostgresqlCurrentQueries,
+      {
+        path: { projectId: projectId, serviceId: serviceId, queryPid: queryPid },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlDatabases iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/database (List databases).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the databases of the service, including the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseDatabase}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlDatabases(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlDatabases(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseDatabase> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlDatabases,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlDatabase calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/database: Create a database
+   *
+   * Creates a database with the given name.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/database/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlDatabase(projectId, serviceId, body);
+   */
+  createProjectManagedDatabasePostgresqlDatabase(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseDatabaseCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlDatabase calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/database/{databaseId}: Get a database
+   *
+   * Returns the database name and whether it is the engine default database.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/database/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlDatabase(projectId, serviceId, databaseId);
+   */
+  getProjectManagedDatabasePostgresqlDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresqlDatabase calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/database/{databaseId}: Delete a database
+   *
+   * Permanently deletes the database. The engine default database cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/database/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param databaseId - Database ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseDatabase} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresqlDatabase(projectId, serviceId, databaseId);
+   */
+  deleteProjectManagedDatabasePostgresqlDatabase(
+    projectId: string,
+    serviceId: string,
+    databaseId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseDatabase> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresqlDatabase,
+      {
+        path: { projectId: projectId, serviceId: serviceId, databaseId: databaseId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * enableWritesProjectManagedDatabasePostgresql calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/enableWrites: Enable temporary writes
+   *
+   * Enables temporary write permissions on a service locked in read-only mode because its disk is
+   * full. Returns the date when they are revoked.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/enableWrites.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseTemporaryWriteDeadline} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.enableWritesProjectManagedDatabasePostgresql(projectId, serviceId);
+   */
+  enableWritesProjectManagedDatabasePostgresql(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseTemporaryWriteDeadline> {
+    return this._call(
+      OPS.enableWritesProjectManagedDatabasePostgresql,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlIntegration calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedDatabasePostgresqlIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlIntegration calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedDatabasePostgresqlIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresqlIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresqlIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedDatabasePostgresqlIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresqlIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds PostgreSQL emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlLogKind calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedDatabasePostgresqlLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the PostgreSQL log subscriptions. Set `kind` to restrict the list to
+   * one log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards PostgreSQL logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedDatabasePostgresqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedDatabasePostgresqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresqlLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding PostgreSQL logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresqlLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedDatabasePostgresqlLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresqlLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedDatabasePostgresqlLog calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedDatabasePostgresqlLog(projectId, serviceId, body);
+   */
+  urlProjectManagedDatabasePostgresqlLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedDatabasePostgresqlLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlMaintenance calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlMaintenance(projectId, serviceId);
+   */
+  createProjectManagedDatabasePostgresqlMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlMaintenance calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedDatabasePostgresqlMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlMetric calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedDatabasePostgresqlMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlPrometheus calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlPrometheus(projectId, serviceId);
+   */
+  getProjectManagedDatabasePostgresqlPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabasePostgresqlPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action
+   * publicCloudProject:apiovh:database/postgresql/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedDatabasePostgresqlPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedDatabasePostgresqlPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedDatabasePostgresqlPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlQueryStatistics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/queryStatistics (List query statistics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns execution statistics for each query pattern: number of calls, rows and execution times.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/queryStatistics/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseQueryStatistic}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlQueryStatistics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlQueryStatistics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Maximum number of entries to return */
+      limit?: number | undefined;
+      /** Number of entries to skip before returning results */
+      offset?: number | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseQueryStatistic> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlQueryStatistics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [
+          ["limit", params?.limit],
+          ["offset", params?.offset],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabasePostgresqlQueryStatistics calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/queryStatistics/reset: Reset query statistics
+   *
+   * Resets all aggregated query statistics of the service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/queryStatistics/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.publicCloud.resetProjectManagedDatabasePostgresqlQueryStatistics(projectId, serviceId);
+   */
+  resetProjectManagedDatabasePostgresqlQueryStatistics(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.resetProjectManagedDatabasePostgresqlQueryStatistics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlRoles iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/roles (List roles).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the roles that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseRole}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlRoles(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlRoles(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseRole> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlRoles calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/roles/{roleId}: Get a role
+   *
+   * Returns a role that can be assigned to users.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/roles/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param roleId - Role ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseRole} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlRoles(projectId, serviceId, roleId);
+   */
+  getProjectManagedDatabasePostgresqlRoles(
+    projectId: string,
+    serviceId: string,
+    roleId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseRole> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlRoles,
+      {
+        path: { projectId: projectId, serviceId: serviceId, roleId: roleId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabasePostgresqlUsers iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their roles and status. Passwords are not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseUserWithRoles}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabasePostgresqlUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabasePostgresqlUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseUserWithRoles> {
+    return this._pages(
+      OPS.allProjectManagedDatabasePostgresqlUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabasePostgresqlUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user: Create a user
+   *
+   * Creates a user with the given roles and generates its password. The password is returned only
+   * on creation and on password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabasePostgresqlUser(projectId, serviceId, body);
+   */
+  createProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseUserWithRolesCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.createProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabasePostgresqlUser calls GET /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user, its roles and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabasePostgresqlUser(projectId, serviceId, userId);
+   */
+  getProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.getProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabasePostgresqlUser calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user/{userId}: Update a user
+   *
+   * Updates the roles of the user. The roles list replaces the current roles. To reset the
+   * password, use the resetPassword route of the user or a partial update with
+   * credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabasePostgresqlUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.updateProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabasePostgresqlUser calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user/{userId}: Partially update a user
+   *
+   * Partially updates the roles of the user. The roles list replaces the current roles. Setting
+   * credentialsLastUpdatedAt resets the password and returns the new one.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabasePostgresqlUser(projectId, serviceId, userId, body);
+   */
+  patchProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseUserUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.patchProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabasePostgresqlUser calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabasePostgresqlUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.deleteProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedDatabasePostgresqlUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/postgresql/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/postgresql/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseUserWithRoles} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedDatabasePostgresqlUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedDatabasePostgresqlUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseUserWithRoles> {
+    return this._call(
+      OPS.resetPasswordProjectManagedDatabasePostgresqlUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseServices iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/service (List services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the database services of the project, across all engines.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/service/get.
+   *
+   * @param projectId - Project ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseServices(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseServices(
+    projectId: string,
+    params?: {
+      /** Filter services by engine category */
+      category?: models.PublicCloudDatabaseCategoryEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseServices,
+      {
+        path: { projectId: projectId },
+        query: [["category", params?.category]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseService calls GET /v2/publicCloud/project/{projectId}/managedDatabase/service/{serviceId}: Get a service
+   *
+   * Returns a database service whatever its engine, with its target specification, current state
+   * and running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/service/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseService(projectId, serviceId);
+   */
+  getProjectManagedDatabaseService(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedDatabaseService,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeys iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey (List Valkey services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the Valkey services of the project.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseService}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeys(projectId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeys(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseService> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeys,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseValkey calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey: Create a Valkey service
+   *
+   * Creates a Valkey service from a plan, a flavor and an engine version. Creation is asynchronous:
+   * follow resourceStatus until READY. Set forkSourceServiceId to create it from a backup of
+   * another service.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseValkey(projectId, body);
+   */
+  createProjectManagedDatabaseValkey(
+    projectId: string,
+    body: models.PublicCloudDatabaseServiceCreationWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.createProjectManagedDatabaseValkey,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkey calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}: Get a Valkey service
+   *
+   * Returns the target specification of the service, its current state and its running tasks.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkey(projectId, serviceId);
+   */
+  getProjectManagedDatabaseValkey(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkey,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseValkey calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}: Update a Valkey service
+   *
+   * Updates the target specification of the service, for example its plan, flavor, version or
+   * number of nodes. Every field is required: the request describes the whole configuration. A new
+   * target specification is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseValkey(projectId, serviceId, body);
+   */
+  updateProjectManagedDatabaseValkey(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseValkey,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabaseValkey calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}: Partially update a Valkey service
+   *
+   * Partially updates the target specification of the service, for example its plan, flavor,
+   * version or number of nodes. Omitted fields keep their current value. A new target specification
+   * is accepted only in READY status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabaseValkey(projectId, serviceId, body);
+   */
+  patchProjectManagedDatabaseValkey(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseServiceUpdateWritable,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.patchProjectManagedDatabaseValkey,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseValkey calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}: Delete a Valkey service
+   *
+   * Deletes the service. A service with deletion protection enabled cannot be deleted.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseValkey(projectId, serviceId);
+   */
+  deleteProjectManagedDatabaseValkey(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseService> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseValkey,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyIntegrations iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/integration (List integrations).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the integrations of the service with other services.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseIntegration}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyIntegrations(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyIntegrations(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseIntegration> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyIntegrations,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseValkeyIntegration calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/integration: Create an integration
+   *
+   * Integrates the service with another database or analytics service. sourceServiceId must be the
+   * identifier of this service. Compatible engine pairs are listed on the capabilities endpoint.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/integration/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseValkeyIntegration(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseValkeyIntegration(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseIntegrationCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.createProjectManagedDatabaseValkeyIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyIntegration calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/integration/{integrationId}: Get an integration
+   *
+   * Returns the integration type, its source and destination services and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/integration/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyIntegration(projectId, serviceId, integrationId);
+   */
+  getProjectManagedDatabaseValkeyIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseValkeyIntegration calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/integration/{integrationId}: Delete an integration
+   *
+   * Deletes the integration.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/integration/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param integrationId - Integration ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseIntegration} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseValkeyIntegration(projectId, serviceId, integrationId);
+   */
+  deleteProjectManagedDatabaseValkeyIntegration(
+    projectId: string,
+    serviceId: string,
+    integrationId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseIntegration> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseValkeyIntegration,
+      {
+        path: { projectId: projectId, serviceId: serviceId, integrationId: integrationId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyLogKinds iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Valkey emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyLogKinds(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyLogKinds(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyLogKinds,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyLogKind calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/kind/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyLogKind(projectId, serviceId, name);
+   */
+  getProjectManagedDatabaseValkeyLogKind(
+    projectId: string,
+    serviceId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyLogKind,
+      {
+        path: { projectId: projectId, serviceId: serviceId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyLogSubscriptions iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Valkey log subscriptions. Set `kind` to restrict the list to one
+   * log kind.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyLogSubscriptions(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyLogSubscriptions(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Filter subscriptions by log kind */
+      kind?: models.PublicCloudDatabaseKindEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyLogSubscriptions,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseValkeyLogSubscription calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/subscription: Create a log subscription
+   *
+   * Forwards Valkey logs of one kind to a Logs Data Platform stream. The subscription is created
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/subscription/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseValkeyLogSubscription(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseValkeyLogSubscription(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createProjectManagedDatabaseValkeyLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyLogSubscription calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/subscription/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  getProjectManagedDatabaseValkeyLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseValkeyLogSubscription calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Valkey logs to the stream.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/subscription/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseValkeyLogSubscription(projectId, serviceId, subscriptionId);
+   */
+  deleteProjectManagedDatabaseValkeyLogSubscription(
+    projectId: string,
+    serviceId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseValkeyLogSubscription,
+      {
+        path: { projectId: projectId, serviceId: serviceId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlProjectManagedDatabaseValkeyLog calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/log/url/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.urlProjectManagedDatabaseValkeyLog(projectId, serviceId, body);
+   */
+  urlProjectManagedDatabaseValkeyLog(
+    projectId: string,
+    serviceId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlProjectManagedDatabaseValkeyLog,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyMaintenances iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/maintenance (List maintenances).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the maintenances of the service, with their schedule and status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMaintenanceWindow}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyMaintenances(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyMaintenances(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyMaintenances,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseValkeyMaintenance calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/maintenance: Apply a maintenance
+   *
+   * Applies a scheduled maintenance immediately, instead of waiting for its scheduled time.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/maintenance/apply.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseValkeyMaintenance(projectId, serviceId);
+   */
+  createProjectManagedDatabaseValkeyMaintenance(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.createProjectManagedDatabaseValkeyMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyMaintenance calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/maintenance/{maintenanceId}: Get a maintenance
+   *
+   * Returns the operations planned by a maintenance, its schedule and its status.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/maintenance/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param maintenanceId - Maintenance ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMaintenanceWindow} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyMaintenance(projectId, serviceId, maintenanceId);
+   */
+  getProjectManagedDatabaseValkeyMaintenance(
+    projectId: string,
+    serviceId: string,
+    maintenanceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMaintenanceWindow> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyMaintenance,
+      {
+        path: { projectId: projectId, serviceId: serviceId, maintenanceId: maintenanceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyMetrics iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/metric (List metrics).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the metrics available for the service. Set extended to true to include engine-specific
+   * metrics.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseMetric}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyMetrics(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyMetrics(
+    projectId: string,
+    serviceId: string,
+    params?: {
+      /** Display engine-specific metrics */
+      extended?: boolean | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseMetric> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyMetrics,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        query: [["extended", params?.extended]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyMetric calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/metric/{metricName}: Get a metric
+   *
+   * Returns the values of a metric for each node of the service, over the requested period.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/metric/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param metricName - Metric name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseMetric} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyMetric(projectId, serviceId, metricName);
+   */
+  getProjectManagedDatabaseValkeyMetric(
+    projectId: string,
+    serviceId: string,
+    metricName: string,
+    params?: {
+      /** Time period over which to retrieve metric values */
+      period?: models.PublicCloudDatabaseMetricPeriodEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseMetric> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyMetric,
+      {
+        path: { projectId: projectId, serviceId: serviceId, metricName: metricName },
+        query: [["period", params?.period]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyPrometheus calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/prometheus: Get the Prometheus endpoint
+   *
+   * Returns the scraping targets and the username for Prometheus authentication. The password is
+   * returned only by a credentials reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/prometheus/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusEndpoint} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyPrometheus(projectId, serviceId);
+   */
+  getProjectManagedDatabaseValkeyPrometheus(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusEndpoint> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyPrometheus,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedDatabaseValkeyPrometheusCredentials calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/prometheus/credentials/reset: Reset the Prometheus credentials
+   *
+   * Resets the Prometheus password. The previous password stops working immediately and the new
+   * credentials are returned in the response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/prometheus/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabasePrometheusAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedDatabaseValkeyPrometheusCredentials(projectId, serviceId);
+   */
+  resetProjectManagedDatabaseValkeyPrometheusCredentials(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabasePrometheusAccess> {
+    return this._call(
+      OPS.resetProjectManagedDatabaseValkeyPrometheusCredentials,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedDatabaseValkeyUsers iterates over GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user (List users).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the users of the service with their access rules and status. Passwords are not
+   * returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudDatabaseValkeyUser}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedDatabaseValkeyUsers(projectId, serviceId)) console.log(item);
+   */
+  allProjectManagedDatabaseValkeyUsers(
+    projectId: string,
+    serviceId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudDatabaseValkeyUser> {
+    return this._pages(
+      OPS.allProjectManagedDatabaseValkeyUsers,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedDatabaseValkeyUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user: Create a user
+   *
+   * Creates a user with access rules on command categories, commands, keys and Pub/Sub channels. An
+   * empty keys or channels list grants no access. The generated password is returned only on
+   * creation and on password reset.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/create.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedDatabaseValkeyUser(projectId, serviceId, body);
+   */
+  createProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    body: models.PublicCloudDatabaseValkeyUserCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.createProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedDatabaseValkeyUser calls GET /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user/{userId}: Get a user
+   *
+   * Returns the user, its access rules and its status. The password is not returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/get.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedDatabaseValkeyUser(projectId, serviceId, userId);
+   */
+  getProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.getProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedDatabaseValkeyUser calls PUT /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user/{userId}: Update a user
+   *
+   * Updates the access rules of the user. Each list replaces the current one, and an empty keys or
+   * channels list revokes all access. To reset the password, use the resetPassword route of the
+   * user or a partial update with credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedDatabaseValkeyUser(projectId, serviceId, userId, body);
+   */
+  updateProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseValkeyUserReplace,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.updateProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * patchProjectManagedDatabaseValkeyUser calls PATCH /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user/{userId}: Partially update a user
+   *
+   * Partially updates the access rules of the user. Each list replaces the current one, and an
+   * empty keys or channels list revokes all access. Setting credentialsLastUpdatedAt resets the
+   * password and returns the new one.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/edit.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.patchProjectManagedDatabaseValkeyUser(projectId, serviceId, userId, body);
+   */
+  patchProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    body: models.PublicCloudDatabaseValkeyUserUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.patchProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedDatabaseValkeyUser calls DELETE /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user/{userId}: Delete a user
+   *
+   * Permanently deletes the user.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/delete.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedDatabaseValkeyUser(projectId, serviceId, userId);
+   */
+  deleteProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.deleteProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetPasswordProjectManagedDatabaseValkeyUser calls POST /v2/publicCloud/project/{projectId}/managedDatabase/valkey/{serviceId}/user/{userId}/resetPassword: Reset the password of a user
+   *
+   * Generates a new password for the user and returns it in the response. Reading the user never
+   * returns it. The previous password stops working once the new one is applied, and
+   * credentialsLastUpdatedAt becomes the date of this reset. This is the same reset as a partial
+   * update of the user that sets credentialsLastUpdatedAt.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:database/valkey/user/credentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param serviceId - Service ID
+   * @param userId - User ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudDatabaseValkeyUser} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetPasswordProjectManagedDatabaseValkeyUser(projectId, serviceId, userId);
+   */
+  resetPasswordProjectManagedDatabaseValkeyUser(
+    projectId: string,
+    serviceId: string,
+    userId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudDatabaseValkeyUser> {
+    return this._call(
+      OPS.resetPasswordProjectManagedDatabaseValkeyUser,
+      {
+        path: { projectId: projectId, serviceId: serviceId, userId: userId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetes iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes (List managed Kubernetes clusters).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesCluster}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetes(projectId)) console.log(item);
+   */
+  allProjectManagedKubernetes(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesCluster> {
+    return this._pages(
+      OPS.allProjectManagedKubernetes,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedKubernetes calls POST /v2/publicCloud/project/{projectId}/managedKubernetes: Create a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedKubernetes(projectId, body);
+   */
+  createProjectManagedKubernetes(
+    projectId: string,
+    body: models.PublicCloudManagedKubernetesClusterCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.createProjectManagedKubernetes,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetes calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}: Get a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetes(projectId, managedKubernetesId);
+   */
+  getProjectManagedKubernetes(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.getProjectManagedKubernetes,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedKubernetes calls PUT /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}: Update a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/edit.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedKubernetes(projectId, managedKubernetesId, body);
+   */
+  updateProjectManagedKubernetes(
+    projectId: string,
+    managedKubernetesId: string,
+    body: models.PublicCloudManagedKubernetesClusterUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.updateProjectManagedKubernetes,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedKubernetes calls DELETE /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}: Delete a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/delete.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedKubernetes(projectId, managedKubernetesId);
+   */
+  deleteProjectManagedKubernetes(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.deleteProjectManagedKubernetes,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesCapabilitiesVersion calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/capabilities/version: Get the versions of a managed Kubernetes cluster
+   *
+   * Returns the full version deployed on the cluster, the patch versions of the current minor it
+   * can update to, and the versions of the next minor it can upgrade to. Multi-minor jumps are
+   * never returned.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/capabilities/version/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesClusterVersions} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesCapabilitiesVersion(projectId, managedKubernetesId);
+   */
+  getProjectManagedKubernetesCapabilitiesVersion(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesClusterVersions> {
+    return this._call(
+      OPS.getProjectManagedKubernetesCapabilitiesVersion,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesEvents iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/event (List all events related to a managed Kubernetes cluster).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/event/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonEvent}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesEvents(projectId, managedKubernetesId)) console.log(item);
+   */
+  allProjectManagedKubernetesEvents(
+    projectId: string,
+    managedKubernetesId: string,
+    params?: {
+      /** Return only the events belonging to this task */
+      taskId?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonEvent> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesEvents,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+        query: [["taskId", params?.taskId]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesKubeconfig calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/kubeconfig: Retrieve the cluster admin kubeconfig
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/kubeconfig/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesKubeconfig} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesKubeconfig(projectId, managedKubernetesId);
+   */
+  getProjectManagedKubernetesKubeconfig(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesKubeconfig> {
+    return this._call(
+      OPS.getProjectManagedKubernetesKubeconfig,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetProjectManagedKubernetesKubeconfig calls POST /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/kubeconfig/reset: Reset the cluster admin kubeconfig
+   *
+   * Rotates the cluster admin credentials asynchronously. The previous kubeconfig stops working.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/kubeconfig/reset.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetProjectManagedKubernetesKubeconfig(projectId, managedKubernetesId);
+   */
+  resetProjectManagedKubernetesKubeconfig(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.resetProjectManagedKubernetesKubeconfig,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesNodepools iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool (List nodepools of a managed Kubernetes cluster).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesNodepool}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesNodepools(projectId, managedKubernetesId)) console.log(item);
+   */
+  allProjectManagedKubernetesNodepools(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesNodepool> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesNodepools,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createProjectManagedKubernetesNodepool calls POST /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool: Create a nodepool in a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/create.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesNodepool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createProjectManagedKubernetesNodepool(projectId, managedKubernetesId, body);
+   */
+  createProjectManagedKubernetesNodepool(
+    projectId: string,
+    managedKubernetesId: string,
+    body: models.PublicCloudManagedKubernetesNodepoolCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesNodepool> {
+    return this._call(
+      OPS.createProjectManagedKubernetesNodepool,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesNodepool calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}: Get a nodepool of a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesNodepool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesNodepool(projectId, managedKubernetesId, nodePoolId);
+   */
+  getProjectManagedKubernetesNodepool(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesNodepool> {
+    return this._call(
+      OPS.getProjectManagedKubernetesNodepool,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateProjectManagedKubernetesNodepool calls PUT /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}: Update a nodepool of a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/edit.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesNodepool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.updateProjectManagedKubernetesNodepool(projectId, managedKubernetesId, nodePoolId, body);
+   */
+  updateProjectManagedKubernetesNodepool(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    body: models.PublicCloudManagedKubernetesNodepoolUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesNodepool> {
+    return this._call(
+      OPS.updateProjectManagedKubernetesNodepool,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteProjectManagedKubernetesNodepool calls DELETE /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}: Delete a nodepool of a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/delete.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesNodepool} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteProjectManagedKubernetesNodepool(projectId, managedKubernetesId, nodePoolId);
+   */
+  deleteProjectManagedKubernetesNodepool(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesNodepool> {
+    return this._call(
+      OPS.deleteProjectManagedKubernetesNodepool,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesNodepoolEvents iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}/event (List all events related to a managed Kubernetes cluster nodepool).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/event/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonEvent}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesNodepoolEvents(projectId, managedKubernetesId, nodePoolId)) console.log(item);
+   */
+  allProjectManagedKubernetesNodepoolEvents(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    params?: {
+      /** Return only the events belonging to this task */
+      taskId?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonEvent> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesNodepoolEvents,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+        query: [["taskId", params?.taskId]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesNodepoolNodes iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}/node (List nodes of a managed Kubernetes cluster nodepool).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Deleted nodes kept in retention are excluded unless includeDeleted is true.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/node/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesNode}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesNodepoolNodes(projectId, managedKubernetesId, nodePoolId)) console.log(item);
+   */
+  allProjectManagedKubernetesNodepoolNodes(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    params?: {
+      /** Include deleted nodes still kept in retention */
+      includeDeleted?: boolean | undefined;
+      /** Return only the nodes in this lifecycle status. Filtering on DELETED requires includeDeleted set to true, otherwise the request returns 400. */
+      resourceStatus?: models.PublicCloudManagedKubernetesNodeResourceStatusEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesNode> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesNodepoolNodes,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+        query: [
+          ["includeDeleted", params?.includeDeleted],
+          ["resourceStatus", params?.resourceStatus],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesNodepoolNode calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}/node/{nodeId}: Get a node of a managed Kubernetes cluster nodepool
+   *
+   * A deleted node kept in retention is returned with resourceStatus DELETED until it expires,
+   * after which the call returns 404.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/node/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param nodeId - Node ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesNode} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesNodepoolNode(projectId, managedKubernetesId, nodePoolId, nodeId);
+   */
+  getProjectManagedKubernetesNodepoolNode(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    nodeId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesNode> {
+    return this._call(
+      OPS.getProjectManagedKubernetesNodepoolNode,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+          nodeId: nodeId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesNodepoolTasks iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}/task (List all tasks related to a managed Kubernetes cluster nodepool).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesNodepoolTasks(projectId, managedKubernetesId, nodePoolId)) console.log(item);
+   */
+  allProjectManagedKubernetesNodepoolTasks(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonTask> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesNodepoolTasks,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+        },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesNodepoolTask calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/nodepool/{nodePoolId}/task/{taskId}: Get a specific task related to a managed Kubernetes cluster nodepool
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/nodepool/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param nodePoolId - Node pool ID
+   * @param taskId - Task ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.CommonTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesNodepoolTask(projectId, managedKubernetesId, nodePoolId, taskId);
+   */
+  getProjectManagedKubernetesNodepoolTask(
+    projectId: string,
+    managedKubernetesId: string,
+    nodePoolId: string,
+    taskId: string,
+    options?: RequestOptions,
+  ): Promise<models.CommonTask> {
+    return this._call(
+      OPS.getProjectManagedKubernetesNodepoolTask,
+      {
+        path: {
+          projectId: projectId,
+          managedKubernetesId: managedKubernetesId,
+          nodePoolId: nodePoolId,
+          taskId: taskId,
+        },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * restartProjectManagedKubernetes calls POST /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/restart: Restart the control plane of a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/restart.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesCluster} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.restartProjectManagedKubernetes(projectId, managedKubernetesId);
+   */
+  restartProjectManagedKubernetes(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesCluster> {
+    return this._call(
+      OPS.restartProjectManagedKubernetes,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allProjectManagedKubernetesTasks iterates over GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/task (List all tasks related to a managed Kubernetes cluster).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectManagedKubernetesTasks(projectId, managedKubernetesId)) console.log(item);
+   */
+  allProjectManagedKubernetesTasks(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonTask> {
+    return this._pages(
+      OPS.allProjectManagedKubernetesTasks,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesTask calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/task/{taskId}: Get a specific task related to a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param taskId - Task ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.CommonTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesTask(projectId, managedKubernetesId, taskId);
+   */
+  getProjectManagedKubernetesTask(
+    projectId: string,
+    managedKubernetesId: string,
+    taskId: string,
+    options?: RequestOptions,
+  ): Promise<models.CommonTask> {
+    return this._call(
+      OPS.getProjectManagedKubernetesTask,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId, taskId: taskId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getProjectManagedKubernetesUsageEtcd calls GET /v2/publicCloud/project/{projectId}/managedKubernetes/{managedKubernetesId}/usage/etcd: Get the etcd database usage and quota for a managed Kubernetes cluster
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedKubernetes/usage/etcd/get.
+   *
+   * @param projectId - Project ID
+   * @param managedKubernetesId - Managed kubernetes ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesEtcdUsage} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectManagedKubernetesUsageEtcd(projectId, managedKubernetesId);
+   */
+  getProjectManagedKubernetesUsageEtcd(
+    projectId: string,
+    managedKubernetesId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesEtcdUsage> {
+    return this._call(
+      OPS.getProjectManagedKubernetesUsageEtcd,
+      {
+        path: { projectId: projectId, managedKubernetesId: managedKubernetesId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAllManagedRegistries iterates over GET /v2/publicCloud/project/{projectId}/managedRegistry (List Managed Private Registry services).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedRegistryRegistry}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allAllManagedRegistries(projectId)) console.log(item);
+   */
+  allAllManagedRegistries(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedRegistryRegistry> {
+    return this._pages(
+      OPS.allAllManagedRegistries,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * createManagedRegistry calls POST /v2/publicCloud/project/{projectId}/managedRegistry: Create a Managed Private Registry service
+   *
+   * The registry runs the latest available Harbor version. Change it later with
+   * `targetSpec.version` on `PUT .../managedRegistry/{managedRegistryId}`.
+   *
+   * Asynchronous creation
+   *
+   * The registry is returned with `resourceStatus` `CREATING` and a `REGISTRY_CREATE` task in
+   * `currentTasks`. Poll `GET .../managedRegistry/{managedRegistryId}` until `resourceStatus` is
+   * `READY`. `currentState.url` and `currentState.usage` are null until then. Once the registry is
+   * `READY`, generate the administrator password with `POST
+   * .../managedRegistry/{managedRegistryId}/adminCredentials`.
+   *
+   * Immutable fields
+   *
+   * `region` cannot change after creation. Create a new registry to change it.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/create.
+   *
+   * @param projectId - Project ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedRegistryRegistry} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.createManagedRegistry(projectId, body);
+   */
+  createManagedRegistry(
+    projectId: string,
+    body: models.PublicCloudManagedRegistryRegistryCreation,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedRegistryRegistry> {
+    return this._call(
+      OPS.createManagedRegistry,
+      {
+        path: { projectId: projectId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getManagedRegistry calls GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}: Get a Managed Private Registry service
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedRegistryRegistry} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getManagedRegistry(projectId, managedRegistryId);
+   */
+  getManagedRegistry(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedRegistryRegistry> {
+    return this._call(
+      OPS.getManagedRegistry,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * editManagedRegistry calls PUT /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}: Update a Managed Private Registry service
+   *
+   * Asynchronous update
+   *
+   * The new `targetSpec` replaces the previous one, the registry moves to `resourceStatus`
+   * `UPDATING` and a `REGISTRY_UPDATE` task starts. Poll `GET
+   * .../managedRegistry/{managedRegistryId}` until `resourceStatus` is `READY` and `currentState`
+   * reflects the change.
+   *
+   * Optimistic concurrency
+   *
+   * Send the `checksum` read from the last `GET`. When another update happened in between, the
+   * checksums differ and the request is rejected: read the registry again and retry. Omitting
+   * `checksum` skips the check.
+   *
+   * Immutable fields
+   *
+   * `region` is set at creation and is not part of the update body. Create a new registry to change
+   * it.
+   *
+   * Destructive updates
+   *
+   * Changing `authentication.type` deletes every existing Harbor user of the registry once the
+   * update task completes. Robot accounts are kept.
+   *
+   * Rejected requests
+   *
+   * The request is rejected when `resourceStatus` is not `READY`, or when `plan` or `version` is
+   * neither the current value nor listed by `GET
+   * .../managedRegistry/{managedRegistryId}/capabilities/plan` or `GET
+   * .../managedRegistry/{managedRegistryId}/capabilities/version`.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/edit.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedRegistryRegistry} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.editManagedRegistry(projectId, managedRegistryId, body);
+   */
+  editManagedRegistry(
+    projectId: string,
+    managedRegistryId: string,
+    body: models.PublicCloudManagedRegistryRegistryUpdate,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedRegistryRegistry> {
+    return this._call(
+      OPS.editManagedRegistry,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteManagedRegistry calls DELETE /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}: Delete a Managed Private Registry service
+   *
+   * Deletion is asynchronous: the registry moves to `resourceStatus` `DELETING`, the response
+   * echoes it, and a `REGISTRY_DELETE` task then removes it. Poll `GET
+   * .../managedRegistry/{managedRegistryId}` until the registry is no longer returned. Every
+   * artifact stored in the registry is deleted and cannot be recovered.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/delete.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedRegistryRegistry} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.deleteManagedRegistry(projectId, managedRegistryId);
+   */
+  deleteManagedRegistry(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedRegistryRegistry> {
+    return this._call(
+      OPS.deleteManagedRegistry,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * resetManagedRegistryAdminCredentials calls POST /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/adminCredentials: Reset the administrator password of a Managed Private Registry service
+   *
+   * Generates a new password for the Harbor administrator account and returns it. The previous
+   * password stops working immediately. The password is returned only in this response.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/adminCredentials/reset.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedRegistryCredentials} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.resetManagedRegistryAdminCredentials(projectId, managedRegistryId);
+   */
+  resetManagedRegistryAdminCredentials(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedRegistryCredentials> {
+    return this._call(
+      OPS.resetManagedRegistryAdminCredentials,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allManagedRegistryPlans iterates over GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/capabilities/plan (List plans a Managed Private Registry service can switch to).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Any `name` listed can be set as `targetSpec.plan` on `PUT
+   * .../managedRegistry/{managedRegistryId}`.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/capabilities/plan/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedRegistryPlan}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allManagedRegistryPlans(projectId, managedRegistryId)) console.log(item);
+   */
+  allManagedRegistryPlans(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedRegistryPlan> {
+    return this._pages(
+      OPS.allManagedRegistryPlans,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allManagedRegistryVersions iterates over GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/capabilities/version (List Harbor versions a Managed Private Registry service can be upgraded to).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Only versions available as an upgrade from the version the registry currently runs are listed.
+   * To upgrade, set a listed `name` as `targetSpec.version` on `PUT
+   * .../managedRegistry/{managedRegistryId}`.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/capabilities/version/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedRegistryVersion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allManagedRegistryVersions(projectId, managedRegistryId)) console.log(item);
+   */
+  allManagedRegistryVersions(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedRegistryVersion> {
+    return this._pages(
+      OPS.allManagedRegistryVersions,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allManagedRegistryEvents iterates over GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/event (List events of a Managed Private Registry service).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/event/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonEvent}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allManagedRegistryEvents(projectId, managedRegistryId)) console.log(item);
+   */
+  allManagedRegistryEvents(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonEvent> {
+    return this._pages(
+      OPS.allManagedRegistryEvents,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allAllManagedRegistryTasks iterates over GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/task (List asynchronous tasks of a Managed Private Registry service).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.CommonTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allAllManagedRegistryTasks(projectId, managedRegistryId)) console.log(item);
+   */
+  allAllManagedRegistryTasks(
+    projectId: string,
+    managedRegistryId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.CommonTask> {
+    return this._pages(
+      OPS.allAllManagedRegistryTasks,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getManagedRegistryTask calls GET /v2/publicCloud/project/{projectId}/managedRegistry/{managedRegistryId}/task/{taskId}: Get an asynchronous task of a Managed Private Registry service
+   *
+   * Requires the IAM action publicCloudProject:apiovh:managedRegistry/task/get.
+   *
+   * @param projectId - Project ID
+   * @param managedRegistryId - Managed registry ID
+   * @param taskId - Task ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.CommonTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getManagedRegistryTask(projectId, managedRegistryId, taskId);
+   */
+  getManagedRegistryTask(
+    projectId: string,
+    managedRegistryId: string,
+    taskId: string,
+    options?: RequestOptions,
+  ): Promise<models.CommonTask> {
+    return this._call(
+      OPS.getManagedRegistryTask,
+      {
+        path: { projectId: projectId, managedRegistryId: managedRegistryId, taskId: taskId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * allNetworks iterates over GET /v2/publicCloud/project/{projectId}/network (List networks).
    *
    * It yields one item at a time, and gets the next page only when the loop reaches it. An
@@ -4585,6 +18448,190 @@ export class PublicCloudApi extends SectionApi {
       {
         path: { projectId: projectId },
         query: [["region", params?.region]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectReferenceManagedKubernetesFlavors iterates over GET /v2/publicCloud/project/{projectId}/reference/managedKubernetes/flavor (List Kubernetes node flavors).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the node flavors available for node pools in a region, with their category, resources
+   * and status. Requires a region.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedKubernetes/flavor/get.
+   *
+   * @param projectId - Project ID
+   * @param region - Region to list flavors for. Flavor availability varies by region. An unknown region returns 404.
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesFlavor}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectReferenceManagedKubernetesFlavors(projectId, region)) console.log(item);
+   */
+  allProjectReferenceManagedKubernetesFlavors(
+    projectId: string,
+    region: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesFlavor> {
+    return this._pages(
+      OPS.allProjectReferenceManagedKubernetesFlavors,
+      {
+        path: { projectId: projectId },
+        query: [["region", region]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectReferenceManagedKubernetesPlans iterates over GET /v2/publicCloud/project/{projectId}/reference/managedKubernetes/plan (List Kubernetes cluster plans).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the plans available for cluster creation in a region, with their control plane
+   * characteristics and limits. Requires a region.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedKubernetes/plan/get.
+   *
+   * @param projectId - Project ID
+   * @param region - Region to list plans for. Plan availability varies by region. An unknown region returns 404.
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesPlan}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectReferenceManagedKubernetesPlans(projectId, region)) console.log(item);
+   */
+  allProjectReferenceManagedKubernetesPlans(
+    projectId: string,
+    region: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesPlan> {
+    return this._pages(
+      OPS.allProjectReferenceManagedKubernetesPlans,
+      {
+        path: { projectId: projectId },
+        query: [["region", region]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * allProjectReferenceManagedKubernetesRegions iterates over GET /v2/publicCloud/project/{projectId}/reference/managedKubernetes/region (List Kubernetes cluster regions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the regions where a cluster can be created, with their availability zones and the plans
+   * offered there.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedKubernetes/region/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedKubernetesRegion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allProjectReferenceManagedKubernetesRegions(projectId)) console.log(item);
+   */
+  allProjectReferenceManagedKubernetesRegions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedKubernetesRegion> {
+    return this._pages(
+      OPS.allProjectReferenceManagedKubernetesRegions,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getProjectReferenceManagedKubernetesVersion calls GET /v2/publicCloud/project/{projectId}/reference/managedKubernetes/version: List Kubernetes versions
+   *
+   * Returns the minor versions available for cluster creation, newest first, and the default
+   * version. Creation resolves a minor version to its latest patch.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedKubernetes/version/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.PublicCloudManagedKubernetesVersionCatalog} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.publicCloud.getProjectReferenceManagedKubernetesVersion(projectId);
+   */
+  getProjectReferenceManagedKubernetesVersion(
+    projectId: string,
+    options?: RequestOptions,
+  ): Promise<models.PublicCloudManagedKubernetesVersionCatalog> {
+    return this._call(
+      OPS.getProjectReferenceManagedKubernetesVersion,
+      {
+        path: { projectId: projectId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allRegistryPlans iterates over GET /v2/publicCloud/project/{projectId}/reference/managedRegistry/plan (List plans available to create a Managed Private Registry service).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedRegistry/plan/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedRegistryPlan}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allRegistryPlans(projectId)) console.log(item);
+   */
+  allRegistryPlans(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedRegistryPlan> {
+    return this._pages(
+      OPS.allRegistryPlans,
+      {
+        path: { projectId: projectId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * allRegistryRegions iterates over GET /v2/publicCloud/project/{projectId}/reference/managedRegistry/region (List regions available to create a Managed Private Registry service).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Requires the IAM action publicCloudProject:apiovh:reference/managedRegistry/region/get.
+   *
+   * @param projectId - Project ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.PublicCloudManagedRegistryRegion}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.publicCloud.allRegistryRegions(projectId)) console.log(item);
+   */
+  allRegistryRegions(
+    projectId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.PublicCloudManagedRegistryRegion> {
+    return this._pages(
+      OPS.allRegistryRegions,
+      {
+        path: { projectId: projectId },
       },
       options,
     );

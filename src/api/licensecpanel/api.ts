@@ -33,7 +33,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensecpanelApi extends SectionApi {
   /**
-   * listCpanels calls GET /v1/license/cpanel: List available services
+   * listCpanels calls GET /v1/license/cpanel: List your cPanel licenses
+   *
+   * Returns the names of the cPanel licenses of the account; each name is the service name used by
+   * the other calls.
    *
    * Requires the IAM action licenseCpanel:apiovh:get.
    *
@@ -61,7 +64,9 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * listOrderableVersions calls GET /v1/license/cpanel/orderableVersions: Get the orderable CPanel versions
+   * listOrderableVersions calls GET /v1/license/cpanel/orderableVersions: Get the orderable cPanel versions
+   *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
    *
    * Requires the IAM action account:apiovh:licenseCpanel/orderableVersions/get.
    *
@@ -86,7 +91,10 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * getCpanel calls GET /v1/license/cpanel/{serviceName}: Get this object properties
+   * getCpanel calls GET /v1/license/cpanel/{serviceName}: Get a cPanel license
+   *
+   * Returns the license ID, version, status, the IP address the license is attached to, and the
+   * creation date.
    *
    * Requires the IAM action licenseCpanel:apiovh:get.
    *
@@ -112,7 +120,7 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * allCpanels iterates over GET /v1/license/cpanel (List available services).
+   * allCpanels iterates over GET /v1/license/cpanel (List your cPanel licenses).
    *
    * It lists the IDs with {@link LicensecpanelApi.listCpanels}, then gets each object with
    * {@link LicensecpanelApi.getCpanel}, only when the loop reaches it. An object deleted in the
@@ -141,7 +149,9 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * updateCpanel calls PUT /v1/license/cpanel/{serviceName}: Alter this object properties
+   * updateCpanel calls PUT /v1/license/cpanel/{serviceName}: Update a cPanel license
+   *
+   * Changes the settings that can be modified: the automatic deletion at expiration.
    *
    * Requires the IAM action licenseCpanel:apiovh:put.
    *
@@ -169,7 +179,9 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * listAllowedDestinationIps calls GET /v1/license/cpanel/{serviceName}/allowedDestinationIp: Returns an array of ips where the license can be moved to
+   * listAllowedDestinationIps calls GET /v1/license/cpanel/{serviceName}/allowedDestinationIp: List the IPs a cPanel license can be moved to
+   *
+   * Returns the IP blocks that can receive the license, so you can pick the destination of a move.
    *
    * Requires the IAM action licenseCpanel:apiovh:allowedDestinationIp/get.
    *
@@ -194,7 +206,9 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * getCanLicenseBeMovedTo calls GET /v1/license/cpanel/{serviceName}/canLicenseBeMovedTo: Will tell if the ip can accept the license
+   * getCanLicenseBeMovedTo calls GET /v1/license/cpanel/{serviceName}/canLicenseBeMovedTo: Check whether a cPanel license can be moved to an IP
+   *
+   * Returns whether the destination IP can receive the license, with the reason when it cannot.
    *
    * Requires the IAM action licenseCpanel:apiovh:canLicenseBeMovedTo/get.
    *
@@ -223,7 +237,9 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * changeIp calls POST /v1/license/cpanel/{serviceName}/changeIp: Move this license to another Ip
+   * changeIp calls POST /v1/license/cpanel/{serviceName}/changeIp: Move a cPanel license to another IP
+   *
+   * Starts the move of the license to the given IP and returns the task that performs it.
    *
    * Requires the IAM action licenseCpanel:apiovh:changeIp.
    *
@@ -340,7 +356,10 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/cpanel/{serviceName}/tasks: tasks linked to this license
+   * listTasks calls GET /v1/license/cpanel/{serviceName}/tasks: List the tasks of a cPanel license
+   *
+   * Returns the IDs of the tasks linked to the license, each task records an action such as a
+   * version upgrade or an IP change.
    *
    * Requires the IAM action licenseCpanel:apiovh:tasks/get.
    *
@@ -376,7 +395,10 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/cpanel/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/cpanel/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseCpanel:apiovh:tasks/get.
    *
@@ -404,7 +426,7 @@ export class LicensecpanelApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/cpanel/{serviceName}/tasks (tasks linked to this license).
+   * allTasks iterates over GET /v1/license/cpanel/{serviceName}/tasks (List the tasks of a cPanel license).
    *
    * It lists the IDs with {@link LicensecpanelApi.listTasks}, then gets each object with
    * {@link LicensecpanelApi.getTasks}, only when the loop reaches it. An object deleted in the

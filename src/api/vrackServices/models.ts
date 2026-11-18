@@ -31,22 +31,6 @@ export interface GetResource404Response {
 }
 
 /** Common error model */
-export interface GetVrackServiceEligibleDedicatedServerInterfaces400Response {
-  /** Class of the error */
-  class?: string | undefined;
-  /** Error message */
-  message?: string | undefined;
-}
-
-/** Common error model */
-export interface GetVrackServiceEligibleDedicatedServerInterfaces404Response {
-  /** Class of the error */
-  class?: string | undefined;
-  /** Error message */
-  message?: string | undefined;
-}
-
-/** Common error model */
 export interface UpdateResource400Response {
   /** Class of the error */
   class?: string | undefined;
@@ -603,54 +587,6 @@ export interface VrackServicesDedicatedServerInterfaceAssociationTarget {
   ip: IP;
   /** UUID that identifies a dedicatedServerInterface */
   uuid: string;
-}
-
-/** List of eligible allowed IP prefixes for vRack Services, separated by IP version */
-export interface VrackServicesEligibleBgpAllowedPrefixes {
-  /**
-   * List of eligible IPv4 prefixes
-   *
-   * Read-only: the API sets it.
-   */
-  ipv4?: IPv4Block[] | undefined;
-  /**
-   * List of eligible IPv6 prefixes
-   *
-   * Read-only: the API sets it.
-   */
-  ipv6?: IPv6Block[] | undefined;
-}
-
-/** List of eligible dedicatedServerInterfaces for vRack Services, listed by availabilityZone */
-export interface VrackServicesEligibleDedicatedServerInterface {
-  /**
-   * The availabilityZone where the dedicatedServerInterfaces are located
-   *
-   * Read-only: the API sets it.
-   */
-  availabilityZone?: string | undefined;
-  /**
-   * List of eligible dedicatedServerInterfaces
-   *
-   * Read-only: the API sets it.
-   */
-  dedicatedServerInterfaces?: VrackServicesEligibleDedicatedServerInterfaceItem[] | undefined;
-}
-
-/** An eligible dedicatedServerInterface */
-export interface VrackServicesEligibleDedicatedServerInterfaceItem {
-  /**
-   * Name of the dedicated server owning the dedicatedServerInterface
-   *
-   * Read-only: the API sets it.
-   */
-  serverName?: string | undefined;
-  /**
-   * UUID that identifies the dedicatedServerInterface
-   *
-   * Read-only: the API sets it.
-   */
-  uuid?: string | undefined;
 }
 
 /** List of managed services eligible to the requested vRack Services */

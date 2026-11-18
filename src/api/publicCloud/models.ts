@@ -287,6 +287,14 @@ export interface CreateLoadBalancer409Response {
 }
 
 /** Common error model */
+export interface CreateManagedRegistry400Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
 export interface CreateNetwork409Response {
   /** Class of the error */
   class?: string | undefined;
@@ -672,6 +680,14 @@ export interface DeleteLoadBalancer404Response {
 
 /** Common error model */
 export interface DeleteLoadBalancer409Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface DeleteManagedRegistry409Response {
   /** Class of the error */
   class?: string | undefined;
   /** Error message */
@@ -1088,6 +1104,22 @@ export interface EditLoadBalancer404Response {
 
 /** Common error model */
 export interface EditLoadBalancer409Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface EditManagedRegistry400Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface EditManagedRegistry409Response {
   /** Class of the error */
   class?: string | undefined;
   /** Error message */
@@ -1695,6 +1727,14 @@ export interface PostVolumeAction409Response {
 }
 
 /** Common error model */
+export interface ResetManagedRegistryAdminCredentials409Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
 export interface UpdateProjectRancher500Response {
   /** Class of the error */
   class?: string | undefined;
@@ -1803,6 +1843,68 @@ export const CommonEventTypeEnum = {
  */
 export type CommonEventTypeEnum =
   | (typeof CommonEventTypeEnum)[keyof typeof CommonEventTypeEnum]
+  | (string & {});
+
+/** OVHcloud region identifier */
+export const CommonRegionEnum = {
+  AF_NORTH_LZ_RBA: "af-north-lz-rba",
+  AP_SOUTH_MUM: "ap-south-mum",
+  AP_SOUTHEAST_SGP: "ap-southeast-sgp",
+  AP_SOUTHEAST_SYD: "ap-southeast-syd",
+  CA_EAST_BHS: "ca-east-bhs",
+  CA_EAST_TOR: "ca-east-tor",
+  EU_CENTRAL_LZ_BUH: "eu-central-lz-buh",
+  EU_CENTRAL_LZ_PRG: "eu-central-lz-prg",
+  EU_CENTRAL_LZ_SOF: "eu-central-lz-sof",
+  EU_CENTRAL_WAW: "eu-central-waw",
+  EU_NORTH_LZ_CPH: "eu-north-lz-cph",
+  EU_NORTH_LZ_HEL: "eu-north-lz-hel",
+  EU_NORTH_LZ_OSL: "eu-north-lz-osl",
+  EU_NORTH_LZ_STO: "eu-north-lz-sto",
+  EU_SOUTH_LZ_LIS: "eu-south-lz-lis",
+  EU_SOUTH_LZ_MAD: "eu-south-lz-mad",
+  EU_SOUTH_LZ_MIL: "eu-south-lz-mil",
+  EU_SOUTH_MIL: "eu-south-mil",
+  EU_WEST_ERI: "eu-west-eri",
+  EU_WEST_GRA: "eu-west-gra",
+  EU_WEST_GRA_SNC: "eu-west-gra-snc",
+  EU_WEST_LIM: "eu-west-lim",
+  EU_WEST_LZ_AMS: "eu-west-lz-ams",
+  EU_WEST_LZ_BRU: "eu-west-lz-bru",
+  EU_WEST_LZ_DLN: "eu-west-lz-dln",
+  EU_WEST_LZ_LUX: "eu-west-lz-lux",
+  EU_WEST_LZ_MNC: "eu-west-lz-mnc",
+  EU_WEST_LZ_MRS: "eu-west-lz-mrs",
+  EU_WEST_LZ_VIE: "eu-west-lz-vie",
+  EU_WEST_LZ_ZRH: "eu-west-lz-zrh",
+  EU_WEST_PAR: "eu-west-par",
+  EU_WEST_RBX: "eu-west-rbx",
+  EU_WEST_RBX_SNC: "eu-west-rbx-snc",
+  EU_WEST_SBG: "eu-west-sbg",
+  EU_WEST_SBG_SNC: "eu-west-sbg-snc",
+  US_CENTRAL_LZ_SLC: "us-central-lz-slc",
+  US_CENTRAL_LZ_STL: "us-central-lz-stl",
+  US_EAST_LZ_ATL: "us-east-lz-atl",
+  US_EAST_LZ_BOS: "us-east-lz-bos",
+  US_EAST_LZ_CHI: "us-east-lz-chi",
+  US_EAST_LZ_DAL: "us-east-lz-dal",
+  US_EAST_LZ_MIA: "us-east-lz-mia",
+  US_EAST_LZ_NYC: "us-east-lz-nyc",
+  US_EAST_VIN: "us-east-vin",
+  US_WEST_HIL: "us-west-hil",
+  US_WEST_LZ_DEN: "us-west-lz-den",
+  US_WEST_LZ_LAX: "us-west-lz-lax",
+  US_WEST_LZ_PAO: "us-west-lz-pao",
+  US_WEST_LZ_PHX: "us-west-lz-phx",
+  US_WEST_LZ_SEA: "us-west-lz-sea",
+} as const;
+/**
+ * OVHcloud region identifier
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type CommonRegionEnum =
+  | (typeof CommonRegionEnum)[keyof typeof CommonRegionEnum]
   | (string & {});
 
 /** Current status of a resource */
@@ -1948,6 +2050,164 @@ export type CommonTaskStatusEnum =
   | (typeof CommonTaskStatusEnum)[keyof typeof CommonTaskStatusEnum]
   | (string & {});
 
+/** A kind of log a service can emit, which you can subscribe to and forward into a stream */
+export interface DbaasLogsLogKind {
+  /**
+   * List of additional log fields managed in this log kind
+   *
+   * Read-only: the API sets it.
+   */
+  additionalReturnedFields?: string[] | undefined;
+  /**
+   * Creation date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Identifier of the log kind
+   *
+   * Read-only: the API sets it.
+   */
+  kindId?: string | undefined;
+  /**
+   * Log kind name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Last update date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** A live forwarding of one kind of log from a service into a Logs Data Platform stream */
+export interface DbaasLogsLogSubscription {
+  /**
+   * Creation date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind name of this subscription
+   *
+   * Read-only: the API sets it.
+   */
+  kind?: string | undefined;
+  /**
+   * Subscribed resource, where the logs come from
+   *
+   * Read-only: the API sets it.
+   */
+  resource?: DbaasLogsLogSubscriptionResource | undefined;
+  /**
+   * Name of the destination log service
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * Identifier of the destination log stream
+   *
+   * Read-only: the API sets it.
+   */
+  streamId?: string | undefined;
+  /**
+   * Unique identifier of the subscription, used to change or stop the forwarding
+   *
+   * Read-only: the API sets it.
+   */
+  subscriptionId?: string | undefined;
+  /**
+   * Last update date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Log subscription creation payload */
+export interface DbaasLogsLogSubscriptionCreation {
+  /** Log kind name to subscribe to */
+  kind: string;
+  /** Identifier of the customer log stream */
+  streamId: string;
+}
+
+/** The service a log subscription collects its logs from */
+export interface DbaasLogsLogSubscriptionResource {
+  /**
+   * Name of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Type of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  type?: string | undefined;
+}
+
+/** Asynchronous operation after subscribing or unsubscribing to a resource logs */
+export interface DbaasLogsLogSubscriptionResponse {
+  /**
+   * Identifier of the operation
+   *
+   * Read-only: the API sets it.
+   */
+  operationId?: string | undefined;
+  /**
+   * Operation owner's service name
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+}
+
+/** Log temporary URL creation payload */
+export interface DbaasLogsLogURLCreation {
+  /** Log kind name */
+  kind: string;
+}
+
+/** Temporary url information */
+export interface DbaasLogsTemporaryLogsLink {
+  /**
+   * Temporary url expiration date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expirationDate?: string | undefined;
+  /**
+   * Temporary url
+   *
+   * Read-only: the API sets it.
+   */
+  url?: string | undefined;
+}
+
 /** IAM resource metadata embedded in services models */
 export interface IAMResourceMetadata {
   /**
@@ -2038,953 +2298,26 @@ export type IP = string;
 /** IP (v4 or v6) CIDR notation (e.g., 192.0.2.0/24) */
 export type IPBlock = string;
 
+/** IPv4 CIDR notation (e.g., 192.0.2.0/24) */
+export type IPv4Block = string;
+
+/** Typology of the region */
+export const LocationTypeEnum = {
+  LOCAL_ZONE: "LOCAL-ZONE",
+  REGION_1_AZ: "REGION-1-AZ",
+  REGION_3_AZ: "REGION-3-AZ",
+} as const;
+/**
+ * Typology of the region
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LocationTypeEnum =
+  | (typeof LocationTypeEnum)[keyof typeof LocationTypeEnum]
+  | (string & {});
+
 /** MAC address (e.g., 00:00:5e:00:53:01) */
 export type MacAddress = string;
-
-/** What OVHcloud offers of the AI Endpoints provider preset: whether the preset can be selected at all, whether its authentication can be provisioned for the agent, the base URL to list available models from, and the model used when the caller states none */
-export interface PublicCloudAiAgentsAIEndpointsPreset {
-  /**
-   * OpenAI-compatible base URL, published so a client can list models from its /models sub-path
-   *
-   * Read-only: the API sets it.
-   */
-  apiBase?: string | undefined;
-  /**
-   * Model seeded when the caller states none. Empty when this deployment states no default.
-   *
-   * Read-only: the API sets it.
-   */
-  defaultModel?: string | null | undefined;
-  /**
-   * Whether the OVHcloud AI Endpoints provider preset is available on this deployment
-   *
-   * Read-only: the API sets it.
-   */
-  enabled?: boolean | undefined;
-  /**
-   * Whether OVHcloud provisions the AI Endpoints credential for the agent, so the caller does not have to supply one
-   *
-   * Read-only: the API sets it.
-   */
-  integratedAuth?: boolean | undefined;
-}
-
-/** A managed AI agent */
-export interface PublicCloudAiAgentsAgent {
-  /**
-   * Date of the AI agent creation
-   *
-   * Read-only: the API sets it.
-   *
-   * An ISO 8601 date-time string.
-   */
-  createdAt?: string | undefined;
-  /**
-   * Current state of the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  currentState?: PublicCloudAiAgentsAgentCurrentState | null | undefined;
-  /**
-   * Unique identifier of the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  id?: string | undefined;
-  /**
-   * Reflects the readiness of the AI agent: READY, SUSPENDED when it is paused, or DELETING on the response to its deletion
-   *
-   * Read-only: the API sets it.
-   */
-  resourceStatus?: CommonResourceStatusEnum | undefined;
-  /**
-   * Last target specification of the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  targetSpec?: PublicCloudAiAgentsAgentTargetSpec | undefined;
-  /**
-   * Date of the last AI agent update
-   *
-   * Read-only: the API sets it.
-   *
-   * An ISO 8601 date-time string.
-   */
-  updatedAt?: string | undefined;
-}
-
-/** The agent's identity settings, such as its display name. */
-export interface PublicCloudAiAgentsAgentConfig {
-  /** Display name for the agent, shown in the interface. Empty falls back to a generic label. */
-  name?: string | null | undefined;
-}
-
-/** Input parameters for creating an AI agent */
-export interface PublicCloudAiAgentsAgentCreation {
-  /** Desired specification of the AI agent to create */
-  targetSpec: PublicCloudAiAgentsAgentCreationTargetSpec;
-}
-
-/** Desired specification of the AI agent to create. */
-export interface PublicCloudAiAgentsAgentCreationTargetSpec {
-  /** Optional AI agent configuration seeded at creation, combinable with or used instead of template. Set only here, at creation time; read and changed afterward through the AI agent itself, not through this resource. */
-  config?: PublicCloudAiAgentsConfig | null | undefined;
-  /** Desired running state of the AI agent. When false the agent is created paused. Defaults to true */
-  enabled?: boolean | null | undefined;
-  /** Name of the AI agent, at most 192 bytes of UTF-8, free of control characters. Unique among this project's agents, with one exception: an agent created before this API enforced uniqueness may share its name with a newer one. Can be changed afterwards through the update endpoint */
-  name: string;
-  /** Reference to a template used to seed the AI agent configuration once, at creation time */
-  template?: PublicCloudAiAgentsAgentTemplateRef | null | undefined;
-}
-
-/** Current state of the AI agent */
-export interface PublicCloudAiAgentsAgentCurrentState {
-  /**
-   * Whether this AI agent carries the OVHcloud AI Endpoints provider preset
-   *
-   * Read-only: the API sets it.
-   */
-  aiEndpoints?: boolean | null | undefined;
-  /**
-   * Whether OVHcloud provisioned the AI Endpoints credential for this agent, so the caller did not have to supply one
-   *
-   * Read-only: the API sets it.
-   */
-  aiEndpointsIntegratedAuth?: boolean | null | undefined;
-  /**
-   * Actual running state of the AI agent. False when the agent is paused.
-   *
-   * Read-only: the API sets it.
-   */
-  enabled?: boolean | undefined;
-  /**
-   * URL to invoke the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  endpointUrl?: string | null | undefined;
-  /**
-   * Name of the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  name?: string | undefined;
-}
-
-/** A single delegated sub-persona: either based on a built-in template or defined entirely inline. */
-export interface PublicCloudAiAgentsAgentSeed {
-  /** Short summary of what this sub-persona is for. */
-  description?: string | null | undefined;
-  /** Optional reference to a built-in template this sub-persona is based on, for example 'builtin:planner'. Any fields set below override the template's defaults. */
-  from?: string | null | undefined;
-  /** Maximum number of conversational turns this sub-persona may take before returning control. Unset means no cap. */
-  maxTurns?: number | null | undefined;
-  /** Model identifier this sub-persona uses when delegated to. Unset reuses the parent agent's model. */
-  model?: string | null | undefined;
-  /** Persona text and system prompt this sub-persona follows when delegated to. */
-  soul?: string | null | undefined;
-  /** Names of the tools this sub-persona is allowed to use. */
-  tools?: string[] | null | undefined;
-}
-
-/** Last target specification of the AI agent */
-export interface PublicCloudAiAgentsAgentTargetSpec {
-  /**
-   * Desired running state of the AI agent. False when the agent is paused.
-   *
-   * Read-only: the API sets it.
-   */
-  enabled?: boolean | undefined;
-  /**
-   * Name of the AI agent
-   *
-   * Read-only: the API sets it.
-   */
-  name?: string | undefined;
-}
-
-/** Reference to a template used to seed the AI agent configuration once, at creation time */
-export interface PublicCloudAiAgentsAgentTemplateRef {
-  /** Identifier of the template to seed the AI agent configuration from. Honored only at creation time. */
-  id: string;
-}
-
-/** An issued AI agent access token */
-export interface PublicCloudAiAgentsAgentToken {
-  /**
-   * Expiration date of the token. Null when the token does not expire.
-   *
-   * Read-only: the API sets it.
-   *
-   * An ISO 8601 date-time string.
-   */
-  expiresAt?: string | null | undefined;
-  /**
-   * Role granted to the token
-   *
-   * Read-only: the API sets it.
-   */
-  role?: PublicCloudAiAgentsAgentTokenRoleEnum | undefined;
-  /**
-   * Bearer token used to authenticate against the AI agent. Returned only once, at mint time.
-   *
-   * Read-only: the API sets it.
-   */
-  token?: string | undefined;
-}
-
-/** Input parameters for issuing an AI agent access token */
-export interface PublicCloudAiAgentsAgentTokenCreation {
-  /** Token lifetime in seconds. Defaults to the agent's default. */
-  lifetimeSeconds?: number | null | undefined;
-  /** Role granted to the minted token. Defaults to VIEWER. */
-  role?: PublicCloudAiAgentsAgentTokenRoleEnum | null | undefined;
-}
-
-/** Role granted to a minted AI agent access token */
-export const PublicCloudAiAgentsAgentTokenRoleEnum = {
-  ADMIN: "ADMIN",
-  OPERATOR: "OPERATOR",
-  USER: "USER",
-  VIEWER: "VIEWER",
-} as const;
-/**
- * Role granted to a minted AI agent access token
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsAgentTokenRoleEnum =
-  | (typeof PublicCloudAiAgentsAgentTokenRoleEnum)[keyof typeof PublicCloudAiAgentsAgentTokenRoleEnum]
-  | (string & {});
-
-/** Input for AI agent update */
-export interface PublicCloudAiAgentsAgentUpdate {
-  /** Desired specification to reconcile the AI agent toward */
-  targetSpec: PublicCloudAiAgentsAgentUpdateTargetSpec;
-}
-
-/** Desired specification to reconcile the AI agent toward. */
-export interface PublicCloudAiAgentsAgentUpdateTargetSpec {
-  /** Desired running state of the AI agent. Set to false to pause it, true to resume it */
-  enabled: boolean;
-  /** New name for the AI agent, at most 192 bytes of UTF-8, free of control characters. Omitted or null leaves the current name untouched, and so does restating the name the agent already has. Rejected if another agent in this project already has it, with the same exception as at creation. Renaming redeploys the agent on its current runtime component */
-  name?: string | null | undefined;
-}
-
-/** Specialized sub-personas this agent can delegate tasks to */
-export interface PublicCloudAiAgentsAgentsConfig {
-  /** Master switch for the delegated-agents feature. When false, this agent cannot delegate to a named sub-persona. */
-  enabled?: boolean | null | undefined;
-  /** Sub-personas defined directly in this configuration, keyed by name */
-  items?: Record<string, PublicCloudAiAgentsAgentSeed> | null | undefined;
-}
-
-/** Authentication settings for the agent's HTTP API. Unset falls back to requiring a token issued by the agent itself. */
-export interface PublicCloudAiAgentsAuthConfig {
-  /** Settings for tokens the agent issues and validates itself. Unset or disabled means the agent does not accept self-issued tokens. */
-  kagentJwt?: PublicCloudAiAgentsKagentJwtConfig | null | undefined;
-  /** Which authentication mode is enforced on the agent's HTTP API. */
-  mode?: PublicCloudAiAgentsAuthModeEnum | null | undefined;
-  /** External identity provider settings, used when the authentication mode accepts an external OAuth2 token. */
-  oauth2?: PublicCloudAiAgentsOAuth2Config | null | undefined;
-}
-
-/** Which authentication mode is enforced on the agent's HTTP API. */
-export const PublicCloudAiAgentsAuthModeEnum = {
-  KAGENT_JWT: "KAGENT_JWT",
-  NONE: "NONE",
-  OAUTH2: "OAUTH2",
-} as const;
-/**
- * Which authentication mode is enforced on the agent's HTTP API.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsAuthModeEnum =
-  | (typeof PublicCloudAiAgentsAuthModeEnum)[keyof typeof PublicCloudAiAgentsAuthModeEnum]
-  | (string & {});
-
-/** Toggles for the agent's built-in capabilities, such as network access and web search. */
-export interface PublicCloudAiAgentsBuiltinsConfig {
-  /** Whether the agent can make outbound network requests. Defaults to true. */
-  network?: boolean | null | undefined;
-  /** Whether the agent can perform web searches. Defaults to true. */
-  search?: boolean | null | undefined;
-  /** API key for the configured search provider, when the provider requires one. */
-  searchApiKey?: string | null | undefined;
-  /** Which search engine the agent uses for web searches. Defaults to 'duckduckgo'. */
-  searchProvider?: string | null | undefined;
-  /** Tools this agent must not be offered, as glob patterns matched against the tool name ('*' = any run of characters). The 'builtins' flags above are all-or-nothing per subsystem — 'relay' exposes twenty 'relay_*' tools or none. A product built on kadk routinely wants *most* of a subsystem plus a composite of its own, and then finds the model reaching past the composite for the primitives it wraps: offered both 'revision_room' and 'relay_create_room', a model will happily assemble the room by hand and skip everything the composite also did. Naming the primitives here is how the product says 'that path is mine to own'. */
-  toolsDeny?: string[] | null | undefined;
-  /** Whether the agent can reconfigure its own settings, such as its model or memory, from within a conversation. Off by default; only available to an administrator caller when enabled. */
-  wizard?: boolean | null | undefined;
-}
-
-/** Messaging-platform integrations, such as Telegram and Webex, the agent can send and receive messages through */
-export interface PublicCloudAiAgentsChannelsConfig {
-  /** Telegram integration settings. When omitted, Telegram is not connected. */
-  telegram?: PublicCloudAiAgentsTelegramChannelConfig | null | undefined;
-  /** Webex integration settings. When omitted, Webex is not connected. */
-  webex?: PublicCloudAiAgentsWebexChannelConfig | null | undefined;
-}
-
-/** Templated AI agent configuration */
-export interface PublicCloudAiAgentsConfig {
-  /** The agent's identity settings, such as its display name. */
-  agent?: PublicCloudAiAgentsAgentConfig | null | undefined;
-  /** Authentication settings for the agent's HTTP API. Unset falls back to requiring a token issued by the agent itself. */
-  auth?: PublicCloudAiAgentsAuthConfig | null | undefined;
-  /** Toggles for the agent's built-in capabilities, such as network access and web search. */
-  builtins?: PublicCloudAiAgentsBuiltinsConfig | null | undefined;
-  /** Messaging-platform integrations, such as Telegram and Webex, the agent can send and receive messages through. */
-  channels?: PublicCloudAiAgentsChannelsConfig | null | undefined;
-  /** Remote command-execution settings. Unset or disabled means the agent cannot run shell commands. */
-  exec?: PublicCloudAiAgentsExecConfig | null | undefined;
-  /** The language model this agent uses to respond, including sampling settings and failover targets. */
-  llm?: PublicCloudAiAgentsLlmConfig | null | undefined;
-  /** Settings for searchable tool indexing, required when any connected tool server uses indexed mode instead of listing all its tools directly. */
-  mcpIndexer?: PublicCloudAiAgentsMcpIndexerConfig | null | undefined;
-  /** Connected MCP tool servers, keyed by a caller-chosen server name. */
-  mcpServers?: Record<string, PublicCloudAiAgentsMcpServer> | null | undefined;
-  /** Long-term memory settings that let the agent retain and later recall facts across conversations. */
-  memory?: PublicCloudAiAgentsMemoryConfig | null | undefined;
-  /** Specialized sub-personas this agent can delegate tasks to. */
-  profiles?: PublicCloudAiAgentsAgentsConfig | null | undefined;
-  /** Shared pool of language-model provider connections, keyed by a caller-chosen provider id and referenced by name elsewhere in this configuration. */
-  providers?: Record<string, PublicCloudAiAgentsProviderConfig> | null | undefined;
-  /** Settings for hosting a local messaging relay that other participants can join. */
-  relay?: PublicCloudAiAgentsRelayConfig | null | undefined;
-  /** Reusable skills the agent can invoke: named bundles of instructions it can follow on demand. */
-  skills?: PublicCloudAiAgentsSkillsConfig | null | undefined;
-  /** The agent's persona and system prompt: free-form text describing who it is, how it should behave, and any standing instructions it should always follow. */
-  soul?: string | null | undefined;
-  /** Rules applied to every tool call, matched on its name, arguments and what triggered the turn: before the call runs and — for a rule that says so — on what it returned. A matching rule allows the call, refuses it, asks a human, or defers to an LLM reviewer. */
-  toolPermissions?: PublicCloudAiAgentsToolPermissionsConfig | null | undefined;
-  /** Configuration format version. Defaults to '1.0' for agents created before this field existed. */
-  version?: string | null | undefined;
-  /** The agent's file storage: an ordered list of mount points and the backend serving each one. */
-  workspace?: PublicCloudAiAgentsWorkspace | null | undefined;
-}
-
-/** Remote command-execution settings. Unset or disabled means the agent cannot run shell commands. */
-export interface PublicCloudAiAgentsExecConfig {
-  /** API key used to authenticate to the remote command-execution service. Kept secret and never returned in plain text once set. */
-  apiKey?: string | null | undefined;
-  /** Number of seconds of inactivity before a sandboxed compute session is automatically suspended. Defaults to 60 seconds. */
-  autoSuspendIdleSeconds?: number | null | undefined;
-  /** Base URL of the remote command-execution service. No trailing slash. */
-  baseUrl?: string | null | undefined;
-  /** Default machine image used when the agent provisions a new sandboxed compute session */
-  defaultImage?: string | null | undefined;
-  /** Master switch for remote command execution. When false, the agent cannot run shell commands. */
-  enabled?: boolean | null | undefined;
-}
-
-/** Which kinds of call failures trigger switching to a backup model instead of surfacing the error */
-export interface PublicCloudAiAgentsFailoverPolicy {
-  /** Failure reasons that trigger switching to the next backup model. A failure reason not listed here is reported as an error instead of triggering failover. */
-  on?: PublicCloudAiAgentsFailoverPolicyOnEnum[] | null | undefined;
-}
-
-/** Failure reasons that trigger switching to the next backup model. A failure reason not listed here is reported as an error instead of triggering failover. */
-export const PublicCloudAiAgentsFailoverPolicyOnEnum = {
-  AUTH: "AUTH",
-  CLIENT_ERROR: "CLIENT_ERROR",
-  CONTEXT_OVERFLOW: "CONTEXT_OVERFLOW",
-  RATE_LIMIT: "RATE_LIMIT",
-  SERVER_ERROR: "SERVER_ERROR",
-  TRANSPORT: "TRANSPORT",
-  UNRECOVERABLE: "UNRECOVERABLE",
-} as const;
-/**
- * Failure reasons that trigger switching to the next backup model. A failure reason not listed here is reported as an error instead of triggering failover.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsFailoverPolicyOnEnum =
-  | (typeof PublicCloudAiAgentsFailoverPolicyOnEnum)[keyof typeof PublicCloudAiAgentsFailoverPolicyOnEnum]
-  | (string & {});
-
-/** What this deployment reserves of, and offers of, an agent's own configuration */
-export interface PublicCloudAiAgentsGlobalAgentConfig {
-  /**
-   * Reservation covering the agent's authentication block
-   *
-   * Read-only: the API sets it.
-   */
-  auth?: PublicCloudAiAgentsGlobalAgentConfigAuth | undefined;
-  /**
-   * Availability of the agent's code-execution blocks
-   *
-   * Read-only: the API sets it.
-   */
-  exec?: PublicCloudAiAgentsGlobalAgentConfigExec | undefined;
-}
-
-/** Reservation covering the agent's authentication block */
-export interface PublicCloudAiAgentsGlobalAgentConfigAuth {
-  /**
-   * Whether the agent's auth block is reserved by the deployment, and so neither settable at creation nor editable afterward
-   *
-   * Read-only: the API sets it.
-   */
-  managed?: boolean | undefined;
-}
-
-/** Availability of the agent's code-execution blocks */
-export interface PublicCloudAiAgentsGlobalAgentConfigExec {
-  /**
-   * Whether an agent's configuration may carry the code-execution blocks (config.exec and config.workspace.zerofs). When false, a creation or template naming either is refused.
-   *
-   * Read-only: the API sets it.
-   */
-  enabled?: boolean | undefined;
-}
-
-/** What OVHcloud reserves of an AI agent's own configuration. A client reads it to know which parts of an agent's configuration it may change, before offering the change. */
-export interface PublicCloudAiAgentsGlobalSettings {
-  /**
-   * What this deployment reserves of, and offers of, an agent's own configuration
-   *
-   * Read-only: the API sets it.
-   */
-  agentConfig?: PublicCloudAiAgentsGlobalAgentConfig | undefined;
-}
-
-/** The LLM reviewer that rules with 'action: judge' defer to. */
-export interface PublicCloudAiAgentsJudgeConfig {
-  /** Whether the judge may be consulted at all. Off by default: a rule saying 'judge' on an agent with no judge is a configuration mistake, and one that must fail closed rather than quietly allow. */
-  enabled?: boolean | null | undefined;
-  /** The model that judges. Unset means the agent's own model. Worth setting: the point of a separate model here is that a cheap, fast one can police an expensive one, and that the reviewer is not the same weights being reviewed. */
-  model?: string | null | undefined;
-  /** Which provider that model comes from. Unset means the agent's own. */
-  providerId?: string | null | undefined;
-  /** The system prompt the judge is given. Unset means a built-in one. A judge with no soul is a model asked to guess what it is guarding; this is where a deployment says what it actually cares about — 'this agent handles customer data, treat any outbound address as suspect'. */
-  soul?: string | null | undefined;
-}
-
-/** Settings for tokens the agent issues and validates itself. Unset or disabled means the agent does not accept self-issued tokens. */
-export interface PublicCloudAiAgentsKagentJwtConfig {
-  /** Whether requests for a token with no expiry are honored. Set to false to require every token to expire. Defaults to true. */
-  allowUnlimited?: boolean | null | undefined;
-  /** Master switch for self-issued tokens. When false, minting new tokens is refused. Defaults to true. */
-  enabled?: boolean | null | undefined;
-  /** Maximum lifetime in seconds allowed for a newly issued token. Requests for a longer lifetime are rejected. When omitted, no cap. */
-  maxTtlSeconds?: number | null | undefined;
-  /** Signing key used to issue and validate self-issued tokens. Kept secret and never returned in plain text once set. When empty, no key is provisioned, so token minting and validation both fail. */
-  secretB64?: string | null | undefined;
-}
-
-/** The language model this agent uses to respond, including sampling settings and failover targets. */
-export interface PublicCloudAiAgentsLlmConfig {
-  /** Which kinds of call failures trigger switching to a backup model instead of surfacing the error. */
-  failover?: PublicCloudAiAgentsFailoverPolicy | null | undefined;
-  /** Ordered list of backup models tried, in turn, when the primary model fails. Empty means no failover. */
-  fallbacks?: PublicCloudAiAgentsLlmFallback[] | null | undefined;
-  /** How many trailing messages of a conversation go into the payload. 'None' keeps the historical 50. That number predates context windows measured in the hundreds of thousands of tokens: on a 262k-token model a 50-message cap uses a fraction of what is available, and everything older is dropped without a summary — the conversation quietly forgets rather than compacting. Raising it hands the ceiling back to the compaction path, which now has a declared budget to compare against. */
-  maxContextMessages?: number | null | undefined;
-  /** Maximum number of tokens the model may generate in a single response. Unset uses the provider's default. */
-  maxTokens?: number | null | undefined;
-  /** Identifier of the model to call, for example 'gpt-5'. */
-  model?: string | null | undefined;
-  /** Id of the connected provider to call for this model. Must reference an entry in the shared provider pool. */
-  providerId?: string | null | undefined;
-  /** Sampling temperature controlling response randomness: lower values are more deterministic, higher values are more varied. Unset uses the provider's default. */
-  temperature?: number | null | undefined;
-  /** Optional secondary model used to describe images when the primary model cannot see them. Unset means images are not described for a text-only model. */
-  vision?: PublicCloudAiAgentsLlmFallback | null | undefined;
-}
-
-/** Optional secondary model used to describe images when the primary model cannot see them. Unset means images are not described for a text-only model. */
-export interface PublicCloudAiAgentsLlmFallback {
-  /** Maximum response tokens for this backup target. Unset falls back to the primary model's setting. */
-  maxTokens?: number | null | undefined;
-  /** Model identifier to use for this backup target. Empty reuses the primary model's identifier against this provider. */
-  model?: string | null | undefined;
-  /** Id of the connected provider to call for this backup target */
-  providerId?: string | null | undefined;
-  /** Sampling temperature for this backup target. Unset falls back to the primary model's temperature. */
-  temperature?: number | null | undefined;
-}
-
-/** Settings for searchable tool indexing, required when any connected tool server uses indexed mode instead of listing all its tools directly. */
-export interface PublicCloudAiAgentsMcpIndexerConfig {
-  /** Number of tool descriptions embedded per request when building the search index. Defaults to 16 when unset. */
-  embedderBatchSize?: number | null | undefined;
-  /** Identifier of the embedding model used to index tool descriptions for search, for example 'text-embedding-3-small'. */
-  embedderModel?: string | undefined;
-  /** Id of the connected provider used to generate embeddings for tool search. Required as soon as any tool server uses indexed mode. */
-  providerId?: string | null | undefined;
-}
-
-/** A connected MCP tool server the agent can call tools from. */
-export interface PublicCloudAiAgentsMcpServer {
-  /** How the agent authenticates to this server. */
-  authKind?: PublicCloudAiAgentsMcpServerAuthKindEnum | null | undefined;
-  /** Whether this server's tools are made available to the agent. Defaults to true; set to false to temporarily park a server without removing its settings. */
-  enabled?: boolean | null | undefined;
-  /** Extra HTTP headers sent on every request to this server, for example custom authentication headers. */
-  headers?: Record<string, string> | null | undefined;
-  /** How this server's tools are surfaced to the model. */
-  mode?: PublicCloudAiAgentsMcpServerModeEnum | null | undefined;
-  /** Base URL of the MCP server. */
-  url?: string | undefined;
-}
-
-/** How the agent authenticates to this server. */
-export const PublicCloudAiAgentsMcpServerAuthKindEnum = {
-  BEARER: "BEARER",
-  NONE: "NONE",
-  OAUTH: "OAUTH",
-} as const;
-/**
- * How the agent authenticates to this server.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsMcpServerAuthKindEnum =
-  | (typeof PublicCloudAiAgentsMcpServerAuthKindEnum)[keyof typeof PublicCloudAiAgentsMcpServerAuthKindEnum]
-  | (string & {});
-
-/** How this server's tools are surfaced to the model. */
-export const PublicCloudAiAgentsMcpServerModeEnum = {
-  FLAT: "FLAT",
-  INDEXED: "INDEXED",
-} as const;
-/**
- * How this server's tools are surfaced to the model.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsMcpServerModeEnum =
-  | (typeof PublicCloudAiAgentsMcpServerModeEnum)[keyof typeof PublicCloudAiAgentsMcpServerModeEnum]
-  | (string & {});
-
-/** Long-term memory settings that let the agent retain and later recall facts across conversations. */
-export interface PublicCloudAiAgentsMemoryConfig {
-  /** Whether the agent reviews each conversation turn to capture any durable facts it did not already record. Defaults to true. */
-  consolidateOnTurnEnd?: boolean | null | undefined;
-  /** Schedule, as a five-field cron expression, for the periodic pass that merges duplicate facts and promotes frequently reinforced ones. Defaults to daily at 3 AM. */
-  consolidationCron?: string | null | undefined;
-  /** Maximum number of internal steps the end-of-turn memory review may take. Defaults to 3. */
-  consolidationMaxRounds?: number | null | undefined;
-  /** Fact categories eligible for automatic promotion to permanent status when reinforced. Empty disables automatic promotion; facts can still be promoted manually. */
-  corePredicates?: string[] | null | undefined;
-  /** Number of facts embedded per request when building the memory index. Defaults to 16. */
-  embedderBatchSize?: number | null | undefined;
-  /** Identifier of the embedding model used to index remembered facts for recall. Required when memory is enabled. */
-  embedderModel?: string | null | undefined;
-  /** Master switch for the memory feature. When false, the agent retains no long-term facts. */
-  enabled?: boolean | null | undefined;
-  /** Schedule, as a five-field cron expression, for the periodic cleanup pass that evicts low-value facts once storage exceeds its soft limit. Defaults to hourly. */
-  gcCron?: string | null | undefined;
-  /** Hard upper bound on the number of stored facts, used as a safety cap against runaway growth. Defaults to 20000. */
-  gcMaxSize?: number | null | undefined;
-  /** Minimum retention score, from 0 to 1 with no unit, a non-permanent fact must keep to survive cleanup; facts scoring below this are marked for eviction. Defaults to 0.15. */
-  gcMinRetention?: number | null | undefined;
-  /** Number of stored facts above which cleanup starts evicting low-value ones, stopping once storage is back down to 90% of this value. Defaults to 10000. */
-  gcSoftLimit?: number | null | undefined;
-  /** Number of days after which a fact's retention score decays by half. Higher values make facts fade more slowly. Defaults to 45. */
-  halfLifeDays?: number | null | undefined;
-  /** Number of times a fact in a core category must be reinforced before it is promoted to permanent status and never evicted. Defaults to 5. */
-  identityPromotionThreshold?: number | null | undefined;
-  /** Whether the model is consulted to classify facts the automatic pass could not resolve on its own. Defaults to true; set to false to keep consolidation fully automatic. */
-  inferenceLlmFallback?: boolean | null | undefined;
-  /** Similarity threshold, from 0 to 1, above which two facts about the same subject are merged during cleanup. Defaults to 0.92. */
-  mergeSimilarityThreshold?: number | null | undefined;
-  /** Id of the connected provider used to generate embeddings for stored facts. Required when memory is enabled. */
-  providerId?: string | null | undefined;
-  /** Number of days a derived rule may go unused before cleanup removes it. Defaults to 60. */
-  ruleIdleGcDays?: number | null | undefined;
-  /** Maximum number of derived rules retained. Older or unused rules are cleaned up during consolidation. Defaults to 256. */
-  rulesMax?: number | null | undefined;
-}
-
-/** Manual overrides for what a specific model can do, used when the built-in defaults for that model are wrong or unknown for this deployment */
-export interface PublicCloudAiAgentsModelCapabilityOverride {
-  /** Maximum context window, in tokens, that this model accepts. Unset uses the built-in default for the model. */
-  contextWindow?: number | null | undefined;
-  /** Whether this model can call tools. Unset uses the built-in default for the model. */
-  tools?: boolean | null | undefined;
-  /** Whether this model can understand images. Unset uses the built-in default for the model. */
-  vision?: boolean | null | undefined;
-}
-
-/** Which storage backend serves this mount. Determines which of the other fields apply. */
-export const PublicCloudAiAgentsMountBackendEnum = {
-  BLOB: "BLOB",
-  FS: "FS",
-  S3: "S3",
-  SQL: "SQL",
-} as const;
-/**
- * Which storage backend serves this mount. Determines which of the other fields apply.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsMountBackendEnum =
-  | (typeof PublicCloudAiAgentsMountBackendEnum)[keyof typeof PublicCloudAiAgentsMountBackendEnum]
-  | (string & {});
-
-/** One workspace mount: a logical path plus the storage backend that serves it (ephemeral filesystem, persistent blob store, SQLite-backed store, or an operator-supplied S3™ compatible bucket). */
-export interface PublicCloudAiAgentsMountConfig {
-  /** Access key used to authenticate to the bucket. */
-  accessKey?: string | null | undefined;
-  /** Which storage backend serves this mount; determines which of the other fields apply. */
-  backend?: PublicCloudAiAgentsMountBackendEnum | undefined;
-  /** Name of the bucket this mount reads and writes to. */
-  bucket?: string | null | undefined;
-  /** Endpoint URL of the S3™-compatible storage service. */
-  endpoint?: string | null | undefined;
-  /** Maximum size, in bytes, allowed for a single file in this mount. Defaults to 8 MiB when unset. */
-  maxFileBytes?: number | null | undefined;
-  /** Maximum number of files allowed in this mount. Unset means no cap. */
-  maxFiles?: number | null | undefined;
-  /** Maximum total size, in bytes, allowed across all files in this mount. Defaults to 256 MiB when unset. */
-  maxTotalBytes?: number | null | undefined;
-  /** Absolute path where this mount appears in the agent's filesystem, for example '/' or '/tmp'. */
-  path?: string | undefined;
-  /** Key prefix within the bucket under which this mount's files are stored. Empty means the bucket root. */
-  prefix?: string | null | undefined;
-  /** Region of the bucket. Defaults to 'us-east-1'. */
-  region?: string | null | undefined;
-  /** When true, writes and deletes under this mount are rejected. */
-  ro?: boolean | null | undefined;
-  /** Secret key used to authenticate to the bucket. Kept secret and never returned in plain text once set. */
-  secretKey?: string | null | undefined;
-}
-
-/** External identity provider settings, used when the authentication mode accepts an external OAuth2 token */
-export interface PublicCloudAiAgentsOAuth2Config {
-  /** Expected audience value that a presented token must carry to be accepted */
-  audience?: string | undefined;
-  /** Base URL of the external identity provider that issues tokens for this agent */
-  issuer?: string | undefined;
-  /** Explicit JWKS endpoint used to verify token signatures. Unset falls back to the identity provider's well-known JWKS location. */
-  jwksUri?: string | null | undefined;
-  /** Stable identifier of the agent's owner at the identity provider. A presented token's subject must match this value to be accepted. */
-  ownerSub?: string | null | undefined;
-  /** Scopes a presented token must carry to be accepted. When empty, no scope is required. */
-  requiredScopes?: string[] | null | undefined;
-}
-
-/** One tool-permission rule: which tool calls it matches, and what to do with them. */
-export interface PublicCloudAiAgentsPermissionRule {
-  /** What to do with a matching call. */
-  action?: PublicCloudAiAgentsPermissionRuleActionEnum | undefined;
-  /** Argument constraints, as 'path-glob -> value-glob', ALL of which must hold for the rule to match. The call's arguments are flattened to 'path -> value' pairs before matching ('{'a':{'b':[1,2]}}' becomes 'a.b.0 -> 1', 'a.b.1 -> 2'), so one entry means 'some argument whose path matches the key has a value matching the pattern'. A '!' prefix on the value inverts it into '… and none of them matches', which is how an allowlist is written: '{'url': '!https://*.ovh.net/*'}' is every URL but ours. '!' flips the value test and not the quantifier: both forms ask whether SOME selected value satisfies the test. So a deny rule reading '{'url': '!https://*.ovh.net/*'}' still fires on a call carrying two URLs of which only one is foreign — which is the point of it. A rule about an argument that is absent entirely never matches, in either form: absence is not a value to have an opinion about, and a rule that fired on it would fire on every unrelated call. */
-  args?: Record<string, string> | null | undefined;
-  /** Whether this rule is evaluated before the call runs or after it returned. Defaults to 'before'. */
-  phase?: PublicCloudAiAgentsPermissionRulePhaseEnum | null | undefined;
-  /** Why this rule exists. Shown to the model in the refusal and written to the log. Worth filling in: it is the only part of this rule the model can act on. */
-  reason?: string | null | undefined;
-  /** Value-glob over the text the tool returned. 'phase: after' only. Matched against the raw result, not flattened into paths the way 'args' is: a result is prose far more often than it is a shape, and an author writing a rule about one should not have to know whether this particular tool happened to wrap it in JSON. '*' spans everything, so ''*-----BEGIN * PRIVATE KEY*'' is a substring test, and a leading '!' inverts it exactly as it does in 'args'. A rule with no 'result' matches every result, which is how 'refer everything this tool brings back to the judge' is written. */
-  result?: string | null | undefined;
-  /** Glob over the tool name. '*' matches any run of characters, including an empty one, so a rule left at its default matches every tool. */
-  tool?: string | null | undefined;
-  /** Trigger kinds this rule applies to ('http', 'invoke', 'messaging', 'cron', 'scheduled', 'subagent'). Empty means every trigger. */
-  triggers?: PublicCloudAiAgentsPermissionRuleTriggerEnum[] | null | undefined;
-  /** What an 'ask' becomes on a turn with no human to ask. Defaults to 'deny'; ignored unless 'action' is 'ask'. */
-  unattended?: PublicCloudAiAgentsPermissionRuleActionEnum | null | undefined;
-}
-
-/** What to do with a matching call */
-export const PublicCloudAiAgentsPermissionRuleActionEnum = {
-  ALLOW: "ALLOW",
-  ASK: "ASK",
-  DENY: "DENY",
-  JUDGE: "JUDGE",
-} as const;
-/**
- * What to do with a matching call
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsPermissionRuleActionEnum =
-  | (typeof PublicCloudAiAgentsPermissionRuleActionEnum)[keyof typeof PublicCloudAiAgentsPermissionRuleActionEnum]
-  | (string & {});
-
-/** Whether this rule is evaluated before the call runs or after it returned. Defaults to 'before'. */
-export const PublicCloudAiAgentsPermissionRulePhaseEnum = {
-  AFTER: "AFTER",
-  BEFORE: "BEFORE",
-} as const;
-/**
- * Whether this rule is evaluated before the call runs or after it returned. Defaults to 'before'.
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsPermissionRulePhaseEnum =
-  | (typeof PublicCloudAiAgentsPermissionRulePhaseEnum)[keyof typeof PublicCloudAiAgentsPermissionRulePhaseEnum]
-  | (string & {});
-
-/** What started the turn a tool-permission rule applies to */
-export const PublicCloudAiAgentsPermissionRuleTriggerEnum = {
-  CRON: "CRON",
-  HTTP: "HTTP",
-  INVOKE: "INVOKE",
-  MESSAGING: "MESSAGING",
-  SCHEDULED: "SCHEDULED",
-  SUBAGENT: "SUBAGENT",
-} as const;
-/**
- * What started the turn a tool-permission rule applies to
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsPermissionRuleTriggerEnum =
-  | (typeof PublicCloudAiAgentsPermissionRuleTriggerEnum)[keyof typeof PublicCloudAiAgentsPermissionRuleTriggerEnum]
-  | (string & {});
-
-/** A language-model provider connection, referenced by id from other configuration blocks that need to call a model */
-export interface PublicCloudAiAgentsProviderConfig {
-  /** Materialize this provider from the OVHcloud AI Endpoints preset. Only accepted on the reserved provider id, which no other provider may use, and on a single provider. Mutually exclusive with apiBase and displayName, which the preset supplies. Refused when the deployment has the preset disabled. Defaults to false. */
-  aiEndpoints?: boolean | null | undefined;
-  /** Have OVHcloud mint this provider's bearer token itself. Requires aiEndpoints, and is mutually exclusive with apiKey. Refused when the deployment has the preset's integrated authentication disabled. Defaults to false. */
-  aiEndpointsIntegratedAuth?: boolean | null | undefined;
-  /** Base URL of the provider's API endpoint, for example `https://api.openai.com/v1`. No trailing slash. */
-  apiBase?: string | null | undefined;
-  /** API key used to authenticate to this provider. Kept secret and never returned in plain text once set. */
-  apiKey?: string | null | undefined;
-  /** Human-readable label for this provider, shown in the interface. Defaults to the provider's id when empty. */
-  displayName?: string | null | undefined;
-  /** Per-model capability overrides for models hosted by this provider, keyed by model id */
-  models?: Record<string, PublicCloudAiAgentsModelCapabilityOverride> | null | undefined;
-}
-
-/** Settings for hosting a local messaging relay that other participants can join. */
-export interface PublicCloudAiAgentsRelayConfig {
-  /** Master switch for hosting a relay. When false, the relay and its rooms are not available. */
-  enabled?: boolean | null | undefined;
-  /** Maximum number of messages retained per room. Unset means unlimited. */
-  maxMessagesPerRoom?: number | null | undefined;
-  /** Maximum number of rooms this relay may host. Unset means unlimited. */
-  maxRooms?: number | null | undefined;
-  /** Controls who may create a new room on this relay: by default only the host can create rooms, but this can be relaxed so that any authenticated member creates one simply by joining a room that does not yet exist. */
-  roomCreation?: PublicCloudAiAgentsRelayRoomCreationEnum | null | undefined;
-}
-
-/** Who may create a new room on a relay */
-export const PublicCloudAiAgentsRelayRoomCreationEnum = {
-  OPEN: "OPEN",
-  OWNER: "OWNER",
-} as const;
-/**
- * Who may create a new room on a relay
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsRelayRoomCreationEnum =
-  | (typeof PublicCloudAiAgentsRelayRoomCreationEnum)[keyof typeof PublicCloudAiAgentsRelayRoomCreationEnum]
-  | (string & {});
-
-/** Temporary per-conversation working files the agent can generate, download into, and re-read across turns, cleaned up automatically after a retention period. Unset means on with defaults. */
-export interface PublicCloudAiAgentsScratchpadConfig {
-  /** Schedule, as a five-field cron expression, for the pass that deletes expired scratchpads. Defaults to daily at 4:30 AM. */
-  cleanupCron?: string | null | undefined;
-  /** Whether scratchpads are available. When omitted, automatically on whenever the agent has durable file storage. Set to false to disable them explicitly. */
-  enabled?: boolean | null | undefined;
-  /** Largest single download in bytes that may be saved to a scratchpad. Defaults to 25 MiB. */
-  maxDownloadBytes?: number | null | undefined;
-  /** Absolute path of the directory holding one subdirectory per conversation. Defaults to `/scratchpad`. */
-  path?: string | null | undefined;
-  /** Number of days a conversation's scratchpad may go untouched before it is deleted. Defaults to 7. */
-  retentionDays?: number | null | undefined;
-  /** Size in bytes above which a fetched page is saved to the scratchpad and summarized instead of being returned in full. Defaults to 128 KiB. */
-  spillBytes?: number | null | undefined;
-}
-
-/** A single skill definition: what it does and how the agent should perform it. */
-export interface PublicCloudAiAgentsSkillSeed {
-  /** Short summary of what this skill does, shown to the user when listing available skills. */
-  description?: string | null | undefined;
-  /** Detailed instructions the agent follows when invoking this skill. */
-  instructions?: string | null | undefined;
-}
-
-/** Reusable skills the agent can invoke: named bundles of instructions it can follow on demand. */
-export interface PublicCloudAiAgentsSkillsConfig {
-  /** Ids of built-in skills to enable, or '-id' to disable one that is on by default. */
-  builtins?: string[] | null | undefined;
-  /** Whether the agent's skills are offered to the model. Absent means yes. When false the prompt catalogue and the 'skill_*' tools go away, so the model is not told about them and cannot invoke them — but their files stay mounted in the workspace ('workspace.skills_path', default '/skills'), where a model with filesystem tools can still read them. */
-  enabled?: boolean | null | undefined;
-  /** Skills defined directly in this configuration, keyed by skill name. Skills created through other means are left untouched. */
-  items?: Record<string, PublicCloudAiAgentsSkillSeed> | null | undefined;
-}
-
-/** Telegram integration settings. Unset means Telegram is not connected. */
-export interface PublicCloudAiAgentsTelegramChannelConfig {
-  /** Bot token issued by Telegram's BotFather. Kept secret and never returned in plain text once set. */
-  botToken?: string | null | undefined;
-  /** Master switch for the Telegram integration. When false, this channel is unavailable to the agent. */
-  enabled?: boolean | null | undefined;
-  /** Shared secret used to verify that incoming Telegram messages genuinely come from Telegram. Leaving it empty disables this verification, which is not recommended. */
-  webhookSecret?: string | null | undefined;
-}
-
-/** An AI agent configuration template */
-export interface PublicCloudAiAgentsTemplate {
-  /**
-   * Date of the template creation
-   *
-   * Read-only: the API sets it.
-   *
-   * An ISO 8601 date-time string.
-   */
-  createdAt?: string | undefined;
-  /**
-   * Unique identifier of the template
-   *
-   * Read-only: the API sets it.
-   */
-  id?: string | undefined;
-  /**
-   * Reflects the readiness of the template: READY, or DELETING on the response to its deletion
-   *
-   * Read-only: the API sets it.
-   */
-  resourceStatus?: CommonResourceStatusEnum | undefined;
-  /**
-   * Distinguishes built-in (code-defined) from user-authored templates
-   *
-   * Read-only: the API sets it.
-   */
-  source?: PublicCloudAiAgentsTemplateSourceEnum | undefined;
-  /**
-   * Desired specification to replace the template with
-   *
-   * Read-only: the API sets it.
-   */
-  targetSpec?: PublicCloudAiAgentsTemplateTargetSpec | undefined;
-  /**
-   * Date of the last template update
-   *
-   * Read-only: the API sets it.
-   *
-   * An ISO 8601 date-time string.
-   */
-  updatedAt?: string | undefined;
-}
-
-/** Input parameters for creating an AI agent template */
-export interface PublicCloudAiAgentsTemplateCreation {
-  /** Desired specification of the template to create */
-  targetSpec: PublicCloudAiAgentsTemplateCreationTargetSpec;
-}
-
-/** Desired specification of the template to create */
-export interface PublicCloudAiAgentsTemplateCreationTargetSpec {
-  /** Templated AI agent configuration */
-  config: PublicCloudAiAgentsConfig;
-  /** Optional human-readable description */
-  description?: string | null | undefined;
-  /** Name of the template, unique within the namespace */
-  name: string;
-}
-
-/** One ready-made AI agent configuration OVHcloud publishes, offered alongside the templates a caller writes for themselves. Its identifier is what a creation names to build an agent from it, and carries a reserved prefix that distinguishes it from a caller's own template. */
-export interface PublicCloudAiAgentsTemplatePreset {
-  /**
-   * Whether an agent created from this preset uses the OVHcloud AI Endpoints provider preset
-   *
-   * Read-only: the API sets it.
-   */
-  aiEndpoints?: boolean | null | undefined;
-  /**
-   * Whether the AI Endpoints credential is minted by this service rather than supplied by the caller
-   *
-   * Read-only: the API sets it.
-   */
-  aiEndpointsIntegratedAuth?: boolean | null | undefined;
-  /**
-   * What this preset is for. Empty when the deployment states none.
-   *
-   * Read-only: the API sets it.
-   */
-  description?: string | null | undefined;
-  /**
-   * Identifier to pass as targetSpec.template.id when creating an agent from this preset
-   *
-   * Read-only: the API sets it.
-   */
-  id?: string | undefined;
-  /**
-   * Human-readable name of the preset
-   *
-   * Read-only: the API sets it.
-   */
-  name?: string | undefined;
-}
-
-/** Origin of an AI agent template */
-export const PublicCloudAiAgentsTemplateSourceEnum = {
-  BUILTIN: "BUILTIN",
-  USER: "USER",
-} as const;
-/**
- * Origin of an AI agent template
- *
- * Open: a value the SDK does not know yet is valid too.
- */
-export type PublicCloudAiAgentsTemplateSourceEnum =
-  | (typeof PublicCloudAiAgentsTemplateSourceEnum)[keyof typeof PublicCloudAiAgentsTemplateSourceEnum]
-  | (string & {});
-
-/** Desired specification to replace the template with */
-export interface PublicCloudAiAgentsTemplateTargetSpec {
-  /** Templated AI agent configuration */
-  config?: PublicCloudAiAgentsConfig | null | undefined;
-  /** Optional human-readable description */
-  description?: string | null | undefined;
-  /** Name of the template */
-  name: string;
-}
-
-/** Input for AI agent template update */
-export interface PublicCloudAiAgentsTemplateUpdate {
-  /** Desired specification to replace the template with */
-  targetSpec: PublicCloudAiAgentsTemplateTargetSpec;
-}
-
-/** Rules applied to every tool call, matched on its name, arguments and what triggered the turn: before the call runs and — for a rule that says so — on what it returned. A matching rule allows the call, refuses it, asks a human, or defers to an LLM reviewer. */
-export interface PublicCloudAiAgentsToolPermissionsConfig {
-  /** The LLM reviewer that rules with 'action: judge' defer to. */
-  judge?: PublicCloudAiAgentsJudgeConfig | null | undefined;
-  /** Permission rules, evaluated in order within a phase; the LAST one that matches decides. */
-  rules?: PublicCloudAiAgentsPermissionRule[] | null | undefined;
-}
-
-/** Webex integration settings. Unset means Webex is not connected. */
-export interface PublicCloudAiAgentsWebexChannelConfig {
-  /** Bot access token issued by Webex. Kept secret and never returned in plain text once set. */
-  accessToken?: string | null | undefined;
-  /** Master switch for the Webex integration. When false, this channel is unavailable to the agent. */
-  enabled?: boolean | null | undefined;
-  /** Shared secret used to verify that incoming Webex messages genuinely come from Webex. Leaving it empty skips this verification. */
-  webhookSecret?: string | null | undefined;
-}
-
-/** The agent's file storage: an ordered list of mount points and the backend serving each one */
-export interface PublicCloudAiAgentsWorkspace {
-  /** Path where the read-only view of delegated sub-personas is mounted. Defaults to `/agents`. */
-  agentsPath?: string | null | undefined;
-  /** Ordered list of storage mount points available to the agent */
-  mount?: PublicCloudAiAgentsMountConfig[] | null | undefined;
-  /** Temporary per-conversation working files the agent can generate, download into, and re-read across turns, cleaned up automatically after a retention period. When omitted, on with defaults. */
-  scratchpad?: PublicCloudAiAgentsScratchpadConfig | null | undefined;
-  /** Path where the read-only view of the agent's skills is mounted. Defaults to `/skills`. */
-  skillsPath?: string | null | undefined;
-  /** Optional shared scratch storage mount, also reachable from any remote command-execution session tied to this agent */
-  zerofs?: PublicCloudAiAgentsZerofsConfig | null | undefined;
-}
-
-/** Optional shared scratch storage mount, also reachable from any remote command-execution session tied to this agent */
-export interface PublicCloudAiAgentsZerofsConfig {
-  /** Whether this mount is active. When omitted, automatically on whenever remote command execution is configured. Set to false to disable it explicitly. */
-  enabled?: boolean | null | undefined;
-  /** Absolute path where this mount appears in the agent's filesystem. Defaults to `/wrk`. */
-  mountPath?: string | null | undefined;
-}
 
 /** A Public Cloud block storage backup */
 export interface PublicCloudBlockStorageBackup {
@@ -3042,6 +2375,58 @@ export interface PublicCloudBlockStorageBackup {
   updatedAt?: string | undefined;
 }
 
+/** Availability of a single backup action for the current backup state */
+export interface PublicCloudBlockStorageBackupCapability {
+  /**
+   * Whether the action can currently be performed
+   *
+   * Read-only: the API sets it.
+   */
+  enabled?: boolean | undefined;
+  /**
+   * Action the capability refers to
+   *
+   * Read-only: the API sets it.
+   */
+  name?: PublicCloudBlockStorageBackupCapabilityNameEnum | undefined;
+  /**
+   * Why the action is disabled. Null when `enabled` is true.
+   *
+   * Read-only: the API sets it.
+   */
+  reason?: PublicCloudBlockStorageBackupCapabilityReasonEnum | null | undefined;
+}
+
+/** Backup actions exposed through capabilities */
+export const PublicCloudBlockStorageBackupCapabilityNameEnum = {
+  CREATE_VOLUME: "CREATE_VOLUME",
+  DELETE: "DELETE",
+  RENAME: "RENAME",
+  RESTORE_TO_VOLUME: "RESTORE_TO_VOLUME",
+} as const;
+/**
+ * Backup actions exposed through capabilities
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageBackupCapabilityNameEnum =
+  | (typeof PublicCloudBlockStorageBackupCapabilityNameEnum)[keyof typeof PublicCloudBlockStorageBackupCapabilityNameEnum]
+  | (string & {});
+
+/** Reason a backup action is currently disabled */
+export const PublicCloudBlockStorageBackupCapabilityReasonEnum = {
+  HAS_DEPENDENT_BACKUPS: "HAS_DEPENDENT_BACKUPS",
+  INVALID_STATUS: "INVALID_STATUS",
+} as const;
+/**
+ * Reason a backup action is currently disabled
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageBackupCapabilityReasonEnum =
+  | (typeof PublicCloudBlockStorageBackupCapabilityReasonEnum)[keyof typeof PublicCloudBlockStorageBackupCapabilityReasonEnum]
+  | (string & {});
+
 /** Payload to create a Public Cloud block storage backup */
 export interface PublicCloudBlockStorageBackupCreation {
   /** Desired target specification for the backup */
@@ -3051,11 +2436,23 @@ export interface PublicCloudBlockStorageBackupCreation {
 /** Current state of a block storage backup as observed from the infrastructure */
 export interface PublicCloudBlockStorageBackupCurrentState {
   /**
+   * Per-action availability for the current backup state
+   *
+   * Read-only: the API sets it.
+   */
+  capabilities?: PublicCloudBlockStorageBackupCapability[] | undefined;
+  /**
    * Backup description
    *
    * Read-only: the API sets it.
    */
   description?: string | null | undefined;
+  /**
+   * Encryption of the source volume at backup time. Null when `volumeType` is null and the backup records no customer key, or when the backup cannot be read.
+   *
+   * Read-only: the API sets it.
+   */
+  encryption?: PublicCloudBlockStorageBlockEncryption | null | undefined;
   /**
    * Current location
    *
@@ -3075,12 +2472,45 @@ export interface PublicCloudBlockStorageBackupCurrentState {
    */
   size?: number | undefined;
   /**
+   * Backup status on the infrastructure
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudBlockStorageBackupStatusEnum | undefined;
+  /**
    * Identifier of the source volume
    *
    * Read-only: the API sets it.
    */
   volumeId?: string | undefined;
+  /**
+   * Volume type of the source volume at backup time. Null when the backup did not record it, when the type has no API value, or when the backup cannot be read.
+   *
+   * Read-only: the API sets it.
+   */
+  volumeType?: PublicCloudBlockStorageVolumeTypeEnum | null | undefined;
 }
+
+/** Possible statuses for a block storage backup */
+export const PublicCloudBlockStorageBackupStatusEnum = {
+  AVAILABLE: "AVAILABLE",
+  CREATING: "CREATING",
+  DELETED: "DELETED",
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  ERROR_DELETING: "ERROR_DELETING",
+  ERROR_RESTORING: "ERROR_RESTORING",
+  RESTORING: "RESTORING",
+  UNMANAGING: "UNMANAGING",
+} as const;
+/**
+ * Possible statuses for a block storage backup
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageBackupStatusEnum =
+  | (typeof PublicCloudBlockStorageBackupStatusEnum)[keyof typeof PublicCloudBlockStorageBackupStatusEnum]
+  | (string & {});
 
 /** Target specification for a block storage backup */
 export interface PublicCloudBlockStorageBackupTargetSpec {
@@ -3192,6 +2622,28 @@ export interface PublicCloudBlockStorageBlockAttachedInstance {
   id?: string | undefined;
 }
 
+/** Availability of a single volume action for the current volume state */
+export interface PublicCloudBlockStorageBlockCapability {
+  /**
+   * Whether the action can currently be performed
+   *
+   * Read-only: the API sets it.
+   */
+  enabled?: boolean | undefined;
+  /**
+   * Action the capability refers to
+   *
+   * Read-only: the API sets it.
+   */
+  name?: PublicCloudBlockStorageVolumeCapabilityNameEnum | undefined;
+  /**
+   * Why the action is disabled. Present only when enabled is false.
+   *
+   * Read-only: the API sets it.
+   */
+  reason?: PublicCloudBlockStorageVolumeCapabilityReasonEnum | null | undefined;
+}
+
 /** Optional source to create a block storage volume from (backup, snapshot, or image). Only one source may be specified. */
 export interface PublicCloudBlockStorageBlockCreateFrom {
   /** UUID of a backup to restore from. `volumeType` and `encryption` may be specified explicitly. When omitted, they are inferred from the source volume when known. */
@@ -3222,6 +2674,12 @@ export interface PublicCloudBlockStorageBlockCurrentState {
    * Read-only: the API sets it.
    */
   bootable?: boolean | undefined;
+  /**
+   * Per-action availability for the current volume state. Null in the response to an update of the volume.
+   *
+   * Read-only: the API sets it.
+   */
+  capabilities?: PublicCloudBlockStorageBlockCapability[] | null | undefined;
   /**
    * Volume description
    *
@@ -3386,6 +2844,56 @@ export interface PublicCloudBlockStorageSnapshot {
   updatedAt?: string | undefined;
 }
 
+/** Availability of a single snapshot action for the current snapshot state */
+export interface PublicCloudBlockStorageSnapshotCapability {
+  /**
+   * Whether the action can currently be performed
+   *
+   * Read-only: the API sets it.
+   */
+  enabled?: boolean | undefined;
+  /**
+   * Action the capability refers to
+   *
+   * Read-only: the API sets it.
+   */
+  name?: PublicCloudBlockStorageSnapshotCapabilityNameEnum | undefined;
+  /**
+   * Why the action is disabled. Null when `enabled` is true.
+   *
+   * Read-only: the API sets it.
+   */
+  reason?: PublicCloudBlockStorageSnapshotCapabilityReasonEnum | null | undefined;
+}
+
+/** Snapshot actions exposed through capabilities */
+export const PublicCloudBlockStorageSnapshotCapabilityNameEnum = {
+  CREATE_VOLUME: "CREATE_VOLUME",
+  DELETE: "DELETE",
+  RENAME: "RENAME",
+} as const;
+/**
+ * Snapshot actions exposed through capabilities
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageSnapshotCapabilityNameEnum =
+  | (typeof PublicCloudBlockStorageSnapshotCapabilityNameEnum)[keyof typeof PublicCloudBlockStorageSnapshotCapabilityNameEnum]
+  | (string & {});
+
+/** Reason a snapshot action is currently disabled */
+export const PublicCloudBlockStorageSnapshotCapabilityReasonEnum = {
+  INVALID_STATUS: "INVALID_STATUS",
+} as const;
+/**
+ * Reason a snapshot action is currently disabled
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageSnapshotCapabilityReasonEnum =
+  | (typeof PublicCloudBlockStorageSnapshotCapabilityReasonEnum)[keyof typeof PublicCloudBlockStorageSnapshotCapabilityReasonEnum]
+  | (string & {});
+
 /** Payload to create a Public Cloud block storage volume snapshot */
 export interface PublicCloudBlockStorageSnapshotCreation {
   /** Desired target specification for the snapshot */
@@ -3394,6 +2902,12 @@ export interface PublicCloudBlockStorageSnapshotCreation {
 
 /** Current state of a block storage volume snapshot as observed from the infrastructure */
 export interface PublicCloudBlockStorageSnapshotCurrentState {
+  /**
+   * Per-action availability for the current snapshot state
+   *
+   * Read-only: the API sets it.
+   */
+  capabilities?: PublicCloudBlockStorageSnapshotCapability[] | undefined;
   /**
    * Snapshot description
    *
@@ -3425,7 +2939,7 @@ export interface PublicCloudBlockStorageSnapshotCurrentState {
    */
   status?: PublicCloudBlockStorageSnapshotStatusEnum | undefined;
   /**
-   * ID of the volume this snapshot was created from
+   * Identifier of the source volume
    *
    * Read-only: the API sets it.
    */
@@ -3495,6 +3009,44 @@ export type PublicCloudBlockStorageVolumeActionTypeEnum =
   | (typeof PublicCloudBlockStorageVolumeActionTypeEnum)[keyof typeof PublicCloudBlockStorageVolumeActionTypeEnum]
   | (string & {});
 
+/** Volume actions exposed through capabilities */
+export const PublicCloudBlockStorageVolumeCapabilityNameEnum = {
+  ATTACH: "ATTACH",
+  CREATE_BACKUP: "CREATE_BACKUP",
+  CREATE_SNAPSHOT: "CREATE_SNAPSHOT",
+  DELETE: "DELETE",
+  DETACH: "DETACH",
+  EXTEND: "EXTEND",
+  RENAME: "RENAME",
+  RETYPE: "RETYPE",
+} as const;
+/**
+ * Volume actions exposed through capabilities
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageVolumeCapabilityNameEnum =
+  | (typeof PublicCloudBlockStorageVolumeCapabilityNameEnum)[keyof typeof PublicCloudBlockStorageVolumeCapabilityNameEnum]
+  | (string & {});
+
+/** Reason a volume action is currently disabled */
+export const PublicCloudBlockStorageVolumeCapabilityReasonEnum = {
+  ATTACH_LIMIT_REACHED: "ATTACH_LIMIT_REACHED",
+  HAS_DEPENDENT_SNAPSHOTS: "HAS_DEPENDENT_SNAPSHOTS",
+  INVALID_STATUS: "INVALID_STATUS",
+  NEEDS_DETACH: "NEEDS_DETACH",
+  NOT_ATTACHED: "NOT_ATTACHED",
+  UNSUPPORTED_VOLUME_TYPE: "UNSUPPORTED_VOLUME_TYPE",
+} as const;
+/**
+ * Reason a volume action is currently disabled
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudBlockStorageVolumeCapabilityReasonEnum =
+  | (typeof PublicCloudBlockStorageVolumeCapabilityReasonEnum)[keyof typeof PublicCloudBlockStorageVolumeCapabilityReasonEnum]
+  | (string & {});
+
 /** Possible statuses for a block storage volume */
 export const PublicCloudBlockStorageVolumeStatusEnum = {
   ATTACHING: "ATTACHING",
@@ -3548,6 +3100,3949 @@ export interface PublicCloudCommonLocation {
   availabilityZone?: string | null | undefined;
   /** Region code */
   region: string;
+}
+
+/** IP authorization configuration of a managed database service. When at least one rule is defined, only traffic from matching CIDR ranges is allowed. */
+export interface PublicCloudDatabaseAuthorizedIPs {
+  /** Authorization entries. An empty list removes all restrictions, allowing access from any IP. */
+  rules?: PublicCloudDatabaseAuthorizedIPsRule[] | undefined;
+}
+
+/** IP authorization configuration of a managed database service, given in full. When at least one rule is defined, only traffic from matching CIDR ranges is allowed. */
+export interface PublicCloudDatabaseAuthorizedIPsReplace {
+  /** Authorization entries. An empty list removes all restrictions, allowing access from any IP. */
+  rules: PublicCloudDatabaseAuthorizedIPsRuleReplace[];
+}
+
+/** An authorization entry granting a CIDR range access to a managed database service */
+export interface PublicCloudDatabaseAuthorizedIPsRule {
+  /** CIDR range allowed to connect to the service, for example 203.0.113.0/24. Use 0.0.0.0/0 to allow all IPs. */
+  cidr: IPBlock;
+  /**
+   * Date at which this rule was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /** Human-readable label for this rule */
+  description?: string | null | undefined;
+}
+
+/** An authorization entry granting a CIDR range access to a managed database service */
+export interface PublicCloudDatabaseAuthorizedIPsRuleReplace {
+  /** CIDR range allowed to connect to the service, for example 203.0.113.0/24. Use 0.0.0.0/0 to allow all IPs. */
+  cidr: IPBlock;
+  /** Human-readable label for this rule. Null for a rule without a label. */
+  description: string | null;
+}
+
+/** {@link PublicCloudDatabaseAuthorizedIPsRule} without its read-only fields, which the API sets: the form a request body takes. */
+export interface PublicCloudDatabaseAuthorizedIPsRuleWritable {
+  /** CIDR range allowed to connect to the service, for example 203.0.113.0/24. Use 0.0.0.0/0 to allow all IPs. */
+  cidr: IPBlock;
+  /** Human-readable label for this rule */
+  description?: string | null | undefined;
+}
+
+/** {@link PublicCloudDatabaseAuthorizedIPs} without its read-only fields, which the API sets: the form a request body takes. */
+export interface PublicCloudDatabaseAuthorizedIPsWritable {
+  /** Authorization entries. An empty list removes all restrictions, allowing access from any IP. */
+  rules?: PublicCloudDatabaseAuthorizedIPsRuleWritable[] | undefined;
+}
+
+/** Availability of a database engine configuration */
+export interface PublicCloudDatabaseAvailability {
+  /**
+   * Backup strategy for this availability
+   *
+   * Read-only: the API sets it.
+   */
+  backups?: PublicCloudDatabaseAvailabilityBackups | undefined;
+  /**
+   * Category of the engine (database or analytics)
+   *
+   * Read-only: the API sets it.
+   */
+  category?: PublicCloudDatabaseCategoryEnum | undefined;
+  /**
+   * Whether this availability can be used by default
+   *
+   * Read-only: the API sets it.
+   */
+  default?: boolean | undefined;
+  /**
+   * Database engine name
+   *
+   * Read-only: the API sets it.
+   */
+  engine?: PublicCloudDatabaseEngineEnum | undefined;
+  /**
+   * Lifecycle information
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Plan name
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: string | undefined;
+  /**
+   * Billing plan code
+   *
+   * Read-only: the API sets it.
+   */
+  planCode?: string | undefined;
+  /**
+   * Billing plan code for storage
+   *
+   * Read-only: the API sets it.
+   */
+  planCodeStorage?: string | null | undefined;
+  /**
+   * Region name
+   *
+   * Read-only: the API sets it.
+   */
+  region?: CommonRegionEnum | undefined;
+  /**
+   * Technical specifications
+   *
+   * Read-only: the API sets it.
+   */
+  specifications?: PublicCloudDatabaseAvailabilitySpecifications | undefined;
+  /**
+   * Version name
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** A backup of a managed database service */
+export interface PublicCloudDatabaseBackup {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the backup was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Human-readable description of the backup
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | null | undefined;
+  /**
+   * Date until point-in-time recovery is available from this backup
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expiredAt?: string | null | undefined;
+  /**
+   * Unique identifier of the backup
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Regions where this backup is stored
+   *
+   * Read-only: the API sets it.
+   */
+  regions?: CommonRegionEnum[] | undefined;
+  /**
+   * Identifier of the service this backup belongs to
+   *
+   * Read-only: the API sets it.
+   */
+  serviceId?: string | undefined;
+  /**
+   * Size of the backup
+   *
+   * Read-only: the API sets it.
+   */
+  size?: PublicCloudDatabaseUnitAndValue | undefined;
+  /**
+   * Current readiness status of the backup
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseBackupStatusEnum | undefined;
+  /**
+   * Type of this backup
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseBackupTypeEnum | undefined;
+}
+
+/** Current backup configuration of a managed database service */
+export interface PublicCloudDatabaseBackupCurrentState {
+  /**
+   * Date until which point-in-time recovery is available for this service
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  pitr?: string | null | undefined;
+  /**
+   * Regions where backups of this service are stored
+   *
+   * Read-only: the API sets it.
+   */
+  regions?: CommonRegionEnum[] | null | undefined;
+  /**
+   * Number of days backups are retained for this service
+   *
+   * Read-only: the API sets it.
+   */
+  retentionDays?: number | null | undefined;
+  /**
+   * Time of day at which automatic backups are scheduled, in HH:MM UTC format
+   *
+   * Read-only: the API sets it.
+   */
+  time?: string | null | undefined;
+}
+
+/** Backup configuration for a managed database service, given in full */
+export interface PublicCloudDatabaseBackupReplaceSpec {
+  /** Regions where backups should be stored. Supported values depend on the engine and plan. Null for engines that do not support cross-region backups. */
+  regions: CommonRegionEnum[] | null;
+  /** Preferred time of day for automatic backups, in HH:MM UTC format */
+  time: string;
+}
+
+/** Backup configuration for a managed database service */
+export interface PublicCloudDatabaseBackupSpec {
+  /** Regions where backups should be stored. Supported values depend on the engine and plan. */
+  regions?: CommonRegionEnum[] | null | undefined;
+  /** Preferred time of day for automatic backups, in HH:MM UTC format */
+  time?: string | null | undefined;
+}
+
+/** Readiness status of a managed database backup */
+export const PublicCloudDatabaseBackupStatusEnum = {
+  CREATING: "CREATING",
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  READY: "READY",
+} as const;
+/**
+ * Readiness status of a managed database backup
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseBackupStatusEnum =
+  | (typeof PublicCloudDatabaseBackupStatusEnum)[keyof typeof PublicCloudDatabaseBackupStatusEnum]
+  | (string & {});
+
+/** Type of a managed database backup */
+export const PublicCloudDatabaseBackupTypeEnum = {
+  AUTOMATIC: "AUTOMATIC",
+  MANUAL: "MANUAL",
+  NONE: "NONE",
+  PITR: "PITR",
+  SNAPSHOT: "SNAPSHOT",
+} as const;
+/**
+ * Type of a managed database backup
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseBackupTypeEnum =
+  | (typeof PublicCloudDatabaseBackupTypeEnum)[keyof typeof PublicCloudDatabaseBackupTypeEnum]
+  | (string & {});
+
+/** Database Category of the managed database and analytics service */
+export const PublicCloudDatabaseCategoryEnum = {
+  ANALYTICS: "ANALYTICS",
+  DATABASE: "DATABASE",
+} as const;
+/**
+ * Database Category of the managed database and analytics service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCategoryEnum =
+  | (typeof PublicCloudDatabaseCategoryEnum)[keyof typeof PublicCloudDatabaseCategoryEnum]
+  | (string & {});
+
+/** TLS certificates for a managed database service */
+export interface PublicCloudDatabaseCertificates {
+  /**
+   * CA certificate in PEM format used to verify the service connection
+   *
+   * Read-only: the API sets it.
+   */
+  ca?: string | undefined;
+}
+
+/** A currently running query on a managed database service */
+export interface PublicCloudDatabaseCurrentQuery {
+  /**
+   * Name of the application that initiated the query
+   *
+   * Read-only: the API sets it.
+   */
+  applicationName?: string | null | undefined;
+  /**
+   * Timestamp when the backend process started
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  backendStartedAt?: string | null | undefined;
+  /**
+   * IP address of the client
+   *
+   * Read-only: the API sets it.
+   */
+  clientIp?: IP | null | undefined;
+  /**
+   * Port of the client connection
+   *
+   * Read-only: the API sets it.
+   */
+  clientPort?: number | null | undefined;
+  /**
+   * Name of the database the query is running on
+   *
+   * Read-only: the API sets it.
+   */
+  databaseName?: string | undefined;
+  /**
+   * Process ID of the connection
+   *
+   * Read-only: the API sets it.
+   */
+  pid?: number | undefined;
+  /**
+   * SQL text of the currently running query
+   *
+   * Read-only: the API sets it.
+   */
+  query?: string | undefined;
+  /**
+   * Duration of the query in seconds
+   *
+   * Read-only: the API sets it.
+   */
+  queryDuration?: number | undefined;
+  /**
+   * Timestamp when the query started
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  queryStartedAt?: string | null | undefined;
+  /**
+   * Current state of the connection
+   *
+   * Read-only: the API sets it.
+   */
+  state?: PublicCloudDatabaseCurrentQueryStateEnum | undefined;
+  /**
+   * Name of the user running the query
+   *
+   * Read-only: the API sets it.
+   */
+  userName?: string | undefined;
+  /**
+   * Name of the wait event the connection is waiting on, if any
+   *
+   * Read-only: the API sets it.
+   */
+  waitEvent?: string | null | undefined;
+  /**
+   * Type of wait event the connection is waiting on, if any
+   *
+   * Read-only: the API sets it.
+   */
+  waitEventType?: PublicCloudDatabaseCurrentQueryWaitEventTypeEnum | null | undefined;
+}
+
+/** Possible states of a currently running query */
+export const PublicCloudDatabaseCurrentQueryStateEnum = {
+  ACTIVE: "ACTIVE",
+  DISABLED: "DISABLED",
+  FASTPATH_FUNCTION_CALL: "FASTPATH_FUNCTION_CALL",
+  IDLE: "IDLE",
+  IDLE_IN_TRANSACTION: "IDLE_IN_TRANSACTION",
+  IDLE_IN_TRANSACTION_ABORTED: "IDLE_IN_TRANSACTION_ABORTED",
+} as const;
+/**
+ * Possible states of a currently running query
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCurrentQueryStateEnum =
+  | (typeof PublicCloudDatabaseCurrentQueryStateEnum)[keyof typeof PublicCloudDatabaseCurrentQueryStateEnum]
+  | (string & {});
+
+/** Possible event types on which a database connection backend is waiting */
+export const PublicCloudDatabaseCurrentQueryWaitEventTypeEnum = {
+  ACTIVITY: "ACTIVITY",
+  BUFFER_PIN: "BUFFER_PIN",
+  CLIENT: "CLIENT",
+  EXTENSION: "EXTENSION",
+  IO: "IO",
+  IPC: "IPC",
+  LOCK: "LOCK",
+  LWLOCK: "LWLOCK",
+  TIMEOUT: "TIMEOUT",
+} as const;
+/**
+ * Possible event types on which a database connection backend is waiting
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCurrentQueryWaitEventTypeEnum =
+  | (typeof PublicCloudDatabaseCurrentQueryWaitEventTypeEnum)[keyof typeof PublicCloudDatabaseCurrentQueryWaitEventTypeEnum]
+  | (string & {});
+
+/** A single metric data point */
+export interface PublicCloudDatabaseDataPoint {
+  /**
+   * Timestamp in seconds since epoch
+   *
+   * Read-only: the API sets it.
+   */
+  timestamp?: number | undefined;
+  /**
+   * Value of the data point
+   *
+   * Read-only: the API sets it.
+   */
+  value?: number | undefined;
+}
+
+/** A logical database on a managed database service */
+export interface PublicCloudDatabaseDatabase {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Whether this is the engine default database created automatically at provisioning time
+   *
+   * Read-only: the API sets it.
+   */
+  default?: boolean | undefined;
+  /**
+   * Unique identifier of the database
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Name of the database
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Input parameters for creating a logical database on a managed database service */
+export interface PublicCloudDatabaseDatabaseCreation {
+  /** Name of the database to create */
+  name: string;
+}
+
+/** Connection endpoint exposed by a managed database service */
+export interface PublicCloudDatabaseEndpoint {
+  /**
+   * Component accessible through this endpoint
+   *
+   * Read-only: the API sets it.
+   */
+  component?: PublicCloudDatabaseEndpointComponentEnum | undefined;
+  /**
+   * Fully qualified domain name of the endpoint
+   *
+   * Read-only: the API sets it.
+   */
+  domain?: string | undefined;
+  /**
+   * URL path appended to the domain when applicable
+   *
+   * Read-only: the API sets it.
+   */
+  path?: string | null | undefined;
+  /**
+   * TCP port of the endpoint
+   *
+   * Read-only: the API sets it.
+   */
+  port?: number | null | undefined;
+  /**
+   * True on the endpoints that use the public domain name of the service, false on the private ones. Null for an engine or a service that does not support public exposure.
+   *
+   * Read-only: the API sets it.
+   */
+  public?: boolean | null | undefined;
+  /**
+   * URI scheme of the endpoint, for example kafka, postgresql, https
+   *
+   * Read-only: the API sets it.
+   */
+  scheme?: string | null | undefined;
+  /**
+   * Whether TLS is enabled on this endpoint
+   *
+   * Read-only: the API sets it.
+   */
+  ssl?: boolean | undefined;
+  /**
+   * TLS verification mode of the endpoint
+   *
+   * Read-only: the API sets it.
+   */
+  sslMode?: PublicCloudDatabaseSSLModeEnum | null | undefined;
+  /**
+   * Full connection URI combining scheme, domain, port, and path
+   *
+   * Read-only: the API sets it.
+   */
+  uri?: string | null | undefined;
+}
+
+/** Component exposed by a connection endpoint of a managed database service */
+export const PublicCloudDatabaseEndpointComponentEnum = {
+  CLICKHOUSE: "CLICKHOUSE",
+  GRAFANA: "GRAFANA",
+  KAFKA: "KAFKA",
+  KAFKA_CONNECT: "KAFKA_CONNECT",
+  KAFKA_REST: "KAFKA_REST",
+  KAFKA_SCHEMA_REGISTRY: "KAFKA_SCHEMA_REGISTRY",
+  MONGODB: "MONGODB",
+  MYSQL: "MYSQL",
+  OPENSEARCH: "OPENSEARCH",
+  OPENSEARCH_DASHBOARDS: "OPENSEARCH_DASHBOARDS",
+  POSTGRESQL: "POSTGRESQL",
+  VALKEY: "VALKEY",
+} as const;
+/**
+ * Component exposed by a connection endpoint of a managed database service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseEndpointComponentEnum =
+  | (typeof PublicCloudDatabaseEndpointComponentEnum)[keyof typeof PublicCloudDatabaseEndpointComponentEnum]
+  | (string & {});
+
+/** Capability definition for a specific database engine */
+export interface PublicCloudDatabaseEngineCapability {
+  /**
+   * Category of the engine (database or analytics)
+   *
+   * Read-only: the API sets it.
+   */
+  category?: PublicCloudDatabaseCategoryEnum | undefined;
+  /**
+   * Version used when no version is specified at service creation
+   *
+   * Read-only: the API sets it.
+   */
+  defaultVersion?: string | undefined;
+  /**
+   * Human-readable description of the engine
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Lifecycle information of the engine
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Engine name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Display order
+   *
+   * Read-only: the API sets it.
+   */
+  order?: number | undefined;
+  /**
+   * Supported TLS modes for connections
+   *
+   * Read-only: the API sets it.
+   */
+  sslModes?: string[] | undefined;
+  /**
+   * Storage strategy of the engine
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: PublicCloudDatabaseCapabilitiesEngineStorageStrategyEnum | undefined;
+  /**
+   * Display tags
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: string[] | null | undefined;
+  /**
+   * Versions available for this engine
+   *
+   * Read-only: the API sets it.
+   */
+  versions?: PublicCloudDatabaseEngineVersion[] | undefined;
+}
+
+/** Database engine type of the managed database service */
+export const PublicCloudDatabaseEngineEnum = {
+  CLICKHOUSE: "CLICKHOUSE",
+  GRAFANA: "GRAFANA",
+  KAFKA: "KAFKA",
+  KAFKA_CONNECT: "KAFKA_CONNECT",
+  KAFKA_MIRROR_MAKER: "KAFKA_MIRROR_MAKER",
+  MONGODB: "MONGODB",
+  MYSQL: "MYSQL",
+  OPENSEARCH: "OPENSEARCH",
+  POSTGRESQL: "POSTGRESQL",
+  VALKEY: "VALKEY",
+} as const;
+/**
+ * Database engine type of the managed database service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseEngineEnum =
+  | (typeof PublicCloudDatabaseEngineEnum)[keyof typeof PublicCloudDatabaseEngineEnum]
+  | (string & {});
+
+/** A version available for a database engine */
+export interface PublicCloudDatabaseEngineVersion {
+  /**
+   * Whether this is the default version for the engine
+   *
+   * Read-only: the API sets it.
+   */
+  default?: boolean | undefined;
+  /**
+   * Lifecycle information of the version
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Version name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Display tags
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: string[] | null | undefined;
+}
+
+/** Metric datapoints from a specific host */
+export interface PublicCloudDatabaseHostMetric {
+  /**
+   * List of metric samples
+   *
+   * Read-only: the API sets it.
+   */
+  dataPoints?: PublicCloudDatabaseDataPoint[] | undefined;
+  /**
+   * Name of the originating host
+   *
+   * Read-only: the API sets it.
+   */
+  hostname?: string | undefined;
+}
+
+/** An integration linking two managed database services */
+export interface PublicCloudDatabaseIntegration {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Identifier of the destination service. Null for external integrations.
+   *
+   * Read-only: the API sets it.
+   */
+  destinationServiceId?: string | null | undefined;
+  /**
+   * Unique identifier of the integration
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Engine-specific configuration parameters for the integration
+   *
+   * Read-only: the API sets it.
+   */
+  parameters?: Record<string, string> | null | undefined;
+  /**
+   * Identifier of the source service
+   *
+   * Read-only: the API sets it.
+   */
+  sourceServiceId?: string | undefined;
+  /**
+   * Current readiness status of the integration
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseIntegrationStatusEnum | undefined;
+  /**
+   * Type of the integration
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseIntegrationTypeEnum | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Input parameters for creating an integration between managed database services */
+export interface PublicCloudDatabaseIntegrationCreation {
+  /** Identifier of the destination service. Compatible source and destination engine pairs can be retrieved from the capabilities endpoint. */
+  destinationServiceId: string;
+  /** Engine-specific configuration parameters for the integration */
+  parameters?: Record<string, string> | null | undefined;
+  /** Identifier of the source service */
+  sourceServiceId: string;
+  /** Type of the integration */
+  type: PublicCloudDatabaseIntegrationTypeEnum;
+}
+
+/** Readiness status of a managed database integration */
+export const PublicCloudDatabaseIntegrationStatusEnum = {
+  CREATING: "CREATING",
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  READY: "READY",
+  UPDATING: "UPDATING",
+} as const;
+/**
+ * Readiness status of a managed database integration
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseIntegrationStatusEnum =
+  | (typeof PublicCloudDatabaseIntegrationStatusEnum)[keyof typeof PublicCloudDatabaseIntegrationStatusEnum]
+  | (string & {});
+
+/** Type of integration between two managed database services */
+export const PublicCloudDatabaseIntegrationTypeEnum = {
+  GRAFANA_DASHBOARD: "GRAFANA_DASHBOARD",
+  GRAFANA_DATASOURCE: "GRAFANA_DATASOURCE",
+  KAFKA_CONNECT: "KAFKA_CONNECT",
+  KAFKA_LOGS: "KAFKA_LOGS",
+  KAFKA_MIRROR_MAKER: "KAFKA_MIRROR_MAKER",
+  OPENSEARCH_LOGS: "OPENSEARCH_LOGS",
+  POSTGRESQL_METRICS: "POSTGRESQL_METRICS",
+  PROMETHEUS: "PROMETHEUS",
+  RSYSLOG: "RSYSLOG",
+} as const;
+/**
+ * Type of integration between two managed database services
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseIntegrationTypeEnum =
+  | (typeof PublicCloudDatabaseIntegrationTypeEnum)[keyof typeof PublicCloudDatabaseIntegrationTypeEnum]
+  | (string & {});
+
+/** Kind of logs forwarded for the managed database and analytics service */
+export const PublicCloudDatabaseKindEnum = {
+  CUSTOMER_LOGS: "CUSTOMER_LOGS",
+} as const;
+/**
+ * Kind of logs forwarded for the managed database and analytics service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKindEnum =
+  | (typeof PublicCloudDatabaseKindEnum)[keyof typeof PublicCloudDatabaseKindEnum]
+  | (string & {});
+
+/** Current maintenance window configuration of a managed database service */
+export interface PublicCloudDatabaseMaintenanceCurrentState {
+  /**
+   * Preferred start time for maintenance windows, in HH:MM UTC format
+   *
+   * Read-only: the API sets it.
+   */
+  startTimeUtc?: string | null | undefined;
+}
+
+/** Desired maintenance window configuration for a managed database service, given in full */
+export interface PublicCloudDatabaseMaintenanceReplaceSpec {
+  /** Preferred start time for maintenance windows, in HH:MM UTC format */
+  startTimeUtc: string;
+}
+
+/** Desired maintenance window configuration for a managed database service */
+export interface PublicCloudDatabaseMaintenanceSpec {
+  /** Preferred start time for maintenance windows, in HH:MM UTC format */
+  startTimeUtc?: string | null | undefined;
+}
+
+/** Status of a scheduled maintenance window */
+export const PublicCloudDatabaseMaintenanceStatusEnum = {
+  APPLIED: "APPLIED",
+  APPLYING: "APPLYING",
+  ERROR: "ERROR",
+  SCHEDULED: "SCHEDULED",
+} as const;
+/**
+ * Status of a scheduled maintenance window
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseMaintenanceStatusEnum =
+  | (typeof PublicCloudDatabaseMaintenanceStatusEnum)[keyof typeof PublicCloudDatabaseMaintenanceStatusEnum]
+  | (string & {});
+
+/** A scheduled maintenance window for a managed database service */
+export interface PublicCloudDatabaseMaintenanceWindow {
+  /**
+   * Date and time at which the maintenance was applied. Null when not yet applied.
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  appliedAt?: string | null | undefined;
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Human-readable description of the maintenance operations to be performed
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Unique identifier of the maintenance window
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Date and time at which the maintenance window is scheduled to start
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  scheduledAt?: string | undefined;
+  /**
+   * Current status of the maintenance window
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseMaintenanceStatusEnum | undefined;
+}
+
+/** Metric data for a managed database service */
+export interface PublicCloudDatabaseMetric {
+  /**
+   * Metric values for each host in the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  metrics?: PublicCloudDatabaseHostMetric[] | undefined;
+  /**
+   * Name of the metric
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Unit of the metric values
+   *
+   * Read-only: the API sets it.
+   */
+  unit?: PublicCloudDatabaseMetricUnitEnum | undefined;
+}
+
+/** Supported time periods for metric queries */
+export const PublicCloudDatabaseMetricPeriodEnum = {
+  LAST_DAY: "LAST_DAY",
+  LAST_HOUR: "LAST_HOUR",
+  LAST_MONTH: "LAST_MONTH",
+  LAST_WEEK: "LAST_WEEK",
+  LAST_YEAR: "LAST_YEAR",
+} as const;
+/**
+ * Supported time periods for metric queries
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseMetricPeriodEnum =
+  | (typeof PublicCloudDatabaseMetricPeriodEnum)[keyof typeof PublicCloudDatabaseMetricPeriodEnum]
+  | (string & {});
+
+/** Unit types for metric values */
+export const PublicCloudDatabaseMetricUnitEnum = {
+  BYTES: "BYTES",
+  BYTES_PER_SECOND: "BYTES_PER_SECOND",
+  GIGABYTES: "GIGABYTES",
+  GIGABYTES_PER_HOUR: "GIGABYTES_PER_HOUR",
+  MEGABYTES: "MEGABYTES",
+  MEGABYTES_PER_SECOND: "MEGABYTES_PER_SECOND",
+  MILLISECONDS: "MILLISECONDS",
+  PERCENT: "PERCENT",
+  SCALAR: "SCALAR",
+  SCALAR_PER_SECOND: "SCALAR_PER_SECOND",
+  SECONDS: "SECONDS",
+  UNKNOWN: "UNKNOWN",
+} as const;
+/**
+ * Unit types for metric values
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseMetricUnitEnum =
+  | (typeof PublicCloudDatabaseMetricUnitEnum)[keyof typeof PublicCloudDatabaseMetricUnitEnum]
+  | (string & {});
+
+/** Current network configuration of a managed database service */
+export interface PublicCloudDatabaseNetworkCurrentState {
+  /**
+   * Current IP authorization configuration of the service
+   *
+   * Read-only: the API sets it.
+   */
+  authorizedIps?: PublicCloudDatabaseAuthorizedIPs | null | undefined;
+  /**
+   * Private network identifier this service is attached to
+   *
+   * Read-only: the API sets it.
+   */
+  networkId?: string | null | undefined;
+  /**
+   * True while the service is published on a public address, false while it is not. Null for an engine or a service that does not support public exposure.
+   *
+   * Read-only: the API sets it.
+   */
+  public?: boolean | null | undefined;
+  /**
+   * Subnet identifier within the private network
+   *
+   * Read-only: the API sets it.
+   */
+  subnetId?: string | null | undefined;
+}
+
+/** Network type of the managed database service */
+export const PublicCloudDatabaseNetworkEnum = {
+  PRIVATE: "PRIVATE",
+  PUBLIC: "PUBLIC",
+} as const;
+/**
+ * Network type of the managed database service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseNetworkEnum =
+  | (typeof PublicCloudDatabaseNetworkEnum)[keyof typeof PublicCloudDatabaseNetworkEnum]
+  | (string & {});
+
+/** Replaceable network configuration for a managed database service. Network and subnet identifiers are immutable after creation. Public exposure is not part of it: a replacement keeps it as it is, and a partial update changes it. */
+export interface PublicCloudDatabaseNetworkReplaceSpec {
+  /** IP authorization configuration to apply to the service */
+  authorizedIps: PublicCloudDatabaseAuthorizedIPsReplace;
+}
+
+/** Network configuration for a managed database service. Without the read-only fields, which the API sets. */
+export interface PublicCloudDatabaseNetworkSpecWritable {
+  /** IP authorization configuration to apply to the service */
+  authorizedIps?: PublicCloudDatabaseAuthorizedIPsWritable | null | undefined;
+  /** Private network identifier to attach the service to. Immutable after creation. */
+  networkId?: string | null | undefined;
+  /** Set to true to publish the service on a public address once it is created: a public IP address in front of the service, and a public domain name with TLS. The authorized IPs apply to the public address as they do to the private one. Null or absent keeps the service private. Engines and services that do not support public exposure ignore this field. */
+  public?: boolean | null | undefined;
+  /** Subnet identifier within the private network. Immutable after creation. */
+  subnetId?: string | null | undefined;
+}
+
+/** Updatable network configuration for a managed database service. Network and subnet identifiers are immutable after creation. */
+export interface PublicCloudDatabaseNetworkUpdateSpec {
+  /** IP authorization configuration to apply to the service */
+  authorizedIps?: PublicCloudDatabaseAuthorizedIPs | null | undefined;
+  /** Set to true to publish the service on a public address: a public IP address in front of the service, and a public domain name with TLS. Set to false to take it off that address. The authorized IPs apply to the public address as they do to the private one. Null or absent keeps the current exposure. Engines and services that do not support public exposure ignore this field. */
+  public?: boolean | null | undefined;
+}
+
+/** {@link PublicCloudDatabaseNetworkUpdateSpec} without its read-only fields, which the API sets: the form a request body takes. */
+export interface PublicCloudDatabaseNetworkUpdateSpecWritable {
+  /** IP authorization configuration to apply to the service */
+  authorizedIps?: PublicCloudDatabaseAuthorizedIPsWritable | null | undefined;
+  /** Set to true to publish the service on a public address: a public IP address in front of the service, and a public domain name with TLS. Set to false to take it off that address. The authorized IPs apply to the public address as they do to the private one. Null or absent keeps the current exposure. Engines and services that do not support public exposure ignore this field. */
+  public?: boolean | null | undefined;
+}
+
+/** A cluster node belonging to a managed database service */
+export interface PublicCloudDatabaseNode {
+  /**
+   * Date at which the node was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Compute flavor of the node
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | undefined;
+  /**
+   * Unique identifier of the node
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Location of this node
+   *
+   * Read-only: the API sets it.
+   */
+  location?: PublicCloudCommonLocation | undefined;
+  /**
+   * Name of the node
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * TCP port on which the node listens
+   *
+   * Read-only: the API sets it.
+   */
+  port?: number | undefined;
+  /**
+   * Role of this node within the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  role?: PublicCloudDatabaseNodeRoleEnum | null | undefined;
+  /**
+   * Current readiness status of the node
+   *
+   * Read-only: the API sets it.
+   */
+  status?: CommonResourceStatusEnum | undefined;
+}
+
+/** Role of a node within a managed database service cluster */
+export const PublicCloudDatabaseNodeRoleEnum = {
+  ANALYTICS: "ANALYTICS",
+  PRIMARY: "PRIMARY",
+  SECONDARY: "SECONDARY",
+  STANDBY: "STANDBY",
+} as const;
+/**
+ * Role of a node within a managed database service cluster
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseNodeRoleEnum =
+  | (typeof PublicCloudDatabaseNodeRoleEnum)[keyof typeof PublicCloudDatabaseNodeRoleEnum]
+  | (string & {});
+
+/** Prometheus credentials returned after a credential reset */
+export interface PublicCloudDatabasePrometheusAccess {
+  /**
+   * Password for Prometheus authentication
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | undefined;
+  /**
+   * Username for Prometheus authentication
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Prometheus scraping endpoint for a managed database service */
+export interface PublicCloudDatabasePrometheusEndpoint {
+  /**
+   * Scraping targets
+   *
+   * Read-only: the API sets it.
+   */
+  targets?: PublicCloudDatabasePrometheusTarget[] | undefined;
+  /**
+   * Username for Prometheus authentication
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** A Prometheus scraping target */
+export interface PublicCloudDatabasePrometheusTarget {
+  /**
+   * Hostname of the target
+   *
+   * Read-only: the API sets it.
+   */
+  host?: string | undefined;
+  /**
+   * Port of the target
+   *
+   * Read-only: the API sets it.
+   */
+  port?: number | undefined;
+}
+
+/** Request to cancel a running query */
+export interface PublicCloudDatabaseQueryCancelRequest {
+  /** Whether to forcefully terminate the query instead of gracefully canceling it */
+  terminate?: boolean | null | undefined;
+}
+
+/** Result of a query cancellation request */
+export interface PublicCloudDatabaseQueryCancelResult {
+  /**
+   * Whether the query was successfully canceled
+   *
+   * Read-only: the API sets it.
+   */
+  success?: boolean | undefined;
+}
+
+/** Statistics for a single query pattern on a managed database service */
+export interface PublicCloudDatabaseQueryStatistic {
+  /**
+   * Number of times this query pattern has been executed
+   *
+   * Read-only: the API sets it.
+   */
+  calls?: number | undefined;
+  /**
+   * Name of the database
+   *
+   * Read-only: the API sets it.
+   */
+  databaseName?: string | null | undefined;
+  /**
+   * Digest hash of the normalized query
+   *
+   * Read-only: the API sets it.
+   */
+  digest?: string | undefined;
+  /**
+   * Timestamp of the first execution
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  firstSeen?: string | null | undefined;
+  /**
+   * Timestamp of the most recent execution
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastSeen?: string | null | undefined;
+  /**
+   * Maximum execution time in milliseconds
+   *
+   * Read-only: the API sets it.
+   */
+  maxTime?: number | undefined;
+  /**
+   * Mean execution time in milliseconds
+   *
+   * Read-only: the API sets it.
+   */
+  meanTime?: number | undefined;
+  /**
+   * Minimum execution time in milliseconds
+   *
+   * Read-only: the API sets it.
+   */
+  minTime?: number | undefined;
+  /**
+   * Representative SQL text of the query pattern
+   *
+   * Read-only: the API sets it.
+   */
+  query?: string | undefined;
+  /**
+   * Total number of rows retrieved or affected
+   *
+   * Read-only: the API sets it.
+   */
+  rows?: number | null | undefined;
+  /**
+   * Total cumulative execution time in milliseconds
+   *
+   * Read-only: the API sets it.
+   */
+  totalTime?: number | undefined;
+  /**
+   * Name of the user who executed the query
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | null | undefined;
+}
+
+/** Request to restore a backup */
+export interface PublicCloudDatabaseRestoreRequest {
+  /**
+   * Point in time to restore to. When null, the backup is restored as-is.
+   *
+   * An ISO 8601 date-time string.
+   */
+  pointInTime?: string | null | undefined;
+}
+
+/** A role that can be assigned to users on a managed database service */
+export interface PublicCloudDatabaseRole {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the role
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Name of the role
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** SSL mode of the connection pool of the managed database and analytics service */
+export const PublicCloudDatabaseSSLModeEnum = {
+  REQUIRE: "REQUIRE",
+} as const;
+/**
+ * SSL mode of the connection pool of the managed database and analytics service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseSSLModeEnum =
+  | (typeof PublicCloudDatabaseSSLModeEnum)[keyof typeof PublicCloudDatabaseSSLModeEnum]
+  | (string & {});
+
+/** A managed database service */
+export interface PublicCloudDatabaseService {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the service was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Current configuration deployed on the service
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: PublicCloudDatabaseServiceCurrentState | undefined;
+  /**
+   * Asynchronous operations currently running on the service
+   *
+   * Read-only: the API sets it.
+   */
+  currentTasks?: CommonCurrentTask[] | null | undefined;
+  /**
+   * Unique identifier of the service
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Readiness status of the service. A new target specification is accepted only in READY status.
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: CommonResourceStatusEnum | undefined;
+  /**
+   * Last requested target specification for the service
+   *
+   * Read-only: the API sets it.
+   */
+  targetSpec?: PublicCloudDatabaseServiceTargetSpec | undefined;
+  /**
+   * Date of the last update to the service
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Desired state of a managed database service at creation time. Extends the update target specification with immutable creation-time fields. Without the read-only fields, which the API sets. */
+export interface PublicCloudDatabaseServiceCreationTargetSpecWritable {
+  /** Backup configuration for the new service */
+  backup?: PublicCloudDatabaseBackupSpec | null | undefined;
+  /** Whether to protect this service from accidental deletion. Defaults to false. */
+  deletionProtected?: boolean | null | undefined;
+  /** Human-readable description of the service */
+  description?: string | null | undefined;
+  /** Compute flavor for the nodes of the cluster. All the nodes of a cluster share the same flavor. Available flavors can be retrieved from the capabilities endpoint. */
+  flavor: string;
+  /** Identifier of the backup to restore from when forking. Mutually exclusive with forkSourcePointInTime. When both are null and forkSourceServiceId is set, the latest backup is used. */
+  forkSourceBackupId?: string | null | undefined;
+  /**
+   * Point-in-time to restore from when forking. Mutually exclusive with forkSourceBackupId. Requires the source service to have PITR enabled.
+   *
+   * An ISO 8601 date-time string.
+   */
+  forkSourcePointInTime?: string | null | undefined;
+  /** Identifier of an existing service to fork from. When set, the new service is created from a backup of the source service. */
+  forkSourceServiceId?: string | null | undefined;
+  /** Maintenance window configuration for the service */
+  maintenanceWindow?: PublicCloudDatabaseMaintenanceSpec | null | undefined;
+  /** Network configuration for the new service */
+  network?: PublicCloudDatabaseNetworkSpecWritable | null | undefined;
+  /** Number of nodes composing the cluster. When null, the minimum node count of the plan is applied. The accepted range for a given plan is exposed as specifications.nodes.minimum and specifications.nodes.maximum on the availability endpoint. */
+  nodesCount?: number | null | undefined;
+  /** Service plan. Available plans can be retrieved from the capabilities endpoint. */
+  plan: string;
+  /** Whether to enable Prometheus monitoring on this service */
+  prometheusEnabled?: boolean | null | undefined;
+  /** Region in which the nodes of the cluster are deployed. All the nodes of a cluster share the same region. Immutable after creation. Available regions can be retrieved from the availability endpoint. */
+  region: CommonRegionEnum;
+  /** Storage configuration for the service. Applies only to engines using block storage. */
+  storage?: PublicCloudDatabaseStorageWritable | null | undefined;
+  /** Engine version to deploy on the cluster. Available versions can be retrieved from the capabilities endpoint. */
+  version: string;
+}
+
+/** Input parameters for creating a managed database service. Without the read-only fields, which the API sets. */
+export interface PublicCloudDatabaseServiceCreationWritable {
+  /** Desired configuration of the new service */
+  targetSpec: PublicCloudDatabaseServiceCreationTargetSpecWritable;
+}
+
+/** Current state of a managed database service as deployed by the system */
+export interface PublicCloudDatabaseServiceCurrentState {
+  /**
+   * Current advanced configuration key-value pairs. Null for engines that do not support advanced configuration.
+   *
+   * Read-only: the API sets it.
+   */
+  advancedConfiguration?: Record<string, string> | null | undefined;
+  /**
+   * Current backup configuration of the service
+   *
+   * Read-only: the API sets it.
+   */
+  backup?: PublicCloudDatabaseBackupCurrentState | null | undefined;
+  /**
+   * Map of capabilities available for this service, keyed by capability name. Each entry describes which CRUD actions are enabled or disabled.
+   *
+   * Read-only: the API sets it.
+   */
+  capabilities?: Record<string, PublicCloudDatabaseServiceCapabilityActions> | undefined;
+  /**
+   * Whether deletion of this service is protected. A protected service cannot be deleted until this flag is set to false.
+   *
+   * Read-only: the API sets it.
+   */
+  deletionProtected?: boolean | undefined;
+  /**
+   * Human-readable description of the service
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | null | undefined;
+  /**
+   * Connection endpoints exposed by this service
+   *
+   * Read-only: the API sets it.
+   */
+  endpoints?: PublicCloudDatabaseEndpoint[] | undefined;
+  /**
+   * Engine-specific capabilities of this service
+   *
+   * Read-only: the API sets it.
+   */
+  engineCapabilities?: PublicCloudDatabaseServiceEngineCapabilities | null | undefined;
+  /**
+   * Compute flavor used by the nodes of this service. Null when flavor is determined by the plan.
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | null | undefined;
+  /**
+   * Current maintenance window configuration of the service
+   *
+   * Read-only: the API sets it.
+   */
+  maintenanceWindow?: PublicCloudDatabaseMaintenanceCurrentState | null | undefined;
+  /**
+   * Current network configuration of the service
+   *
+   * Read-only: the API sets it.
+   */
+  network?: PublicCloudDatabaseNetworkCurrentState | null | undefined;
+  /**
+   * Nodes composing this service cluster
+   *
+   * Read-only: the API sets it.
+   */
+  nodes?: PublicCloudDatabaseNode[] | undefined;
+  /**
+   * Number of nodes currently composing the cluster. While the cluster is being created or scaled, this reflects the number of nodes requested rather than the number already deployed in nodes.
+   *
+   * Read-only: the API sets it.
+   */
+  nodesCount?: number | undefined;
+  /**
+   * Service plan currently applied
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: string | undefined;
+  /**
+   * Whether Prometheus monitoring is enabled on this service
+   *
+   * Read-only: the API sets it.
+   */
+  prometheusEnabled?: boolean | null | undefined;
+  /**
+   * Operational status of the service as reported by the database engine
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseServiceStatusEnum | undefined;
+  /**
+   * Storage configuration of the service. Null for engines that do not use block storage.
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: PublicCloudDatabaseStorage | null | undefined;
+  /**
+   * Engine version currently running
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** Engine-specific capabilities of a managed database or analytics service */
+export interface PublicCloudDatabaseServiceEngineCapabilities {
+  /**
+   * Available advanced configuration properties and their constraints. Null for engines that do not support advanced configuration.
+   *
+   * Read-only: the API sets it.
+   */
+  advancedConfigurationProperties?:
+    | PublicCloudDatabaseCapabilitiesAdvancedConfigurationProperty[]
+    | null
+    | undefined;
+  /**
+   * Available regions for backup storage. Null for engines that do not support cross-region backups.
+   *
+   * Read-only: the API sets it.
+   */
+  backupRegions?: string[] | null | undefined;
+  /**
+   * Available command categories. Only applicable to Valkey services.
+   *
+   * Read-only: the API sets it.
+   */
+  categories?: string[] | null | undefined;
+  /**
+   * Available commands. Only applicable to Valkey services.
+   *
+   * Read-only: the API sets it.
+   */
+  commands?: string[] | null | undefined;
+  /**
+   * Available connector types. Only applicable to Kafka Connect services.
+   *
+   * Read-only: the API sets it.
+   */
+  connectors?: PublicCloudDatabaseKafkaConnectCapabilitiesConnectorCapability[] | null | undefined;
+  /**
+   * Available integration types and their parameters
+   *
+   * Read-only: the API sets it.
+   */
+  integrations?: PublicCloudDatabaseCapabilitiesIntegrationCapability[] | null | undefined;
+}
+
+/** Input parameters for replacing the configuration of a managed database service. Every field is required: the request describes the whole desired configuration. */
+export interface PublicCloudDatabaseServiceReplace {
+  /** Desired configuration of the service */
+  targetSpec: PublicCloudDatabaseServiceReplaceTargetSpec;
+}
+
+/** Desired state of a managed database service, given in full. Changes are applied asynchronously. */
+export interface PublicCloudDatabaseServiceReplaceTargetSpec {
+  /** Advanced configuration key-value pairs to apply to the service. Null for engines that do not support advanced configuration. */
+  advancedConfiguration: Record<string, string> | null;
+  /** Backup configuration for the service. Null for engines that do not support backups. */
+  backup: PublicCloudDatabaseBackupReplaceSpec | null;
+  /** Whether to protect this service from accidental deletion */
+  deletionProtected: boolean;
+  /** Human-readable description of the service. Null removes the description. */
+  description: string | null;
+  /** Desired compute flavor for the nodes. Available flavors can be retrieved from the capabilities endpoint. */
+  flavor: string;
+  /** Maintenance window configuration for the service */
+  maintenanceWindow: PublicCloudDatabaseMaintenanceReplaceSpec;
+  /** Updatable network configuration for the service. Only IP restrictions can be modified after creation. */
+  network: PublicCloudDatabaseNetworkReplaceSpec;
+  /** Desired number of nodes composing the cluster. Increasing or decreasing this value scales the cluster. The value must stay within the range accepted by the plan, exposed as specifications.nodes.minimum and specifications.nodes.maximum on the availability endpoint. */
+  nodesCount: number;
+  /** Desired service plan. Available plans can be retrieved from the capabilities endpoint. */
+  plan: string;
+  /** Whether to enable Prometheus monitoring on this service. Null for engines that do not expose a Prometheus endpoint. */
+  prometheusEnabled: boolean | null;
+  /** Updatable storage configuration. Only size can be modified after creation. Null for engines that do not use block storage. */
+  storage: PublicCloudDatabaseStorageReplaceSpec | null;
+  /** Desired engine version. Available versions can be retrieved from the capabilities endpoint. */
+  version: string;
+}
+
+/** Desired state of a managed database service. Changes are applied asynchronously. */
+export interface PublicCloudDatabaseServiceTargetSpec {
+  /**
+   * Advanced configuration key-value pairs requested for the service. Null for engines that do not support advanced configuration.
+   *
+   * Read-only: the API sets it.
+   */
+  advancedConfiguration?: Record<string, string> | null | undefined;
+  /**
+   * Requested backup configuration for the service
+   *
+   * Read-only: the API sets it.
+   */
+  backup?: PublicCloudDatabaseBackupSpec | null | undefined;
+  /**
+   * Whether deletion protection is requested on this service
+   *
+   * Read-only: the API sets it.
+   */
+  deletionProtected?: boolean | null | undefined;
+  /**
+   * Human-readable description of the service
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | null | undefined;
+  /**
+   * Requested compute flavor for the nodes
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | null | undefined;
+  /**
+   * Requested maintenance window configuration for the service
+   *
+   * Read-only: the API sets it.
+   */
+  maintenanceWindow?: PublicCloudDatabaseMaintenanceSpec | null | undefined;
+  /**
+   * Requested network configuration for the service. Only IP restrictions can change after creation.
+   *
+   * Read-only: the API sets it.
+   */
+  network?: PublicCloudDatabaseNetworkUpdateSpec | null | undefined;
+  /**
+   * Requested number of nodes composing the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  nodesCount?: number | null | undefined;
+  /**
+   * Requested service plan
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: string | null | undefined;
+  /**
+   * Whether Prometheus monitoring is requested on this service. Null for engines that do not expose a Prometheus endpoint.
+   *
+   * Read-only: the API sets it.
+   */
+  prometheusEnabled?: boolean | null | undefined;
+  /**
+   * Requested storage configuration. Only size can change after creation. Null for engines that do not use block storage.
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: PublicCloudDatabaseStorageUpdateSpec | null | undefined;
+  /**
+   * Requested engine version
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | null | undefined;
+}
+
+/** Changes to apply to a managed database service. Fields left out keep their current value. Changes are applied asynchronously. Without the read-only fields, which the API sets. */
+export interface PublicCloudDatabaseServiceUpdateTargetSpecWritable {
+  /** Advanced configuration key-value pairs to apply to the service. Null for engines that do not support advanced configuration. */
+  advancedConfiguration?: Record<string, string> | null | undefined;
+  /** Backup configuration for the service */
+  backup?: PublicCloudDatabaseBackupSpec | null | undefined;
+  /** Whether to protect this service from accidental deletion. Omit or set to null to leave the current setting unchanged. */
+  deletionProtected?: boolean | null | undefined;
+  /** Human-readable description of the service */
+  description?: string | null | undefined;
+  /** Desired compute flavor for the nodes. Available flavors can be retrieved from the capabilities endpoint. */
+  flavor?: string | null | undefined;
+  /** Maintenance window configuration for the service */
+  maintenanceWindow?: PublicCloudDatabaseMaintenanceSpec | null | undefined;
+  /** Updatable network configuration for the service. Only IP restrictions can be modified after creation. */
+  network?: PublicCloudDatabaseNetworkUpdateSpecWritable | null | undefined;
+  /** Desired number of nodes composing the cluster. Increasing or decreasing this value scales the cluster. The value must stay within the range accepted by the plan, exposed as specifications.nodes.minimum and specifications.nodes.maximum on the availability endpoint. */
+  nodesCount?: number | null | undefined;
+  /** Desired service plan. Available plans can be retrieved from the capabilities endpoint. */
+  plan?: string | null | undefined;
+  /** Whether to enable Prometheus monitoring on this service. Null for engines that do not expose a Prometheus endpoint. */
+  prometheusEnabled?: boolean | null | undefined;
+  /** Updatable storage configuration. Only size can be modified after creation. Null for engines that do not use block storage. */
+  storage?: PublicCloudDatabaseStorageUpdateSpec | null | undefined;
+  /** Desired engine version. Available versions can be retrieved from the capabilities endpoint. */
+  version?: string | null | undefined;
+}
+
+/** Input parameters for updating a managed database service. Without the read-only fields, which the API sets. */
+export interface PublicCloudDatabaseServiceUpdateWritable {
+  /** Desired configuration of the service */
+  targetSpec: PublicCloudDatabaseServiceUpdateTargetSpecWritable;
+}
+
+/** Storage configuration of a managed database service */
+export interface PublicCloudDatabaseStorage {
+  /** Storage size allocated to the service */
+  size?: PublicCloudDatabaseUnitAndValue | null | undefined;
+  /**
+   * Type of storage used by the service. Immutable after creation.
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseStorageTypeEnum | null | undefined;
+}
+
+/** Replaceable storage configuration for a managed database service. Storage type is immutable after creation. */
+export interface PublicCloudDatabaseStorageReplaceSpec {
+  /** Storage size allocated to the service */
+  size: PublicCloudDatabaseUnitAndValueReplace;
+}
+
+/** Type of storage used by a managed database service */
+export const PublicCloudDatabaseStorageTypeEnum = {
+  HIGH_SPEED: "HIGH_SPEED",
+  HIGH_SPEED_GEN2: "HIGH_SPEED_GEN2",
+} as const;
+/**
+ * Type of storage used by a managed database service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseStorageTypeEnum =
+  | (typeof PublicCloudDatabaseStorageTypeEnum)[keyof typeof PublicCloudDatabaseStorageTypeEnum]
+  | (string & {});
+
+/** Unit for storage size values */
+export const PublicCloudDatabaseStorageUnitEnum = {
+  GB: "GB",
+  MB: "MB",
+} as const;
+/**
+ * Unit for storage size values
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseStorageUnitEnum =
+  | (typeof PublicCloudDatabaseStorageUnitEnum)[keyof typeof PublicCloudDatabaseStorageUnitEnum]
+  | (string & {});
+
+/** Updatable storage configuration for a managed database service. Storage type is immutable after creation. */
+export interface PublicCloudDatabaseStorageUpdateSpec {
+  /** Storage size allocated to the service */
+  size?: PublicCloudDatabaseUnitAndValue | null | undefined;
+}
+
+/** {@link PublicCloudDatabaseStorage} without its read-only fields, which the API sets: the form a request body takes. */
+export interface PublicCloudDatabaseStorageWritable {
+  /** Storage size allocated to the service */
+  size?: PublicCloudDatabaseUnitAndValue | null | undefined;
+}
+
+/** Temporary write permission deadline */
+export interface PublicCloudDatabaseTemporaryWriteDeadline {
+  /**
+   * Date and time when the temporary write permissions will be revoked
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expiresAt?: string | undefined;
+}
+
+/** A numeric size value with its associated unit */
+export interface PublicCloudDatabaseUnitAndValue {
+  /** Unit of the value */
+  unit?: PublicCloudDatabaseStorageUnitEnum | undefined;
+  /** Numeric value */
+  value?: number | undefined;
+}
+
+/** A numeric size value with its associated unit */
+export interface PublicCloudDatabaseUnitAndValueReplace {
+  /** Unit of the value */
+  unit: PublicCloudDatabaseStorageUnitEnum;
+  /** Numeric value */
+  value: number;
+}
+
+/** A user account on a managed database or analytics service */
+export interface PublicCloudDatabaseUser {
+  /**
+   * Whether this is the service administrator, the user created automatically at provisioning time, which cannot be deleted
+   *
+   * Read-only: the API sets it.
+   */
+  admin?: boolean | undefined;
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the user was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Date at which the user credentials were last updated
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /**
+   * Unique identifier of the user
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Password of the user. Returned only on creation or password reset.
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | null | undefined;
+  /**
+   * Current readiness status of the user
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseUserStatusEnum | undefined;
+  /**
+   * Login name of the user
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Input parameters for creating a user on a managed database or analytics service */
+export interface PublicCloudDatabaseUserCreation {
+  /** Login name of the new user */
+  name: string;
+}
+
+/** Input parameters for resetting the credentials of a user on a managed database or analytics service */
+export interface PublicCloudDatabaseUserCredentialsUpdate {
+  /**
+   * Date at which the user credentials were last updated. Setting this field triggers a credential reset and returns the new password.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt: string;
+}
+
+/** Input parameters for replacing a user on a managed service whose users are assigned roles. Every field is required: the request describes the whole user. */
+export interface PublicCloudDatabaseUserReplace {
+  /** List of roles to assign to the user. Available roles depend on the engine. */
+  roles: string[];
+}
+
+/** Readiness status of a managed database user */
+export const PublicCloudDatabaseUserStatusEnum = {
+  CREATING: "CREATING",
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  READY: "READY",
+  UPDATING: "UPDATING",
+} as const;
+/**
+ * Readiness status of a managed database user
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseUserStatusEnum =
+  | (typeof PublicCloudDatabaseUserStatusEnum)[keyof typeof PublicCloudDatabaseUserStatusEnum]
+  | (string & {});
+
+/** Input parameters for updating a user on a managed service whose users are assigned roles */
+export interface PublicCloudDatabaseUserUpdate {
+  /**
+   * Date at which the user credentials were last updated. Setting this field triggers a credential reset and returns the new password.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /** List of roles to assign to the user. Available roles depend on the engine. */
+  roles?: string[] | null | undefined;
+}
+
+/** A user account on a managed service whose users are assigned roles */
+export interface PublicCloudDatabaseUserWithRoles {
+  /**
+   * Whether this is the service administrator, the user created automatically at provisioning time, which cannot be deleted
+   *
+   * Read-only: the API sets it.
+   */
+  admin?: boolean | undefined;
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the user was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Date at which the user credentials were last updated
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /**
+   * Unique identifier of the user
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Password of the user. Returned only on creation or password reset.
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | null | undefined;
+  /**
+   * List of roles assigned to the user. Available roles depend on the engine.
+   *
+   * Read-only: the API sets it.
+   */
+  roles?: string[] | undefined;
+  /**
+   * Current readiness status of the user
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseUserStatusEnum | undefined;
+  /**
+   * Login name of the user
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Input parameters for creating a user on a managed service whose users are assigned roles */
+export interface PublicCloudDatabaseUserWithRolesCreation {
+  /** Login name of the new user */
+  name: string;
+  /** List of roles to assign to the user. Available roles depend on the engine. */
+  roles?: string[] | null | undefined;
+}
+
+/** Action type to filter availabilities */
+export const PublicCloudDatabaseAvailabilityActionEnum = {
+  FORK: "FORK",
+  READ: "READ",
+  UPDATE: "UPDATE",
+} as const;
+/**
+ * Action type to filter availabilities
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseAvailabilityActionEnum =
+  | (typeof PublicCloudDatabaseAvailabilityActionEnum)[keyof typeof PublicCloudDatabaseAvailabilityActionEnum]
+  | (string & {});
+
+/** Backup availability for a database engine offer */
+export interface PublicCloudDatabaseAvailabilityBackups {
+  /**
+   * Whether backups are available for this offer
+   *
+   * Read-only: the API sets it.
+   */
+  available?: boolean | undefined;
+  /**
+   * Number of retention days for the backups
+   *
+   * Read-only: the API sets it.
+   */
+  retentionDays?: number | null | undefined;
+}
+
+/** Lifecycle information for an availability */
+export interface PublicCloudDatabaseAvailabilityLifecycle {
+  /**
+   * End of life date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  endOfLifeAt?: string | null | undefined;
+  /**
+   * End of sale date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  endOfSaleAt?: string | null | undefined;
+  /**
+   * Release date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  startedAt?: string | undefined;
+  /**
+   * Current status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseAvailabilityStatusEnum | undefined;
+}
+
+/** Technical specifications of an availability */
+export interface PublicCloudDatabaseAvailabilitySpecifications {
+  /**
+   * Flavor name
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | undefined;
+  /**
+   * Type of network (public or private)
+   *
+   * Read-only: the API sets it.
+   */
+  network?: PublicCloudDatabaseNetworkEnum | undefined;
+  /**
+   * Node count specifications
+   *
+   * Read-only: the API sets it.
+   */
+  nodes?: PublicCloudDatabaseAvailabilitySpecificationsNodes | undefined;
+  /**
+   * Storage specifications
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: PublicCloudDatabaseAvailabilitySpecificationsStorage | null | undefined;
+}
+
+/** Status of an availability */
+export const PublicCloudDatabaseAvailabilityStatusEnum = {
+  BETA: "BETA",
+  DEPRECATED: "DEPRECATED",
+  END_OF_LIFE: "END_OF_LIFE",
+  END_OF_SALE: "END_OF_SALE",
+  STABLE: "STABLE",
+  UNAVAILABLE: "UNAVAILABLE",
+} as const;
+/**
+ * Status of an availability
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseAvailabilityStatusEnum =
+  | (typeof PublicCloudDatabaseAvailabilityStatusEnum)[keyof typeof PublicCloudDatabaseAvailabilityStatusEnum]
+  | (string & {});
+
+/** Suggested availability for a database engine */
+export interface PublicCloudDatabaseAvailabilitySuggestion {
+  /**
+   * Whether this suggestion is the default
+   *
+   * Read-only: the API sets it.
+   */
+  default?: boolean | undefined;
+  /**
+   * Engine name
+   *
+   * Read-only: the API sets it.
+   */
+  engine?: PublicCloudDatabaseEngineEnum | undefined;
+  /**
+   * Flavor name
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | undefined;
+  /**
+   * Plan name
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: string | undefined;
+  /**
+   * Region name
+   *
+   * Read-only: the API sets it.
+   */
+  region?: CommonRegionEnum | undefined;
+  /**
+   * Version name
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** Target type to filter availabilities */
+export const PublicCloudDatabaseAvailabilityTargetEnum = {
+  FLAVOR: "FLAVOR",
+  PLAN: "PLAN",
+  SELF: "SELF",
+  VERSION: "VERSION",
+} as const;
+/**
+ * Target type to filter availabilities
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseAvailabilityTargetEnum =
+  | (typeof PublicCloudDatabaseAvailabilityTargetEnum)[keyof typeof PublicCloudDatabaseAvailabilityTargetEnum]
+  | (string & {});
+
+/** Node count specifications for an availability */
+export interface PublicCloudDatabaseAvailabilitySpecificationsNodes {
+  /**
+   * Maximum number of nodes
+   *
+   * Read-only: the API sets it.
+   */
+  maximum?: number | undefined;
+  /**
+   * Minimum number of nodes
+   *
+   * Read-only: the API sets it.
+   */
+  minimum?: number | undefined;
+}
+
+/** Storage specifications for an availability */
+export interface PublicCloudDatabaseAvailabilitySpecificationsStorage {
+  /**
+   * Maximum storage size
+   *
+   * Read-only: the API sets it.
+   */
+  maximum?: PublicCloudDatabaseUnitAndValue | undefined;
+  /**
+   * Minimum storage size
+   *
+   * Read-only: the API sets it.
+   */
+  minimum?: PublicCloudDatabaseUnitAndValue | undefined;
+  /**
+   * Storage increment step between minimum and maximum
+   *
+   * Read-only: the API sets it.
+   */
+  step?: PublicCloudDatabaseUnitAndValue | null | undefined;
+}
+
+/** Description of an advanced configuration property that can be set on a service */
+export interface PublicCloudDatabaseCapabilitiesAdvancedConfigurationProperty {
+  /**
+   * Default value of the property. Null when the engine does not provide one.
+   *
+   * Read-only: the API sets it.
+   */
+  default?: string | null | undefined;
+  /**
+   * Description of the property
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Maximum value if numeric and applicable
+   *
+   * Read-only: the API sets it.
+   */
+  maximum?: number | null | undefined;
+  /**
+   * Minimum value if numeric and applicable
+   *
+   * Read-only: the API sets it.
+   */
+  minimum?: number | null | undefined;
+  /**
+   * Property name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Whether changing the property restarts the service. Null when the service does not report it.
+   *
+   * Read-only: the API sets it.
+   */
+  requiresRestart?: boolean | null | undefined;
+  /**
+   * Data type of the property
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseCapabilitiesAdvancedConfigurationPropertyTypeEnum | undefined;
+  /**
+   * Possible values if string type and applicable
+   *
+   * Read-only: the API sets it.
+   */
+  values?: string[] | null | undefined;
+}
+
+/** Data type of an advanced configuration property */
+export const PublicCloudDatabaseCapabilitiesAdvancedConfigurationPropertyTypeEnum = {
+  BOOLEAN: "BOOLEAN",
+  DOUBLE: "DOUBLE",
+  LONG: "LONG",
+  STRING: "STRING",
+} as const;
+/**
+ * Data type of an advanced configuration property
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCapabilitiesAdvancedConfigurationPropertyTypeEnum =
+  | (typeof PublicCloudDatabaseCapabilitiesAdvancedConfigurationPropertyTypeEnum)[keyof typeof PublicCloudDatabaseCapabilitiesAdvancedConfigurationPropertyTypeEnum]
+  | (string & {});
+
+/** A disk type available for database services, with its performance specifications */
+export interface PublicCloudDatabaseCapabilitiesDiskType {
+  /**
+   * Number of IOPS per GB of disk. Null when IOPS are fixed regardless of disk size.
+   *
+   * Read-only: the API sets it.
+   */
+  iopsPerGigabyte?: number | null | undefined;
+  /**
+   * Maximum IOPS per volume
+   *
+   * Read-only: the API sets it.
+   */
+  maximumIops?: number | undefined;
+  /**
+   * Maximum throughput in MB/s per volume. Null when no throughput limit applies.
+   *
+   * Read-only: the API sets it.
+   */
+  maximumThroughput?: number | null | undefined;
+  /**
+   * Name of the disk type
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Throughput in MB/s per GB of disk. Null when no throughput scaling applies.
+   *
+   * Read-only: the API sets it.
+   */
+  throughputPerGigabyte?: number | null | undefined;
+}
+
+/** A compute flavor available for database services */
+export interface PublicCloudDatabaseCapabilitiesFlavor {
+  /**
+   * Generation tag used to group flavors in the order funnel
+   *
+   * Read-only: the API sets it.
+   */
+  generation?: PublicCloudDatabaseCapabilitiesFlavorGenerationEnum | null | undefined;
+  /**
+   * Lifecycle information of the flavor
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Name of the flavor
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Display order
+   *
+   * Read-only: the API sets it.
+   */
+  order?: number | undefined;
+  /**
+   * Technical specifications
+   *
+   * Read-only: the API sets it.
+   */
+  specifications?: PublicCloudDatabaseCapabilitiesFlavorSpecifications | undefined;
+  /**
+   * Display tags
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: string[] | null | undefined;
+}
+
+/** Generation tag used to group flavors in the order funnel */
+export const PublicCloudDatabaseCapabilitiesFlavorGenerationEnum = {
+  GEN1: "GEN1",
+  GEN2: "GEN2",
+  GEN3: "GEN3",
+} as const;
+/**
+ * Generation tag used to group flavors in the order funnel
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCapabilitiesFlavorGenerationEnum =
+  | (typeof PublicCloudDatabaseCapabilitiesFlavorGenerationEnum)[keyof typeof PublicCloudDatabaseCapabilitiesFlavorGenerationEnum]
+  | (string & {});
+
+/** An available integration type between database engines */
+export interface PublicCloudDatabaseCapabilitiesIntegrationCapability {
+  /**
+   * Destination engine for the integration
+   *
+   * Read-only: the API sets it.
+   */
+  destinationEngine?: PublicCloudDatabaseEngineEnum | undefined;
+  /**
+   * Parameters for the integration
+   *
+   * Read-only: the API sets it.
+   */
+  parameters?: PublicCloudDatabaseCapabilitiesIntegrationParameter[] | null | undefined;
+  /**
+   * Source engine for the integration
+   *
+   * Read-only: the API sets it.
+   */
+  sourceEngine?: PublicCloudDatabaseEngineEnum | undefined;
+  /**
+   * Type of the integration
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseIntegrationTypeEnum | undefined;
+}
+
+/** A parameter for an integration capability */
+export interface PublicCloudDatabaseCapabilitiesIntegrationParameter {
+  /**
+   * Name of the parameter
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Data type of the parameter
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseCapabilitiesIntegrationParameterTypeEnum | undefined;
+}
+
+/** Data type of an integration capability parameter */
+export const PublicCloudDatabaseCapabilitiesIntegrationParameterTypeEnum = {
+  INTEGER: "INTEGER",
+  STRING: "STRING",
+} as const;
+/**
+ * Data type of an integration capability parameter
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCapabilitiesIntegrationParameterTypeEnum =
+  | (typeof PublicCloudDatabaseCapabilitiesIntegrationParameterTypeEnum)[keyof typeof PublicCloudDatabaseCapabilitiesIntegrationParameterTypeEnum]
+  | (string & {});
+
+/** An option available for database services */
+export interface PublicCloudDatabaseCapabilitiesOption {
+  /**
+   * Name of the option
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Data type of the option
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseCapabilitiesOptionTypeEnum | undefined;
+}
+
+/** Data type of a capability option */
+export const PublicCloudDatabaseCapabilitiesOptionTypeEnum = {
+  BOOLEAN: "BOOLEAN",
+  DOUBLE: "DOUBLE",
+  DURATION: "DURATION",
+  LONG: "LONG",
+  STRING: "STRING",
+} as const;
+/**
+ * Data type of a capability option
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCapabilitiesOptionTypeEnum =
+  | (typeof PublicCloudDatabaseCapabilitiesOptionTypeEnum)[keyof typeof PublicCloudDatabaseCapabilitiesOptionTypeEnum]
+  | (string & {});
+
+/** A service plan available for database services */
+export interface PublicCloudDatabaseCapabilitiesPlan {
+  /**
+   * Automatic backup retention duration
+   *
+   * Read-only: the API sets it.
+   */
+  backupRetention?: string | null | undefined;
+  /**
+   * Description of the plan
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Lifecycle information of the plan
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Name of the plan
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Display order
+   *
+   * Read-only: the API sets it.
+   */
+  order?: number | undefined;
+  /**
+   * Display tags
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: string[] | null | undefined;
+}
+
+/** A region available for database services */
+export interface PublicCloudDatabaseCapabilitiesRegion {
+  /**
+   * Lifecycle information of the region
+   *
+   * Read-only: the API sets it.
+   */
+  lifecycle?: PublicCloudDatabaseAvailabilityLifecycle | undefined;
+  /**
+   * Name of the region
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Display order
+   *
+   * Read-only: the API sets it.
+   */
+  order?: number | undefined;
+  /**
+   * Display tags
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: string[] | null | undefined;
+  /**
+   * Type of the region
+   *
+   * Read-only: the API sets it.
+   */
+  type?: LocationTypeEnum | undefined;
+}
+
+/** Storage strategy of a database engine */
+export const PublicCloudDatabaseCapabilitiesEngineStorageStrategyEnum = {
+  DISTRIBUTED: "DISTRIBUTED",
+  NOT_APPLICABLE: "NOT_APPLICABLE",
+  REPLICATED: "REPLICATED",
+} as const;
+/**
+ * Storage strategy of a database engine
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseCapabilitiesEngineStorageStrategyEnum =
+  | (typeof PublicCloudDatabaseCapabilitiesEngineStorageStrategyEnum)[keyof typeof PublicCloudDatabaseCapabilitiesEngineStorageStrategyEnum]
+  | (string & {});
+
+/** Technical specifications of a compute flavor */
+export interface PublicCloudDatabaseCapabilitiesFlavorSpecifications {
+  /**
+   * RAM size
+   *
+   * Read-only: the API sets it.
+   */
+  memory?: PublicCloudDatabaseUnitAndValue | undefined;
+  /**
+   * Number of vCPU cores
+   *
+   * Read-only: the API sets it.
+   */
+  vcpus?: number | undefined;
+}
+
+/** A Kafka topic ACL entry on a managed Kafka service */
+export interface PublicCloudDatabaseKafkaACL {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the ACL entry
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Permission level granted by this ACL entry
+   *
+   * Read-only: the API sets it.
+   */
+  permission?: PublicCloudDatabaseKafkaACLPermissionEnum | undefined;
+  /**
+   * Topic name pattern this ACL entry applies to. Supports wildcards (*).
+   *
+   * Read-only: the API sets it.
+   */
+  topic?: string | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+  /**
+   * Username this ACL entry applies to
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Input parameters for creating a Kafka topic ACL entry */
+export interface PublicCloudDatabaseKafkaACLCreation {
+  /** Permission level to grant */
+  permission: PublicCloudDatabaseKafkaACLPermissionEnum;
+  /** Topic name pattern this ACL applies to. Use * to match all topics. */
+  topic: string;
+  /** Username to grant access to */
+  username: string;
+}
+
+/** Permission level of a Kafka topic ACL entry */
+export const PublicCloudDatabaseKafkaACLPermissionEnum = {
+  ADMIN: "ADMIN",
+  READ: "READ",
+  READ_WRITE: "READ_WRITE",
+  WRITE: "WRITE",
+} as const;
+/**
+ * Permission level of a Kafka topic ACL entry
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaACLPermissionEnum =
+  | (typeof PublicCloudDatabaseKafkaACLPermissionEnum)[keyof typeof PublicCloudDatabaseKafkaACLPermissionEnum]
+  | (string & {});
+
+/** Available permission names for Kafka ACL entries */
+export interface PublicCloudDatabaseKafkaPermissions {
+  /**
+   * Available Schema Registry permission names
+   *
+   * Read-only: the API sets it.
+   */
+  schemaRegistry?: string[] | undefined;
+  /**
+   * Available topic permission names
+   *
+   * Read-only: the API sets it.
+   */
+  topic?: string[] | undefined;
+}
+
+/** A Schema Registry ACL entry on a managed Kafka service */
+export interface PublicCloudDatabaseKafkaSchemaRegistryACL {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the Schema Registry ACL entry
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Permission level granted by this ACL entry
+   *
+   * Read-only: the API sets it.
+   */
+  permission?: PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum | undefined;
+  /**
+   * Schema Registry resource pattern this ACL entry applies to. Supports wildcards (*).
+   *
+   * Read-only: the API sets it.
+   */
+  resource?: string | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+  /**
+   * Username this ACL entry applies to
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Input parameters for creating a Kafka Schema Registry ACL entry */
+export interface PublicCloudDatabaseKafkaSchemaRegistryACLCreation {
+  /** Permission level to grant on the Schema Registry resource */
+  permission: PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum;
+  /** Schema Registry resource pattern this ACL applies to. Use * to match all subjects. */
+  resource: string;
+  /** Username to grant access to */
+  username: string;
+}
+
+/** Permission level of a Kafka Schema Registry ACL entry */
+export const PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum = {
+  READ: "READ",
+  READ_WRITE: "READ_WRITE",
+  WRITE: "WRITE",
+} as const;
+/**
+ * Permission level of a Kafka Schema Registry ACL entry
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum =
+  | (typeof PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum)[keyof typeof PublicCloudDatabaseKafkaSchemaRegistryACLPermissionEnum]
+  | (string & {});
+
+/** A Kafka topic on a managed Kafka service */
+export interface PublicCloudDatabaseKafkaTopic {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the topic
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Minimum number of in-sync replicas required before a write is acknowledged
+   *
+   * Read-only: the API sets it.
+   */
+  minimumInSyncReplicas?: number | undefined;
+  /**
+   * Name of the Kafka topic
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Number of partitions for this topic
+   *
+   * Read-only: the API sets it.
+   */
+  partitions?: number | undefined;
+  /**
+   * Replication factor for this topic
+   *
+   * Read-only: the API sets it.
+   */
+  replication?: number | undefined;
+  /**
+   * Maximum size in bytes retained per partition. -1 means unlimited.
+   *
+   * Read-only: the API sets it.
+   */
+  retentionBytes?: number | undefined;
+  /**
+   * Maximum time in hours that messages are retained. -1 means unlimited.
+   *
+   * Read-only: the API sets it.
+   */
+  retentionHours?: number | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Input parameters for creating a Kafka topic on a managed Kafka service */
+export interface PublicCloudDatabaseKafkaTopicCreation {
+  /** Minimum number of in-sync replicas. Defaults to 1 when null. */
+  minimumInSyncReplicas?: number | null | undefined;
+  /** Name of the Kafka topic */
+  name: string;
+  /** Number of partitions. Defaults to 1 when null. */
+  partitions?: number | null | undefined;
+  /** Replication factor. Must not exceed the number of brokers. Defaults to 1 when null. */
+  replication?: number | null | undefined;
+  /** Maximum size in bytes retained per partition. -1 means unlimited. Defaults to -1 when null. */
+  retentionBytes?: number | null | undefined;
+  /** Maximum time in hours that messages are retained. -1 means unlimited. Defaults to 168 (7 days) when null. */
+  retentionHours?: number | null | undefined;
+}
+
+/** Input parameters for replacing a Kafka topic on a managed Kafka service. Every field is required: the request describes the whole topic. */
+export interface PublicCloudDatabaseKafkaTopicReplace {
+  /** Minimum number of in-sync replicas required before a write is acknowledged */
+  minimumInSyncReplicas: number;
+  /** New number of partitions. Can only be increased, never decreased. */
+  partitions: number;
+  /** New replication factor. Must not exceed the number of brokers. */
+  replication: number;
+  /** Maximum size in bytes retained per partition. -1 means unlimited. */
+  retentionBytes: number;
+  /** Maximum time in hours that messages are retained. -1 means unlimited. */
+  retentionHours: number;
+}
+
+/** Input parameters for updating a Kafka topic on a managed Kafka service */
+export interface PublicCloudDatabaseKafkaTopicUpdate {
+  /** Minimum number of in-sync replicas required before a write is acknowledged */
+  minimumInSyncReplicas?: number | null | undefined;
+  /** New number of partitions. Can only be increased, never decreased. */
+  partitions?: number | null | undefined;
+  /** New replication factor. Must not exceed the number of brokers. */
+  replication?: number | null | undefined;
+  /** Maximum size in bytes retained per partition. -1 means unlimited. */
+  retentionBytes?: number | null | undefined;
+  /** Maximum time in hours that messages are retained. -1 means unlimited. */
+  retentionHours?: number | null | undefined;
+}
+
+/** Client certificate and key for Kafka SSL authentication */
+export interface PublicCloudDatabaseKafkaUserAccess {
+  /**
+   * Client certificate in PEM format
+   *
+   * Read-only: the API sets it.
+   */
+  cert?: string | undefined;
+  /**
+   * Private key for the client certificate
+   *
+   * Read-only: the API sets it.
+   */
+  key?: string | undefined;
+}
+
+/** A connector on a managed Kafka Connect service */
+export interface PublicCloudDatabaseKafkaConnectConnector {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Connector configuration key-value pairs
+   *
+   * Read-only: the API sets it.
+   */
+  configuration?: Record<string, string> | undefined;
+  /**
+   * Identifier of the connector type from capabilities
+   *
+   * Read-only: the API sets it.
+   */
+  connectorCapabilityId?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Name of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Current status of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseKafkaConnectConnectorStatusEnum | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Actions that can be performed on a Kafka Connect connector */
+export const PublicCloudDatabaseKafkaConnectConnectorActionEnum = {
+  PAUSE: "PAUSE",
+  RESTART: "RESTART",
+  RESUME: "RESUME",
+} as const;
+/**
+ * Actions that can be performed on a Kafka Connect connector
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectConnectorActionEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectConnectorActionEnum)[keyof typeof PublicCloudDatabaseKafkaConnectConnectorActionEnum]
+  | (string & {});
+
+/** Input parameters for creating a connector on a managed Kafka Connect service */
+export interface PublicCloudDatabaseKafkaConnectConnectorCreation {
+  /** Connector configuration key-value pairs */
+  configuration: Record<string, string>;
+  /** Identifier of the connector type from capabilities */
+  connectorCapabilityId: string;
+  /** Name of the connector */
+  name: string;
+}
+
+/** Input parameters for replacing a connector on a managed Kafka Connect service */
+export interface PublicCloudDatabaseKafkaConnectConnectorReplace {
+  /** Connector configuration key-value pairs. The whole configuration is replaced: keys omitted here are removed from the connector. */
+  configuration: Record<string, string>;
+}
+
+/** Possible states of a Kafka Connect connector */
+export const PublicCloudDatabaseKafkaConnectConnectorStatusEnum = {
+  CREATING: "CREATING",
+  FAILED: "FAILED",
+  PAUSED: "PAUSED",
+  RUNNING: "RUNNING",
+  UNASSIGNED: "UNASSIGNED",
+} as const;
+/**
+ * Possible states of a Kafka Connect connector
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectConnectorStatusEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectConnectorStatusEnum)[keyof typeof PublicCloudDatabaseKafkaConnectConnectorStatusEnum]
+  | (string & {});
+
+/** Input parameters for updating the status of a Kafka Connect connector */
+export interface PublicCloudDatabaseKafkaConnectConnectorStatusUpdate {
+  /** Action to perform on the connector */
+  action: PublicCloudDatabaseKafkaConnectConnectorActionEnum;
+}
+
+/** An available Kafka Connect connector type */
+export interface PublicCloudDatabaseKafkaConnectCapabilitiesConnectorCapability {
+  /**
+   * Author of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  author?: string | undefined;
+  /**
+   * Configuration properties for this connector type
+   *
+   * Read-only: the API sets it.
+   */
+  configuration?:
+    | PublicCloudDatabaseKafkaConnectCapabilitiesConnectorConfigurationProperty[]
+    | null
+    | undefined;
+  /**
+   * URL of the connector documentation
+   *
+   * Read-only: the API sets it.
+   */
+  documentationUrl?: string | null | undefined;
+  /**
+   * Unique identifier of the connector type
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Whether this is the latest version available
+   *
+   * Read-only: the API sets it.
+   */
+  latest?: boolean | undefined;
+  /**
+   * Name of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Whether the connector is in preview
+   *
+   * Read-only: the API sets it.
+   */
+  preview?: boolean | undefined;
+  /**
+   * Available transforms for this connector type
+   *
+   * Read-only: the API sets it.
+   */
+  transforms?: PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTransform[] | null | undefined;
+  /**
+   * Connector type (sink or source)
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTypeEnum | undefined;
+  /**
+   * Version of the connector
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** A configuration property for a Kafka Connect connector type */
+export interface PublicCloudDatabaseKafkaConnectCapabilitiesConnectorConfigurationProperty {
+  /**
+   * Default value if applicable
+   *
+   * Read-only: the API sets it.
+   */
+  defaultValue?: string | null | undefined;
+  /**
+   * Description of the property
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Display name of the property
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Configuration group the property belongs to
+   *
+   * Read-only: the API sets it.
+   */
+  group?: string | undefined;
+  /**
+   * Importance level of the property
+   *
+   * Read-only: the API sets it.
+   */
+  importance?:
+    | PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyImportanceEnum
+    | undefined;
+  /**
+   * Property name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Whether the property is required
+   *
+   * Read-only: the API sets it.
+   */
+  required?: boolean | undefined;
+  /**
+   * Data type of the property
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum | undefined;
+  /**
+   * Possible values if applicable
+   *
+   * Read-only: the API sets it.
+   */
+  values?: string[] | null | undefined;
+}
+
+/** Importance level of a Kafka Connect connector property */
+export const PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyImportanceEnum = {
+  HIGH: "HIGH",
+  LOW: "LOW",
+  MEDIUM: "MEDIUM",
+} as const;
+/**
+ * Importance level of a Kafka Connect connector property
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyImportanceEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyImportanceEnum)[keyof typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyImportanceEnum]
+  | (string & {});
+
+/** Data type of a Kafka Connect connector property */
+export const PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum = {
+  BOOLEAN: "BOOLEAN",
+  CLASS: "CLASS",
+  DOUBLE: "DOUBLE",
+  INT16: "INT16",
+  INT32: "INT32",
+  INT64: "INT64",
+  LIST: "LIST",
+  PASSWORD: "PASSWORD",
+  STRING: "STRING",
+  TRANSFORM: "TRANSFORM",
+} as const;
+/**
+ * Data type of a Kafka Connect connector property
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum)[keyof typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum]
+  | (string & {});
+
+/** A transform definition for a Kafka Connect connector type */
+export interface PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTransform {
+  /**
+   * Description of the transform
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | undefined;
+  /**
+   * Display name of the transform
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Name of the transform
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Whether the transform is required
+   *
+   * Read-only: the API sets it.
+   */
+  required?: boolean | undefined;
+  /**
+   * Transform type this relates to
+   *
+   * Read-only: the API sets it.
+   */
+  transformType?: string | undefined;
+  /**
+   * Data type of the transform
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudDatabaseKafkaConnectCapabilitiesConnectorPropertyTypeEnum | undefined;
+  /**
+   * Possible values if applicable
+   *
+   * Read-only: the API sets it.
+   */
+  values?: string[] | null | undefined;
+}
+
+/** Type of Kafka Connect connector */
+export const PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTypeEnum = {
+  SINK: "SINK",
+  SOURCE: "SOURCE",
+} as const;
+/**
+ * Type of Kafka Connect connector
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTypeEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTypeEnum)[keyof typeof PublicCloudDatabaseKafkaConnectCapabilitiesConnectorTypeEnum]
+  | (string & {});
+
+/** A task running within a Kafka Connect connector */
+export interface PublicCloudDatabaseKafkaConnectConnectorTask {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Identifier of the task within the connector
+   *
+   * Read-only: the API sets it.
+   */
+  id?: number | undefined;
+  /**
+   * Current status of the task
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseKafkaConnectConnectorTaskStatusEnum | undefined;
+  /**
+   * Error trace if the task is in error state
+   *
+   * Read-only: the API sets it.
+   */
+  trace?: string | null | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Possible states of a Kafka Connect connector task */
+export const PublicCloudDatabaseKafkaConnectConnectorTaskStatusEnum = {
+  FAILED: "FAILED",
+  PAUSED: "PAUSED",
+  RUNNING: "RUNNING",
+} as const;
+/**
+ * Possible states of a Kafka Connect connector task
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaConnectConnectorTaskStatusEnum =
+  | (typeof PublicCloudDatabaseKafkaConnectConnectorTaskStatusEnum)[keyof typeof PublicCloudDatabaseKafkaConnectConnectorTaskStatusEnum]
+  | (string & {});
+
+/** A replication flow on a managed Kafka MirrorMaker service */
+export interface PublicCloudDatabaseKafkaMirrorMakerReplication {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Whether heartbeats are emitted on the replication flow
+   *
+   * Read-only: the API sets it.
+   */
+  emitHeartbeats?: boolean | undefined;
+  /**
+   * Whether this replication flow is enabled
+   *
+   * Read-only: the API sets it.
+   */
+  enabled?: boolean | undefined;
+  /**
+   * Unique identifier of the replication flow
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Replication policy class used for this replication flow
+   *
+   * Read-only: the API sets it.
+   */
+  replicationPolicyClass?:
+    | PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum
+    | undefined;
+  /**
+   * Identifier of the source integration
+   *
+   * Read-only: the API sets it.
+   */
+  sourceIntegrationId?: string | undefined;
+  /**
+   * Whether consumer group offsets are synced
+   *
+   * Read-only: the API sets it.
+   */
+  syncGroupOffsetsEnabled?: boolean | undefined;
+  /**
+   * Sync interval in seconds
+   *
+   * Read-only: the API sets it.
+   */
+  syncInterval?: number | null | undefined;
+  /**
+   * Identifier of the target integration
+   *
+   * Read-only: the API sets it.
+   */
+  targetIntegrationId?: string | undefined;
+  /**
+   * List of topic patterns to exclude from replication
+   *
+   * Read-only: the API sets it.
+   */
+  topicExcludeList?: string[] | null | undefined;
+  /**
+   * List of topic patterns to include in replication
+   *
+   * Read-only: the API sets it.
+   */
+  topicIncludeList?: string[] | null | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Input parameters for creating a replication flow */
+export interface PublicCloudDatabaseKafkaMirrorMakerReplicationCreation {
+  /** Whether heartbeats are emitted on the replication flow */
+  emitHeartbeats?: boolean | null | undefined;
+  /** Whether this replication flow is enabled */
+  enabled: boolean;
+  /** Replication policy class used for this replication flow */
+  replicationPolicyClass?:
+    | PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum
+    | null
+    | undefined;
+  /** Identifier of the source integration */
+  sourceIntegrationId: string;
+  /** Whether to sync consumer group offsets */
+  syncGroupOffsetsEnabled?: boolean | null | undefined;
+  /** Sync interval in seconds */
+  syncInterval?: number | null | undefined;
+  /** Identifier of the target integration */
+  targetIntegrationId: string;
+  /** Topic patterns to exclude from replication */
+  topicExcludeList?: string[] | null | undefined;
+  /** Topic patterns to include in replication */
+  topicIncludeList?: string[] | null | undefined;
+}
+
+/** Replication policy class used by a Kafka MirrorMaker replication flow. Values are fully-qualified Java class names defined by the Kafka MirrorMaker protocol and cannot follow UPPER_SNAKE_CASE. */
+export const PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum = {
+  ORG_APACHE_KAFKA_CONNECT_MIRROR_DEFAULT_REPLICATION_POLICY:
+    "org.apache.kafka.connect.mirror.DefaultReplicationPolicy",
+  ORG_APACHE_KAFKA_CONNECT_MIRROR_IDENTITY_REPLICATION_POLICY:
+    "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+} as const;
+/**
+ * Replication policy class used by a Kafka MirrorMaker replication flow. Values are fully-qualified Java class names defined by the Kafka MirrorMaker protocol and cannot follow UPPER_SNAKE_CASE.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum =
+  | (typeof PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum)[keyof typeof PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum]
+  | (string & {});
+
+/** Input parameters for replacing a replication flow. Every field is required: the request describes the whole replication flow. */
+export interface PublicCloudDatabaseKafkaMirrorMakerReplicationReplace {
+  /** Whether heartbeats are emitted on the replication flow */
+  emitHeartbeats: boolean;
+  /** Whether this replication flow is enabled */
+  enabled: boolean;
+  /** Replication policy class used for this replication flow */
+  replicationPolicyClass: PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum;
+  /** Whether to sync consumer group offsets */
+  syncGroupOffsetsEnabled: boolean;
+  /** Sync interval in seconds */
+  syncInterval: number;
+  /** Topic patterns to exclude */
+  topicExcludeList: string[];
+  /** Topic patterns to include */
+  topicIncludeList: string[];
+}
+
+/** Input parameters for updating a replication flow */
+export interface PublicCloudDatabaseKafkaMirrorMakerReplicationUpdate {
+  /** Whether heartbeats are emitted on the replication flow */
+  emitHeartbeats?: boolean | null | undefined;
+  /** Whether this replication flow is enabled */
+  enabled?: boolean | undefined;
+  /** Replication policy class used for this replication flow */
+  replicationPolicyClass?:
+    | PublicCloudDatabaseKafkaMirrorMakerReplicationPolicyClassEnum
+    | null
+    | undefined;
+  /** Whether to sync consumer group offsets */
+  syncGroupOffsetsEnabled?: boolean | null | undefined;
+  /** Sync interval in seconds */
+  syncInterval?: number | null | undefined;
+  /** Topic patterns to exclude */
+  topicExcludeList?: string[] | null | undefined;
+  /** Topic patterns to include */
+  topicIncludeList?: string[] | null | undefined;
+}
+
+/** Prometheus scraping endpoint for a managed MongoDB service */
+export interface PublicCloudDatabaseMongodbPrometheusEndpoint {
+  /**
+   * Domain of the DNS SRV record (RFC 2782) listing the Prometheus targets to scrape. The abbreviation is imposed by the record type defined in that standard.
+   *
+   * Read-only: the API sets it.
+   */
+  srvDomain?: string | undefined;
+  /**
+   * Username for Prometheus authentication
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Permission level of an OpenSearch ACL entry */
+export const PublicCloudDatabaseOpensearchACLPermissionEnum = {
+  ADMIN: "ADMIN",
+  DENY: "DENY",
+  READ: "READ",
+  READ_WRITE: "READ_WRITE",
+  WRITE: "WRITE",
+} as const;
+/**
+ * Permission level of an OpenSearch ACL entry
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseOpensearchACLPermissionEnum =
+  | (typeof PublicCloudDatabaseOpensearchACLPermissionEnum)[keyof typeof PublicCloudDatabaseOpensearchACLPermissionEnum]
+  | (string & {});
+
+/** An OpenSearch index on a managed OpenSearch service */
+export interface PublicCloudDatabaseOpensearchIndex {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the index was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Number of documents stored in this index
+   *
+   * Read-only: the API sets it.
+   */
+  documentCount?: number | undefined;
+  /**
+   * Unique identifier of the index
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Name of the OpenSearch index
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Number of replica shards for this index
+   *
+   * Read-only: the API sets it.
+   */
+  replicaCount?: number | undefined;
+  /**
+   * Number of primary shards for this index
+   *
+   * Read-only: the API sets it.
+   */
+  shardCount?: number | undefined;
+  /**
+   * Total size of the index in bytes
+   *
+   * Read-only: the API sets it.
+   */
+  size?: number | undefined;
+}
+
+/** An index pattern on a managed OpenSearch service */
+export interface PublicCloudDatabaseOpensearchPattern {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Unique identifier of the index pattern
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Maximum number of indexes matching this pattern. Oldest indexes are deleted when this limit is reached.
+   *
+   * Read-only: the API sets it.
+   */
+  maximumIndexCount?: number | null | undefined;
+  /**
+   * Glob pattern matching index names
+   *
+   * Read-only: the API sets it.
+   */
+  pattern?: string | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Input parameters for creating an index pattern */
+export interface PublicCloudDatabaseOpensearchPatternCreation {
+  /** Maximum number of indexes matching this pattern */
+  maximumIndexCount: number;
+  /** Glob pattern matching index names */
+  pattern: string;
+}
+
+/** A user account on a managed OpenSearch service */
+export interface PublicCloudDatabaseOpensearchUser {
+  /**
+   * ACL entries granted to the user
+   *
+   * Read-only: the API sets it.
+   */
+  acls?: PublicCloudDatabaseOpensearchUserACL[] | undefined;
+  /**
+   * Whether this is the service administrator, the user created automatically at provisioning time, which cannot be deleted
+   *
+   * Read-only: the API sets it.
+   */
+  admin?: boolean | undefined;
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the user was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Date at which the user credentials were last updated
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /**
+   * Unique identifier of the user
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Password of the user. Returned only on creation or password reset.
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | null | undefined;
+  /**
+   * Current readiness status of the user
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseUserStatusEnum | undefined;
+  /**
+   * Login name of the user
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** An ACL entry for an OpenSearch user */
+export interface PublicCloudDatabaseOpensearchUserACL {
+  /** Index pattern this ACL applies to */
+  pattern: string;
+  /** Permission granted on the matching indexes */
+  permission: PublicCloudDatabaseOpensearchACLPermissionEnum;
+}
+
+/** Input parameters for creating a user on a managed OpenSearch service */
+export interface PublicCloudDatabaseOpensearchUserCreation {
+  /** ACL entries to grant to the user */
+  acls?: PublicCloudDatabaseOpensearchUserACL[] | undefined;
+  /** Login name of the new user */
+  name: string;
+}
+
+/** Input parameters for replacing an OpenSearch user. Every field is required: the request describes the whole user. */
+export interface PublicCloudDatabaseOpensearchUserReplace {
+  /** ACL entries for the user */
+  acls: PublicCloudDatabaseOpensearchUserACL[];
+}
+
+/** Input parameters for updating an OpenSearch user */
+export interface PublicCloudDatabaseOpensearchUserUpdate {
+  /** ACL entries for the user */
+  acls?: PublicCloudDatabaseOpensearchUserACL[] | undefined;
+  /**
+   * Date at which the user credentials were last updated. Setting this field triggers a credential reset and returns the new password.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+}
+
+/** A PgBouncer connection pool on a managed PostgreSQL service */
+export interface PublicCloudDatabasePostgresqlConnectionPool {
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Date at which the resource was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Identifier of the target database schema
+   *
+   * Read-only: the API sets it.
+   */
+  databaseId?: string | undefined;
+  /**
+   * Unique identifier of the connection pool
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * PgBouncer pooling mode
+   *
+   * Read-only: the API sets it.
+   */
+  mode?: PublicCloudDatabasePostgresqlConnectionPoolModeEnum | undefined;
+  /**
+   * Name of the connection pool
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * TCP port on which the connection pool listens
+   *
+   * Read-only: the API sets it.
+   */
+  port?: number | undefined;
+  /**
+   * Maximum number of server connections in the pool
+   *
+   * Read-only: the API sets it.
+   */
+  size?: number | undefined;
+  /**
+   * SSL connection mode for the pool
+   *
+   * Read-only: the API sets it.
+   */
+  sslMode?: PublicCloudDatabaseSSLModeEnum | null | undefined;
+  /**
+   * Date of the last update to the resource
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+  /**
+   * Connection URI to the pool
+   *
+   * Read-only: the API sets it.
+   */
+  uri?: string | undefined;
+  /**
+   * Unique identifier of the database user used to establish server connections. Null when no user is assigned.
+   *
+   * Read-only: the API sets it.
+   */
+  userId?: string | null | undefined;
+}
+
+/** Input parameters for creating a PgBouncer connection pool on a managed PostgreSQL service */
+export interface PublicCloudDatabasePostgresqlConnectionPoolCreation {
+  /** Identifier of the target database schema */
+  databaseId: string;
+  /** PgBouncer pooling mode */
+  mode: PublicCloudDatabasePostgresqlConnectionPoolModeEnum;
+  /** Name of the connection pool */
+  name: string;
+  /** Maximum number of server connections in the pool */
+  size: number;
+  /** Unique identifier of the database user for server connections. Null to use a system user. */
+  userId?: string | null | undefined;
+}
+
+/** PgBouncer pooling mode of a PostgreSQL connection pool */
+export const PublicCloudDatabasePostgresqlConnectionPoolModeEnum = {
+  SESSION: "SESSION",
+  STATEMENT: "STATEMENT",
+  TRANSACTION: "TRANSACTION",
+} as const;
+/**
+ * PgBouncer pooling mode of a PostgreSQL connection pool
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabasePostgresqlConnectionPoolModeEnum =
+  | (typeof PublicCloudDatabasePostgresqlConnectionPoolModeEnum)[keyof typeof PublicCloudDatabasePostgresqlConnectionPoolModeEnum]
+  | (string & {});
+
+/** Input parameters for replacing a PgBouncer connection pool on a managed PostgreSQL service. Every field is required: the request describes the whole pool. */
+export interface PublicCloudDatabasePostgresqlConnectionPoolReplace {
+  /** Identifier of the target database schema */
+  databaseId: string;
+  /** PgBouncer pooling mode */
+  mode: PublicCloudDatabasePostgresqlConnectionPoolModeEnum;
+  /** Maximum number of server connections in the pool */
+  size: number;
+  /** Unique identifier of the database user for server connections. Null to remove the user assignment. */
+  userId: string | null;
+}
+
+/** Input parameters for updating a PgBouncer connection pool on a managed PostgreSQL service */
+export interface PublicCloudDatabasePostgresqlConnectionPoolUpdate {
+  /** Identifier of the target database schema */
+  databaseId?: string | null | undefined;
+  /** PgBouncer pooling mode */
+  mode?: PublicCloudDatabasePostgresqlConnectionPoolModeEnum | null | undefined;
+  /** Maximum number of server connections in the pool */
+  size?: number | null | undefined;
+  /** Unique identifier of the database user for server connections. Null to remove the user assignment. */
+  userId?: string | null | undefined;
+}
+
+/** CRUD actions available for a capability on a service */
+export interface PublicCloudDatabaseServiceCapabilityActions {
+  /**
+   * Whether the capability supports creation
+   *
+   * Read-only: the API sets it.
+   */
+  create?: PublicCloudDatabaseServiceCapabilityStateEnum | null | undefined;
+  /**
+   * Whether the capability supports deletion
+   *
+   * Read-only: the API sets it.
+   */
+  delete?: PublicCloudDatabaseServiceCapabilityStateEnum | null | undefined;
+  /**
+   * Whether the capability supports reading
+   *
+   * Read-only: the API sets it.
+   */
+  read?: PublicCloudDatabaseServiceCapabilityStateEnum | null | undefined;
+  /**
+   * Whether the capability supports update
+   *
+   * Read-only: the API sets it.
+   */
+  update?: PublicCloudDatabaseServiceCapabilityStateEnum | null | undefined;
+}
+
+/** Operational status of a managed database or analytics service */
+export const PublicCloudDatabaseServiceStatusEnum = {
+  CREATING: "CREATING",
+  DELETING: "DELETING",
+  DRAINED: "DRAINED",
+  ERROR: "ERROR",
+  LOCKED: "LOCKED",
+  LOCKED_PENDING: "LOCKED_PENDING",
+  LOCKED_UPDATING: "LOCKED_UPDATING",
+  PENDING: "PENDING",
+  READY: "READY",
+  SHELVED: "SHELVED",
+  TO_DRAIN: "TO_DRAIN",
+  UPDATING: "UPDATING",
+} as const;
+/**
+ * Operational status of a managed database or analytics service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseServiceStatusEnum =
+  | (typeof PublicCloudDatabaseServiceStatusEnum)[keyof typeof PublicCloudDatabaseServiceStatusEnum]
+  | (string & {});
+
+/** State of a capability for a service */
+export const PublicCloudDatabaseServiceCapabilityStateEnum = {
+  DISABLED: "DISABLED",
+  ENABLED: "ENABLED",
+} as const;
+/**
+ * State of a capability for a service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudDatabaseServiceCapabilityStateEnum =
+  | (typeof PublicCloudDatabaseServiceCapabilityStateEnum)[keyof typeof PublicCloudDatabaseServiceCapabilityStateEnum]
+  | (string & {});
+
+/** A user account on a managed Valkey service */
+export interface PublicCloudDatabaseValkeyUser {
+  /**
+   * Whether this is the service administrator, the user created automatically at provisioning time, which cannot be deleted
+   *
+   * Read-only: the API sets it.
+   */
+  admin?: boolean | undefined;
+  /**
+   * Command category rules granted to the user, each written as a category name prefixed with `+@` when it is allowed or `-@` when it is denied, for example `+@read`, `-@dangerous`
+   *
+   * Read-only: the API sets it.
+   */
+  categories?: string[] | undefined;
+  /**
+   * Glob patterns of the Pub/Sub channels the user can subscribe to and publish on, for example `news:*`, `chat:room1`. `*` means every channel, and an empty list means the user cannot use any channel.
+   *
+   * Read-only: the API sets it.
+   */
+  channels?: string[] | undefined;
+  /**
+   * Hash of the resource used for concurrency control
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Individual command rules refining the permissions granted through the categories, each written as a Valkey command name prefixed with `+` when it is allowed or `-` when it is denied, for example `+get`, `-flushall`
+   *
+   * Read-only: the API sets it.
+   */
+  commands?: string[] | undefined;
+  /**
+   * Date at which the user was created
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Date at which the user credentials were last updated
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /**
+   * Unique identifier of the user
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Glob patterns of the keys the user can access, for example `cache:*`, `session:user:42`. `*` means every key, and an empty list means the user cannot access any key.
+   *
+   * Read-only: the API sets it.
+   */
+  keys?: string[] | undefined;
+  /**
+   * Password of the user. Returned only on creation or password reset.
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | null | undefined;
+  /**
+   * Current readiness status of the user
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudDatabaseUserStatusEnum | undefined;
+  /**
+   * Login name of the user
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** Input parameters for creating a user on a managed Valkey service */
+export interface PublicCloudDatabaseValkeyUserCreation {
+  /** Command category rules granted to the user, each written as a category name prefixed with `+@` to allow it or `-@` to deny it, for example `+@read`, `-@dangerous`. Available categories are all, admin, bitmap, blocking, connection, dangerous, fast, geo, hash, hyperloglog, keyspace, list, pubsub, read, scripting, set, slow, sortedset, stream, string, transaction and write. */
+  categories?: string[] | undefined;
+  /** Glob patterns of the Pub/Sub channels the user can subscribe to and publish on, for example `news:*`, `chat:room1`. Use `*` to allow every channel. When the list is empty, the user cannot use any channel. */
+  channels?: string[] | undefined;
+  /** Individual command rules that refine the permissions granted through the categories, each written as a Valkey command name in lowercase prefixed with `+` to allow it or `-` to deny it, for example `+get`, `-flushall` */
+  commands?: string[] | undefined;
+  /** Glob patterns of the keys the user can access, for example `cache:*`, `session:user:42`. Use `*` to allow every key. When the list is empty, the user cannot access any key. */
+  keys?: string[] | undefined;
+  /** Login name of the new user, unique on the service. It must be 1 to 32 characters long, start with a letter, a digit or an underscore, and contain only letters, digits, underscores, dots and hyphens. */
+  name: string;
+}
+
+/** Input parameters for replacing a Valkey user. Every field is required: the request describes the whole user. */
+export interface PublicCloudDatabaseValkeyUserReplace {
+  /** Command category rules granted to the user, each written as a category name prefixed with `+@` to allow it or `-@` to deny it, for example `+@read`, `-@dangerous`. Available categories are all, admin, bitmap, blocking, connection, dangerous, fast, geo, hash, hyperloglog, keyspace, list, pubsub, read, scripting, set, slow, sortedset, stream, string, transaction and write. The list replaces the one currently set on the user. */
+  categories: string[];
+  /** Glob patterns of the Pub/Sub channels the user can subscribe to and publish on, for example `news:*`, `chat:room1`. Use `*` to allow every channel. The list replaces the one currently set on the user, and an empty list revokes access to every channel. */
+  channels: string[];
+  /** Individual command rules that refine the permissions granted through the categories, each written as a Valkey command name in lowercase prefixed with `+` to allow it or `-` to deny it, for example `+get`, `-flushall`. The list replaces the one currently set on the user. */
+  commands: string[];
+  /** Glob patterns of the keys the user can access, for example `cache:*`, `session:user:42`. Use `*` to allow every key. The list replaces the one currently set on the user, and an empty list revokes access to every key. */
+  keys: string[];
+}
+
+/** Input parameters for updating a Valkey user */
+export interface PublicCloudDatabaseValkeyUserUpdate {
+  /** Command category rules granted to the user, each written as a category name prefixed with `+@` to allow it or `-@` to deny it, for example `+@read`, `-@dangerous`. Available categories are all, admin, bitmap, blocking, connection, dangerous, fast, geo, hash, hyperloglog, keyspace, list, pubsub, read, scripting, set, slow, sortedset, stream, string, transaction and write. The list replaces the one currently set on the user. */
+  categories?: string[] | undefined;
+  /** Glob patterns of the Pub/Sub channels the user can subscribe to and publish on, for example `news:*`, `chat:room1`. Use `*` to allow every channel. The list replaces the one currently set on the user, and an empty list revokes access to every channel. */
+  channels?: string[] | undefined;
+  /** Individual command rules that refine the permissions granted through the categories, each written as a Valkey command name in lowercase prefixed with `+` to allow it or `-` to deny it, for example `+get`, `-flushall`. The list replaces the one currently set on the user. */
+  commands?: string[] | undefined;
+  /**
+   * Date at which the user credentials were last updated. Setting this field triggers a credential reset and returns the new password.
+   *
+   * An ISO 8601 date-time string.
+   */
+  credentialsLastUpdatedAt?: string | undefined;
+  /** Glob patterns of the keys the user can access, for example `cache:*`, `session:user:42`. Use `*` to allow every key. The list replaces the one currently set on the user, and an empty list revokes access to every key. */
+  keys?: string[] | undefined;
 }
 
 /** External gateway configuration */
@@ -4045,7 +7540,7 @@ export interface PublicCloudInstanceInstanceCurrentState {
    */
   userId?: string | undefined;
   /**
-   * Observed block volumes attached to the instance, with details (name, size). See InstanceVolume.
+   * Observed block volumes attached to the instance, with details (name, size) and their role for the instance (role). See InstanceVolume.
    *
    * Read-only: the API sets it.
    */
@@ -4262,7 +7757,7 @@ export interface PublicCloudInstanceInstanceReadTargetSpec {
    */
   group?: PublicCloudInstanceInstanceGroupRef | null | undefined;
   /**
-   * Reference to the image the instance boots from. Carries only the image id. Changing the referenced image on PUT triggers a rebuild of the instance from the new image. Null for boot-from-volume instances, which have no backing image.
+   * Reference to the image the instance boots from. Carries only the image id. Changing the referenced image on PUT triggers a rebuild of the instance from the new image. Null for boot-from-volume instances, which have no backing image: their boot volume is the entry of volumes with role BOOT.
    *
    * Read-only: the API sets it.
    */
@@ -4310,7 +7805,7 @@ export interface PublicCloudInstanceInstanceReadTargetSpec {
    */
   sshKeyName?: string | null | undefined;
   /**
-   * Declarative list of block volumes attached to the instance, each referencing a volume by id (see InstanceVolumeRef). Attach/detach is driven by diffing this list on PUT. There is no imperative attach/detach sub-route. Adding a volume reference attaches that volume. Removing one detaches it.
+   * Declarative list of block volumes attached to the instance, each referencing a volume by id (see InstanceVolumeRef). For a boot-from-volume instance, the boot volume has role BOOT. For one created outside this API, every volume is DATA until its boot volume has been identified. Attach/detach is driven by diffing this list on PUT. There is no imperative attach/detach sub-route. Adding a volume reference attaches that volume. Removing one detaches it. The boot volume cannot be detached.
    *
    * Read-only: the API sets it.
    */
@@ -4359,7 +7854,7 @@ export interface PublicCloudInstanceInstanceTargetSpec {
   flavor: PublicCloudInstanceInstanceFlavorRef;
   /** Optional reference to the instance (placement) group the instance is created into, controlling affinity/anti-affinity placement. Immutable after creation. The group is set only at creation time. OpenStack/Nova server groups are immutable. There is no group change on PUT and membership cannot be changed after the instance exists. */
   group?: PublicCloudInstanceInstanceGroupRef | null | undefined;
-  /** Reference to the image the instance boots from. Carries only the image id. Changing the referenced image on PUT triggers a rebuild of the instance from the new image. */
+  /** Reference to the image the instance boots from. Carries only the image id. The instance needs exactly one boot source: either this image, or one volume of the volumes list with role BOOT. Omit image (or set it to null) to boot from that volume. Setting both, or neither, is rejected. Changing the referenced image on PUT triggers a rebuild of the instance from the new image. An instance booted from a volume cannot be given an image later. */
   image?: PublicCloudInstanceInstanceImageRef | null | undefined;
   /** Target location. Region (and optional availability zone) where the instance is provisioned. Immutable after creation. An instance cannot be moved to another region/zone, which is why location is absent from InstanceUpdateTargetSpec. */
   location: PublicCloudInstanceInstanceLocation;
@@ -4377,7 +7872,7 @@ export interface PublicCloudInstanceInstanceTargetSpec {
   sshKeyName?: string | null | undefined;
   /** User data (cloud-init). Base64-encoded (strict standard encoding) cloud-init payload handed to the instance at boot through the OpenStack metadata service / config drive, and interpreted by cloud-init inside the guest image. The submitted string itself must be at most 65535 bytes once base64-encoded. Write-only: never returned by GET/LIST. Deliberately absent from InstanceReadTargetSpec and InstanceCurrentState. Not persisted or stored by the Public Cloud API: the payload is handed to the compute service, which makes it available to the instance via the metadata service. Only a non-reversible fingerprint of the value is retained, for change detection. Mutable, but destructively: changing userData on PUT REINSTALLS the instance (a Nova rebuild on the current image), wiping the root disk and all data on it. See InstanceUpdateTargetSpec for the tri-state update semantics. */
   userData?: string | null | undefined;
-  /** Declarative list of block volumes attached to the instance, each referencing a volume by id (see InstanceVolumeRef). Attach/detach is driven by diffing this list on PUT. There is no imperative attach/detach sub-route. Adding a volume reference attaches that volume. Removing one detaches it. */
+  /** Declarative list of block volumes attached to the instance, each referencing a volume by id (see InstanceVolumeRef). At creation, at most one entry may have role BOOT, when image is omitted. The instance then boots from that volume, and the other volumes are attached once the instance is running. Attach/detach is driven by diffing this list on PUT. There is no imperative attach/detach sub-route. Adding a volume reference attaches that volume. Removing one detaches it. The boot volume cannot be detached. */
   volumes?: PublicCloudInstanceInstanceVolumeRef[] | null | undefined;
 }
 
@@ -4393,7 +7888,7 @@ export interface PublicCloudInstanceInstanceUpdate {
 export interface PublicCloudInstanceInstanceUpdateTargetSpec {
   /** Reference to the desired flavor (vCPUs, RAM, local disk). Carries only the flavor id. Sending a different flavor triggers a resize of the instance. */
   flavor: PublicCloudInstanceInstanceFlavorRef;
-  /** Reference to the desired image. Carries only the image id. Sending a different image triggers a rebuild of the instance from the new image. */
+  /** Reference to the desired image. Carries only the image id. Sending a different image triggers a rebuild of the instance from the new image. Rejected on an instance booted from a volume, which has no image and cannot be rebuilt: leave image null for such an instance. */
   image?: PublicCloudInstanceInstanceImageRef | null | undefined;
   /** Desired display name of the instance. Changing it triggers a rename. */
   name: string;
@@ -4405,9 +7900,9 @@ export interface PublicCloudInstanceInstanceUpdateTargetSpec {
   securityGroups?: PublicCloudSecurityGroupSecurityGroupRef[] | null | undefined;
   /** Declarative list of file storage (shares) attached to the instance, managed exactly like volumes: the diff of this list drives attach/detach. Attaching a share creates a Manila IP access rule for the instance's interface on the share's network. The instance must have an interface on that network or the operation errors. Detaching (removing an entry from this list) deletes the matching access rule and is idempotent. Each entry's accessLevel defaults to READ_WRITE when omitted (see InstanceShareRef). */
   shares?: PublicCloudInstanceInstanceShareRef[] | null | undefined;
-  /** User data (cloud-init). Base64-encoded (strict standard encoding) cloud-init payload, at most 65535 bytes once base64-encoded. Write-only: never returned by GET/LIST. Not persisted or stored by the Public Cloud API: the payload is handed to the compute service, which makes it available to the instance via the metadata service on boot/rebuild. Only a non-reversible fingerprint of the value is retained, for change detection. Tri-state: omitted or null keeps the current value unchanged. An empty string clears it. A non-empty value replaces it. Destructive: any change (clear or replace) REINSTALLS the instance — a Nova rebuild on the current image — wiping the root disk and all data on it. */
+  /** User data (cloud-init). Base64-encoded (strict standard encoding) cloud-init payload, at most 65535 bytes once base64-encoded. Write-only: never returned by GET/LIST. Not persisted or stored by the Public Cloud API: the payload is handed to the compute service, which makes it available to the instance via the metadata service on boot/rebuild. Only a non-reversible fingerprint of the value is retained, for change detection. Tri-state: omitted or null keeps the current value unchanged. An empty string clears it. A non-empty value replaces it. Destructive: any change (clear or replace) REINSTALLS the instance — a Nova rebuild on the current image — wiping the root disk and all data on it. Rejected on an instance booted from a volume, which has no image to rebuild from. */
   userData?: string | null | undefined;
-  /** Declarative list of block volumes attached to the instance (see InstanceVolumeRef). Attach/detach is driven by diffing this list. Adding a reference attaches the volume, removing one detaches it. There is no imperative attach/detach sub-route. */
+  /** Declarative list of block volumes attached to the instance (see InstanceVolumeRef). Attach/detach is driven by diffing this list. Adding a reference attaches the volume, removing one detaches it. There is no imperative attach/detach sub-route. The boot volume of an instance booted from a volume must stay in the list, with role omitted or BOOT. It cannot be detached, and no other volume can become BOOT after creation. */
   volumes?: PublicCloudInstanceInstanceVolumeRef[] | null | undefined;
 }
 
@@ -4426,6 +7921,12 @@ export interface PublicCloudInstanceInstanceVolume {
    */
   name?: string | undefined;
   /**
+   * Role of this volume for the instance: BOOT for the root volume of an instance booted from a volume, DATA for any other attached volume. For an instance booted from a volume but created outside this API, DATA on every volume until its boot volume has been identified.
+   *
+   * Read-only: the API sets it.
+   */
+  role?: PublicCloudInstanceInstanceVolumeRoleEnum | undefined;
+  /**
    * Size of the attached volume in GB
    *
    * Read-only: the API sets it.
@@ -4433,11 +7934,27 @@ export interface PublicCloudInstanceInstanceVolume {
   size?: number | undefined;
 }
 
-/** User-controlled reference to a block volume attached to the instance, used within the declarative volumes list of targetSpec. It carries only the volume id. The full observed volume is exposed in currentState through InstanceVolume. */
+/** User-controlled reference to a block volume attached to the instance, used within the declarative volumes list of targetSpec. It carries the volume id and its role for the instance, boot or data volume. The full observed volume is exposed in currentState through InstanceVolume. */
 export interface PublicCloudInstanceInstanceVolumeRef {
   /** Identifier of the volume to attach. Adding this reference attaches the volume. Removing it from the volumes list detaches it. */
   id: string;
+  /** Role of this volume for the instance: BOOT when the instance boots from it instead of an image, DATA otherwise. When omitted or null, the role is DATA. At most one entry of the volumes list may be BOOT, and only when targetSpec.image is omitted. The boot volume must be bootable (see the bootable field of the block storage volume), available, not multi-attach, and in the region of the instance. The boot volume can only be chosen at creation: on update, it must stay in the volumes list, with role omitted or BOOT, and no other volume can become BOOT. The boot volume cannot be detached, and it is kept when the instance is deleted. */
+  role?: PublicCloudInstanceInstanceVolumeRoleEnum | null | undefined;
 }
+
+/** Role of a volume attached to an instance: BOOT when the instance boots from it instead of an image, DATA for any other attached volume */
+export const PublicCloudInstanceInstanceVolumeRoleEnum = {
+  BOOT: "BOOT",
+  DATA: "DATA",
+} as const;
+/**
+ * Role of a volume attached to an instance: BOOT when the instance boots from it instead of an image, DATA for any other attached volume
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudInstanceInstanceVolumeRoleEnum =
+  | (typeof PublicCloudInstanceInstanceVolumeRoleEnum)[keyof typeof PublicCloudInstanceInstanceVolumeRoleEnum]
+  | (string & {});
 
 /** Power state of an instance as reported by OpenStack Nova, also used to express the desired power state when driving the instance. `ACTIVE`: The instance is running and powered on. `PAUSED`: The instance is paused: its state is frozen in the memory of the host, which keeps its resources allocated. `SHUTOFF`: The instance is powered off (stopped) but its resources remain allocated. `SHELVED`: The instance is shelved: it is powered off and its compute resources are released, so it can be unshelved later to resume it. `SUSPENDED`: The instance is suspended: its memory state is saved to disk and it stops running, but its resources remain allocated. `RESCUE`: The instance is booted in rescue mode from a rescue image. */
 export const PublicCloudInstancePowerStateEnum = {
@@ -6763,6 +10280,1836 @@ export const PublicCloudLoadbalancerSessionPersistenceTypeEnum = {
 export type PublicCloudLoadbalancerSessionPersistenceTypeEnum =
   | (typeof PublicCloudLoadbalancerSessionPersistenceTypeEnum)[keyof typeof PublicCloudLoadbalancerSessionPersistenceTypeEnum]
   | (string & {});
+
+/** A Kubernetes admission plugin configuration */
+export interface PublicCloudManagedKubernetesAdmissionPlugin {
+  /** Whether the admission plugin is enabled */
+  enabled: boolean;
+}
+
+/** Anti-affinity placement of the nodepool nodes */
+export interface PublicCloudManagedKubernetesAntiAffinity {
+  /** Whether anti-affinity placement is enabled for the nodepool */
+  enabled?: boolean | null | undefined;
+  /** Placement policy applied when anti-affinity is enabled */
+  policy?: PublicCloudManagedKubernetesAntiAffinityPolicyEnum | null | undefined;
+}
+
+/** Placement policy between nodepool nodes. HARD spreads nodes across distinct hypervisors and caps the nodepool at the size the anti-affinity group allows. */
+export const PublicCloudManagedKubernetesAntiAffinityPolicyEnum = {
+  HARD: "HARD",
+} as const;
+/**
+ * Placement policy between nodepool nodes. HARD spreads nodes across distinct hypervisors and caps the nodepool at the size the anti-affinity group allows.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesAntiAffinityPolicyEnum =
+  | (typeof PublicCloudManagedKubernetesAntiAffinityPolicyEnum)[keyof typeof PublicCloudManagedKubernetesAntiAffinityPolicyEnum]
+  | (string & {});
+
+/** Cluster control-plane configuration: exposure and IP filtering (access) and admission plugins */
+export interface PublicCloudManagedKubernetesAPIServer {
+  /** Exposure and IP filtering of the API server */
+  access?: PublicCloudManagedKubernetesAPIServerAccess | null | undefined;
+  /** Admission plugin configurations. Plugin names are validated against a platform allowlist. An unknown name is rejected with 400. */
+  admissionPlugins?: Record<string, PublicCloudManagedKubernetesAdmissionPlugin> | null | undefined;
+}
+
+/** IP filtering for the cluster API server */
+export interface PublicCloudManagedKubernetesAPIServerAccess {
+  /** IP allowlist for the API server */
+  authorizedIps?: PublicCloudManagedKubernetesAuthorizedIPs | null | undefined;
+}
+
+/** Public endpoint exposing the cluster API server */
+export interface PublicCloudManagedKubernetesAPIServerPublicEndpoint {
+  /**
+   * URL of the control plane, available once the cluster is ready
+   *
+   * Read-only: the API sets it.
+   */
+  url?: string | null | undefined;
+}
+
+/** Floating IP attachment for the nodepool nodes */
+export interface PublicCloudManagedKubernetesAttachFloatingIP {
+  /** Whether a floating IP is attached to each node of the nodepool */
+  enabled?: boolean | null | undefined;
+}
+
+/** Control-plane authentication. The type field selects the variant. */
+export interface PublicCloudManagedKubernetesAuthentication {
+  /** Single-provider OpenID Connect payload. Present when type is OIDC, absent otherwise. */
+  oidc?: PublicCloudManagedKubernetesOidc | null | undefined;
+  /** Selected authentication variant */
+  type: PublicCloudManagedKubernetesAuthenticationTypeEnum;
+}
+
+/** Control-plane authentication variant. OIDC uses single-provider OpenID Connect. */
+export const PublicCloudManagedKubernetesAuthenticationTypeEnum = {
+  OIDC: "OIDC",
+} as const;
+/**
+ * Control-plane authentication variant. OIDC uses single-provider OpenID Connect.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesAuthenticationTypeEnum =
+  | (typeof PublicCloudManagedKubernetesAuthenticationTypeEnum)[keyof typeof PublicCloudManagedKubernetesAuthenticationTypeEnum]
+  | (string & {});
+
+/** A single allow rule in the API server IP allowlist */
+export interface PublicCloudManagedKubernetesAuthorizedIPRule {
+  /** Authorized CIDR block, for example 203.0.113.0/24. Allow-all is expressed as 0.0.0.0/0. */
+  cidr: IPBlock;
+}
+
+/** IP allowlist for the API server. When no rule is set, any IP can reach the API server. When at least one rule is set, any IP that no rule allows is blocked. */
+export interface PublicCloudManagedKubernetesAuthorizedIPs {
+  /** Authorization rules for the API server */
+  rules?: PublicCloudManagedKubernetesAuthorizedIPRule[] | null | undefined;
+}
+
+/** Automatic Kubernetes version upgrade policy for the patch track */
+export interface PublicCloudManagedKubernetesAutoUpgrade {
+  /** Automatic upgrade track for patch versions, for example 1.34.1-1 to 1.34.2-1. Enabled by default. */
+  patch?: PublicCloudManagedKubernetesAutoUpgradeTrack | null | undefined;
+}
+
+/** Configuration of a single automatic upgrade track */
+export interface PublicCloudManagedKubernetesAutoUpgradeTrack {
+  /** Whether automatic upgrade is enabled for this track */
+  enabled?: boolean | null | undefined;
+}
+
+/** Automatic node scaling for the nodepool. When enabled, the node count varies between minNodes and maxNodes based on cluster load. */
+export interface PublicCloudManagedKubernetesAutoscaler {
+  /** Whether automatic scaling is enabled for the nodepool */
+  enabled?: boolean | null | undefined;
+  /** Maximum number of nodes the autoscaler provisions */
+  maxNodes?: number | null | undefined;
+  /** Minimum number of nodes the autoscaler maintains. Lower bound of desiredNodes. */
+  minNodes?: number | null | undefined;
+  /** Thresholds governing when the autoscaler removes underused nodes */
+  scaleDown?: PublicCloudManagedKubernetesAutoscalerScaleDown | null | undefined;
+}
+
+/** Scale-down thresholds the autoscaler applies when removing underused nodes */
+export interface PublicCloudManagedKubernetesAutoscalerScaleDown {
+  /** Time in seconds a node must stay below the utilization threshold before it is removed */
+  unneededTimeSeconds?: number | null | undefined;
+  /** Time in seconds an unready node is kept before it is removed */
+  unreadyTimeSeconds?: number | null | undefined;
+  /** Node utilization ratio below which a node becomes a scale-down candidate, as a fraction between 0 and 1. Defaults to 0.5. */
+  utilizationThreshold?: number | null | undefined;
+}
+
+/** ClusterMesh multi-cluster connectivity configuration for the Cilium CNI */
+export interface PublicCloudManagedKubernetesCiliumClusterMesh {
+  /** ClusterMesh API server exposure settings */
+  apiServer?: PublicCloudManagedKubernetesCiliumClusterMeshAPIServer | null | undefined;
+  /** Whether ClusterMesh is enabled */
+  enabled?: boolean | null | undefined;
+}
+
+/** ClusterMesh API server exposure settings for the Cilium CNI */
+export interface PublicCloudManagedKubernetesCiliumClusterMeshAPIServer {
+  /** Node port exposing the ClusterMesh API server */
+  nodePort?: number | null | undefined;
+  /** Kubernetes service type exposing the ClusterMesh API server */
+  serviceType?: PublicCloudManagedKubernetesCiliumClusterMeshServiceTypeEnum | null | undefined;
+}
+
+/** Kubernetes service type exposing the ClusterMesh API server */
+export const PublicCloudManagedKubernetesCiliumClusterMeshServiceTypeEnum = {
+  LOAD_BALANCER: "LoadBalancer",
+  NODE_PORT: "NodePort",
+} as const;
+/**
+ * Kubernetes service type exposing the ClusterMesh API server
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesCiliumClusterMeshServiceTypeEnum =
+  | (typeof PublicCloudManagedKubernetesCiliumClusterMeshServiceTypeEnum)[keyof typeof PublicCloudManagedKubernetesCiliumClusterMeshServiceTypeEnum]
+  | (string & {});
+
+/** Hubble observability configuration for the Cilium CNI */
+export interface PublicCloudManagedKubernetesCiliumHubble {
+  /** Whether Hubble observability is enabled */
+  enabled?: boolean | null | undefined;
+  /** Hubble relay configuration */
+  relay?: PublicCloudManagedKubernetesCiliumHubbleRelay | null | undefined;
+  /** Hubble UI configuration */
+  ui?: PublicCloudManagedKubernetesCiliumHubbleUI | null | undefined;
+}
+
+/** Hubble relay configuration for the Cilium CNI */
+export interface PublicCloudManagedKubernetesCiliumHubbleRelay {
+  /** Whether the Hubble relay is enabled */
+  enabled?: boolean | null | undefined;
+}
+
+/** Hubble UI configuration for the Cilium CNI */
+export interface PublicCloudManagedKubernetesCiliumHubbleUI {
+  /** Compute resource requirements of the Hubble UI backend */
+  backendResources?: PublicCloudManagedKubernetesCiliumResourceRequirements | null | undefined;
+  /** Whether the Hubble UI is enabled */
+  enabled?: boolean | null | undefined;
+  /** Compute resource requirements of the Hubble UI frontend */
+  frontendResources?: PublicCloudManagedKubernetesCiliumResourceRequirements | null | undefined;
+}
+
+/** Kubernetes compute resource quantities for a Cilium component */
+export interface PublicCloudManagedKubernetesCiliumResourceList {
+  /** CPU resource quantity, for example 250m or 1 */
+  cpu?: string | null | undefined;
+  /** Memory resource quantity, for example 128Mi or 1Gi */
+  memory?: string | null | undefined;
+}
+
+/** Kubernetes compute resource requirements for a Cilium component */
+export interface PublicCloudManagedKubernetesCiliumResourceRequirements {
+  /** Maximum compute resources allowed */
+  limits?: PublicCloudManagedKubernetesCiliumResourceList | null | undefined;
+  /** Minimum compute resources guaranteed */
+  requests?: PublicCloudManagedKubernetesCiliumResourceList | null | undefined;
+}
+
+/** A managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesCluster {
+  /**
+   * Concurrency control hash of the target specification
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Cluster creation timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Actual cluster state
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: PublicCloudManagedKubernetesClusterCurrentState | undefined;
+  /**
+   * In-progress asynchronous operations on the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  currentTasks?: CommonCurrentTask[] | null | undefined;
+  /**
+   * Unique identifier of the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Current lifecycle status of the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: CommonResourceStatusEnum | undefined;
+  /**
+   * Desired cluster specification
+   *
+   * Read-only: the API sets it.
+   */
+  targetSpec?: PublicCloudManagedKubernetesClusterTargetSpec | undefined;
+  /**
+   * Last cluster modification timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Request body for creating a managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesClusterCreation {
+  /** Desired cluster specification */
+  targetSpec: PublicCloudManagedKubernetesClusterTargetSpec;
+}
+
+/** Observed state of the cluster as reported by the backend. May differ from targetSpec while the cluster reconciles, or when the cluster is changed outside the API (resourceStatus becomes OUT_OF_SYNC). */
+export interface PublicCloudManagedKubernetesClusterCurrentState {
+  /**
+   * Observed API server state: configuration and resolved control-plane URL
+   *
+   * Read-only: the API sets it.
+   */
+  apiServer?: PublicCloudManagedKubernetesCurrentStateAPIServer | null | undefined;
+  /**
+   * Observed control-plane authentication state
+   *
+   * Read-only: the API sets it.
+   */
+  authentication?: PublicCloudManagedKubernetesCurrentStateAuthentication | null | undefined;
+  /**
+   * Observed automatic Kubernetes version upgrade policy
+   *
+   * Read-only: the API sets it.
+   */
+  autoUpgrade?: PublicCloudManagedKubernetesAutoUpgrade | null | undefined;
+  /**
+   * Observed Container Network Interface plugin and its settings
+   *
+   * Read-only: the API sets it.
+   */
+  cni?: PublicCloudManagedKubernetesCni | null | undefined;
+  /**
+   * Full Kubernetes version currently deployed on the cluster, for example 1.34.1-2
+   *
+   * Read-only: the API sets it.
+   */
+  deployedVersion?: string | null | undefined;
+  /**
+   * Observed internal pod and service CIDRs allocated by the backend, including any applied platform defaults
+   *
+   * Read-only: the API sets it.
+   */
+  ipAllocationPolicy?: PublicCloudManagedKubernetesIPAllocationPolicy | null | undefined;
+  /**
+   * Observed cluster name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | null | undefined;
+  /**
+   * Observed network topology and resolved network identifiers
+   *
+   * Read-only: the API sets it.
+   */
+  network?: PublicCloudManagedKubernetesNetwork | null | undefined;
+  /**
+   * Observed platform tier (FREE or STANDARD)
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: PublicCloudManagedKubernetesPlanNameEnum | null | undefined;
+  /**
+   * Observed deployment region identifier
+   *
+   * Read-only: the API sets it.
+   */
+  region?: string | null | undefined;
+  /**
+   * Minor Kubernetes version currently running on the cluster, for example 1.34. See deployedVersion for the full version.
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | null | undefined;
+}
+
+/** Desired specification of the cluster */
+export interface PublicCloudManagedKubernetesClusterTargetSpec {
+  /** Control-plane exposure, IP filtering, and admission plugins */
+  apiServer?: PublicCloudManagedKubernetesAPIServer | null | undefined;
+  /** Control-plane authentication variant */
+  authentication?: PublicCloudManagedKubernetesAuthentication | null | undefined;
+  /** Automatic Kubernetes version upgrade policy, by track */
+  autoUpgrade?: PublicCloudManagedKubernetesAutoUpgrade | null | undefined;
+  /** Container Network Interface plugin */
+  cni: PublicCloudManagedKubernetesCni;
+  /** Internal pod and service addressing. Immutable after creation. */
+  ipAllocationPolicy?: PublicCloudManagedKubernetesIPAllocationPolicy | null | undefined;
+  /** Cluster name. Not an identifier. Can be changed after creation by PUT. Automatically generated when omitted at creation. */
+  name?: string | null | undefined;
+  /** Network topology of the cluster nodes. The variant and its identifiers are immutable after creation. defaultEgress remains mutable. */
+  network: PublicCloudManagedKubernetesNetwork;
+  /** Platform tier (FREE or STANDARD) */
+  plan: PublicCloudManagedKubernetesPlanNameEnum;
+  /** Deployment region name */
+  region: string;
+  /** Desired Kubernetes version. On creation, minor, for example 1.34 or full, for example 1.34.1-2. A minor resolves to its latest patch. On update, minor or full. */
+  version?: string | null | undefined;
+}
+
+/** Request body for updating a managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesClusterUpdate {
+  /** Optional concurrency-control checksum. When supplied, it must match the resource's current checksum or the request is rejected with a 409 checksum-mismatch conflict. When omitted or empty, the concurrency check is skipped and the write is forced (last-write-wins). */
+  checksum?: string | null | undefined;
+  /** Updated cluster specification with mutable fields only */
+  targetSpec: PublicCloudManagedKubernetesClusterUpdateTargetSpec;
+}
+
+/** Desired specification of the cluster on update, restricted to the mutable surface. Immutable fields (region, plan, network variant and identifiers, cni variant, ipAllocationPolicy) are excluded from the body. Sending any is rejected with 400. Every configured mutable field must be present. A missing configured field is rejected with 400. */
+export interface PublicCloudManagedKubernetesClusterUpdateTargetSpec {
+  /** Control-plane exposure, IP filtering, and admission plugins */
+  apiServer?: PublicCloudManagedKubernetesAPIServer | null | undefined;
+  /** Control-plane authentication variant */
+  authentication?: PublicCloudManagedKubernetesAuthentication | null | undefined;
+  /** Automatic Kubernetes version upgrade policy, by track */
+  autoUpgrade?: PublicCloudManagedKubernetesAutoUpgrade | null | undefined;
+  /** Mutable CNI settings only. The CNI variant is immutable. Its discriminant must not be sent. */
+  cni?: PublicCloudManagedKubernetesCniUpdate | null | undefined;
+  /** Cluster name. Not an identifier. Can be changed after creation. */
+  name: string;
+  /** Mutable network settings only. The network variant and its identifiers are immutable and must not be sent. */
+  network?: PublicCloudManagedKubernetesNetworkUpdate | null | undefined;
+  /** Desired Kubernetes version, full, for example 1.34.1-2 or minor, for example 1.34. The current minor changes nothing. The next minor upgrades to its latest patch. Changing this drives a version upgrade reconciliation. */
+  version: string;
+}
+
+/** Version currently deployed on the cluster, and the versions it can move to */
+export interface PublicCloudManagedKubernetesClusterVersions {
+  /**
+   * Patch versions of the current minor the cluster can update to, for example 1.32.8-1 to 1.32.8-2
+   *
+   * Read-only: the API sets it.
+   */
+  availableUpdates?: PublicCloudManagedKubernetesVersionReference[] | undefined;
+  /**
+   * Versions of the next minor the cluster can upgrade to, for example 1.32.8-1 to 1.33.1-2. Multi-minor jumps are never listed.
+   *
+   * Read-only: the API sets it.
+   */
+  availableUpgrades?: PublicCloudManagedKubernetesVersionReference[] | undefined;
+  /**
+   * Full Kubernetes version currently deployed on the cluster, for example 1.32.8-1
+   *
+   * Read-only: the API sets it.
+   */
+  currentVersion?: string | undefined;
+}
+
+/** Container Network Interface plugin. FREE requires CANAL, STANDARD requires CILIUM. A mismatch is rejected with 400. The variant and the Canal kube-proxy mode are immutable after creation. Other internal settings stay mutable. */
+export interface PublicCloudManagedKubernetesCni {
+  /** Canal payload, valid only on the FREE plan. Present when type is CANAL, absent otherwise. */
+  canal?: PublicCloudManagedKubernetesCniCanal | null | undefined;
+  /** Cilium payload, valid only on the STANDARD plan. Present when type is CILIUM, absent otherwise. */
+  cilium?: PublicCloudManagedKubernetesCniCilium | null | undefined;
+  /** Selected CNI variant */
+  type: PublicCloudManagedKubernetesCniTypeEnum;
+}
+
+/** Canal CNI configuration, valid only on the FREE plan. The kube-proxy mode is immutable after creation. Its other settings stay mutable. */
+export interface PublicCloudManagedKubernetesCniCanal {
+  /** kube-proxy configuration */
+  kubeProxy?: PublicCloudManagedKubernetesKubeProxy | null | undefined;
+}
+
+/** Mutable Canal CNI settings, valid only on the FREE plan. The kube-proxy mode is immutable. */
+export interface PublicCloudManagedKubernetesCniCanalUpdate {
+  /** Mutable kube-proxy settings */
+  kubeProxy?: PublicCloudManagedKubernetesKubeProxyUpdate | null | undefined;
+}
+
+/** Cilium CNI configuration, valid only on the STANDARD plan */
+export interface PublicCloudManagedKubernetesCniCilium {
+  /** ClusterMesh cluster identifier, between 1 and 255 */
+  clusterId?: number | null | undefined;
+  /** ClusterMesh multi-cluster connectivity configuration */
+  clusterMesh?: PublicCloudManagedKubernetesCiliumClusterMesh | null | undefined;
+  /** Hubble observability configuration */
+  hubble?: PublicCloudManagedKubernetesCiliumHubble | null | undefined;
+}
+
+/** Container Network Interface. CANAL requires the FREE plan. CILIUM requires the STANDARD plan. A mismatch is rejected. Immutable after creation. */
+export const PublicCloudManagedKubernetesCniTypeEnum = {
+  CANAL: "CANAL",
+  CILIUM: "CILIUM",
+} as const;
+/**
+ * Container Network Interface. CANAL requires the FREE plan. CILIUM requires the STANDARD plan. A mismatch is rejected. Immutable after creation.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesCniTypeEnum =
+  | (typeof PublicCloudManagedKubernetesCniTypeEnum)[keyof typeof PublicCloudManagedKubernetesCniTypeEnum]
+  | (string & {});
+
+/** Mutable CNI settings. The variant is immutable and its discriminant must not be sent, else 400. */
+export interface PublicCloudManagedKubernetesCniUpdate {
+  /** Mutable Canal settings. Present on the FREE plan. The kube-proxy mode is immutable. */
+  canal?: PublicCloudManagedKubernetesCniCanalUpdate | null | undefined;
+  /** Mutable Cilium settings. Present on the STANDARD plan. */
+  cilium?: PublicCloudManagedKubernetesCniCilium | null | undefined;
+}
+
+/** Observed API server state */
+export interface PublicCloudManagedKubernetesCurrentStateAPIServer {
+  /**
+   * Observed exposure and IP filtering of the API server
+   *
+   * Read-only: the API sets it.
+   */
+  access?: PublicCloudManagedKubernetesCurrentStateAPIServerAccess | null | undefined;
+  /**
+   * Observed admission plugin configurations
+   *
+   * Read-only: the API sets it.
+   */
+  admissionPlugins?: Record<string, PublicCloudManagedKubernetesAdmissionPlugin> | null | undefined;
+}
+
+/** Observed exposure of the cluster API server: public endpoint and IP filtering */
+export interface PublicCloudManagedKubernetesCurrentStateAPIServerAccess {
+  /**
+   * Observed IP allowlist for the API server
+   *
+   * Read-only: the API sets it.
+   */
+  authorizedIps?: PublicCloudManagedKubernetesAuthorizedIPs | null | undefined;
+  /**
+   * Observed public endpoint of the API server
+   *
+   * Read-only: the API sets it.
+   */
+  publicEndpoint?: PublicCloudManagedKubernetesAPIServerPublicEndpoint | null | undefined;
+}
+
+/** Observed control-plane authentication state */
+export interface PublicCloudManagedKubernetesCurrentStateAuthentication {
+  /**
+   * Observed OpenID Connect configuration, present when type is OIDC
+   *
+   * Read-only: the API sets it.
+   */
+  oidc?: PublicCloudManagedKubernetesCurrentStateOidc | null | undefined;
+  /**
+   * Observed active authentication variant
+   *
+   * Read-only: the API sets it.
+   */
+  type?: PublicCloudManagedKubernetesAuthenticationTypeEnum | null | undefined;
+}
+
+/** Observed single-provider OpenID Connect configuration */
+export interface PublicCloudManagedKubernetesCurrentStateOidc {
+  /**
+   * CA certificate of the OIDC provider, PEM-encoded
+   *
+   * Read-only: the API sets it.
+   */
+  caContent?: string | null | undefined;
+  /**
+   * Identifier of the OIDC client
+   *
+   * Read-only: the API sets it.
+   */
+  clientId?: string | null | undefined;
+  /**
+   * JWT claims used as Kubernetes groups
+   *
+   * Read-only: the API sets it.
+   */
+  groupsClaim?: string[] | null | undefined;
+  /**
+   * Prefix prepended to group claims
+   *
+   * Read-only: the API sets it.
+   */
+  groupsPrefix?: string | null | undefined;
+  /**
+   * OIDC issuer URL
+   *
+   * Read-only: the API sets it.
+   */
+  issuerUrl?: string | null | undefined;
+  /**
+   * Claims that must be present in the JWT token
+   *
+   * Read-only: the API sets it.
+   */
+  requiredClaim?: string[] | null | undefined;
+  /**
+   * Accepted signing algorithms for OIDC tokens
+   *
+   * Read-only: the API sets it.
+   */
+  signingAlgs?: PublicCloudManagedKubernetesOidcSigningAlgEnum[] | null | undefined;
+  /**
+   * JWT claim used as the Kubernetes username
+   *
+   * Read-only: the API sets it.
+   */
+  usernameClaim?: string | null | undefined;
+  /**
+   * Prefix prepended to username claims
+   *
+   * Read-only: the API sets it.
+   */
+  usernamePrefix?: string | null | undefined;
+}
+
+/** Default egress route for nodes on a private network cluster. userGateway is required if and only if type is USER_GATEWAY, else the request is rejected. */
+export interface PublicCloudManagedKubernetesDefaultEgress {
+  /** Default egress route type for the cluster nodes */
+  type: PublicCloudManagedKubernetesDefaultEgressTypeEnum;
+  /** User-provided egress gateway. Required if and only if type is USER_GATEWAY. */
+  userGateway?: PublicCloudManagedKubernetesUserGateway | null | undefined;
+}
+
+/** Default egress route for nodes on a private network cluster. NODE_PUBLIC_INTERFACE uses the public interface. MANAGED_GATEWAY uses the subnet gateway. USER_GATEWAY uses a caller-provided gateway (requires userGateway). */
+export const PublicCloudManagedKubernetesDefaultEgressTypeEnum = {
+  MANAGED_GATEWAY: "MANAGED_GATEWAY",
+  NODE_PUBLIC_INTERFACE: "NODE_PUBLIC_INTERFACE",
+  USER_GATEWAY: "USER_GATEWAY",
+} as const;
+/**
+ * Default egress route for nodes on a private network cluster. NODE_PUBLIC_INTERFACE uses the public interface. MANAGED_GATEWAY uses the subnet gateway. USER_GATEWAY uses a caller-provided gateway (requires userGateway).
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesDefaultEgressTypeEnum =
+  | (typeof PublicCloudManagedKubernetesDefaultEgressTypeEnum)[keyof typeof PublicCloudManagedKubernetesDefaultEgressTypeEnum]
+  | (string & {});
+
+/** Etcd database usage metrics for a managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesEtcdUsage {
+  /**
+   * Etcd storage quota in bytes
+   *
+   * Read-only: the API sets it.
+   */
+  limit?: number | undefined;
+  /**
+   * Current etcd storage usage in bytes
+   *
+   * Read-only: the API sets it.
+   */
+  used?: number | null | undefined;
+}
+
+/** A node flavor available for managed Kubernetes node pools in a region */
+export interface PublicCloudManagedKubernetesFlavor {
+  /**
+   * Category of the flavor
+   *
+   * Read-only: the API sets it.
+   */
+  category?: PublicCloudManagedKubernetesFlavorCategoryEnum | undefined;
+  /**
+   * Flavor name, for example b3-8
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Compute resources provided by the flavor
+   *
+   * Read-only: the API sets it.
+   */
+  resources?: PublicCloudManagedKubernetesFlavorResources | undefined;
+  /**
+   * Availability of the flavor for node pool creation
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudManagedKubernetesFlavorStatusEnum | undefined;
+}
+
+/** Resource profile a node flavor is optimized for */
+export const PublicCloudManagedKubernetesFlavorCategoryEnum = {
+  CPU_OPTIMIZED: "CPU_OPTIMIZED",
+  DISCOVERY: "DISCOVERY",
+  GENERAL_PURPOSE: "GENERAL_PURPOSE",
+  GPU: "GPU",
+  IOPS_OPTIMIZED: "IOPS_OPTIMIZED",
+  MEMORY_OPTIMIZED: "MEMORY_OPTIMIZED",
+} as const;
+/**
+ * Resource profile a node flavor is optimized for
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesFlavorCategoryEnum =
+  | (typeof PublicCloudManagedKubernetesFlavorCategoryEnum)[keyof typeof PublicCloudManagedKubernetesFlavorCategoryEnum]
+  | (string & {});
+
+/** Compute resources provided by a node flavor */
+export interface PublicCloudManagedKubernetesFlavorResources {
+  /**
+   * Number of GPUs
+   *
+   * Read-only: the API sets it.
+   */
+  gpus?: number | undefined;
+  /**
+   * Memory in GiB
+   *
+   * Read-only: the API sets it.
+   */
+  memoryGiB?: number | undefined;
+  /**
+   * Number of virtual CPUs
+   *
+   * Read-only: the API sets it.
+   */
+  vcpus?: number | undefined;
+}
+
+/** Availability of a node flavor for node pool creation */
+export const PublicCloudManagedKubernetesFlavorStatusEnum = {
+  AVAILABLE: "AVAILABLE",
+  UNAVAILABLE: "UNAVAILABLE",
+} as const;
+/**
+ * Availability of a node flavor for node pool creation
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesFlavorStatusEnum =
+  | (typeof PublicCloudManagedKubernetesFlavorStatusEnum)[keyof typeof PublicCloudManagedKubernetesFlavorStatusEnum]
+  | (string & {});
+
+/** Internal pod and service addressing. Both CIDRs are immutable after creation. When omitted, platform defaults apply. */
+export interface PublicCloudManagedKubernetesIPAllocationPolicy {
+  /** IPv4 CIDR block allocated for pod networking, for example 10.0.0.0/16. Immutable after creation. A non-IPv4, invalid or overlapping CIDR is rejected with 400. */
+  pods?: IPv4Block | null | undefined;
+  /** IPv4 CIDR block allocated for service networking, for example 10.96.0.0/12. Immutable after creation. A non-IPv4, invalid or overlapping CIDR is rejected with 400. */
+  services?: IPv4Block | null | undefined;
+}
+
+/** kube-proxy configuration for the Canal CNI */
+export interface PublicCloudManagedKubernetesKubeProxy {
+  /** iptables mode payload. Provided when mode is IPTABLES. Must be absent otherwise. */
+  iptables?: PublicCloudManagedKubernetesKubeProxyIptables | null | undefined;
+  /** IPVS mode payload. Provided when mode is IPVS. Must be absent otherwise. */
+  ipvs?: PublicCloudManagedKubernetesKubeProxyIpvs | null | undefined;
+  /** Selected kube-proxy mode. Immutable after creation. */
+  mode: PublicCloudManagedKubernetesKubeProxyModeEnum;
+}
+
+/** Kube-proxy iptables mode settings */
+export interface PublicCloudManagedKubernetesKubeProxyIptables {
+  /** The minimum period that iptables rules are refreshed, in RFC3339 duration format, for example `PT60S` */
+  minSyncPeriod?: string | null | undefined;
+  /** The period that iptables rules are refreshed, in RFC3339 duration format, for example `PT60S`. Must be greater than 0. */
+  syncPeriod?: string | null | undefined;
+}
+
+/** Kube-proxy IPVS mode settings */
+export interface PublicCloudManagedKubernetesKubeProxyIpvs {
+  /** The minimum period that ipvs rules are refreshed in RFC3339 duration format, for example `PT60S` */
+  minSyncPeriod?: string | null | undefined;
+  /** IPVS scheduling algorithm */
+  scheduler?: PublicCloudManagedKubernetesKubeProxyIpvsSchedulerEnum | null | undefined;
+  /** The period that ipvs rules are refreshed in RFC3339 duration format, for example `PT60S`. Must be greater than 0. */
+  syncPeriod?: string | null | undefined;
+  /** The timeout value used for IPVS TCP sessions after receiving a FIN in RFC3339 duration format, for example `PT60S`. Defaults to `PT0S`, which preserves the current timeout value on the system. */
+  tcpFinTimeout?: string | null | undefined;
+  /** The timeout value used for idle IPVS TCP sessions in RFC3339 duration format, for example `PT60S`. Defaults to `PT0S`, which preserves the current timeout value on the system. Cannot be set between `PT0S` and `PT5S`, in order to prevent in-cluster networking issues. */
+  tcpTimeout?: string | null | undefined;
+  /** The timeout value used for IPVS UDP packets in RFC3339 duration format, for example `PT60S`. Defaults to `PT0S`, which preserves the current timeout value on the system. */
+  udpTimeout?: string | null | undefined;
+}
+
+/** Algorithm IPVS uses to pick the backend pod for a new connection. ROUND_ROBIN cycles through backends. LEAST_CONNECTION picks the backend with the fewest active connections. SHORTEST_EXPECTED_DELAY and NEVER_QUEUE weight the choice on expected latency. DESTINATION_HASHING and SOURCE_HASHING pin a connection to a backend based on the destination or source address. */
+export const PublicCloudManagedKubernetesKubeProxyIpvsSchedulerEnum = {
+  DESTINATION_HASHING: "DESTINATION_HASHING",
+  LEAST_CONNECTION: "LEAST_CONNECTION",
+  NEVER_QUEUE: "NEVER_QUEUE",
+  ROUND_ROBIN: "ROUND_ROBIN",
+  SHORTEST_EXPECTED_DELAY: "SHORTEST_EXPECTED_DELAY",
+  SOURCE_HASHING: "SOURCE_HASHING",
+} as const;
+/**
+ * Algorithm IPVS uses to pick the backend pod for a new connection. ROUND_ROBIN cycles through backends. LEAST_CONNECTION picks the backend with the fewest active connections. SHORTEST_EXPECTED_DELAY and NEVER_QUEUE weight the choice on expected latency. DESTINATION_HASHING and SOURCE_HASHING pin a connection to a backend based on the destination or source address.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesKubeProxyIpvsSchedulerEnum =
+  | (typeof PublicCloudManagedKubernetesKubeProxyIpvsSchedulerEnum)[keyof typeof PublicCloudManagedKubernetesKubeProxyIpvsSchedulerEnum]
+  | (string & {});
+
+/** kube-proxy mode for the Canal CNI */
+export const PublicCloudManagedKubernetesKubeProxyModeEnum = {
+  IPTABLES: "IPTABLES",
+  IPVS: "IPVS",
+} as const;
+/**
+ * kube-proxy mode for the Canal CNI
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesKubeProxyModeEnum =
+  | (typeof PublicCloudManagedKubernetesKubeProxyModeEnum)[keyof typeof PublicCloudManagedKubernetesKubeProxyModeEnum]
+  | (string & {});
+
+/** Mutable kube-proxy settings for the Canal CNI. The mode is immutable after creation. */
+export interface PublicCloudManagedKubernetesKubeProxyUpdate {
+  /** iptables mode payload. Provided when the cluster runs in IPTABLES mode. Must be absent otherwise. */
+  iptables?: PublicCloudManagedKubernetesKubeProxyIptables | null | undefined;
+  /** IPVS mode payload. Provided when the cluster runs in IPVS mode. Must be absent otherwise. */
+  ipvs?: PublicCloudManagedKubernetesKubeProxyIpvs | null | undefined;
+}
+
+/** Kubeconfig file content for a managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesKubeconfig {
+  /**
+   * Kubeconfig file content in YAML format
+   *
+   * Read-only: the API sets it.
+   */
+  content?: string | undefined;
+}
+
+/** Network topology of the cluster nodes. Immutable after creation. For VRACK, the vrack identifiers are immutable while defaultEgress stays mutable. */
+export interface PublicCloudManagedKubernetesNetwork {
+  /** Selected network topology variant */
+  type: PublicCloudManagedKubernetesNetworkTypeEnum;
+  /** Private network (vRack) payload. Required when type is VRACK. Must be absent otherwise. */
+  vrack?: PublicCloudManagedKubernetesNetworkVrack | null | undefined;
+}
+
+/** Network topology of the cluster nodes. PUBLIC for a public cluster. VRACK for a vRack private network cluster. Immutable after creation. */
+export const PublicCloudManagedKubernetesNetworkTypeEnum = {
+  PUBLIC: "PUBLIC",
+  VRACK: "VRACK",
+} as const;
+/**
+ * Network topology of the cluster nodes. PUBLIC for a public cluster. VRACK for a vRack private network cluster. Immutable after creation.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesNetworkTypeEnum =
+  | (typeof PublicCloudManagedKubernetesNetworkTypeEnum)[keyof typeof PublicCloudManagedKubernetesNetworkTypeEnum]
+  | (string & {});
+
+/** Mutable network settings. The variant and its identifiers are immutable and must not be sent, else 400. */
+export interface PublicCloudManagedKubernetesNetworkUpdate {
+  /** Mutable private network (vRack) settings. Present for a vRack cluster. */
+  vrack?: PublicCloudManagedKubernetesNetworkVrackUpdate | null | undefined;
+}
+
+/** Private network (vRack) topology for cluster nodes. The private network and subnet identifiers are immutable after creation. defaultEgress stays mutable. */
+export interface PublicCloudManagedKubernetesNetworkVrack {
+  /** Default egress route for the cluster nodes. Defaults is MANAGED_GATEWAY for STANDARD plan, NODE_PUBLIC_INTERFACE for FREE plan. */
+  defaultEgress?: PublicCloudManagedKubernetesDefaultEgress | null | undefined;
+  /** Subnet identifier used by load balancers. Immutable after creation on STANDARD plan. */
+  loadBalancerSubnetId?: string | null | undefined;
+  /** Identifier of the target private network. Immutable after creation. */
+  privateNetworkId: string;
+  /** Subnet identifier used by cluster nodes. Immutable after creation. */
+  subnetId: string;
+}
+
+/** Mutable private network (vRack) settings. The variant and its identifiers are immutable and must not be sent. */
+export interface PublicCloudManagedKubernetesNetworkVrackUpdate {
+  /** Default egress route for the cluster nodes */
+  defaultEgress?: PublicCloudManagedKubernetesDefaultEgress | null | undefined;
+  /** Subnet identifier used by load balancers. Immutable on STANDARD plan. */
+  loadBalancerSubnetId?: string | null | undefined;
+}
+
+/** A node of a managed Kubernetes cluster nodepool */
+export interface PublicCloudManagedKubernetesNode {
+  /**
+   * Node creation timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Actual node state
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: PublicCloudManagedKubernetesNodeCurrentState | undefined;
+  /**
+   * Unique identifier of the node
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Current lifecycle status of the node
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: PublicCloudManagedKubernetesNodeResourceStatusEnum | undefined;
+  /**
+   * Last node modification timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Hardware configuration of the nodepool nodes */
+export interface PublicCloudManagedKubernetesNodeConfig {
+  /** Floating IP attachment for the nodepool nodes */
+  attachFloatingIp?: PublicCloudManagedKubernetesAttachFloatingIP | null | undefined;
+  /** Node flavor identifier defining the CPU, memory and disk of each node, for example b3-8. Immutable after creation. */
+  flavor: string;
+}
+
+/** Observed state of the node */
+export interface PublicCloudManagedKubernetesNodeCurrentState {
+  /**
+   * Timestamp when the node was removed. Present only for a deleted node kept in retention.
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  deletedAt?: string | null | undefined;
+  /**
+   * Timestamp when the node joined the cluster. Absent until the node has joined.
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  deployedAt?: string | null | undefined;
+  /**
+   * Flavor of the Public Cloud instance backing the node
+   *
+   * Read-only: the API sets it.
+   */
+  flavor?: string | undefined;
+  /**
+   * Identifier of the Public Cloud instance backing the node. Absent until the instance is provisioned.
+   *
+   * Read-only: the API sets it.
+   */
+  instanceId?: string | null | undefined;
+  /**
+   * Node name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Identifier of the nodepool the node belongs to
+   *
+   * Read-only: the API sets it.
+   */
+  nodePoolId?: string | undefined;
+  /**
+   * Whether the node runs the current nodepool specification
+   *
+   * Read-only: the API sets it.
+   */
+  upToDate?: boolean | undefined;
+  /**
+   * Kubernetes version currently installed on the node
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | null | undefined;
+}
+
+/** Lifecycle status of the node. CREATING while provisioning, before the node joins the cluster. READY when operational on the current nodepool spec. UPDATING while a change reconciles. ERROR when the node is detected as failed. DELETING while being removed. DELETED once removed, kept in retention until it expires. */
+export const PublicCloudManagedKubernetesNodeResourceStatusEnum = {
+  CREATING: "CREATING",
+  DELETED: "DELETED",
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  OUT_OF_SYNC: "OUT_OF_SYNC",
+  READY: "READY",
+  SUSPENDED: "SUSPENDED",
+  UNKNOWN: "UNKNOWN",
+  UPDATING: "UPDATING",
+} as const;
+/**
+ * Lifecycle status of the node. CREATING while provisioning, before the node joins the cluster. READY when operational on the current nodepool spec. UPDATING while a change reconciles. ERROR when the node is detected as failed. DELETING while being removed. DELETED once removed, kept in retention until it expires.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesNodeResourceStatusEnum =
+  | (typeof PublicCloudManagedKubernetesNodeResourceStatusEnum)[keyof typeof PublicCloudManagedKubernetesNodeResourceStatusEnum]
+  | (string & {});
+
+/** Kubernetes metadata and scheduling settings applied to every node of the nodepool */
+export interface PublicCloudManagedKubernetesNodeTemplate {
+  /** Kubernetes metadata applied to each node */
+  metadata?: PublicCloudManagedKubernetesNodeTemplateMetadata | null | undefined;
+  /** Kubernetes scheduling settings applied to each node */
+  spec?: PublicCloudManagedKubernetesNodeTemplateSpec | null | undefined;
+}
+
+/** Kubernetes metadata applied to every node of the nodepool */
+export interface PublicCloudManagedKubernetesNodeTemplateMetadata {
+  /** Annotations applied to each node, as key-value pairs */
+  annotations?: Record<string, string> | null | undefined;
+  /** Finalizers applied to each node, blocking deletion until the associated cleanup completes */
+  finalizers?: string[] | null | undefined;
+  /** Labels applied to each node, as key-value pairs */
+  labels?: Record<string, string> | null | undefined;
+}
+
+/** Kubernetes scheduling settings applied to every node of the nodepool */
+export interface PublicCloudManagedKubernetesNodeTemplateSpec {
+  /** Taints applied to each node */
+  taints?: PublicCloudManagedKubernetesTaint[] | null | undefined;
+  /** Whether the nodes are marked unschedulable, preventing new pods from being placed on them */
+  unschedulable?: boolean | null | undefined;
+}
+
+/** A nodepool of a managed Kubernetes cluster */
+export interface PublicCloudManagedKubernetesNodepool {
+  /**
+   * Concurrency control hash of the target specification
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Nodepool creation timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Actual nodepool state
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: PublicCloudManagedKubernetesNodepoolCurrentState | undefined;
+  /**
+   * In-progress asynchronous operations on the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  currentTasks?: CommonCurrentTask[] | null | undefined;
+  /**
+   * Unique identifier of the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Current lifecycle status of the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: CommonResourceStatusEnum | undefined;
+  /**
+   * Desired nodepool specification
+   *
+   * Read-only: the API sets it.
+   */
+  targetSpec?: PublicCloudManagedKubernetesNodepoolTargetSpec | undefined;
+  /**
+   * Last nodepool modification timestamp
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Billing period for the nodepool nodes. HOURLY bills per hour. MONTHLY bills a fixed monthly rate. Immutable after creation. */
+export const PublicCloudManagedKubernetesNodepoolBillingTypeEnum = {
+  HOURLY: "HOURLY",
+  MONTHLY: "MONTHLY",
+} as const;
+/**
+ * Billing period for the nodepool nodes. HOURLY bills per hour. MONTHLY bills a fixed monthly rate. Immutable after creation.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesNodepoolBillingTypeEnum =
+  | (typeof PublicCloudManagedKubernetesNodepoolBillingTypeEnum)[keyof typeof PublicCloudManagedKubernetesNodepoolBillingTypeEnum]
+  | (string & {});
+
+/** Request body for creating a nodepool */
+export interface PublicCloudManagedKubernetesNodepoolCreation {
+  /** Desired nodepool specification */
+  targetSpec: PublicCloudManagedKubernetesNodepoolTargetSpec;
+}
+
+/** Observed state of the nodepool. May differ from targetSpec while reconciling, or when the nodepool is changed outside the API (resourceStatus becomes OUT_OF_SYNC). */
+export interface PublicCloudManagedKubernetesNodepoolCurrentState {
+  /**
+   * Observed anti-affinity placement of the nodepool nodes
+   *
+   * Read-only: the API sets it.
+   */
+  antiAffinity?: PublicCloudManagedKubernetesAntiAffinity | null | undefined;
+  /**
+   * Observed automatic node scaling configuration
+   *
+   * Read-only: the API sets it.
+   */
+  autoscaler?: PublicCloudManagedKubernetesAutoscaler | null | undefined;
+  /**
+   * Observed availability zone the nodepool nodes are placed in
+   *
+   * Read-only: the API sets it.
+   */
+  availabilityZone?: string | null | undefined;
+  /**
+   * Observed billing period applied to the nodepool nodes
+   *
+   * Read-only: the API sets it.
+   */
+  billingType?: PublicCloudManagedKubernetesNodepoolBillingTypeEnum | null | undefined;
+  /**
+   * Observed desired number of nodes in the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  desiredNodes?: number | null | undefined;
+  /**
+   * Observed nodepool name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | null | undefined;
+  /**
+   * Observed hardware configuration of the nodepool nodes
+   *
+   * Read-only: the API sets it.
+   */
+  nodeConfig?: PublicCloudManagedKubernetesNodeConfig | null | undefined;
+  /**
+   * Observed strategy used to apply node changes across the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  rollout?: PublicCloudManagedKubernetesNodepoolRollout | null | undefined;
+  /**
+   * Observed size and readiness of the nodepool nodes
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudManagedKubernetesNodepoolStatus | null | undefined;
+  /**
+   * Observed Kubernetes metadata and scheduling settings applied to the nodepool nodes
+   *
+   * Read-only: the API sets it.
+   */
+  template?: PublicCloudManagedKubernetesNodeTemplate | null | undefined;
+}
+
+/** Observed strategy used to apply node changes across the nodepool */
+export interface PublicCloudManagedKubernetesNodepoolRollout {
+  /**
+   * Strategy used to apply node changes across the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  strategy?: PublicCloudManagedKubernetesNodepoolRolloutStrategyEnum | null | undefined;
+}
+
+/** How node changes roll out across the nodepool. ROLLING_UPDATE replaces nodes progressively. IN_PLACE updates existing nodes without replacing them. */
+export const PublicCloudManagedKubernetesNodepoolRolloutStrategyEnum = {
+  IN_PLACE: "IN_PLACE",
+  ROLLING_UPDATE: "ROLLING_UPDATE",
+} as const;
+/**
+ * How node changes roll out across the nodepool. ROLLING_UPDATE replaces nodes progressively. IN_PLACE updates existing nodes without replacing them.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesNodepoolRolloutStrategyEnum =
+  | (typeof PublicCloudManagedKubernetesNodepoolRolloutStrategyEnum)[keyof typeof PublicCloudManagedKubernetesNodepoolRolloutStrategyEnum]
+  | (string & {});
+
+/** Observed size and readiness of the nodepool nodes */
+export interface PublicCloudManagedKubernetesNodepoolStatus {
+  /**
+   * Number of nodes currently provisioned in the nodepool
+   *
+   * Read-only: the API sets it.
+   */
+  currentNodes?: number | null | undefined;
+  /**
+   * Number of nodes reporting a Ready condition
+   *
+   * Read-only: the API sets it.
+   */
+  readyNodes?: number | null | undefined;
+  /**
+   * Number of nodes running the current nodepool specification
+   *
+   * Read-only: the API sets it.
+   */
+  upToDateNodes?: number | null | undefined;
+}
+
+/** Desired specification for a nodepool */
+export interface PublicCloudManagedKubernetesNodepoolTargetSpec {
+  /** Anti-affinity placement of the nodepool nodes. Immutable after creation. */
+  antiAffinity?: PublicCloudManagedKubernetesAntiAffinity | null | undefined;
+  /** Automatic node scaling for the nodepool */
+  autoscaler?: PublicCloudManagedKubernetesAutoscaler | null | undefined;
+  /** Availability zone the nodepool nodes are placed in. Immutable after creation. */
+  availabilityZone?: string | null | undefined;
+  /** Billing period applied to the nodepool nodes. Immutable after creation. */
+  billingType?: PublicCloudManagedKubernetesNodepoolBillingTypeEnum | null | undefined;
+  /** Desired number of nodes in the nodepool. When the autoscaler is enabled, must be at least autoscaler.minNodes. */
+  desiredNodes?: number | null | undefined;
+  /** Nodepool name. Immutable after creation. */
+  name?: string | null | undefined;
+  /** Hardware configuration of the nodepool nodes. Immutable after creation. */
+  nodeConfig: PublicCloudManagedKubernetesNodeConfig;
+  /** Kubernetes metadata and scheduling settings applied to every node of the nodepool */
+  template?: PublicCloudManagedKubernetesNodeTemplate | null | undefined;
+}
+
+/** Request body for updating a nodepool */
+export interface PublicCloudManagedKubernetesNodepoolUpdate {
+  /** Optional concurrency-control checksum. When supplied, it must match the resource's current checksum or the request is rejected with a 409 checksum-mismatch conflict. When omitted or empty, the concurrency check is skipped and the write is forced (last-write-wins). */
+  checksum?: string | null | undefined;
+  /** Updated nodepool specification with mutable fields only */
+  targetSpec: PublicCloudManagedKubernetesNodepoolUpdateTargetSpec;
+}
+
+/** Desired nodepool specification on update. Mutable fields only. */
+export interface PublicCloudManagedKubernetesNodepoolUpdateTargetSpec {
+  /** Automatic node scaling for the nodepool */
+  autoscaler?: PublicCloudManagedKubernetesAutoscaler | null | undefined;
+  /** Desired number of nodes in the nodepool. When the autoscaler is enabled, must be at least autoscaler.minNodes. */
+  desiredNodes?: number | null | undefined;
+  /** Kubernetes metadata and scheduling settings applied to every node of the nodepool */
+  template?: PublicCloudManagedKubernetesNodeTemplate | null | undefined;
+}
+
+/** Single-provider OpenID Connect configuration for control-plane authentication */
+export interface PublicCloudManagedKubernetesOidc {
+  /** CA certificate of the OIDC provider, PEM-encoded */
+  caContent?: string | null | undefined;
+  /** Identifier of the OIDC client */
+  clientId: string;
+  /** JWT claims to use as Kubernetes groups */
+  groupsClaim?: string[] | null | undefined;
+  /** Prefix prepended to group claims */
+  groupsPrefix?: string | null | undefined;
+  /** OIDC issuer URL */
+  issuerUrl: string;
+  /** Claims that must be present in the JWT token */
+  requiredClaim?: string[] | null | undefined;
+  /** Accepted signing algorithms for OIDC tokens */
+  signingAlgs?: PublicCloudManagedKubernetesOidcSigningAlgEnum[] | null | undefined;
+  /** JWT claim to use as the Kubernetes username */
+  usernameClaim?: string | null | undefined;
+  /** Prefix prepended to username claims */
+  usernamePrefix?: string | null | undefined;
+}
+
+/** JSON Web Signature algorithm accepted for OIDC tokens. RS* are RSASSA-PKCS1-v1_5, ES* are ECDSA and PS* are RSASSA-PSS, each with the SHA-256, SHA-384 or SHA-512 digest. */
+export const PublicCloudManagedKubernetesOidcSigningAlgEnum = {
+  ES256: "ES256",
+  ES384: "ES384",
+  ES512: "ES512",
+  PS256: "PS256",
+  PS384: "PS384",
+  PS512: "PS512",
+  RS256: "RS256",
+  RS384: "RS384",
+  RS512: "RS512",
+} as const;
+/**
+ * JSON Web Signature algorithm accepted for OIDC tokens. RS* are RSASSA-PKCS1-v1_5, ES* are ECDSA and PS* are RSASSA-PSS, each with the SHA-256, SHA-384 or SHA-512 digest.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesOidcSigningAlgEnum =
+  | (typeof PublicCloudManagedKubernetesOidcSigningAlgEnum)[keyof typeof PublicCloudManagedKubernetesOidcSigningAlgEnum]
+  | (string & {});
+
+/** A plan available for managed Kubernetes clusters, with its control plane characteristics and limits */
+export interface PublicCloudManagedKubernetesPlan {
+  /**
+   * Control plane characteristics of the plan
+   *
+   * Read-only: the API sets it.
+   */
+  controlPlane?: PublicCloudManagedKubernetesPlanControlPlane | undefined;
+  /**
+   * Limits enforced by the plan
+   *
+   * Read-only: the API sets it.
+   */
+  limits?: PublicCloudManagedKubernetesPlanLimits | undefined;
+  /**
+   * Plan name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: PublicCloudManagedKubernetesPlanNameEnum | undefined;
+  /**
+   * Availability of the plan for cluster creation
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudManagedKubernetesPlanStatusEnum | undefined;
+}
+
+/** Control plane characteristics of a managed Kubernetes plan */
+export interface PublicCloudManagedKubernetesPlanControlPlane {
+  /**
+   * Etcd characteristics of the control plane
+   *
+   * Read-only: the API sets it.
+   */
+  etcd?: PublicCloudManagedKubernetesPlanEtcd | undefined;
+}
+
+/** etcd characteristics of a managed Kubernetes control plane */
+export interface PublicCloudManagedKubernetesPlanEtcd {
+  /**
+   * Whether etcd runs on storage dedicated to the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  dedicated?: boolean | undefined;
+  /**
+   * Etcd storage quota
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: PublicCloudManagedKubernetesPlanEtcdStorage | undefined;
+}
+
+/** etcd storage quota of a managed Kubernetes plan */
+export interface PublicCloudManagedKubernetesPlanEtcdStorage {
+  /**
+   * Storage quota, expressed in the given unit
+   *
+   * Read-only: the API sets it.
+   */
+  limit?: number | undefined;
+  /**
+   * Unit of the storage quota
+   *
+   * Read-only: the API sets it.
+   */
+  unit?: PublicCloudQuotaQuotaUnitEnum | undefined;
+}
+
+/** Limits enforced by a managed Kubernetes plan */
+export interface PublicCloudManagedKubernetesPlanLimits {
+  /**
+   * Maximum number of nodes allowed across the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  maxNodes?: number | undefined;
+}
+
+/** Plan offered for managed Kubernetes clusters */
+export const PublicCloudManagedKubernetesPlanNameEnum = {
+  FREE: "FREE",
+  STANDARD: "STANDARD",
+} as const;
+/**
+ * Plan offered for managed Kubernetes clusters
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesPlanNameEnum =
+  | (typeof PublicCloudManagedKubernetesPlanNameEnum)[keyof typeof PublicCloudManagedKubernetesPlanNameEnum]
+  | (string & {});
+
+/** Availability of a plan for cluster creation */
+export const PublicCloudManagedKubernetesPlanStatusEnum = {
+  AVAILABLE: "AVAILABLE",
+  UNAVAILABLE: "UNAVAILABLE",
+} as const;
+/**
+ * Availability of a plan for cluster creation
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesPlanStatusEnum =
+  | (typeof PublicCloudManagedKubernetesPlanStatusEnum)[keyof typeof PublicCloudManagedKubernetesPlanStatusEnum]
+  | (string & {});
+
+/** A region where managed Kubernetes clusters can be created, with its availability zones and the plans offered there */
+export interface PublicCloudManagedKubernetesRegion {
+  /**
+   * Availability zones in the region. Empty for a single-zone (mono-AZ) region.
+   *
+   * Read-only: the API sets it.
+   */
+  availabilityZones?: string[] | undefined;
+  /**
+   * Plans that can be selected when creating a cluster in this region
+   *
+   * Read-only: the API sets it.
+   */
+  availablePlans?: PublicCloudManagedKubernetesPlanNameEnum[] | undefined;
+  /**
+   * Region identifier, for example EU-WEST-PAR
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+}
+
+/** A Kubernetes taint applied to every node of the nodepool. Pods that do not tolerate the taint are kept off the nodes according to its effect. */
+export interface PublicCloudManagedKubernetesTaint {
+  /** Effect applied to pods that do not tolerate the taint */
+  effect: PublicCloudManagedKubernetesTaintEffectEnum;
+  /** Taint key */
+  key: string;
+  /** Taint value matched by a pod toleration */
+  value: string;
+}
+
+/** Effect a taint has on pods that do not tolerate it. NoSchedule blocks scheduling new pods. PreferNoSchedule avoids scheduling when possible. NoExecute also evicts running pods that do not tolerate it. Refer to the Kubernetes documentation to get more information. */
+export const PublicCloudManagedKubernetesTaintEffectEnum = {
+  NO_EXECUTE: "NoExecute",
+  NO_SCHEDULE: "NoSchedule",
+  PREFER_NO_SCHEDULE: "PreferNoSchedule",
+} as const;
+/**
+ * Effect a taint has on pods that do not tolerate it. NoSchedule blocks scheduling new pods. PreferNoSchedule avoids scheduling when possible. NoExecute also evicts running pods that do not tolerate it. Refer to the Kubernetes documentation to get more information.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesTaintEffectEnum =
+  | (typeof PublicCloudManagedKubernetesTaintEffectEnum)[keyof typeof PublicCloudManagedKubernetesTaintEffectEnum]
+  | (string & {});
+
+/** User-provided egress gateway for nodes on a private network cluster */
+export interface PublicCloudManagedKubernetesUserGateway {
+  /** IP address of the user-provided egress gateway */
+  ip: IP;
+}
+
+/** Kubernetes minor versions available for cluster creation, and the version applied when a creation request does not specify one */
+export interface PublicCloudManagedKubernetesVersionCatalog {
+  /**
+   * Minor versions available for cluster creation, for example 1.34, newest first
+   *
+   * Read-only: the API sets it.
+   */
+  availableVersions?: PublicCloudManagedKubernetesVersionReference[] | undefined;
+  /**
+   * Minor version applied when a creation request does not specify one, for example 1.34
+   *
+   * Read-only: the API sets it.
+   */
+  defaultVersion?: string | undefined;
+}
+
+/** A Kubernetes version with its support status */
+export interface PublicCloudManagedKubernetesVersionReference {
+  /**
+   * Support status of the version
+   *
+   * Read-only: the API sets it.
+   */
+  status?: PublicCloudManagedKubernetesVersionStatusEnum | undefined;
+  /**
+   * Kubernetes version. Minor in the creation catalog, for example 1.34, full in the cluster update and upgrade lists, for example 1.34.2-1.
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** Support status of a Kubernetes version */
+export const PublicCloudManagedKubernetesVersionStatusEnum = {
+  END_OF_SUPPORT: "END_OF_SUPPORT",
+  SUPPORTED: "SUPPORTED",
+} as const;
+/**
+ * Support status of a Kubernetes version
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedKubernetesVersionStatusEnum =
+  | (typeof PublicCloudManagedKubernetesVersionStatusEnum)[keyof typeof PublicCloudManagedKubernetesVersionStatusEnum]
+  | (string & {});
+
+/** Artifact storage usage. Storage consumed by artifacts, compared with the limit of the plan. */
+export interface PublicCloudManagedRegistryArtifactStorage {
+  /**
+   * Limit. Maximum artifact storage of the current plan. Reported by the service. See ValueWithUnit.
+   *
+   * Read-only: the API sets it.
+   */
+  limit?: PublicCloudManagedRegistryValueWithUnit | undefined;
+  /**
+   * Used. Artifact storage currently consumed. Null until the first measurement is collected. Reported by the service. See ValueWithUnit.
+   *
+   * Read-only: the API sets it.
+   */
+  used?: PublicCloudManagedRegistryValueWithUnit | null | undefined;
+}
+
+/** Registry authentication. Login method of the registry. `oidc` is required if and only if `type` is `OIDC`. */
+export interface PublicCloudManagedRegistryAuthentication {
+  /** OIDC configuration. External OpenID Connect provider users log in with. Required when `type` is `OIDC`, null otherwise. Mutable. See Oidc. */
+  oidc?: PublicCloudManagedRegistryOidc | null | undefined;
+  /** Authentication type. Login method of the registry. Changing it deletes every existing Harbor user of the registry once the update task completes. Robot accounts are kept. */
+  type: PublicCloudManagedRegistryAuthenticationTypeEnum;
+}
+
+/** Authentication type. How users log in to the Harbor web interface and API of the registry. `IAM`: Users log in with OVHcloud accounts, authorized through OVHcloud IAM policies. `LOCAL`: Users log in with accounts created in Harbor. `OIDC`: Users log in through an external OpenID Connect provider. Requires `oidc`. */
+export const PublicCloudManagedRegistryAuthenticationTypeEnum = {
+  IAM: "IAM",
+  LOCAL: "LOCAL",
+  OIDC: "OIDC",
+} as const;
+/**
+ * Authentication type. How users log in to the Harbor web interface and API of the registry. `IAM`: Users log in with OVHcloud accounts, authorized through OVHcloud IAM policies. `LOCAL`: Users log in with accounts created in Harbor. `OIDC`: Users log in through an external OpenID Connect provider. Requires `oidc`.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedRegistryAuthenticationTypeEnum =
+  | (typeof PublicCloudManagedRegistryAuthenticationTypeEnum)[keyof typeof PublicCloudManagedRegistryAuthenticationTypeEnum]
+  | (string & {});
+
+/** Authorized IP rule. CIDR block allowed on one or more scopes of the registry. */
+export interface PublicCloudManagedRegistryAuthorizedIPRule {
+  /** CIDR. nIPv4 block allowed, for example `192.0.2.0/24`. Mutable. */
+  cidr: IPv4Block;
+  /** Description. Free text describing the rule, for example `VPN`. Null when not set. Mutable. */
+  description?: string | null | undefined;
+  /** Scopes. Parts of the registry the CIDR block is allowed on. Mutable. */
+  scopes: PublicCloudManagedRegistryAuthorizedIPRuleScopeEnum[];
+}
+
+/** Authorized IP rule scope. Part of the registry an authorized IP rule applies to. `ADMINISTRATION`: Harbor web interface and management API. `ARTIFACT_OPERATIONS`: Registry endpoint used to push and pull artifacts, for example with `docker` or `helm`. */
+export const PublicCloudManagedRegistryAuthorizedIPRuleScopeEnum = {
+  ADMINISTRATION: "ADMINISTRATION",
+  ARTIFACT_OPERATIONS: "ARTIFACT_OPERATIONS",
+} as const;
+/**
+ * Authorized IP rule scope. Part of the registry an authorized IP rule applies to. `ADMINISTRATION`: Harbor web interface and management API. `ARTIFACT_OPERATIONS`: Registry endpoint used to push and pull artifacts, for example with `docker` or `helm`.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedRegistryAuthorizedIPRuleScopeEnum =
+  | (typeof PublicCloudManagedRegistryAuthorizedIPRuleScopeEnum)[keyof typeof PublicCloudManagedRegistryAuthorizedIPRuleScopeEnum]
+  | (string & {});
+
+/** Authorized IPs. IP filtering of the registry. When `rules` is empty or null, any IP is allowed on every scope. Otherwise a scope accepts only the CIDR blocks of the rules that list it. */
+export interface PublicCloudManagedRegistryAuthorizedIPs {
+  /** Rules. CIDR blocks allowed to reach the registry, each on one or more scopes. When empty or null, any IP is allowed. The list is replaced as a whole on update. See AuthorizedIpRule. */
+  rules?: PublicCloudManagedRegistryAuthorizedIPRule[] | null | undefined;
+}
+
+/** Administrator credentials. Username and password of the Harbor administrator account of the registry. */
+export interface PublicCloudManagedRegistryCredentials {
+  /**
+   * New password of the administrator account. The previous password stops working. Returned by the reset call only.
+   *
+   * Read-only: the API sets it.
+   */
+  password?: string | undefined;
+  /**
+   * Username of the administrator account
+   *
+   * Read-only: the API sets it.
+   */
+  username?: string | undefined;
+}
+
+/** OpenID Connect configuration. External OpenID Connect provider configured as the Harbor login method. Used when `authentication.type` is `OIDC`. Register `<currentState.url>/c/oidc/callback` as a redirect URI of the client in the provider. Each field maps a Harbor OIDC setting, described in the [Harbor documentation](https://goharbor.io/docs/latest/administration/configure-authentication/oidc-auth/). */
+export interface PublicCloudManagedRegistryOidc {
+  /** Admin group. Group of the OIDC provider whose members get the Harbor system administrator role. When null, no group gets the role. Requires `groupsClaim`. Mutable. */
+  adminGroup?: string | null | undefined;
+  /** Automatic onboarding. When `true`, a user logging in for the first time is created from the token claims, without the Harbor onboarding screen. When null, treated as `false`. Mutable. */
+  autoOnboard?: boolean | null | undefined;
+  /** Client ID. Client identifier of the registry in the OIDC provider. Mutable. */
+  clientId: string;
+  /** Client secret of the registry in the OIDC provider. Required at creation. On update, omit it to keep the current secret, or set it to replace it. Mutable. Write-only: never returned on read. */
+  clientSecret?: string | null | undefined;
+  /** Endpoint. Issuer URL of the OIDC provider, for example `https://keycloak.example.com/realms/mpr`. Its `/.well-known/openid-configuration` document must be reachable from the registry. Mutable. */
+  endpoint: string;
+  /** Group filter. Regular expression selecting the groups of `groupsClaim` that are imported into Harbor. It does not restrict who can log in. When null, every group is imported. Mutable. */
+  groupFilter?: string | null | undefined;
+  /** Name of the token claim that lists the groups of the user. When null, groups are not read from the token. Mutable. */
+  groupsClaim?: string | null | undefined;
+  /** Name of the OIDC provider, displayed on the Harbor login button. Mutable. */
+  name: string;
+  /** Comma-separated OIDC scopes requested at login, for example `openid,profile,email,offline_access`. Must include `openid`. Include `offline_access` so the registry gets a refresh token. Mutable. */
+  scope: string;
+  /** Name of the ID token claim used as the Harbor username. The claim must be present in the ID token, otherwise onboarding the user fails. When null, Harbor uses the `name` claim. Mutable. */
+  userClaim?: string | null | undefined;
+  /** Verify certificate. When `true`, the TLS certificate of `endpoint` is verified. When null, treated as `true`. Set it to `false` only for a provider with a self-signed or untrusted certificate. Mutable. */
+  verifyCert?: boolean | null | undefined;
+}
+
+/** Managed Private Registry plan. Plan with its limits and features, as listed by the reference and capabilities routes. */
+export interface PublicCloudManagedRegistryPlan {
+  /**
+   * Features included in the plan. See PlanFeatures.
+   *
+   * Read-only: the API sets it.
+   */
+  features?: PublicCloudManagedRegistryPlanFeatures | undefined;
+  /**
+   * Resource limits enforced by the plan. See PlanLimits.
+   *
+   * Read-only: the API sets it.
+   */
+  limits?: PublicCloudManagedRegistryPlanLimits | undefined;
+  /**
+   * Name of the plan, to use as `targetSpec.plan`
+   *
+   * Read-only: the API sets it.
+   */
+  name?: PublicCloudManagedRegistryPlanEnum | undefined;
+}
+
+/** Managed Private Registry plan name. Plan of a Managed Private Registry service. Limits and features of each plan are listed by `GET .../reference/managedRegistry/plan`. `LARGE`: Largest storage and request limits. `MEDIUM`: Intermediate storage and request limits. `SMALL`: Smallest storage and request limits. */
+export const PublicCloudManagedRegistryPlanEnum = {
+  LARGE: "LARGE",
+  MEDIUM: "MEDIUM",
+  SMALL: "SMALL",
+} as const;
+/**
+ * Managed Private Registry plan name. Plan of a Managed Private Registry service. Limits and features of each plan are listed by `GET .../reference/managedRegistry/plan`. `LARGE`: Largest storage and request limits. `MEDIUM`: Intermediate storage and request limits. `SMALL`: Smallest storage and request limits.
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type PublicCloudManagedRegistryPlanEnum =
+  | (typeof PublicCloudManagedRegistryPlanEnum)[keyof typeof PublicCloudManagedRegistryPlanEnum]
+  | (string & {});
+
+/** Features included in a Managed Private Registry plan */
+export interface PublicCloudManagedRegistryPlanFeatures {
+  /**
+   * Whether the plan includes vulnerability scanning of stored artifacts
+   *
+   * Read-only: the API sets it.
+   */
+  vulnerabilityScanner?: boolean | undefined;
+}
+
+/** Resource limits enforced by a Managed Private Registry plan */
+export interface PublicCloudManagedRegistryPlanLimits {
+  /**
+   * Maximum storage available for artifacts. See ValueWithUnit.
+   *
+   * Read-only: the API sets it.
+   */
+  artifactStorage?: PublicCloudManagedRegistryValueWithUnit | undefined;
+  /**
+   * Maximum number of requests the registry serves concurrently
+   *
+   * Read-only: the API sets it.
+   */
+  parallelRequests?: number | undefined;
+}
+
+/** Region where a Managed Private Registry service can be created */
+export interface PublicCloudManagedRegistryRegion {
+  /**
+   * Region name, to use as `targetSpec.region`, for example `EU-WEST-PAR`
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+}
+
+/** Managed Private Registry service. Harbor-based container registry. `targetSpec` holds the requested configuration and `currentState` the applied one. They differ while a task is running. */
+export interface PublicCloudManagedRegistryRegistry {
+  /**
+   * Checksum. Hash of the current `targetSpec`. Send it back in `PUT .../managedRegistry/{managedRegistryId}` to detect concurrent updates. Changes on every `targetSpec` update.
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Creation date of the registry
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Current state. Configuration applied to the registry. Reported by the service. See RegistryCurrentState.
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: PublicCloudManagedRegistryRegistryCurrentState | undefined;
+  /**
+   * Current tasks. Asynchronous tasks running on the registry. Empty or null when none is running. Follow `link` to get a task. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  currentTasks?: CommonCurrentTask[] | null | undefined;
+  /**
+   * Unique identifier of the registry
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Resource status. Readiness of the registry. A new `targetSpec` is accepted only when it is `READY`. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: CommonResourceStatusEnum | undefined;
+  /**
+   * Target specification. Last configuration requested for the registry. Mutable through `PUT .../managedRegistry/{managedRegistryId}`. See RegistryTargetSpec.
+   *
+   * Read-only: the API sets it.
+   */
+  targetSpec?: PublicCloudManagedRegistryRegistryTargetSpec | undefined;
+  /**
+   * Date of the last update of the registry
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Registry creation request. Request body of `POST .../managedRegistry`. */
+export interface PublicCloudManagedRegistryRegistryCreation {
+  /** Target specification. Configuration the registry is created with. Mutable through `PUT .../managedRegistry/{managedRegistryId}`, except `region`, which is immutable. See RegistryTargetSpec. */
+  targetSpec: PublicCloudManagedRegistryRegistryTargetSpec;
+}
+
+/** Observed registry state. Configuration applied to the registry, reported as `currentState`. It matches `targetSpec` once every task has completed. */
+export interface PublicCloudManagedRegistryRegistryCurrentState {
+  /**
+   * Login method applied to the registry. Reported by the service. See Authentication.
+   *
+   * Read-only: the API sets it.
+   */
+  authentication?: PublicCloudManagedRegistryAuthentication | undefined;
+  /**
+   * Authorized IPs. IP filtering applied to the registry. When `rules` is empty or null, any IP is allowed. Reported by the service. See AuthorizedIps.
+   *
+   * Read-only: the API sets it.
+   */
+  authorizedIps?: PublicCloudManagedRegistryAuthorizedIPs | undefined;
+  /**
+   * Display name applied to the registry. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Plan applied to the registry. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  plan?: PublicCloudManagedRegistryPlanEnum | undefined;
+  /**
+   * Region where the registry is deployed, for example `EU-WEST-PAR`. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  region?: string | undefined;
+  /**
+   * URL of the Harbor web interface and registry endpoint, for example `https://xxxxxx.eu-west-par.container-registry.ovh.net`. Null until the registry is deployed. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  url?: string | null | undefined;
+  /**
+   * Resources consumed by the registry. Reported by the service. See Usage.
+   *
+   * Read-only: the API sets it.
+   */
+  usage?: PublicCloudManagedRegistryUsage | undefined;
+  /**
+   * Harbor version running on the registry, for example `2.14.2`. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | undefined;
+}
+
+/** Desired registry specification. Configuration requested on `POST .../managedRegistry`, and returned as `targetSpec`. */
+export interface PublicCloudManagedRegistryRegistryTargetSpec {
+  /** Login method of the registry. Changing `type` deletes every existing Harbor user of the registry once the update task completes. Robot accounts are kept. See Authentication. Defaults to `LOCAL` authentication. */
+  authentication?: PublicCloudManagedRegistryAuthentication | null | undefined;
+  /** Authorized IPs. CIDR blocks allowed to reach the registry, per scope. When omitted or when `rules` is empty, any IP is allowed. The rule list is replaced as a whole. See AuthorizedIps. */
+  authorizedIps?: PublicCloudManagedRegistryAuthorizedIPs | null | undefined;
+  /** Display name of the registry. Not an identifier. Renaming has no effect on the registry URL. */
+  name: string;
+  /** Plan of the registry, which sets its storage and request limits and its features. Plans are listed by `GET .../reference/managedRegistry/plan`. Changing it applies the limits and features of the new plan. Plans an existing registry can switch to are listed by `GET .../managedRegistry/{managedRegistryId}/capabilities/plan`. */
+  plan: PublicCloudManagedRegistryPlanEnum;
+  /** Region where the registry is deployed. Regions are listed by `GET .../reference/managedRegistry/region`. Immutable after creation. Create a new registry to change it. */
+  region: string;
+  /** Harbor version to run, for example `2.14.2`. On `POST .../managedRegistry`, must be null or the latest available version: the registry is always created with the latest version. Mutable through `PUT .../managedRegistry/{managedRegistryId}`, which upgrades the registry. */
+  version?: string | null | undefined;
+}
+
+/** Registry update request. Request body of `PUT .../managedRegistry/{managedRegistryId}`. */
+export interface PublicCloudManagedRegistryRegistryUpdate {
+  /** Optimistic concurrency token. When set, it must match the `checksum` returned by `GET .../managedRegistry/{managedRegistryId}`, otherwise the request is rejected. When null or empty, the check is skipped and the update overwrites the current `targetSpec`. */
+  checksum?: string | null | undefined;
+  /** Target specification. New configuration of the registry, replacing the previous one as a whole. See RegistryUpdateTargetSpec. */
+  targetSpec: PublicCloudManagedRegistryRegistryUpdateTargetSpec;
+}
+
+/** Desired registry specification (update). Configuration requested on `PUT .../managedRegistry/{managedRegistryId}`. It replaces the previous `targetSpec` as a whole, so unchanged fields are sent too. `region` is immutable and not part of it. */
+export interface PublicCloudManagedRegistryRegistryUpdateTargetSpec {
+  /** Login method of the registry. Changing `type` deletes every existing Harbor user of the registry once the update task completes. Robot accounts are kept. See Authentication. Defaults to `LOCAL` authentication. */
+  authentication?: PublicCloudManagedRegistryAuthentication | null | undefined;
+  /** Authorized IPs. CIDR blocks allowed to reach the registry, per scope. When omitted or when `rules` is empty, any IP is allowed. The rule list is replaced as a whole. See AuthorizedIps. */
+  authorizedIps?: PublicCloudManagedRegistryAuthorizedIPs | null | undefined;
+  /** Display name of the registry. Not an identifier. Renaming has no effect on the registry URL. */
+  name: string;
+  /** Plan of the registry, which sets its storage and request limits and its features. Must be the current plan or one listed by `GET .../managedRegistry/{managedRegistryId}/capabilities/plan`. Changing it applies the limits and features of the new plan. */
+  plan: PublicCloudManagedRegistryPlanEnum;
+  /** Harbor version to run, for example `2.14.2`. Must be the current version or one listed by `GET .../managedRegistry/{managedRegistryId}/capabilities/version`. Changing it upgrades the registry. */
+  version: string;
+}
+
+/** Registry usage. Resources consumed by the registry, compared with the limits of its plan. Reported as `currentState.usage`. */
+export interface PublicCloudManagedRegistryUsage {
+  /**
+   * Artifact storage consumed and its limit. Reported by the service. See ArtifactStorage.
+   *
+   * Read-only: the API sets it.
+   */
+  artifactStorage?: PublicCloudManagedRegistryArtifactStorage | undefined;
+  /**
+   * Measured at. Time of the last usage measurement. Null until the first measurement is collected. Reported by the service.
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  measuredAt?: string | null | undefined;
+}
+
+/** Value with unit. Numeric quantity together with the unit it is expressed in. */
+export interface PublicCloudManagedRegistryValueWithUnit {
+  /**
+   * Unit the value is expressed in, for example `GiB`
+   *
+   * Read-only: the API sets it.
+   */
+  unit?: PublicCloudQuotaQuotaUnitEnum | undefined;
+  /**
+   * Numeric value in `unit`
+   *
+   * Read-only: the API sets it.
+   */
+  value?: number | undefined;
+}
+
+/** Harbor version an existing registry can be upgraded to, to use as `targetSpec.version` on `PUT .../managedRegistry/{managedRegistryId}` */
+export interface PublicCloudManagedRegistryVersion {
+  /**
+   * URL of the Harbor release notes of the version
+   *
+   * Read-only: the API sets it.
+   */
+  changelogUrl?: string | undefined;
+  /**
+   * Harbor version, for example `2.14.2`
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+}
 
 /** A Public Cloud network */
 export interface PublicCloudNetworkNetwork {

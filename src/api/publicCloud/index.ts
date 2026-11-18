@@ -10,10 +10,11 @@
  * Its operations are a client property, `client.publicCloud`, or a class of their
  * own: `new PublicCloudApi(client)`. Its types are exported here too.
  *
- * It has 191 operations, on the routes under /v2/publicCloud.
+ * It has 613 operations, on the routes under /v2/publicCloud.
  *
- * To start, list what the account has: allProjects, allGateways, allLoadBalancers, allNetworks,
- * allPublicIps, allProjectRanchers, allSecurityGroups, allSshKeys, and 45 more.
+ * To start, list what the account has: allProjects, allGateways, allLoadBalancers,
+ * allProjectManagedKubernetes, allAllManagedRegistries, allNetworks, allPublicIps,
+ * allProjectRanchers, and 169 more.
  *
  * To find the method for a route, search index/publicCloud.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,

@@ -36,7 +36,7 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * listDedicatedClouds calls GET /v1/dedicatedCloud: List Managed VMware vSphere services
    *
-   * Returns the names of your services. Filter by IAM tags with `iamTags`.
+   * Returns the names of the services of the account. Filter by IAM tags with `iamTags`.
    *
    * Requires the IAM action pccVMware:apiovh:get.
    *
@@ -528,6 +528,9 @@ export class DedicatedCloudApi extends SectionApi {
 
   /**
    * listAllowedNetworks calls GET /v1/dedicatedCloud/{serviceName}/allowedNetwork: List allowed networks
+   *
+   * Returns the IDs of the networks allowed through the infrastructure firewall. They apply only
+   * when the service access policy is `filtered`.
    *
    * Requires the IAM action pccVMware:apiovh:allowedNetwork/get.
    *
@@ -3001,6 +3004,9 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * removeDatacenterFiler calls POST /v1/dedicatedCloud/{serviceName}/datacenter/{datacenterId}/filer/{filerId}/remove: Remove a datastore
    *
+   * Removes the datastore and its data: move the virtual machines first. Returns a task to track
+   * progress.
+   *
    * Requires the IAM action pccVMware:apiovh:datacenter/filer/remove.
    *
    * @param serviceName - Domain of the service
@@ -3390,6 +3396,8 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * getDatacenterHostLocation calls GET /v1/dedicatedCloud/{serviceName}/datacenter/{datacenterId}/host/{hostId}/location: Get the host location
    *
+   * Returns the OVHcloud datacenter, room and rack of the host, not its vSphere datacenter.
+   *
    * Requires the IAM action pccVMware:apiovh:datacenter/host/location/get.
    *
    * @param serviceName - Domain of the service
@@ -3419,6 +3427,9 @@ export class DedicatedCloudApi extends SectionApi {
 
   /**
    * removeDatacenterHost calls POST /v1/dedicatedCloud/{serviceName}/datacenter/{datacenterId}/host/{hostId}/remove: Remove a host
+   *
+   * Removes the host from the datacenter. To replace a faulty host instead, request a spare with
+   * `addHostSpare`. Returns a task to track progress.
    *
    * Requires the IAM action pccVMware:apiovh:datacenter/host/remove.
    *
@@ -3799,6 +3810,9 @@ export class DedicatedCloudApi extends SectionApi {
 
   /**
    * createDatacenterNsxtEdge calls POST /v1/dedicatedCloud/{serviceName}/datacenter/{datacenterId}/nsxtEdge: Create an edge node
+   *
+   * Adds an NSX-T edge node to the datacenter, up to the maximum given by
+   * `nsxtEdgesScalingCapabilities`. Returns a task to track progress.
    *
    * Requires the IAM action pccVMware:apiovh:datacenter/nsxtEdge/create.
    *
@@ -5839,6 +5853,9 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * removeFiler calls POST /v1/dedicatedCloud/{serviceName}/filer/{filerId}/remove: Remove a datastore
    *
+   * Removes the datastore and its data: move the virtual machines first. Returns a task to track
+   * progress.
+   *
    * Requires the IAM action pccVMware:apiovh:filer/remove.
    *
    * @param serviceName - Domain of the service
@@ -6254,6 +6271,9 @@ export class DedicatedCloudApi extends SectionApi {
 
   /**
    * disableHcx calls POST /v1/dedicatedCloud/{serviceName}/hcx/disable: Disable HCX
+   *
+   * Disables the HCX option. To enable it again, order the option with
+   * `/order/cart/{cartId}/privateCloud`. Returns a task to track progress.
    *
    * Requires the IAM action pccVMware:apiovh:hcx/disable.
    *
@@ -7322,7 +7342,8 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * createLogSubscription calls POST /v1/dedicatedCloud/{serviceName}/log/subscription: Create a log subscription
    *
-   * Sends the logs of a kind to a Logs Data Platform stream. Returns the operation ID.
+   * Sends the logs of a kind to a Logs Data Platform stream. The log forwarder option must be
+   * enabled first. Returns the operation ID.
    *
    * Requires the IAM actions pccVMware:apiovh:log/subscription/create,
    * ldp:apiovh:output/graylog/stream/forwardTo.
@@ -9072,6 +9093,9 @@ export class DedicatedCloudApi extends SectionApi {
   /**
    * deleteUser calls DELETE /v1/dedicatedCloud/{serviceName}/user/{userId}: Delete a user
    *
+   * Deletes the user. To block its access without deleting it, use `disable` instead. Returns a
+   * task to track progress.
+   *
    * Requires the IAM action pccVMware:apiovh:user/delete.
    *
    * @param serviceName - Domain of the service
@@ -10137,7 +10161,7 @@ export class DedicatedCloudApi extends SectionApi {
   }
 
   /**
-   * getVrack calls GET /v1/dedicatedCloud/{serviceName}/vrack/{vrack}: Get a service. Returns the attached Hosted Private Cloud service and its vRack.
+   * getVrack calls GET /v1/dedicatedCloud/{serviceName}/vrack/{vrack}: Get an attached Managed VMware vSphere service
    *
    * Requires the IAM action pccVMware:apiovh:vrack/get.
    *
@@ -10191,7 +10215,7 @@ export class DedicatedCloudApi extends SectionApi {
   }
 
   /**
-   * deleteVrack calls DELETE /v1/dedicatedCloud/{serviceName}/vrack/{vrack}: Detach a service
+   * deleteVrack calls DELETE /v1/dedicatedCloud/{serviceName}/vrack/{vrack}: Detach a Managed VMware vSphere service
    *
    * Detaches the Hosted Private Cloud service from the vRack. Returns the task that performs it.
    *

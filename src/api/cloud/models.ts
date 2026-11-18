@@ -25346,6 +25346,8 @@ export interface CloudProjectDatabaseServiceCreationWritable {
   backupTime?: Time | null | undefined;
   /** Information related to the backups, null if the engine does not support backups */
   backups?: CloudProjectDatabaseServiceBackupWritable | null | undefined;
+  /** Whether to protect the cluster from deletion. Defaults to false. */
+  deletionProtection?: boolean | null | undefined;
   /** Description of the cluster */
   description?: string | undefined;
   /** Disk attributes of the cluster */

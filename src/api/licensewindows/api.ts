@@ -32,7 +32,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensewindowsApi extends SectionApi {
   /**
-   * listWindows calls GET /v1/license/windows: List available services
+   * listWindows calls GET /v1/license/windows: List your Windows licenses
+   *
+   * Returns the names of the Windows licenses of the account; each name is the service name used by
+   * the other calls.
    *
    * Requires the IAM action licenseWindows:apiovh:get.
    *
@@ -62,6 +65,9 @@ export class LicensewindowsApi extends SectionApi {
   /**
    * listOrderableVersions calls GET /v1/license/windows/orderableVersions: Get the orderable Windows versions
    *
+   * Returns the versions that can be ordered for the given IP, with their compliant SQL Server
+   * versions.
+   *
    * Requires the IAM action account:apiovh:licenseWindows/orderableVersions/get.
    *
    * @param ip - Your license Ip
@@ -85,7 +91,10 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * getWindows calls GET /v1/license/windows/{serviceName}: Get this object properties
+   * getWindows calls GET /v1/license/windows/{serviceName}: Get a Windows license
+   *
+   * Returns the license ID, version, status, the IP address the license is attached to, and the
+   * creation date.
    *
    * Requires the IAM action licenseWindows:apiovh:get.
    *
@@ -111,7 +120,7 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * allWindows iterates over GET /v1/license/windows (List available services).
+   * allWindows iterates over GET /v1/license/windows (List your Windows licenses).
    *
    * It lists the IDs with {@link LicensewindowsApi.listWindows}, then gets each object with
    * {@link LicensewindowsApi.getWindows}, only when the loop reaches it. An object deleted in the
@@ -140,7 +149,9 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * updateWindows calls PUT /v1/license/windows/{serviceName}: Alter this object properties
+   * updateWindows calls PUT /v1/license/windows/{serviceName}: Update a Windows license
+   *
+   * Changes the settings that can be modified: the automatic deletion at expiration.
    *
    * Requires the IAM action licenseWindows:apiovh:put.
    *
@@ -199,7 +210,10 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * listOptions calls GET /v1/license/windows/{serviceName}/option: options attached to this license
+   * listOptions calls GET /v1/license/windows/{serviceName}/option: List the options of a Windows license
+   *
+   * Returns the labels of the options attached to the license; get an option for its version,
+   * quantity and expiration date.
    *
    * Requires the IAM action licenseWindows:apiovh:option/get.
    *
@@ -221,7 +235,9 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * getOption calls GET /v1/license/windows/{serviceName}/option/{label}: Get this object properties
+   * getOption calls GET /v1/license/windows/{serviceName}/option/{label}: Get an option of a license
+   *
+   * Returns the label, version, quantity, expiration date and whether the option can be released.
    *
    * Requires the IAM action licenseWindows:apiovh:option/get.
    *
@@ -249,7 +265,7 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * allOptions iterates over GET /v1/license/windows/{serviceName}/option (options attached to this license).
+   * allOptions iterates over GET /v1/license/windows/{serviceName}/option (List the options of a Windows license).
    *
    * It lists the IDs with {@link LicensewindowsApi.listOptions}, then gets each object with
    * {@link LicensewindowsApi.getOption}, only when the loop reaches it. An object deleted in the
@@ -272,7 +288,9 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * deleteOption calls DELETE /v1/license/windows/{serviceName}/option/{label}: release this Option
+   * deleteOption calls DELETE /v1/license/windows/{serviceName}/option/{label}: Release an option from a license
+   *
+   * Removes the option from the license and returns the task that performs the release.
    *
    * Requires the IAM action licenseWindows:apiovh:option/delete.
    *
@@ -357,7 +375,10 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * sqlServer calls POST /v1/license/windows/{serviceName}/sqlServer: Link your own sql server license to this Windows license
+   * sqlServer calls POST /v1/license/windows/{serviceName}/sqlServer: Attach your own SQL Server license
+   *
+   * Links a SQL Server license, identified by its version and serial number, to the Windows
+   * license.
    *
    * Requires the IAM action licenseWindows:apiovh:sqlServer/create.
    *
@@ -386,7 +407,10 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/windows/{serviceName}/tasks: tasks linked to this license
+   * listTasks calls GET /v1/license/windows/{serviceName}/tasks: List the tasks of a Windows license
+   *
+   * Returns the IDs of the tasks linked to the license, each task records an action such as a
+   * version upgrade or an option change.
    *
    * Requires the IAM action licenseWindows:apiovh:tasks/get.
    *
@@ -422,7 +446,10 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/windows/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/windows/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseWindows:apiovh:tasks/get.
    *
@@ -450,7 +477,7 @@ export class LicensewindowsApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/windows/{serviceName}/tasks (tasks linked to this license).
+   * allTasks iterates over GET /v1/license/windows/{serviceName}/tasks (List the tasks of a Windows license).
    *
    * It lists the IDs with {@link LicensewindowsApi.listTasks}, then gets each object with
    * {@link LicensewindowsApi.getTasks}, only when the loop reaches it. An object deleted in the

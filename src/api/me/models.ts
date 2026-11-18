@@ -882,6 +882,34 @@ export const AuthRoleEnum = {
  */
 export type AuthRoleEnum = (typeof AuthRoleEnum)[keyof typeof AuthRoleEnum] | (string & {});
 
+/** An IAM Federation Provider */
+export interface AuthServiceProviderInfo {
+  /**
+   * URL of the SAMLv2 Assertion Consumer Service for OVHcloud
+   *
+   * Read-only: the API sets it.
+   */
+  assertionConsumerServiceUrl?: string | undefined;
+  /**
+   * Entity ID of OVHcloud as a service provider
+   *
+   * Read-only: the API sets it.
+   */
+  entityId?: string | undefined;
+  /**
+   * XML metadata of OVHcloud as a service provider
+   *
+   * Read-only: the API sets it.
+   */
+  metadata?: string | undefined;
+  /**
+   * URL of the SAMLv2 metadata for OVHcloud
+   *
+   * Read-only: the API sets it.
+   */
+  metadataUrl?: string | undefined;
+}
+
 /** An IAM User */
 export interface AuthUser {
   /**

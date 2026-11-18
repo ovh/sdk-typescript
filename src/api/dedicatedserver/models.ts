@@ -14,6 +14,14 @@
  * @module
  */
 
+/** The request body of POST /v1/dedicated/server/{serviceName}/ola/aggregation. */
+export interface AggregationOlaRequest {
+  /** Resulting VirtualNetworkInterface name */
+  name: string;
+  /** Interfaces to aggregate */
+  virtualNetworkInterfaces: string[];
+}
+
 /** The request body of POST /v1/dedicated/server/{serviceName}/changeContact. */
 export interface ChangeContactRequest {
   /** The contact to set as admin contact */
@@ -22,6 +30,14 @@ export interface ChangeContactRequest {
   contactBilling?: string | undefined;
   /** The contact to set as tech contact */
   contactTech?: string | undefined;
+}
+
+/** The request body of POST /v1/dedicated/server/{serviceName}/biosSettings/sgx/configure. */
+export interface ConfigureBiosSettingsSgxRequest {
+  /** Size of the Processor Reserved Memory */
+  prmrr?: DedicatedServerBiosSettingsSgxPrmrrEnum | undefined;
+  /** Desired SGX status */
+  status?: DedicatedServerBiosSettingsSgxStatusEnum | undefined;
 }
 
 /** The request body of POST /v1/dedicated/server/{serviceName}/confirmTermination. */
@@ -34,6 +50,14 @@ export interface ConfirmTerminationRequest {
   reason?: ServiceTerminationReasonEnum | undefined;
   /** The termination token sent by email to the admin contact */
   token: string;
+}
+
+/** The request body of POST /v1/dedicated/server/{serviceName}/features/backupCloud. */
+export interface CreateFeaturesBackupCloudRequest {
+  /** cloud project id */
+  cloudProjectId?: string | undefined;
+  /** Project description of the project to be created (ignored when an existing project is already specified) */
+  projectDescription?: string | undefined;
 }
 
 /** The request body of POST /v1/dedicated/server/{serviceName}/features/backupFTP/access. */
@@ -66,6 +90,22 @@ export interface CreateFeaturesIpmiTestRequest {
   ttl: DedicatedServerCacheTTLEnum;
   /** Test to make on KVM IPMI interface */
   type: DedicatedServerIpmiTestTypeEnum;
+}
+
+/** Common error model */
+export interface CreateLogSubscription400Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface CreateLogSubscription503Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
 }
 
 /** The request body of POST /v1/dedicated/server/{serviceName}/secondaryDnsDomains. */
@@ -169,6 +209,28 @@ export interface Reinstall501Response {
   message?: string | undefined;
 }
 
+/** The request body of POST /v1/dedicated/server/{serviceName}/ola/reset. */
+export interface ResetOlaRequest {
+  /** Interface to reset */
+  virtualNetworkInterface: string;
+}
+
+/** Common error model */
+export interface URLLog400Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface URLLog503Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
 /** The request body of POST /v1/dedicated/server/{serviceName}/ola/ungroup. */
 export interface UngroupOlaRequest {
   /** Interface to ungroup */
@@ -205,6 +267,164 @@ export interface ComplexTypeUnitAndValueLong {
 export interface ComplexTypeUnitAndValueString {
   unit?: string | undefined;
   value?: string | undefined;
+}
+
+/** A kind of log a service can emit, which you can subscribe to and forward into a stream */
+export interface DbaasLogsLogKind {
+  /**
+   * List of additional log fields managed in this log kind
+   *
+   * Read-only: the API sets it.
+   */
+  additionalReturnedFields?: string[] | undefined;
+  /**
+   * Creation date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Identifier of the log kind
+   *
+   * Read-only: the API sets it.
+   */
+  kindId?: string | undefined;
+  /**
+   * Log kind name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Last update date of the log kind
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** A live forwarding of one kind of log from a service into a Logs Data Platform stream */
+export interface DbaasLogsLogSubscription {
+  /**
+   * Creation date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Log kind name of this subscription
+   *
+   * Read-only: the API sets it.
+   */
+  kind?: string | undefined;
+  /**
+   * Subscribed resource, where the logs come from
+   *
+   * Read-only: the API sets it.
+   */
+  resource?: DbaasLogsLogSubscriptionResource | undefined;
+  /**
+   * Name of the destination log service
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * Identifier of the destination log stream
+   *
+   * Read-only: the API sets it.
+   */
+  streamId?: string | undefined;
+  /**
+   * Unique identifier of the subscription, used to change or stop the forwarding
+   *
+   * Read-only: the API sets it.
+   */
+  subscriptionId?: string | undefined;
+  /**
+   * Last update date of the subscription
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | undefined;
+}
+
+/** Log subscription creation payload */
+export interface DbaasLogsLogSubscriptionCreation {
+  /** Log kind name to subscribe to */
+  kind: string;
+  /** Identifier of the customer log stream */
+  streamId: string;
+}
+
+/** The service a log subscription collects its logs from */
+export interface DbaasLogsLogSubscriptionResource {
+  /**
+   * Name of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Type of subscribed resource
+   *
+   * Read-only: the API sets it.
+   */
+  type?: string | undefined;
+}
+
+/** Asynchronous operation after subscribing or unsubscribing to a resource logs */
+export interface DbaasLogsLogSubscriptionResponse {
+  /**
+   * Identifier of the operation
+   *
+   * Read-only: the API sets it.
+   */
+  operationId?: string | undefined;
+  /**
+   * Operation owner's service name
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+}
+
+/** Log temporary URL creation payload */
+export interface DbaasLogsLogURLCreation {
+  /** Log kind name */
+  kind: string;
+}
+
+/** Temporary url information */
+export interface DbaasLogsTemporaryLogsLink {
+  /**
+   * Temporary url expiration date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expirationDate?: string | undefined;
+  /**
+   * Temporary url
+   *
+   * Read-only: the API sets it.
+   */
+  url?: string | undefined;
 }
 
 /** A structure describing the hardware availability for each datacenter */
@@ -432,6 +652,58 @@ export type DedicatedDatacenterEnum =
   | (typeof DedicatedDatacenterEnum)[keyof typeof DedicatedDatacenterEnum]
   | (string & {});
 
+/** Change status */
+export const DedicatedPlannedChangeStatusEnum = {
+  ACKNOWLEDGED: "acknowledged",
+  ASSESS: "assess",
+  AUTHORIZE: "authorize",
+  CANCELED: "canceled",
+  CLOSED: "closed",
+  DOING: "doing",
+  DONE: "done",
+  IMPLEMENT: "implement",
+  NEW: "new",
+  REVIEW: "review",
+  SCHEDULED: "scheduled",
+  TODO: "todo",
+} as const;
+/**
+ * Change status
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedPlannedChangeStatusEnum =
+  | (typeof DedicatedPlannedChangeStatusEnum)[keyof typeof DedicatedPlannedChangeStatusEnum]
+  | (string & {});
+
+/** Intervention status */
+export const DedicatedPlannedInterventionStatusEnum = {
+  DOING: "doing",
+  DONE: "done",
+  TODO: "todo",
+} as const;
+/**
+ * Intervention status
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedPlannedInterventionStatusEnum =
+  | (typeof DedicatedPlannedInterventionStatusEnum)[keyof typeof DedicatedPlannedInterventionStatusEnum]
+  | (string & {});
+
+/** Intervention type */
+export const DedicatedPlannedInterventionTypeEnum = {
+  HARDWARE_UPGRADE_ON_ACTIVE_SERVER: "HARDWARE_UPGRADE_ON_ACTIVE_SERVER",
+} as const;
+/**
+ * Intervention type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedPlannedInterventionTypeEnum =
+  | (typeof DedicatedPlannedInterventionTypeEnum)[keyof typeof DedicatedPlannedInterventionTypeEnum]
+  | (string & {});
+
 /** List of logs */
 export interface DedicatedPublicLog {
   /**
@@ -536,6 +808,73 @@ export type DedicatedTaskStatusEnum =
   | (typeof DedicatedTaskStatusEnum)[keyof typeof DedicatedTaskStatusEnum]
   | (string & {});
 
+/** Your BiosSettings */
+export interface DedicatedBiosSettingsBiosSettings {
+  /**
+   * List supported setting
+   *
+   * Read-only: the API sets it.
+   */
+  supportedSettings?: DedicatedServerBiosSettingsSupport | undefined;
+}
+
+/** Your BiosSettings for SGX feature */
+export interface DedicatedBiosSettingsSgxBiosSettingsSgx {
+  /**
+   * Settings sections
+   *
+   * Read-only: the API sets it.
+   */
+  prmrr?: DedicatedServerBiosSettingsSgxPrmrrEnum | undefined;
+  /**
+   * Settings sections
+   *
+   * Read-only: the API sets it.
+   */
+  status?: DedicatedServerBiosSettingsSgxStatusEnum | undefined;
+}
+
+/** Your networkInterfaceController */
+export interface DedicatedNetworkInterfaceControllerNetworkInterfaceController {
+  /**
+   * NetworkInterfaceController linkType
+   *
+   * Read-only: the API sets it.
+   */
+  linkType?: DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum | undefined;
+  /**
+   * NetworkInterfaceController mac
+   *
+   * Read-only: the API sets it.
+   */
+  mac?: MacAddress | undefined;
+  /**
+   * VirtualNetworkInterface bound to this NetworkInterfaceController
+   *
+   * Read-only: the API sets it.
+   */
+  virtualNetworkInterface?: string | null | undefined;
+}
+
+/** List NetworkInterfaceController linktype */
+export const DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum = {
+  ISOLATED: "isolated",
+  PRIVATE: "private",
+  PRIVATE_LAG: "private_lag",
+  PROVISIONING: "provisioning",
+  PROVISIONING_LAG: "provisioning_lag",
+  PUBLIC: "public",
+  PUBLIC_LAG: "public_lag",
+} as const;
+/**
+ * List NetworkInterfaceController linktype
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum =
+  | (typeof DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum)[keyof typeof DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum]
+  | (string & {});
+
 /** Secondary DNS infos */
 export interface DedicatedSecondaryDNSDomainSecondaryDNS {
   /**
@@ -596,6 +935,159 @@ export const DedicatedServerAccessTypeEnum = {
 export type DedicatedServerAccessTypeEnum =
   | (typeof DedicatedServerAccessTypeEnum)[keyof typeof DedicatedServerAccessTypeEnum]
   | (string & {});
+
+/** A structure describing the hardware availability for each region */
+export interface DedicatedServerAvailabilityByRegion {
+  /**
+   * The availability
+   *
+   * Read-only: the API sets it.
+   */
+  availability?: DedicatedServerAvailabilityEnum | undefined;
+  /**
+   * Availability zones
+   *
+   * Read-only: the API sets it.
+   */
+  availabilityZones?: DedicatedServerAvailabilityZones[] | undefined;
+  /**
+   * The region
+   *
+   * Read-only: the API sets it.
+   */
+  region?: DedicatedServerAvailabilityRegionalizationEnum | undefined;
+}
+
+/** The availability */
+export const DedicatedServerAvailabilityEnum = {
+  VALUE_120_H: "120H",
+  VALUE_1440_H: "1440H",
+  VALUE_1_H_HIGH: "1H-high",
+  VALUE_1_H_LOW: "1H-low",
+  VALUE_2160_H: "2160H",
+  VALUE_240_H: "240H",
+  VALUE_24_H: "24H",
+  VALUE_480_H: "480H",
+  VALUE_720_H: "720H",
+  VALUE_72_H: "72H",
+  COMING_SOON: "comingSoon",
+  UNAVAILABLE: "unavailable",
+  UNKNOWN: "unknown",
+} as const;
+/**
+ * The availability
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerAvailabilityEnum =
+  | (typeof DedicatedServerAvailabilityEnum)[keyof typeof DedicatedServerAvailabilityEnum]
+  | (string & {});
+
+/** The region */
+export const DedicatedServerAvailabilityRegionalizationEnum = {
+  AP_SOUTH_1: "ap-south-1",
+  AP_SOUTHEAST_SGP: "ap-southeast-sgp",
+  AP_SOUTHEAST_SYD: "ap-southeast-syd",
+  CA_EAST_1: "ca-east-1",
+  CA_EAST_BHS: "ca-east-bhs",
+  EU_CENTRAL_WAW: "eu-central-waw",
+  EU_WEST_ERI: "eu-west-eri",
+  EU_WEST_GRA: "eu-west-gra",
+  EU_WEST_LIM: "eu-west-lim",
+  EU_WEST_PAR: "eu-west-par",
+  EU_WEST_RBX: "eu-west-rbx",
+  EU_WEST_SBG: "eu-west-sbg",
+  US_EAST_VIN: "us-east-vin",
+  US_WEST_HIL: "us-west-hil",
+} as const;
+/**
+ * The region
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerAvailabilityRegionalizationEnum =
+  | (typeof DedicatedServerAvailabilityRegionalizationEnum)[keyof typeof DedicatedServerAvailabilityRegionalizationEnum]
+  | (string & {});
+
+/** A structure describing the hardware availability for each availability zone */
+export interface DedicatedServerAvailabilityZones {
+  /**
+   * The availability
+   *
+   * Read-only: the API sets it.
+   */
+  availability?: DedicatedServerAvailabilityEnum | undefined;
+  /**
+   * The availability zone
+   *
+   * Read-only: the API sets it.
+   */
+  availabilityZone?: DedicatedServerAvailabilityZonesEnum | undefined;
+}
+
+/** The availability zone */
+export const DedicatedServerAvailabilityZonesEnum = {
+  AP_SOUTH_1_A: "ap-south-1-a",
+  AP_SOUTH_MUM_A: "ap-south-mum-a",
+  AP_SOUTHEAST_SGP_A: "ap-southeast-sgp-a",
+  AP_SOUTHEAST_SYD_A: "ap-southeast-syd-a",
+  CA_EAST_1_A: "ca-east-1-a",
+  CA_EAST_BHS_A: "ca-east-bhs-a",
+  CA_EAST_TOR_A: "ca-east-tor-a",
+  EU_CENTRAL_WAW_A: "eu-central-waw-a",
+  EU_SOUTH_MIL_A: "eu-south-mil-a",
+  EU_SOUTH_MIL_B: "eu-south-mil-b",
+  EU_SOUTH_MIL_C: "eu-south-mil-c",
+  EU_WEST_1_A: "eu-west-1-a",
+  EU_WEST_1_B: "eu-west-1-b",
+  EU_WEST_1_C: "eu-west-1-c",
+  EU_WEST_ERI_A: "eu-west-eri-a",
+  EU_WEST_GRA_A: "eu-west-gra-a",
+  EU_WEST_LIM_A: "eu-west-lim-a",
+  EU_WEST_PAR_A: "eu-west-par-a",
+  EU_WEST_PAR_B: "eu-west-par-b",
+  EU_WEST_PAR_C: "eu-west-par-c",
+  EU_WEST_RBX_A: "eu-west-rbx-a",
+  EU_WEST_SBG_A: "eu-west-sbg-a",
+  US_EAST_VIN_A: "us-east-vin-a",
+  US_WEST_HIL_A: "us-west-hil-a",
+} as const;
+/**
+ * The availability zone
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerAvailabilityZonesEnum =
+  | (typeof DedicatedServerAvailabilityZonesEnum)[keyof typeof DedicatedServerAvailabilityZonesEnum]
+  | (string & {});
+
+/** Backup Cloud assigned to this server */
+export interface DedicatedServerBackupCloud {
+  /**
+   * Agreement ids waiting for validation
+   *
+   * Read-only: the API sets it.
+   */
+  agreements?: number[] | null | undefined;
+  /**
+   * Archive space info.
+   *
+   * Read-only: the API sets it.
+   */
+  archive?: DedicatedServerBackupBackupContainer | null | undefined;
+  /**
+   * Status of the container.
+   *
+   * Read-only: the API sets it.
+   */
+  status?: DedicatedServerBackupBackupStatus | undefined;
+  /**
+   * Storage space info.
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: DedicatedServerBackupBackupContainer | null | undefined;
+}
 
 /** Backup Ftp assigned to this server */
 export interface DedicatedServerBackupFtp {
@@ -811,6 +1303,61 @@ export const DedicatedServerBandwidthvRackTypeEnum = {
 export type DedicatedServerBandwidthvRackTypeEnum =
   | (typeof DedicatedServerBandwidthvRackTypeEnum)[keyof typeof DedicatedServerBandwidthvRackTypeEnum]
   | (string & {});
+
+/** SGX PRMRR value enum */
+export const DedicatedServerBiosSettingsSgxPrmrrEnum = {
+  VALUE_128: "128",
+  VALUE_131072: "131072",
+  VALUE_16384: "16384",
+  VALUE_2048: "2048",
+  VALUE_256: "256",
+  VALUE_32: "32",
+  VALUE_32768: "32768",
+  VALUE_4096: "4096",
+  VALUE_512: "512",
+  VALUE_64: "64",
+  VALUE_65536: "65536",
+  VALUE_8192: "8192",
+} as const;
+/**
+ * SGX PRMRR value enum
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerBiosSettingsSgxPrmrrEnum =
+  | (typeof DedicatedServerBiosSettingsSgxPrmrrEnum)[keyof typeof DedicatedServerBiosSettingsSgxPrmrrEnum]
+  | (string & {});
+
+/** SGX Status enum */
+export const DedicatedServerBiosSettingsSgxStatusEnum = {
+  DISABLED: "disabled",
+  ENABLED: "enabled",
+  SOFTWARE_CONTROLLED: "software controlled",
+} as const;
+/**
+ * SGX Status enum
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerBiosSettingsSgxStatusEnum =
+  | (typeof DedicatedServerBiosSettingsSgxStatusEnum)[keyof typeof DedicatedServerBiosSettingsSgxStatusEnum]
+  | (string & {});
+
+/** A structure describing supported bios settings */
+export interface DedicatedServerBiosSettingsSupport {
+  /** SGX feature support */
+  sgx?: boolean | undefined;
+  /** Supported SGX options */
+  sgxOptions?: DedicatedServerBiosSettingsSupportSgxOptions | undefined;
+}
+
+/** A structure describing supported SGX options values */
+export interface DedicatedServerBiosSettingsSupportSgxOptions {
+  /** Supported SGX prmrr values */
+  prmrr?: DedicatedServerBiosSettingsSgxPrmrrEnum[] | undefined;
+  /** Supported SGX statuses */
+  status?: DedicatedServerBiosSettingsSgxStatusEnum[] | undefined;
+}
 
 /** Server boot mode */
 export const DedicatedServerBootModeEnum = {
@@ -1298,6 +1845,16 @@ export interface DedicatedServerInstallationProgressSteps {
   status?: DedicatedServerInstallationProgressStatusEnum | undefined;
 }
 
+/** Interface or interfaces aggregation */
+export interface DedicatedServerInterfaces {
+  /** Mac address of the LACP fallback interface */
+  aggregationFallback?: MacAddress | null | undefined;
+  /** Mac address or list of mac addresses */
+  macs?: MacAddress[] | undefined;
+  /** Network type */
+  type?: DedicatedServerNetworkingTypeEnum | undefined;
+}
+
 /** Intervention made on this server */
 export interface DedicatedServerIntervention {
   /**
@@ -1583,6 +2140,56 @@ export interface DedicatedServerNetworkSpecifications {
   vrack?: DedicatedServerBandwidthvRackDetails | null | undefined;
 }
 
+/** Network configuration */
+export interface DedicatedServerNetworking {
+  /**
+   * Operation description
+   *
+   * Read-only: the API sets it.
+   */
+  description?: string | null | undefined;
+  /**
+   * Interface or interfaces aggregation
+   *
+   * Read-only: the API sets it.
+   */
+  interfaces?: DedicatedServerInterfaces[] | undefined;
+  /**
+   * Operation status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: DedicatedServerNetworkingOperationEnum | null | undefined;
+}
+
+/** Network operation states */
+export const DedicatedServerNetworkingOperationEnum = {
+  ACTIVE: "active",
+  DEPLOYING: "deploying",
+} as const;
+/**
+ * Network operation states
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerNetworkingOperationEnum =
+  | (typeof DedicatedServerNetworkingOperationEnum)[keyof typeof DedicatedServerNetworkingOperationEnum]
+  | (string & {});
+
+/** Network type */
+export const DedicatedServerNetworkingTypeEnum = {
+  PUBLIC: "public",
+  VRACK: "vrack",
+} as const;
+/**
+ * Network type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerNetworkingTypeEnum =
+  | (typeof DedicatedServerNetworkingTypeEnum)[keyof typeof DedicatedServerNetworkingTypeEnum]
+  | (string & {});
+
 /** A structure describing OVH Link Aggregation available modes */
 export interface DedicatedServerOlaAvailableModes {
   /** Is it the default configuration of the server */
@@ -1710,6 +2317,82 @@ export type DedicatedServerOrderableSysFeatureEnum =
   | (typeof DedicatedServerOrderableSysFeatureEnum)[keyof typeof DedicatedServerOrderableSysFeatureEnum]
   | (string & {});
 
+/** Planned change on the server */
+export interface DedicatedServerPlannedChange {
+  /**
+   * Expected end date for this change
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expectedEndDate?: string | undefined;
+  /**
+   * UUID of the change
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Status of the change
+   *
+   * Read-only: the API sets it.
+   */
+  status?: DedicatedPlannedChangeStatusEnum | undefined;
+  /**
+   * Operation purpose
+   *
+   * Read-only: the API sets it.
+   */
+  type?: DedicatedPlannedInterventionTypeEnum | undefined;
+  /**
+   * Wanted start date for this change
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  wantedStartDate?: string | undefined;
+}
+
+/** Planned intervention on the server */
+export interface DedicatedServerPlannedIntervention {
+  /**
+   * Expected end date for this intervention
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expectedEndDate?: string | undefined;
+  /**
+   * ID of the intervention
+   *
+   * Read-only: the API sets it.
+   */
+  id?: number | undefined;
+  /**
+   * Status of the intervention
+   *
+   * Read-only: the API sets it.
+   */
+  status?: DedicatedPlannedInterventionStatusEnum | undefined;
+  /**
+   * Operation purpose
+   *
+   * Read-only: the API sets it.
+   */
+  type?: DedicatedPlannedInterventionTypeEnum | undefined;
+  /**
+   * Wanted start date for this intervention
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  wantedStartDate?: string | undefined;
+}
+
 /** Power states of a Dedicated */
 export const DedicatedServerPowerStateEnum = {
   POWEROFF: "poweroff",
@@ -1723,6 +2406,58 @@ export const DedicatedServerPowerStateEnum = {
 export type DedicatedServerPowerStateEnum =
   | (typeof DedicatedServerPowerStateEnum)[keyof typeof DedicatedServerPowerStateEnum]
   | (string & {});
+
+/** A structure describing the availabilities of dedicated server */
+export interface DedicatedServerRegionAvailability {
+  /**
+   * Fully qualified and unique name of the hardware
+   *
+   * Read-only: the API sets it.
+   */
+  fqn?: string | undefined;
+  /**
+   * Name of the gpu hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  gpu?: string | null | undefined;
+  /**
+   * Name of the memory hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  memory?: string | null | undefined;
+  /**
+   * Plan code in which the hardware is involved
+   *
+   * Read-only: the API sets it.
+   */
+  planCode?: string | undefined;
+  /**
+   * The hardware availability for each region
+   *
+   * Read-only: the API sets it.
+   */
+  regions?: DedicatedServerAvailabilityByRegion[] | null | undefined;
+  /**
+   * Name of the base hardware
+   *
+   * Read-only: the API sets it.
+   */
+  server?: string | undefined;
+  /**
+   * Name of the storage hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: string | null | undefined;
+  /**
+   * Name of the system storage hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  systemStorage?: string | null | undefined;
+}
 
 /** OS reinstallation payload */
 export interface DedicatedServerReinstall {
@@ -2103,6 +2838,115 @@ export const DedicatedServerVmacTypeEnum = {
 export type DedicatedServerVmacTypeEnum =
   | (typeof DedicatedServerVmacTypeEnum)[keyof typeof DedicatedServerVmacTypeEnum]
   | (string & {});
+
+/** A structure describing informations about the backup cloud feature */
+export interface DedicatedServerBackupBackupContainer {
+  /** /cloud project which the container belongs to. */
+  cloudProject?: DedicatedServerBackupBackupProject | null | undefined;
+  /** Container id (can also be used to retrieve the resource in the /cloud api). */
+  id?: string | null | undefined;
+  /** Container name. */
+  name?: string | null | undefined;
+  /** Quota on the current container */
+  quota?: DedicatedServerBackupBackupQuota | null | undefined;
+  /** The cloud region which the container belongs to. */
+  region?: string | null | undefined;
+  /** Sftp connection info */
+  sftp?: DedicatedServerBackupBackupSftp | null | undefined;
+  /** Swift related information to reach the container */
+  swift?: DedicatedServerBackupBackupSwift | null | undefined;
+}
+
+/** Backup cloud offer description for a dedicated server */
+export interface DedicatedServerBackupBackupOffer {
+  /** Archive container max size. */
+  maxArchive?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Archive volume r/w bandwidth limit: read/write volume offered per month on the container. */
+  maxBandwidthArchive?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Storage volume r/w bandwidth limit: read/write volume offered per month on the container. */
+  maxBandwidthStorage?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Storage container max size. */
+  maxStorage?: ComplexTypeUnitAndValueLong | null | undefined;
+}
+
+/** A structure describing regenerated passwords */
+export interface DedicatedServerBackupBackupPassword {
+  /** Password to reach the archive container through the sftp gw. */
+  sftpArchive?: string | null | undefined;
+  /** Password to reach the storage container through the sftp gw. */
+  sftpStorage?: string | null | undefined;
+  /** Password to reach the archive container through swift. */
+  swiftArchive?: string | null | undefined;
+  /** Password to reach the storage container through swift. */
+  swiftStorage?: string | null | undefined;
+}
+
+/** Cloud project struct. */
+export interface DedicatedServerBackupBackupProject {
+  /** Project description. */
+  description?: string | null | undefined;
+  /** Project id. */
+  projectId?: string | null | undefined;
+}
+
+/** A structure describing quota associated to the current container */
+export interface DedicatedServerBackupBackupQuota {
+  /** Volume r/w bandwidth limit: read/write volume offered per month on the container. */
+  maxBandwidth?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Container max size. */
+  maxStorage?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Volume usage. */
+  storageUsed?: ComplexTypeUnitAndValueLong | null | undefined;
+  /** Volume usage in percent */
+  usagePercent?: number | null | undefined;
+}
+
+/** A structure describing the SFTP access to a container */
+export interface DedicatedServerBackupBackupSftp {
+  /** Sftp password. */
+  password?: string | null | undefined;
+  /** Url */
+  url?: string | null | undefined;
+  /** Username */
+  username?: string | null | undefined;
+}
+
+/** A structure describing the status of your backup */
+export interface DedicatedServerBackupBackupStatus {
+  /** Status code */
+  code?: DedicatedServerBackupBackupStatusCodeEnum | undefined;
+  /** Status code reason (when not ok) */
+  reason?: string | null | undefined;
+}
+
+/** Possible values for backup status code */
+export const DedicatedServerBackupBackupStatusCodeEnum = {
+  DELETING: "DELETING",
+  ERROR: "ERROR",
+  OK: "OK",
+  SUSPENDED: "SUSPENDED",
+  SUSPENDING: "SUSPENDING",
+  UNKNOWN: "UNKNOWN",
+  WAITING_AGREEMENTS_VALIDATION: "WAITING_AGREEMENTS_VALIDATION",
+} as const;
+/**
+ * Possible values for backup status code
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type DedicatedServerBackupBackupStatusCodeEnum =
+  | (typeof DedicatedServerBackupBackupStatusCodeEnum)[keyof typeof DedicatedServerBackupBackupStatusCodeEnum]
+  | (string & {});
+
+/** A structure describing the information related to Openstack to reach the container. */
+export interface DedicatedServerBackupBackupSwift {
+  /** Auth url. */
+  authUrl?: string | null | undefined;
+  /** Openstack password. */
+  password?: string | null | undefined;
+  /** Openstack username to use swift. */
+  username?: string | null | undefined;
+}
 
 /** Physical KVM */
 export interface DedicatedServerKvm {
@@ -2545,6 +3389,44 @@ export type DedicatedServerTaskStatusEnum =
   | (typeof DedicatedServerTaskStatusEnum)[keyof typeof DedicatedServerTaskStatusEnum]
   | (string & {});
 
+/** Your VirtualNetworkInterface */
+export interface DedicatedVirtualNetworkInterfaceVirtualNetworkInterface {
+  /**
+   * VirtualNetworkInterface activation state
+   *
+   * Read-only: the API sets it.
+   */
+  enabled?: boolean | undefined;
+  /** VirtualNetworkInterface mode */
+  mode?: DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum | undefined;
+  /** User defined VirtualNetworkInterface name */
+  name?: string | undefined;
+  /**
+   * NetworkInterfaceControllers bound to this VirtualNetworkInterface
+   *
+   * Read-only: the API sets it.
+   */
+  networkInterfaceController?: MacAddress[] | undefined;
+  /**
+   * Server bound to this VirtualNetworkInterface
+   *
+   * Read-only: the API sets it.
+   */
+  serverName?: string | undefined;
+  /**
+   * VirtualNetworkInterface unique id
+   *
+   * Read-only: the API sets it.
+   */
+  uuid?: string | undefined;
+  /**
+   * vRack name
+   *
+   * Read-only: the API sets it.
+   */
+  vrack?: string | null | undefined;
+}
+
 /** Available VirtualNetworkInterface modes */
 export const DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum = {
   PUBLIC: "public",
@@ -2561,7 +3443,7 @@ export type DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum =
   | (typeof DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum)[keyof typeof DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum]
   | (string & {});
 
-/** Your VirtualNetworkInterface. Without the read-only fields, which the API sets. */
+/** {@link DedicatedVirtualNetworkInterfaceVirtualNetworkInterface} without its read-only fields, which the API sets: the form a request body takes. */
 export interface DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceWritable {
   /** VirtualNetworkInterface mode */
   mode?: DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum | undefined;
@@ -3758,6 +4640,9 @@ export const LicenseWindowsSQLVersionEnum = {
 export type LicenseWindowsSQLVersionEnum =
   | (typeof LicenseWindowsSQLVersionEnum)[keyof typeof LicenseWindowsSQLVersionEnum]
   | (string & {});
+
+/** MAC address (e.g., 00:00:5e:00:53:01) */
+export type MacAddress = string;
 
 /** A structure describing informations about secondary dns check field */
 export interface SecondaryDNSSecondaryDNSCheckField {

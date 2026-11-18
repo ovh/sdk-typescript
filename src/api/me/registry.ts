@@ -1680,6 +1680,15 @@ export const OPS = {
     deprecated: false,
     schemasVersion: undefined,
   },
+  getMeIdentityProviderSamlServiceProviderInfo: {
+    name: "me.getMeIdentityProviderSamlServiceProviderInfo",
+    method: "GET",
+    path: "/v1/me/identity/provider/samlServiceProviderInfo",
+    summary: "Get information related to OVHcloud as a SAMLv2 service provider",
+    iamActions: [],
+    deprecated: false,
+    schemasVersion: undefined,
+  },
   listIdentityUsers: {
     name: "me.listIdentityUsers",
     method: "GET",

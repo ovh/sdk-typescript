@@ -19,10 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 662 operations, on the routes under /v1/order.
+ * It has 665 operations, on the routes under /v1/order.
  *
  * To start, list what the account has: listCarts, listDedicatedClouds, listFreefaxes,
- * listOverTheBoxes, listSms, listTelephonies, listVeeamCloudConnects, listVps, and 276 more.
+ * listOverTheBoxes, listSms, listTelephonies, listVeeamCloudConnects, listVps, and 278 more.
  *
  * To find the method for a route, search index/order.jsonl: one line per method, with its route,
  * its signature and the IAM actions it requires. It is at the root of the SDK repository, and in
@@ -9252,6 +9252,97 @@ export class OrderApi extends SectionApi {
   }
 
   /**
+   * listCartServiceOptionVrackServices calls GET /v1/order/cartServiceOption/vrackServices: List available services
+   *
+   * Requires the IAM action order:apiovh:cartServiceOption/vrackServices/get.
+   *
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.order.listCartServiceOptionVrackServices();
+   */
+  listCartServiceOptionVrackServices(options?: RequestOptions): Promise<string[]> {
+    return this._call(OPS.listCartServiceOptionVrackServices, {}, "json", options);
+  }
+
+  /**
+   * getCartServiceOptionVrackServices calls GET /v1/order/cartServiceOption/vrackServices/{serviceName}: Get informations about additional vrackServices offer for your service
+   *
+   * Requires the IAM action order:apiovh:cartServiceOption/vrackServices/get.
+   *
+   * @param serviceName - The internal ID of your vRackServices service
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.order.getCartServiceOptionVrackServices(serviceName);
+   */
+  getCartServiceOptionVrackServices(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.OrderCartGenericOptionDefinition[]> {
+    return this._call(
+      OPS.getCartServiceOptionVrackServices,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allCartServiceOptionVrackServices iterates over GET /v1/order/cartServiceOption/vrackServices (List available services).
+   *
+   * It lists the IDs with {@link OrderApi.listCartServiceOptionVrackServices}, then gets each object with
+   * {@link OrderApi.getCartServiceOptionVrackServices}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action order:apiovh:cartServiceOption/vrackServices/get.
+   *
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.order.allCartServiceOptionVrackServices()) console.log(item);
+   */
+  allCartServiceOptionVrackServices(
+    options?: RequestOptions,
+  ): AsyncIterable<models.OrderCartGenericOptionDefinition[]> {
+    return this._each(
+      () => this.listCartServiceOptionVrackServices(options),
+      (listedId) => this.getCartServiceOptionVrackServices(listedId, options),
+    );
+  }
+
+  /**
+   * postCartServiceOptionVrackServices calls POST /v1/order/cartServiceOption/vrackServices/{serviceName}: Add an additional vrackServices option in your cart
+   *
+   * Requires the IAM action order:apiovh:cartServiceOption/vrackServices/create.
+   *
+   * @param serviceName - The internal ID of your vRackServices service
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.OrderCartItem} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.order.postCartServiceOptionVrackServices(serviceName, body);
+   */
+  postCartServiceOptionVrackServices(
+    serviceName: string,
+    body: models.PostCartServiceOptionVrackServicesRequest,
+    options?: RequestOptions,
+  ): Promise<models.OrderCartItem> {
+    return this._call(
+      OPS.postCartServiceOptionVrackServices,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * listCartServiceOptionWebHostings calls GET /v1/order/cartServiceOption/webHosting: List available services
    *
    * Requires the IAM action order:apiovh:cartServiceOption/webHosting/get.
@@ -15261,7 +15352,10 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * listLicenseCpanels calls GET /v1/order/license/cpanel: List available services
+   * listLicenseCpanels calls GET /v1/order/license/cpanel: List your cPanel licenses
+   *
+   * Returns the names of the cPanel licenses of the account; each name is the service name used by
+   * the other calls.
    *
    * Requires the IAM action order:apiovh:license/cpanel/get.
    *
@@ -15402,7 +15496,7 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * allLicenseCpanels iterates over GET /v1/order/license/cpanel (List available services).
+   * allLicenseCpanels iterates over GET /v1/order/license/cpanel (List your cPanel licenses).
    *
    * It lists the IDs with {@link OrderApi.listLicenseCpanels}, then gets each object with
    * {@link OrderApi.getLicenseCpanel}, only when the loop reaches it. An object deleted in the
@@ -15651,7 +15745,10 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * listLicensePlesks calls GET /v1/order/license/plesk: List available services
+   * listLicensePlesks calls GET /v1/order/license/plesk: List your Plesk licenses
+   *
+   * Returns the names of the Plesk licenses of the account; each name is the service name used by
+   * the other calls.
    *
    * Requires the IAM action order:apiovh:license/plesk/get.
    *
@@ -15834,7 +15931,7 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * allLicensePlesks iterates over GET /v1/order/license/plesk (List available services).
+   * allLicensePlesks iterates over GET /v1/order/license/plesk (List your Plesk licenses).
    *
    * It lists the IDs with {@link OrderApi.listLicensePlesks}, then gets each object with
    * {@link OrderApi.getLicensePlesk}, only when the loop reaches it. An object deleted in the
@@ -16050,7 +16147,10 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * listLicenseSqlservers calls GET /v1/order/license/sqlserver: List available services
+   * listLicenseSqlservers calls GET /v1/order/license/sqlserver: List your SQL Server licenses
+   *
+   * Returns the names of the SQL Server licenses of the account; each name is the service name used
+   * by the other calls.
    *
    * Requires the IAM action order:apiovh:license/sqlserver/get.
    *
@@ -16179,7 +16279,7 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * allLicenseSqlservers iterates over GET /v1/order/license/sqlserver (List available services).
+   * allLicenseSqlservers iterates over GET /v1/order/license/sqlserver (List your SQL Server licenses).
    *
    * It lists the IDs with {@link OrderApi.listLicenseSqlservers}, then gets each object with
    * {@link OrderApi.getLicenseSqlserver}, only when the loop reaches it. An object deleted in the
@@ -16290,7 +16390,10 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * listLicenseWindows calls GET /v1/order/license/windows: List available services
+   * listLicenseWindows calls GET /v1/order/license/windows: List your Windows licenses
+   *
+   * Returns the names of the Windows licenses of the account; each name is the service name used by
+   * the other calls.
    *
    * Requires the IAM action order:apiovh:license/windows/get.
    *
@@ -16437,7 +16540,7 @@ export class OrderApi extends SectionApi {
   }
 
   /**
-   * allLicenseWindows iterates over GET /v1/order/license/windows (List available services).
+   * allLicenseWindows iterates over GET /v1/order/license/windows (List your Windows licenses).
    *
    * It lists the IDs with {@link OrderApi.listLicenseWindows}, then gets each object with
    * {@link OrderApi.getLicenseWindows}, only when the loop reaches it. An object deleted in the
@@ -17158,6 +17261,9 @@ export class OrderApi extends SectionApi {
   /**
    * listTelephonies calls GET /v1/order/telephony: List billing accounts
    *
+   * Returns the billing accounts of the customer. A billing account groups telephony services
+   * billed together.
+   *
    * Requires the IAM action order:apiovh:telephony/get.
    *
    * @param options - the options of this call: signal, timeout, headers
@@ -17171,6 +17277,9 @@ export class OrderApi extends SectionApi {
 
   /**
    * listTelephonyLines calls GET /v1/order/telephony/lines: List lines
+   *
+   * Returns the lines of the customer, across all billing accounts. Get a line or trunk for the
+   * service without its billing account.
    *
    * Requires the IAM action order:apiovh:telephony/lines/get.
    *
@@ -17525,6 +17634,9 @@ export class OrderApi extends SectionApi {
 
   /**
    * listTelephonyTrunks calls GET /v1/order/telephony/trunks: List trunks
+   *
+   * Returns the trunks of the customer, across all billing accounts. A trunk connects a customer
+   * PBX to OVHcloud over SIP.
    *
    * Requires the IAM action order:apiovh:telephony/trunks/get.
    *

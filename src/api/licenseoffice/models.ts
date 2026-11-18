@@ -14,6 +14,90 @@
  * @module
  */
 
+/** IAM resource metadata embedded in services models */
+export interface IAMResourceMetadata {
+  /**
+   * Resource display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Unique identifier of the resource
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Resource state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: IAMResourceMetadataStateEnum | null | undefined;
+  /**
+   * Resource tags. Tags that were internally computed are prefixed with ovh:
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: Record<string, string> | null | undefined;
+  /**
+   * Unique resource name used in policies
+   *
+   * Read-only: the API sets it.
+   */
+  urn?: string | undefined;
+}
+
+/** Resource state */
+export const IAMResourceMetadataStateEnum = {
+  EXPIRED: "EXPIRED",
+  IN_CREATION: "IN_CREATION",
+  OK: "OK",
+  SUSPENDED: "SUSPENDED",
+} as const;
+/**
+ * Resource state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceMetadataStateEnum =
+  | (typeof IAMResourceMetadataStateEnum)[keyof typeof IAMResourceMetadataStateEnum]
+  | (string & {});
+
+/** Resource tag filter */
+export interface IAMResourceTagFilter {
+  /**
+   * Operator to use in order to filter on the value (defaults to 'EQ')
+   *
+   * Read-only: the API sets it.
+   */
+  operator?: IAMResourceTagFilterOperatorEnum | null | undefined;
+  /**
+   * Value to use in order to filter tags
+   *
+   * Read-only: the API sets it.
+   */
+  value?: string | undefined;
+}
+
+/** Operator that can be used in order to filter resources tags */
+export const IAMResourceTagFilterOperatorEnum = {
+  EQ: "EQ",
+  EXISTS: "EXISTS",
+  ILIKE: "ILIKE",
+  LIKE: "LIKE",
+  NEQ: "NEQ",
+  NEXISTS: "NEXISTS",
+} as const;
+/**
+ * Operator that can be used in order to filter resources tags
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceTagFilterOperatorEnum =
+  | (typeof IAMResourceTagFilterOperatorEnum)[keyof typeof IAMResourceTagFilterOperatorEnum]
+  | (string & {});
+
 /** ISO country codes */
 export const LicenseOfficeCountryEnum = {
   AC: "ac",
@@ -286,6 +370,42 @@ export type LicenseOfficeCountryEnum =
   | (typeof LicenseOfficeCountryEnum)[keyof typeof LicenseOfficeCountryEnum]
   | (string & {});
 
+/** Office tenant */
+export interface LicenseOfficeDomainNative {
+  /**
+   * Domain name
+   *
+   * Read-only: the API sets it.
+   */
+  domainName?: string | undefined;
+  /**
+   * Domain status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: LicenseOfficeDomainStatusEnum | undefined;
+  /**
+   * Domain status
+   *
+   * Read-only: the API sets it.
+   */
+  txtEntry?: string | undefined;
+}
+
+/** Office tenant type */
+export const LicenseOfficeDomainStatusEnum = {
+  OK: "ok",
+  UNVERIFIED: "unverified",
+} as const;
+/**
+ * Office tenant type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficeDomainStatusEnum =
+  | (typeof LicenseOfficeDomainStatusEnum)[keyof typeof LicenseOfficeDomainStatusEnum]
+  | (string & {});
+
 /** Office tenant type */
 export const LicenseOfficeLicenseEnum = {
   OFFICE_BUSINESS: "officeBusiness",
@@ -299,6 +419,24 @@ export const LicenseOfficeLicenseEnum = {
 export type LicenseOfficeLicenseEnum =
   | (typeof LicenseOfficeLicenseEnum)[keyof typeof LicenseOfficeLicenseEnum]
   | (string & {});
+
+/** Office Current Statisitics */
+export interface LicenseOfficeOfficeCurrentStatisticsNative {
+  /**
+   * Date of the statistics
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  date?: string | undefined;
+  /**
+   * List of lines associated to this statistics entity.
+   *
+   * Read-only: the API sets it.
+   */
+  lines?: LicenseOfficeStatisticsLineNative[] | undefined;
+}
 
 /** Office tenant */
 export interface LicenseOfficeOfficeTaskNative {
@@ -336,6 +474,78 @@ export interface LicenseOfficeOfficeTaskNative {
    * An ISO 8601 date-time string.
    */
   todoDate?: string | undefined;
+}
+
+/** Office tenant */
+export interface LicenseOfficeOfficeTenantNativeWithIAM {
+  /** Contact's address line */
+  address?: string | undefined;
+  /** Contact's city */
+  city?: string | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /** Tenant's display name */
+  displayName?: string | undefined;
+  /** Contact's first name */
+  firstName?: string | undefined;
+  /**
+   * IAM resource metadata
+   *
+   * Read-only: the API sets it.
+   */
+  iam?: IAMResourceMetadata | null | undefined;
+  /** Contact's last name */
+  lastName?: string | undefined;
+  /** MCA acceptance status */
+  mcaAgreed?: boolean | undefined;
+  /** Primary phone number */
+  phone?: PhoneNumber | undefined;
+  /**
+   * Internal service name
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * Tenant's service type
+   *
+   * Read-only: the API sets it.
+   */
+  serviceType?: LicenseOfficeServiceTypeEnum | undefined;
+  /**
+   * Tenant's status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: LicenseOfficeServiceStateEnum | undefined;
+  /** Contact's zip code */
+  zipCode?: string | undefined;
+}
+
+/** Office tenant. Without the read-only fields, which the API sets. */
+export interface LicenseOfficeOfficeTenantNativeWritable {
+  /** Contact's address line */
+  address?: string | undefined;
+  /** Contact's city */
+  city?: string | undefined;
+  /** Tenant's display name */
+  displayName?: string | undefined;
+  /** Contact's first name */
+  firstName?: string | undefined;
+  /** Contact's last name */
+  lastName?: string | undefined;
+  /** MCA acceptance status */
+  mcaAgreed?: boolean | undefined;
+  /** Primary phone number */
+  phone?: PhoneNumber | undefined;
+  /** Contact's zip code */
+  zipCode?: string | undefined;
 }
 
 /** Office change password */
@@ -434,6 +644,60 @@ export interface LicenseOfficePostUserNative {
   login: string;
   /** ISO 3166-1 alpha-2 country code where the user is using Office365 services */
   usageLocation?: LicenseOfficePrepaidCountryEnum | undefined;
+}
+
+/** Office tenant state */
+export const LicenseOfficeServiceStateEnum = {
+  CREATING: "creating",
+  IN_MAINTENANCE: "inMaintenance",
+  OK: "ok",
+  REOPENING: "reopening",
+  SUSPENDED: "suspended",
+  SUSPENDING: "suspending",
+} as const;
+/**
+ * Office tenant state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficeServiceStateEnum =
+  | (typeof LicenseOfficeServiceStateEnum)[keyof typeof LicenseOfficeServiceStateEnum]
+  | (string & {});
+
+/** Office tenant type */
+export const LicenseOfficeServiceTypeEnum = {
+  PAY_AS_YOU_GO: "payAsYouGo",
+  PREPAID: "prepaid",
+} as const;
+/**
+ * Office tenant type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficeServiceTypeEnum =
+  | (typeof LicenseOfficeServiceTypeEnum)[keyof typeof LicenseOfficeServiceTypeEnum]
+  | (string & {});
+
+/** License usage statistics line. */
+export interface LicenseOfficeStatisticsLineNative {
+  /**
+   * Count of activated licenses at the end of the day.
+   *
+   * Read-only: the API sets it.
+   */
+  endOfDayCount?: number | undefined;
+  /**
+   * Type of the Office license.
+   *
+   * Read-only: the API sets it.
+   */
+  licenceType?: LicenseOfficeLicenseEnum | undefined;
+  /**
+   * Maximum count of simultaneous activated licences.
+   *
+   * Read-only: the API sets it.
+   */
+  peakCount?: number | undefined;
 }
 
 /** Excahnge task status */
@@ -756,6 +1020,9 @@ export const LicenseOfficePrepaidLicenseEnum = {
 export type LicenseOfficePrepaidLicenseEnum =
   | (typeof LicenseOfficePrepaidLicenseEnum)[keyof typeof LicenseOfficePrepaidLicenseEnum]
   | (string & {});
+
+/** Phone number */
+export type PhoneNumber = string;
 
 /** Map a possible renew for a specific service */
 export interface ServiceRenewType {

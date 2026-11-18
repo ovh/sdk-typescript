@@ -19,9 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 32 operations, on the routes under /v1/email/pro.
+ * It has 60 operations, on the routes under /v1/email/pro.
  *
- * To start, list what the account has: listDomainDkimSelectors.
+ * To start, list what the account has: listPros, listAccounts, listDomains, listExternalContacts,
+ * listTasks, listAccountAlias, listAccountFullAccess, listAccountSendAs, and 5 more.
  *
  * To find the method for a route, search index/emailpro.jsonl: one line per method, with its route,
  * its signature and the IAM actions it requires. It is at the root of the SDK repository, and in
@@ -31,6 +32,92 @@ import { OPS } from "./registry.js";
  * dist/api/emailpro/models.d.ts.
  */
 export class EmailproApi extends SectionApi {
+  /**
+   * listPros calls GET /v1/email/pro: List Email Pro services
+   *
+   * Returns the names of the Email Pro services of the account. Filter them by IAM tags with
+   * `iamTags`.
+   *
+   * Requires the IAM action emailPro:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listPros();
+   */
+  listPros(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listPros,
+      {
+        query: [["iamTags", params?.iamTags]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getPro calls GET /v1/email/pro/{service}: Get the Email Pro service
+   *
+   * Returns the state, offer, hostname and web interface URL of the service, its message size
+   * limits, its password and lockout policy, and its spam and virus configuration.
+   *
+   * Requires the IAM action emailPro:apiovh:get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProServiceNativeWithIAM} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getPro(service);
+   */
+  getPro(service: string, options?: RequestOptions): Promise<models.EmailProServiceNativeWithIAM> {
+    return this._call(
+      OPS.getPro,
+      {
+        path: { service: service },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allPros iterates over GET /v1/email/pro (List Email Pro services).
+   *
+   * It lists the IDs with {@link EmailproApi.listPros}, then gets each object with
+   * {@link EmailproApi.getPro}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProServiceNativeWithIAM}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allPros()) console.log(item);
+   */
+  allPros(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProServiceNativeWithIAM> {
+    return this._each(
+      () => this.listPros(params, options),
+      (listedId) => this.getPro(listedId, options),
+    );
+  }
+
   /**
    * updatePro calls PUT /v1/email/pro/{service}: Update the Email Pro service
    *
@@ -59,6 +146,109 @@ export class EmailproApi extends SectionApi {
       },
       "none",
       options,
+    );
+  }
+
+  /**
+   * listAccounts calls GET /v1/email/pro/{service}/account: List email accounts
+   *
+   * Returns the email addresses of the email accounts of the service. Filter them by
+   * `primaryEmailAddress` or `id`.
+   *
+   * Requires the IAM action emailPro:apiovh:account/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccounts(service);
+   */
+  listAccounts(
+    service: string,
+    params?: {
+      /** Filter the value of id property (like) */
+      id?: number | undefined;
+      /** Filter the value of primaryEmailAddress property (like) */
+      primaryEmailAddress?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listAccounts,
+      {
+        path: { service: service },
+        query: [
+          ["id", params?.id],
+          ["primaryEmailAddress", params?.primaryEmailAddress],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getAccount calls GET /v1/email/pro/{service}/account/{email}: Get an email account
+   *
+   * Returns the login, names, domain, state, quota and usage of the email account, its renewal and
+   * expiration settings, and its spam and virus configuration.
+   *
+   * Requires the IAM action emailPro:apiovh:account/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccount(service, email);
+   */
+  getAccount(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountNative> {
+    return this._call(
+      OPS.getAccount,
+      {
+        path: { service: service, email: email },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccounts iterates over GET /v1/email/pro/{service}/account (List email accounts).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccounts}, then gets each object with
+   * {@link EmailproApi.getAccount}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProAccountNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccounts(service)) console.log(item);
+   */
+  allAccounts(
+    service: string,
+    params?: {
+      /** Filter the value of id property (like) */
+      id?: number | undefined;
+      /** Filter the value of primaryEmailAddress property (like) */
+      primaryEmailAddress?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProAccountNative> {
+    return this._each(
+      () => this.listAccounts(service, params, options),
+      (listedId) => this.getAccount(service, listedId, options),
     );
   }
 
@@ -127,6 +317,31 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * listAccountAlias calls GET /v1/email/pro/{service}/account/{email}/alias: List account aliases
+   *
+   * Returns the aliases of the email account: extra addresses that deliver to the same mailbox.
+   *
+   * Requires the IAM action emailPro:apiovh:account/alias/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccountAlias(service, email);
+   */
+  listAccountAlias(service: string, email: string, options?: RequestOptions): Promise<string[]> {
+    return this._call(
+      OPS.listAccountAlias,
+      {
+        path: { service: service, email: email },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * createAccountAlias calls POST /v1/email/pro/{service}/account/{email}/alias: Create an account alias
    *
    * Adds the `alias` address to the email account, so that it receives its emails, and returns the
@@ -157,6 +372,67 @@ export class EmailproApi extends SectionApi {
       },
       "json",
       options,
+    );
+  }
+
+  /**
+   * getAccountAlias calls GET /v1/email/pro/{service}/account/{email}/alias/{alias}: Get an account alias
+   *
+   * Returns the alias address, its creation date and the ID of its pending task, if any
+   * (`taskPendingId`).
+   *
+   * Requires the IAM action emailPro:apiovh:account/alias/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param alias - Alias
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountAlias} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountAlias(service, email, alias);
+   */
+  getAccountAlias(
+    service: string,
+    email: string,
+    alias: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountAlias> {
+    return this._call(
+      OPS.getAccountAlias,
+      {
+        path: { service: service, email: email, alias: alias },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccountAlias iterates over GET /v1/email/pro/{service}/account/{email}/alias (List account aliases).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccountAlias}, then gets each object with
+   * {@link EmailproApi.getAccountAlias}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/alias/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProAccountAlias}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccountAlias(service, email)) console.log(item);
+   */
+  allAccountAlias(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProAccountAlias> {
+    return this._each(
+      () => this.listAccountAlias(service, email, options),
+      (listedId) => this.getAccountAlias(service, email, listedId, options),
     );
   }
 
@@ -227,6 +503,38 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * getAccountDiagnostics calls GET /v1/email/pro/{service}/account/{email}/diagnostics: Get the account diagnosis
+   *
+   * Returns the results of the last diagnosis of the email account: account locked, suspended or
+   * flagged as spammer, login with its credentials, MX and SRV records, and sending and receiving
+   * of emails.
+   *
+   * Requires the IAM action emailPro:apiovh:account/diagnostics/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountDiagnosis} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountDiagnostics(service, email);
+   */
+  getAccountDiagnostics(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountDiagnosis> {
+    return this._call(
+      OPS.getAccountDiagnostics,
+      {
+        path: { service: service, email: email },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * createAccountDiagnostics calls POST /v1/email/pro/{service}/account/{email}/diagnostics: Run an account diagnosis
    *
    * Starts a diagnosis of the email account, which requires the account `password`, and returns the
@@ -254,6 +562,35 @@ export class EmailproApi extends SectionApi {
       {
         path: { service: service, email: email },
         body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * listAccountFullAccess calls GET /v1/email/pro/{service}/account/{email}/fullAccess: List full access permissions
+   *
+   * Returns the IDs of the accounts that have full access to the email account.
+   *
+   * Requires the IAM action emailPro:apiovh:account/fullAccess/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccountFullAccess(service, email);
+   */
+  listAccountFullAccess(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): Promise<number[]> {
+    return this._call(
+      OPS.listAccountFullAccess,
+      {
+        path: { service: service, email: email },
       },
       "json",
       options,
@@ -294,6 +631,67 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * getAccountFullAccess calls GET /v1/email/pro/{service}/account/{email}/fullAccess/{allowedAccountId}: Get a full access permission
+   *
+   * Returns the ID of the account that has full access to the email account, and the creation date
+   * of the permission.
+   *
+   * Requires the IAM action emailPro:apiovh:account/fullAccess/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param allowedAccountId - Allowed account ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountFullAccess} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountFullAccess(service, email, allowedAccountId);
+   */
+  getAccountFullAccess(
+    service: string,
+    email: string,
+    allowedAccountId: number,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountFullAccess> {
+    return this._call(
+      OPS.getAccountFullAccess,
+      {
+        path: { service: service, email: email, allowedAccountId: allowedAccountId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccountFullAccess iterates over GET /v1/email/pro/{service}/account/{email}/fullAccess (List full access permissions).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccountFullAccess}, then gets each object with
+   * {@link EmailproApi.getAccountFullAccess}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/fullAccess/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProAccountFullAccess}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccountFullAccess(service, email)) console.log(item);
+   */
+  allAccountFullAccess(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProAccountFullAccess> {
+    return this._each(
+      () => this.listAccountFullAccess(service, email, options),
+      (listedId) => this.getAccountFullAccess(service, email, listedId, options),
+    );
+  }
+
+  /**
    * deleteAccountFullAccess calls DELETE /v1/email/pro/{service}/account/{email}/fullAccess/{allowedAccountId}: Remove a full access permission
    *
    * Withdraws the access of the allowed account to the mailbox of this email account, and returns
@@ -320,6 +718,31 @@ export class EmailproApi extends SectionApi {
       OPS.deleteAccountFullAccess,
       {
         path: { service: service, email: email, allowedAccountId: allowedAccountId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * listAccountSendAs calls GET /v1/email/pro/{service}/account/{email}/sendAs: List send as permissions
+   *
+   * Returns the IDs of the accounts allowed to send emails as the email account.
+   *
+   * Requires the IAM action emailPro:apiovh:account/sendAs/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccountSendAs(service, email);
+   */
+  listAccountSendAs(service: string, email: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listAccountSendAs,
+      {
+        path: { service: service, email: email },
       },
       "json",
       options,
@@ -360,6 +783,67 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * getAccountSendAs calls GET /v1/email/pro/{service}/account/{email}/sendAs/{allowedAccountId}: Get a send as permission
+   *
+   * Returns the ID of the account allowed to send emails as the email account, and the creation
+   * date of the permission.
+   *
+   * Requires the IAM action emailPro:apiovh:account/sendAs/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param allowedAccountId - Allowed account ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountSendAs} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountSendAs(service, email, allowedAccountId);
+   */
+  getAccountSendAs(
+    service: string,
+    email: string,
+    allowedAccountId: number,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountSendAs> {
+    return this._call(
+      OPS.getAccountSendAs,
+      {
+        path: { service: service, email: email, allowedAccountId: allowedAccountId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccountSendAs iterates over GET /v1/email/pro/{service}/account/{email}/sendAs (List send as permissions).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccountSendAs}, then gets each object with
+   * {@link EmailproApi.getAccountSendAs}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/sendAs/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProAccountSendAs}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccountSendAs(service, email)) console.log(item);
+   */
+  allAccountSendAs(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProAccountSendAs> {
+    return this._each(
+      () => this.listAccountSendAs(service, email, options),
+      (listedId) => this.getAccountSendAs(service, email, listedId, options),
+    );
+  }
+
+  /**
    * deleteAccountSendAs calls DELETE /v1/email/pro/{service}/account/{email}/sendAs/{allowedAccountId}: Remove a send as permission
    *
    * Withdraws the right of the allowed account to send emails as this email account, and returns
@@ -386,6 +870,35 @@ export class EmailproApi extends SectionApi {
       OPS.deleteAccountSendAs,
       {
         path: { service: service, email: email, allowedAccountId: allowedAccountId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * listAccountSendOnBehalfTos calls GET /v1/email/pro/{service}/account/{email}/sendOnBehalfTo: List send on behalf permissions
+   *
+   * Returns the IDs of the accounts allowed to send emails on behalf of the email account.
+   *
+   * Requires the IAM action emailPro:apiovh:account/sendOnBehalfTo/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccountSendOnBehalfTos(service, email);
+   */
+  listAccountSendOnBehalfTos(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): Promise<number[]> {
+    return this._call(
+      OPS.listAccountSendOnBehalfTos,
+      {
+        path: { service: service, email: email },
       },
       "json",
       options,
@@ -427,6 +940,67 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * getAccountSendOnBehalfTo calls GET /v1/email/pro/{service}/account/{email}/sendOnBehalfTo/{allowedAccountId}: Get a send on behalf permission
+   *
+   * Returns the ID of the account allowed to send emails on behalf of the email account, and the
+   * creation date of the permission.
+   *
+   * Requires the IAM action emailPro:apiovh:account/sendOnBehalfTo/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param allowedAccountId - Allowed account ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProAccountSendOnBehalfTo} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountSendOnBehalfTo(service, email, allowedAccountId);
+   */
+  getAccountSendOnBehalfTo(
+    service: string,
+    email: string,
+    allowedAccountId: number,
+    options?: RequestOptions,
+  ): Promise<models.EmailProAccountSendOnBehalfTo> {
+    return this._call(
+      OPS.getAccountSendOnBehalfTo,
+      {
+        path: { service: service, email: email, allowedAccountId: allowedAccountId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccountSendOnBehalfTos iterates over GET /v1/email/pro/{service}/account/{email}/sendOnBehalfTo (List send on behalf permissions).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccountSendOnBehalfTos}, then gets each object with
+   * {@link EmailproApi.getAccountSendOnBehalfTo}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/sendOnBehalfTo/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProAccountSendOnBehalfTo}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccountSendOnBehalfTos(service, email)) console.log(item);
+   */
+  allAccountSendOnBehalfTos(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProAccountSendOnBehalfTo> {
+    return this._each(
+      () => this.listAccountSendOnBehalfTos(service, email, options),
+      (listedId) => this.getAccountSendOnBehalfTo(service, email, listedId, options),
+    );
+  }
+
+  /**
    * deleteAccountSendOnBehalfTo calls DELETE /v1/email/pro/{service}/account/{email}/sendOnBehalfTo/{allowedAccountId}: Remove a send on behalf permission
    *
    * Withdraws the right of the allowed account to send emails on behalf of this email account, and
@@ -460,6 +1034,93 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * listAccountTasks calls GET /v1/email/pro/{service}/account/{email}/tasks: List email account tasks
+   *
+   * Returns the IDs of the tasks of the email account. Read one with `GET
+   * /email/pro/{service}/task/{id}`.
+   *
+   * Requires the IAM action emailPro:apiovh:account/tasks/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listAccountTasks(service, email);
+   */
+  listAccountTasks(service: string, email: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listAccountTasks,
+      {
+        path: { service: service, email: email },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getAccountTasks calls GET /v1/email/pro/{service}/account/{email}/tasks/{id}: Get a task
+   *
+   * Returns the function, status, creation date and completion date of the task. The status is
+   * todo, doing, done, error or cancelled.
+   *
+   * Requires the IAM action emailPro:apiovh:account/tasks/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param id - Id
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getAccountTasks(service, email, id);
+   */
+  getAccountTasks(
+    service: string,
+    email: string,
+    id: number,
+    options?: RequestOptions,
+  ): Promise<models.EmailProTask> {
+    return this._call(
+      OPS.getAccountTasks,
+      {
+        path: { service: service, email: email, id: id },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allAccountTasks iterates over GET /v1/email/pro/{service}/account/{email}/tasks (List email account tasks).
+   *
+   * It lists the IDs with {@link EmailproApi.listAccountTasks}, then gets each object with
+   * {@link EmailproApi.getAccountTasks}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:account/tasks/get.
+   *
+   * @param service - Service
+   * @param email - Email
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allAccountTasks(service, email)) console.log(item);
+   */
+  allAccountTasks(
+    service: string,
+    email: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProTask> {
+    return this._each(
+      () => this.listAccountTasks(service, email, options),
+      (listedId) => this.getAccountTasks(service, email, listedId, options),
+    );
+  }
+
+  /**
    * terminateAccount calls POST /v1/email/pro/{service}/account/{email}/terminate: Terminate an email account at expiration
    *
    * Sets the email account to be suspended at its expiration date, and returns a message giving
@@ -479,6 +1140,54 @@ export class EmailproApi extends SectionApi {
       OPS.terminateAccount,
       {
         path: { service: service, email: email },
+      },
+      "string",
+      options,
+    );
+  }
+
+  /**
+   * getBillingMigrated calls GET /v1/email/pro/{service}/billingMigrated: Get the billing migration status
+   *
+   * Returns `true` when the service is billed by the new OVHcloud billing system.
+   *
+   * Requires the IAM action emailPro:apiovh:billingMigrated/get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getBillingMigrated(service);
+   */
+  getBillingMigrated(service: string, options?: RequestOptions): Promise<boolean> {
+    return this._call(
+      OPS.getBillingMigrated,
+      {
+        path: { service: service },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getBillingPlan calls GET /v1/email/pro/{service}/billingPlan: Get the billing plan
+   *
+   * Returns the name of the billing plan of the service.
+   *
+   * Requires the IAM action emailPro:apiovh:billingPlan/get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getBillingPlan(service);
+   */
+  getBillingPlan(service: string, options?: RequestOptions): Promise<string> {
+    return this._call(
+      OPS.getBillingPlan,
+      {
+        path: { service: service },
       },
       "string",
       options,
@@ -516,6 +1225,40 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * listDomains calls GET /v1/email/pro/{service}/domain: List domains
+   *
+   * Returns the names of the domains attached to the service. Filter them by `state`, such as ok or
+   * suspended.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listDomains(service);
+   */
+  listDomains(
+    service: string,
+    params?: {
+      /** Filter the value of state property (=) */
+      state?: models.EmailProObjectStateEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listDomains,
+      {
+        path: { service: service },
+        query: [["state", params?.state]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * createDomain calls POST /v1/email/pro/{service}/domain: Add a domain
    *
    * Adds an authoritative or nonAuthoritative domain to the service and returns the task. For a
@@ -545,6 +1288,68 @@ export class EmailproApi extends SectionApi {
       },
       "json",
       options,
+    );
+  }
+
+  /**
+   * getDomain calls GET /v1/email/pro/{service}/domain/{domainName}: Get a domain
+   *
+   * Returns the type and state of the domain, its MX, SRV and SPF records with their validation
+   * status, the expected records, its DKIM diagnostics, its MX relay and its aliases.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProDomainNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getDomain(service, domainName);
+   */
+  getDomain(
+    service: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProDomainNative> {
+    return this._call(
+      OPS.getDomain,
+      {
+        path: { service: service, domainName: domainName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allDomains iterates over GET /v1/email/pro/{service}/domain (List domains).
+   *
+   * It lists the IDs with {@link EmailproApi.listDomains}, then gets each object with
+   * {@link EmailproApi.getDomain}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:domain/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProDomainNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allDomains(service)) console.log(item);
+   */
+  allDomains(
+    service: string,
+    params?: {
+      /** Filter the value of state property (=) */
+      state?: models.EmailProObjectStateEnum | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProDomainNative> {
+    return this._each(
+      () => this.listDomains(service, params, options),
+      (listedId) => this.getDomain(service, listedId, options),
     );
   }
 
@@ -604,6 +1409,37 @@ export class EmailproApi extends SectionApi {
   ): Promise<models.EmailProTask> {
     return this._call(
       OPS.deleteDomain,
+      {
+        path: { service: service, domainName: domainName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getDomainDisclaimer calls GET /v1/email/pro/{service}/domain/{domainName}/disclaimer: Get the disclaimer
+   *
+   * Returns the content of the disclaimer added at the bottom of the emails of the domain, and
+   * whether it is added only to external emails.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/disclaimer/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProDisclaimerNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getDomainDisclaimer(service, domainName);
+   */
+  getDomainDisclaimer(
+    service: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProDisclaimerNative> {
+    return this._call(
+      OPS.getDomainDisclaimer,
       {
         path: { service: service, domainName: domainName },
       },
@@ -712,6 +1548,67 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * listDomainDisclaimerAttributes calls GET /v1/email/pro/{service}/domain/{domainName}/disclaimerAttribute: List disclaimer attributes
+   *
+   * Returns the Active Directory attributes that can be substituted in the disclaimer content, such
+   * as DisplayName, Email or PhoneNumber. Insert one in the disclaimer content as
+   * `%%AttributeName%%`.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/disclaimerAttribute/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listDomainDisclaimerAttributes(service, domainName);
+   */
+  listDomainDisclaimerAttributes(
+    service: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProDisclaimerAttributeEnum[]> {
+    return this._call(
+      OPS.listDomainDisclaimerAttributes,
+      {
+        path: { service: service, domainName: domainName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * listDomainDkims calls GET /v1/email/pro/{service}/domain/{domainName}/dkim: List DKIM selectors
+   *
+   * Returns the names of the DKIM selectors of the domain. Get one to read its DNS record and its
+   * status.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/dkim/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listDomainDkims(service, domainName);
+   */
+  listDomainDkims(
+    service: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listDomainDkims,
+      {
+        path: { service: service, domainName: domainName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * createDomainDkim calls POST /v1/email/pro/{service}/domain/{domainName}/dkim: Create a DKIM selector
    *
    * Creates the DKIM selector `selectorName` on the domain and returns the task. Set
@@ -743,6 +1640,67 @@ export class EmailproApi extends SectionApi {
       },
       "json",
       options,
+    );
+  }
+
+  /**
+   * getDomainDkim calls GET /v1/email/pro/{service}/domain/{domainName}/dkim/{selectorName}: Get a DKIM selector
+   *
+   * Returns the status of the DKIM selector, the CNAME record to add to the DNS zone with its
+   * target and validation status, and the header used for the DKIM signature.
+   *
+   * Requires the IAM action emailPro:apiovh:domain/dkim/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param selectorName - Selector name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProDkimAlt} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getDomainDkim(service, domainName, selectorName);
+   */
+  getDomainDkim(
+    service: string,
+    domainName: string,
+    selectorName: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProDkimAlt> {
+    return this._call(
+      OPS.getDomainDkim,
+      {
+        path: { service: service, domainName: domainName, selectorName: selectorName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allDomainDkims iterates over GET /v1/email/pro/{service}/domain/{domainName}/dkim (List DKIM selectors).
+   *
+   * It lists the IDs with {@link EmailproApi.listDomainDkims}, then gets each object with
+   * {@link EmailproApi.getDomainDkim}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:domain/dkim/get.
+   *
+   * @param service - Service
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProDkimAlt}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allDomainDkims(service, domainName)) console.log(item);
+   */
+  allDomainDkims(
+    service: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProDkimAlt> {
+    return this._each(
+      () => this.listDomainDkims(service, domainName, options),
+      (listedId) => this.getDomainDkim(service, domainName, listedId, options),
     );
   }
 
@@ -875,6 +1833,54 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * listExternalContacts calls GET /v1/email/pro/{service}/externalContact: List external contacts
+   *
+   * Returns the email addresses of the external contacts of the service. Filter them by
+   * `externalEmailAddress`, `firstName`, `lastName`, `displayName` or `id`.
+   *
+   * Requires the IAM action emailPro:apiovh:externalContact/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listExternalContacts(service);
+   */
+  listExternalContacts(
+    service: string,
+    params?: {
+      /** Filter the value of displayName property (like) */
+      displayName?: string | undefined;
+      /** Filter the value of externalEmailAddress property (like) */
+      externalEmailAddress?: string | undefined;
+      /** Filter the value of firstName property (like) */
+      firstName?: string | undefined;
+      /** Filter the value of id property (like) */
+      id?: number | undefined;
+      /** Filter the value of lastName property (like) */
+      lastName?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listExternalContacts,
+      {
+        path: { service: service },
+        query: [
+          ["displayName", params?.displayName],
+          ["externalEmailAddress", params?.externalEmailAddress],
+          ["firstName", params?.firstName],
+          ["id", params?.id],
+          ["lastName", params?.lastName],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * createExternalContact calls POST /v1/email/pro/{service}/externalContact: Create an external contact
    *
    * Creates a contact with an external email address in the service, and returns the task. Set
@@ -903,6 +1909,76 @@ export class EmailproApi extends SectionApi {
       },
       "json",
       options,
+    );
+  }
+
+  /**
+   * getExternalContact calls GET /v1/email/pro/{service}/externalContact/{externalEmailAddress}: Get an external contact
+   *
+   * Returns the email address, names, state and Global Address List visibility of the external
+   * contact.
+   *
+   * Requires the IAM action emailPro:apiovh:externalContact/get.
+   *
+   * @param service - Service
+   * @param externalEmailAddress - External email address
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProExternalContactNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getExternalContact(service, externalEmailAddress);
+   */
+  getExternalContact(
+    service: string,
+    externalEmailAddress: string,
+    options?: RequestOptions,
+  ): Promise<models.EmailProExternalContactNative> {
+    return this._call(
+      OPS.getExternalContact,
+      {
+        path: { service: service, externalEmailAddress: externalEmailAddress },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allExternalContacts iterates over GET /v1/email/pro/{service}/externalContact (List external contacts).
+   *
+   * It lists the IDs with {@link EmailproApi.listExternalContacts}, then gets each object with
+   * {@link EmailproApi.getExternalContact}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:externalContact/get.
+   *
+   * @param service - Service
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProExternalContactNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allExternalContacts(service)) console.log(item);
+   */
+  allExternalContacts(
+    service: string,
+    params?: {
+      /** Filter the value of displayName property (like) */
+      displayName?: string | undefined;
+      /** Filter the value of externalEmailAddress property (like) */
+      externalEmailAddress?: string | undefined;
+      /** Filter the value of firstName property (like) */
+      firstName?: string | undefined;
+      /** Filter the value of id property (like) */
+      id?: number | undefined;
+      /** Filter the value of lastName property (like) */
+      lastName?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.EmailProExternalContactNative> {
+    return this._each(
+      () => this.listExternalContacts(service, params, options),
+      (listedId) => this.getExternalContact(service, listedId, options),
     );
   }
 
@@ -971,6 +2047,32 @@ export class EmailproApi extends SectionApi {
   }
 
   /**
+   * getServer calls GET /v1/email/pro/{service}/server: Get the server
+   *
+   * Returns the state, IPv4 and IPv6 addresses, version and disk usage of the server, and whether
+   * its A, AAAA and PTR DNS records are valid.
+   *
+   * Requires the IAM action emailPro:apiovh:server/get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProServer} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getServer(service);
+   */
+  getServer(service: string, options?: RequestOptions): Promise<models.EmailProServer> {
+    return this._call(
+      OPS.getServer,
+      {
+        path: { service: service },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * getServiceInfos calls GET /v1/email/pro/{service}/serviceInfos: Get service information
    *
    * Returns the status, creation and expiration dates, contacts and renewal settings of the
@@ -1024,6 +2126,80 @@ export class EmailproApi extends SectionApi {
       },
       "none",
       options,
+    );
+  }
+
+  /**
+   * listTasks calls GET /v1/email/pro/{service}/task: List service tasks
+   *
+   * Returns the IDs of the tasks of the service. Get one to follow its function, status and dates.
+   *
+   * Requires the IAM action emailPro:apiovh:task/get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.listTasks(service);
+   */
+  listTasks(service: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listTasks,
+      {
+        path: { service: service },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getTask calls GET /v1/email/pro/{service}/task/{id}: Get a task
+   *
+   * Returns the function, status, creation date and completion date of the task. The status is
+   * todo, doing, done, error or cancelled.
+   *
+   * Requires the IAM action emailPro:apiovh:task/get.
+   *
+   * @param service - Service
+   * @param id - Id
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.EmailProTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.emailpro.getTask(service, id);
+   */
+  getTask(service: string, id: number, options?: RequestOptions): Promise<models.EmailProTask> {
+    return this._call(
+      OPS.getTask,
+      {
+        path: { service: service, id: id },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allTasks iterates over GET /v1/email/pro/{service}/task (List service tasks).
+   *
+   * It lists the IDs with {@link EmailproApi.listTasks}, then gets each object with
+   * {@link EmailproApi.getTask}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action emailPro:apiovh:task/get.
+   *
+   * @param service - Service
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.EmailProTask}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.emailpro.allTasks(service)) console.log(item);
+   */
+  allTasks(service: string, options?: RequestOptions): AsyncIterable<models.EmailProTask> {
+    return this._each(
+      () => this.listTasks(service, options),
+      (listedId) => this.getTask(service, listedId, options),
     );
   }
 

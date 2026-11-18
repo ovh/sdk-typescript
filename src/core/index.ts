@@ -9,9 +9,11 @@
  *
  * ```ts
  * import { Client } from "@ovhcloud/sdk/core";
- * import { VrackApi } from "@ovhcloud/sdk/api/vrack";
+ * import { MeApi } from "@ovhcloud/sdk/api/me";
  *
- * const vrack = new VrackApi(new Client());
+ * const me = new MeApi(new Client()); // reads OVH_CLIENT_ID, OVH_CLIENT_SECRET, OVH_REGION
+ * const account = await me.getAccountDetails(); // GET /v1/me
+ * console.log(account.nichandle);
  * ```
  *
  * Most programs import the full client from "@ovhcloud/sdk" instead.
@@ -40,7 +42,9 @@ export {
   ConfigurationError,
   ConflictError,
   DecodeError,
+  DryRunError,
   ForbiddenError,
+  HookRefusedError,
   InvalidRequestError,
   NotAllowedError,
   NotFoundError,
@@ -54,6 +58,7 @@ export {
   WaitFailedError,
   WaitTimeoutError,
 } from "./errors.js";
+export type { AfterRequestHook, BeforeRequestHook, CallInfo, CallResult } from "./hooks.js";
 export { MAX_CURSOR_PAGES } from "./pagination.js";
 export { type Operation, Registry, type SectionLoader } from "./registry.js";
 export { path } from "./request.js";

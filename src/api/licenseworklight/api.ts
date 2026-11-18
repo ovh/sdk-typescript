@@ -33,7 +33,10 @@ import { OPS } from "./registry.js";
  */
 export class LicenseworklightApi extends SectionApi {
   /**
-   * listWorklights calls GET /v1/license/worklight: List available services
+   * listWorklights calls GET /v1/license/worklight: List your Worklight licenses
+   *
+   * Returns the names of the Worklight licenses of the account; each name is the service name used
+   * by the other calls.
    *
    * Requires the IAM action licenseWorklight:apiovh:get.
    *
@@ -61,7 +64,9 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * listOrderableVersions calls GET /v1/license/worklight/orderableVersions: Get the orderable WorkLight versions
+   * listOrderableVersions calls GET /v1/license/worklight/orderableVersions: Get the orderable Worklight versions
+   *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
    *
    * Requires the IAM action account:apiovh:licenseWorklight/orderableVersions/get.
    *
@@ -86,7 +91,10 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * getWorklight calls GET /v1/license/worklight/{serviceName}: Get this object properties
+   * getWorklight calls GET /v1/license/worklight/{serviceName}: Get a Worklight license
+   *
+   * Returns the license ID, version, status, the IP address the license is attached to, and the
+   * creation date.
    *
    * Requires the IAM action licenseWorklight:apiovh:get.
    *
@@ -112,7 +120,7 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * allWorklights iterates over GET /v1/license/worklight (List available services).
+   * allWorklights iterates over GET /v1/license/worklight (List your Worklight licenses).
    *
    * It lists the IDs with {@link LicenseworklightApi.listWorklights}, then gets each object with
    * {@link LicenseworklightApi.getWorklight}, only when the loop reaches it. An object deleted in the
@@ -141,7 +149,9 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * updateWorklight calls PUT /v1/license/worklight/{serviceName}: Alter this object properties
+   * updateWorklight calls PUT /v1/license/worklight/{serviceName}: Update a Worklight license
+   *
+   * Changes the settings that can be modified: the automatic deletion at expiration.
    *
    * Requires the IAM action licenseWorklight:apiovh:put.
    *
@@ -169,7 +179,9 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * listAllowedDestinationIps calls GET /v1/license/worklight/{serviceName}/allowedDestinationIp: Returns an array of ips where the license can be moved to
+   * listAllowedDestinationIps calls GET /v1/license/worklight/{serviceName}/allowedDestinationIp: List the IPs a Worklight license can be moved to
+   *
+   * Returns the IP blocks that can receive the license, so you can pick the destination of a move.
    *
    * Requires the IAM action licenseWorklight:apiovh:allowedDestinationIp/get.
    *
@@ -194,7 +206,9 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * getCanLicenseBeMovedTo calls GET /v1/license/worklight/{serviceName}/canLicenseBeMovedTo: Will tell if the ip can accept the license
+   * getCanLicenseBeMovedTo calls GET /v1/license/worklight/{serviceName}/canLicenseBeMovedTo: Check whether a Worklight license can be moved to an IP
+   *
+   * Returns whether the destination IP can receive the license, with the reason when it cannot.
    *
    * Requires the IAM action licenseWorklight:apiovh:canLicenseBeMovedTo/get.
    *
@@ -223,7 +237,9 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * changeIp calls POST /v1/license/worklight/{serviceName}/changeIp: Move this license to another Ip
+   * changeIp calls POST /v1/license/worklight/{serviceName}/changeIp: Move a Worklight license to another IP
+   *
+   * Starts the move of the license to the given IP and returns the task that performs it.
    *
    * Requires the IAM action licenseWorklight:apiovh:changeIp.
    *
@@ -340,7 +356,10 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/worklight/{serviceName}/tasks: Tasks linked to this license
+   * listTasks calls GET /v1/license/worklight/{serviceName}/tasks: List the tasks of a Worklight license
+   *
+   * Returns the IDs of the tasks linked to the license, each task records an action such as a
+   * version upgrade or an IP change.
    *
    * Requires the IAM action licenseWorklight:apiovh:tasks/get.
    *
@@ -376,7 +395,10 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/worklight/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/worklight/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseWorklight:apiovh:tasks/get.
    *
@@ -404,7 +426,7 @@ export class LicenseworklightApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/worklight/{serviceName}/tasks (Tasks linked to this license).
+   * allTasks iterates over GET /v1/license/worklight/{serviceName}/tasks (List the tasks of a Worklight license).
    *
    * It lists the IDs with {@link LicenseworklightApi.listTasks}, then gets each object with
    * {@link LicenseworklightApi.getTasks}, only when the loop reaches it. An object deleted in the

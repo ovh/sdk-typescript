@@ -19,9 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 8 operations, on the routes under /v1/license/office.
+ * It has 16 operations, on the routes under /v1/license/office.
  *
- * To start, list what the account has: listUsers.
+ * To start, list what the account has: listOffices, listDomains, listPendingTasks,
+ * listUsageStatistics, listUsers.
  *
  * To find the method for a route, search index/licenseoffice.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,
@@ -31,6 +32,286 @@ import { OPS } from "./registry.js";
  * dist/api/licenseoffice/models.d.ts.
  */
 export class LicenseofficeApi extends SectionApi {
+  /**
+   * listOffices calls GET /v1/license/office: List tenants
+   *
+   * Returns the service names of the tenants.
+   *
+   * Requires the IAM action licenseOffice:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.listOffices();
+   */
+  listOffices(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listOffices,
+      {
+        query: [["iamTags", params?.iamTags]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getOffice calls GET /v1/license/office/{serviceName}: Get a tenant
+   *
+   * Returns the display name, contact details, service type, status and creation date of the
+   * tenant, and whether the Microsoft Customer Agreement (MCA) is accepted.
+   *
+   * Requires the IAM action licenseOffice:apiovh:get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficeOfficeTenantNativeWithIAM} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.getOffice(serviceName);
+   */
+  getOffice(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficeOfficeTenantNativeWithIAM> {
+    return this._call(
+      OPS.getOffice,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allOffices iterates over GET /v1/license/office (List tenants).
+   *
+   * It lists the IDs with {@link LicenseofficeApi.listOffices}, then gets each object with
+   * {@link LicenseofficeApi.getOffice}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action licenseOffice:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.LicenseOfficeOfficeTenantNativeWithIAM}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.licenseoffice.allOffices()) console.log(item);
+   */
+  allOffices(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.LicenseOfficeOfficeTenantNativeWithIAM> {
+    return this._each(
+      () => this.listOffices(params, options),
+      (listedId) => this.getOffice(listedId, options),
+    );
+  }
+
+  /**
+   * updateOffice calls PUT /v1/license/office/{serviceName}: Update a tenant
+   *
+   * Updates the display name and the contact details of the tenant: first name, last name, address,
+   * zip code, city and phone number.
+   *
+   * Requires the IAM action licenseOffice:apiovh:edit.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.licenseoffice.updateOffice(serviceName, body);
+   */
+  updateOffice(
+    serviceName: string,
+    body: models.LicenseOfficeOfficeTenantNativeWritable,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.updateOffice,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * listDomains calls GET /v1/license/office/{serviceName}/domain: List domains
+   *
+   * Returns the names of the domains of the tenant.
+   *
+   * Requires the IAM action licenseOffice:apiovh:domain/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.listDomains(serviceName);
+   */
+  listDomains(serviceName: string, options?: RequestOptions): Promise<string[]> {
+    return this._call(
+      OPS.listDomains,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getDomain calls GET /v1/license/office/{serviceName}/domain/{domainName}: Get a domain
+   *
+   * Returns the status of the domain, `ok` or `unverified`, and the TXT record required to validate
+   * it.
+   *
+   * Requires the IAM action licenseOffice:apiovh:domain/get.
+   *
+   * @param serviceName - Service name
+   * @param domainName - Domain name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficeDomainNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.getDomain(serviceName, domainName);
+   */
+  getDomain(
+    serviceName: string,
+    domainName: string,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficeDomainNative> {
+    return this._call(
+      OPS.getDomain,
+      {
+        path: { serviceName: serviceName, domainName: domainName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allDomains iterates over GET /v1/license/office/{serviceName}/domain (List domains).
+   *
+   * It lists the IDs with {@link LicenseofficeApi.listDomains}, then gets each object with
+   * {@link LicenseofficeApi.getDomain}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action licenseOffice:apiovh:domain/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.LicenseOfficeDomainNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.licenseoffice.allDomains(serviceName)) console.log(item);
+   */
+  allDomains(
+    serviceName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.LicenseOfficeDomainNative> {
+    return this._each(
+      () => this.listDomains(serviceName, options),
+      (listedId) => this.getDomain(serviceName, listedId, options),
+    );
+  }
+
+  /**
+   * listPendingTasks calls GET /v1/license/office/{serviceName}/pendingTask: List tenant tasks
+   *
+   * Returns the IDs of the pending tasks of the tenant.
+   *
+   * Requires the IAM action licenseOffice:apiovh:pendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.listPendingTasks(serviceName);
+   */
+  listPendingTasks(serviceName: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listPendingTasks,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getPendingTask calls GET /v1/license/office/{serviceName}/pendingTask/{id}: Get a tenant task
+   *
+   * Returns the function, status, creation date and completion date of the task.
+   *
+   * Requires the IAM action licenseOffice:apiovh:pendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param id - Id
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficeOfficeTaskNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.getPendingTask(serviceName, id);
+   */
+  getPendingTask(
+    serviceName: string,
+    id: number,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficeOfficeTaskNative> {
+    return this._call(
+      OPS.getPendingTask,
+      {
+        path: { serviceName: serviceName, id: id },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allPendingTasks iterates over GET /v1/license/office/{serviceName}/pendingTask (List tenant tasks).
+   *
+   * It lists the IDs with {@link LicenseofficeApi.listPendingTasks}, then gets each object with
+   * {@link LicenseofficeApi.getPendingTask}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action licenseOffice:apiovh:pendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.LicenseOfficeOfficeTaskNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.licenseoffice.allPendingTasks(serviceName)) console.log(item);
+   */
+  allPendingTasks(
+    serviceName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.LicenseOfficeOfficeTaskNative> {
+    return this._each(
+      () => this.listPendingTasks(serviceName, options),
+      (listedId) => this.getPendingTask(serviceName, listedId, options),
+    );
+  }
+
   /**
    * getServiceInfos calls GET /v1/license/office/{serviceName}/serviceInfos: Get service information
    *
@@ -84,6 +365,45 @@ export class LicenseofficeApi extends SectionApi {
         body: body,
       },
       "none",
+      options,
+    );
+  }
+
+  /**
+   * listUsageStatistics calls GET /v1/license/office/{serviceName}/usageStatistics: Get tenant usage statistics
+   *
+   * Returns, for each day between `from` and `to`, the peak and end-of-day counts of activated
+   * licenses of the tenant, by license type.
+   *
+   * Requires the IAM action licenseOffice:apiovh:usageStatistics/get.
+   *
+   * @param serviceName - Service name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseoffice.listUsageStatistics(serviceName);
+   */
+  listUsageStatistics(
+    serviceName: string,
+    params?: {
+      /** Period's start point */
+      from?: string | undefined;
+      /** Period's end point */
+      to?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficeOfficeCurrentStatisticsNative[]> {
+    return this._call(
+      OPS.listUsageStatistics,
+      {
+        path: { serviceName: serviceName },
+        query: [
+          ["from", params?.from],
+          ["to", params?.to],
+        ],
+      },
+      "json",
       options,
     );
   }

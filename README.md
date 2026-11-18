@@ -1,5 +1,8 @@
 # OVHcloud TypeScript SDK
 
+[![npm version](https://img.shields.io/npm/v/@ovhcloud/sdk.svg)](https://www.npmjs.com/package/@ovhcloud/sdk)
+[![API reference](https://img.shields.io/badge/API_reference-jsDocs.io-blue.svg)](https://www.jsdocs.io/package/@ovhcloud/sdk)
+
 The TypeScript SDK for the [OVHcloud API](https://developers.eu.ovhcloud.com/): a typed method
 for every public operation, with OAuth2 service-account authentication, retries, typed errors
 and async iterators over lists. No runtime dependency: it runs on Node.js, Deno and Bun.
@@ -10,6 +13,7 @@ you propose a change.
 
 - [1. Install](#1-install)
 - [2. Your first program](#2-your-first-program)
+  - [Coming from node-ovh](#coming-from-node-ovh)
 - [3. Finding the operation you need](#3-finding-the-operation-you-need)
 - [4. Calling an operation](#4-calling-an-operation)
 - [5. Lists and pagination](#5-lists-and-pagination)
@@ -27,30 +31,13 @@ you propose a change.
 
 Node.js 22.12 or later (tested on 22, 24 and 26), Deno 2 or Bun. The package is an ES module.
 
-The SDK is not on npm yet. Install it from GitHub:
-
-```shell
-npm install github:ovh/sdk-typescript
-```
-
-The `master` branch is always the latest release, and your lock file records the exact
-commit. To stay on a range of versions, add a semver range: npm picks the highest matching
-tag (the [releases](https://github.com/ovh/sdk-typescript/releases) list them):
-
-```shell
-npm install "github:ovh/sdk-typescript#semver:^1.2.0"
-```
-
-npm clones the release and builds the package on install: it downloads TypeScript and compiles
-the SDK, which takes a minute. Your code imports it as `@ovhcloud/sdk` all the same. Deno and
-Bun run it from the `node_modules` that npm makes: run the `npm install` above in your
-project first. Once the SDK is on npm, the usual commands will work:
-
 ```shell
 npm install @ovhcloud/sdk     # Node.js
 deno add npm:@ovhcloud/sdk    # Deno
 bun add @ovhcloud/sdk         # Bun
 ```
+
+The package is [`@ovhcloud/sdk` on npm](https://www.npmjs.com/package/@ovhcloud/sdk).
 
 You also need OAuth2 credentials: the client ID and secret of a service account.
 
@@ -128,18 +115,18 @@ Older TypeScript versions refuse `require` of an ES module (error TS1479).
 
 ## 2. Your first program
 
-This prints your account details and lists your vRacks. Copy it, set two environment
-variables, run it.
+This prints the details of your account: `GET /v1/me`. Copy it, set your credentials,
+run it.
 
 ```ts
 import { Client } from "@ovhcloud/sdk";
 
 const client = new Client(); // reads OVH_CLIENT_ID, OVH_CLIENT_SECRET, OVH_REGION
 
-const account = await client.me.getAccountDetails();
-console.log("account", account.nichandle);
-
-console.log("vRacks:", await client.vrack.listVracks());
+const account = await client.me.getAccountDetails(); // GET /v1/me
+console.log("account:", account.nichandle);
+console.log("email:  ", account.email);
+console.log("country:", account.country);
 ```
 
 ```shell
@@ -148,11 +135,10 @@ export OVH_REGION=eu    # eu (default), ca or us
 node first.ts           # Node.js 22.18 or later runs TypeScript as it is
 ```
 
-Create **one** client and share it: it reuses the token between calls. Each API section is a
-property of the client (`client.vrack`), built the first time you use it.
+More examples: [examples/](examples/README.md).
 
-More programs are in [examples/](examples/README.md): list with an iterator, create then wait,
-a DNS record, a cart order, a raw call, error handling. Each one is a single file you can run.
+Create **one** client and share it: it reuses the token between calls. Each API section is a
+property of the client (`client.me`), built the first time you use it.
 
 ### Choosing your region
 
@@ -265,6 +251,22 @@ If you do not know where the package is (pnpm, workspaces), ask Node.js:
 `node -p 'require.resolve("@ovhcloud/sdk/package.json")'`. The package also exports its docs:
 `@ovhcloud/sdk/llms.txt`, `@ovhcloud/sdk/AGENTS.md` and `@ovhcloud/sdk/index/<section>.jsonl`.
 
+### Search by URL path
+
+Every method's doc comment starts with its HTTP method and route, so searching for the route
+always works, even when the name is not what you guessed:
+
+```shell
+grep -rh --include=api.d.ts "calls GET /v1/cloud/project/{serviceName}/instance:" \
+    node_modules/@ovhcloud/sdk/
+```
+
+```
+* listProjectInstances calls GET /v1/cloud/project/{serviceName}/instance: Get instance
+```
+
+Routes carry their API version: `/v1/...` or `/v2/...`.
+
 ### Find the fields of a type
 
 A signature names its types as `models.X`. They are in `dist/api/<section>/models.d.ts` of
@@ -343,7 +345,7 @@ if (instance.resourceStatus === CommonResourceStatusEnum.READY) {
 }
 ```
 
-### Updating an object
+### Request bodies have no read-only fields
 
 The API sets some fields itself: an ID, a creation date, a status. A type the API returns has
 them, and their doc says `Read-only: the API sets it.` A request body never has them. A body
@@ -504,6 +506,8 @@ prints a useful line.
 | `RequestTimeoutError` | a `TransportError`: the request took more than its `timeout`. Never retried: the server may have done the work. Match it with `instanceof`, its `name` is not `"TimeoutError"`. |
 | `InvalidRequestError` | refused before sending: a path without `/v1/` or `/v2/`, an empty path parameter, a `.` or `..` path segment, a `%` that does not start an escape, a header value that is not ASCII |
 | `NotAllowedError` | refused by `readOnly` or `allowedOperations`. Nothing was sent. |
+| `DryRunError` | not sent because of `dryRun`. It holds what would have been sent. Not a failure. |
+| `HookRefusedError` | refused by a `beforeRequest` hook. Nothing was sent. What the hook threw is the `cause`. |
 | `ResponseTooLargeError` | the body is larger than `maxResponseBytes` |
 | `DecodeError` | a 2xx body is not JSON, or a page of a list is not a list |
 | `WaitFailedError`, `WaitTimeoutError` | a wait ended in a failure, or gave up |
@@ -528,6 +532,9 @@ The options of `new Client({...})` win over the environment. Durations are in mi
 | `maxResponseBytes` | no limit | fail, never truncate, past this size |
 | `readOnly` | `false` | `true`: only `GET` and `HEAD`. A list of patterns: also these operations. |
 | `allowedOperations` | all | only the operations whose name matches: `["vrack.*", "*.get*"]` |
+| `dryRun` | `false` | send reads (`GET`, `HEAD`) as usual. Do not send anything else: throw a `DryRunError` with the URL and body it would have sent. |
+| `beforeRequest` | | a hook, or a list, run before each call: to log it, or to refuse it by throwing |
+| `afterRequest` | | a hook, or a list, run after each call, with its status, query ID, error, duration and number of attempts |
 | `debug`, `debugBodies` | off | log requests with `logger` (see below) |
 | `logger` | `console.error` | where debug logs go |
 | `userAgent` | | your product, added after the SDK's: `"my-tool/1.2"` |
@@ -550,6 +557,81 @@ is a `TokenError`.
 **Redirects are not followed.** The API does not redirect. A `3xx` comes back as an
 `ApiError`, so you see it. Following it would send the request, and its token, to a route
 that `readOnly` and `allowedOperations` did not check.
+
+**Planning changes with a dry run.** With `dryRun: true`, a program reads the real state of the
+account, but changes nothing. A call that would change something is not sent. It throws a
+`DryRunError` that holds what would have been sent:
+
+```ts
+import { Client, DryRunError } from "@ovhcloud/sdk";
+
+const client = new Client({ dryRun: true });
+try {
+  await client.vrack.createCloudProject("pn-1", { project: "0123456789abcdef" });
+} catch (err) {
+  if (err instanceof DryRunError) {
+    console.log(err.method, err.url, err.body);
+  } else {
+    throw err;
+  }
+}
+```
+
+```text
+POST https://api.eu.ovhcloud.com/v1/vrack/pn-1/cloudProject {"project":"0123456789abcdef"}
+```
+
+Printed, the error itself reads:
+
+```text
+DryRunError: vrack.createCloudProject (POST https://api.eu.ovhcloud.com/v1/vrack/pn-1/cloudProject) not sent: dry run
+```
+
+`operation` is the method's name (`""` when the route is unknown), `url` is the full URL with
+its query, `headers` the headers, and `body` the JSON body. No OAuth2 token is fetched for such
+a call, and the credential headers (`Authorization`, `Cookie`...) are left out. It is never
+retried. The policy still applies first: with `readOnly` or `allowedOperations`, a refused
+call stays a `NotAllowedError`.
+
+**Watching every call with hooks.** A hook sees every call the client makes, with the operation
+it calls. Use it to keep an audit log, or to refuse some calls:
+
+```ts
+const client = new Client({
+  beforeRequest: (call) => {
+    if (call.operation?.deprecated) {
+      throw new Error(`${call.operation.name} is deprecated`);
+    }
+  },
+  afterRequest: (call, r) => {
+    console.log(
+      `${call.method} ${call.path}: ${r.status} in ${r.duration}ms (${r.attempts} attempts, query ${r.queryId})`,
+      r.error ?? "",
+    );
+  },
+});
+```
+
+- A `CallInfo` has the `operation` (undefined when the route is unknown), `method`, `path`,
+  `query`, `body`, `readOnly` (true for `GET` and `HEAD`) and the call's `signal`. It never
+  holds the token.
+- A before hook runs once per call, just before it is sent. Retries do not run it again. If it
+  throws, nothing is sent, and the call throws a `HookRefusedError` whose `cause` is what the
+  hook threw.
+- An after hook runs once per call, after the retries. It also sees the calls that were not
+  sent: refused by the policy or by a before hook, malformed, or stopped by a dry run. Then
+  `status` and `attempts` are 0. `error` is undefined on success.
+- Several hooks run in the order they were given. A hook may be async: the call waits for it.
+- Calls made at the same time interleave: an async hook may run for one call while another
+  call waits on it. Do not assume calls come one at a time.
+- If an after hook throws, its error replaces the result of the call, and the hooks after it
+  do not run. Catch your own errors in a hook.
+- Each page of an `all...` iterator is a separate call, so the hooks run once per page.
+- `withOptions` keeps the hooks and the dry run.
+
+In one call, the steps run in this order: find the operation, check the request, check
+`readOnly` and `allowedOperations`, run the before hooks, stop if it is a dry run, then send.
+The after hooks run last, whatever happened.
 
 **Proxy, private CA, mutual TLS.** The SDK uses `fetch`. In Node.js, give it a dispatcher of
 [undici](https://undici.nodejs.org/):
@@ -703,25 +785,41 @@ object literal with the fields your code reads is enough: `{ nichandle: "ab12345
 
 ## 11. Observability
 
-The SDK has no tracing or metrics of its own. It sends every request, token requests
-included, through one `fetch`. Give it your own, and see each request and response:
+The SDK has no tracing or metrics of its own. Two places see every call:
 
-```ts
-const client = new Client({
-  fetch: async (input, init) => {
-    const response = await fetch(input, init);
-    const url = new URL(input instanceof Request ? input.url : input);
-    console.log(init?.method, url.pathname, response.status, response.headers.get("X-Ovh-Queryid"));
-    return response;
-  },
-});
-```
+- **Hooks** see each call with its operation. `afterRequest` gives the status, the duration,
+  the number of attempts and the `X-Ovh-Queryid`, which identifies a call for OVHcloud
+  support, also when it succeeds. Use it for logs and metrics (see
+  [Watching every call with hooks](#7-configuration-reference)):
 
-- The `X-Ovh-Queryid` header identifies a call for OVHcloud support, also when it succeeds.
-  On an error it is in `err.queryId` too.
-- Each retry is a new call of your `fetch`. So is the token request (`POST /auth/oauth2/token`).
+  ```ts
+  const client = new Client({
+    afterRequest: (call, r) => {
+      console.log("ovh call", call.method, call.path, r.status, `${r.duration}ms`, r.queryId);
+    },
+  });
+  ```
+
+- **Your own `fetch`** sees each request, token requests included:
+
+  ```ts
+  const client = new Client({
+    fetch: async (input, init) => {
+      const response = await fetch(input, init);
+      const url = new URL(input instanceof Request ? input.url : input);
+      console.log(init?.method, url.pathname, response.status, response.headers.get("X-Ovh-Queryid"));
+      return response;
+    },
+  });
+  ```
+
+With your own `fetch`:
+
 - The SDK still sets the `Authorization`, `User-Agent` and other headers, and applies its
   `timeout` through `init.signal`. Pass `init` on as it is.
+- Each retry is a new call of your `fetch`. So is the token request (`POST /auth/oauth2/token`).
+  A hook runs once per call.
+- On an error, the query ID is in `err.queryId` too.
 - **OpenTelemetry**: the global `fetch` of Node.js is undici. The
   [undici instrumentation](https://www.npmjs.com/package/@opentelemetry/instrumentation-undici)
   makes a span per request, the SDK's included, with no change to the client.
@@ -800,6 +898,9 @@ Copyright 2026 OVH SAS. Licensed under the [Apache License 2.0](LICENSE). See
 - Contribute: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Report bugs: <https://github.com/ovh/sdk-typescript/issues>
 - Releases and changes: [CHANGELOG.md](CHANGELOG.md), <https://github.com/ovh/sdk-typescript/releases>
+- The package: [`@ovhcloud/sdk` on npm](https://www.npmjs.com/package/@ovhcloud/sdk), and its
+  [API reference](https://www.jsdocs.io/package/@ovhcloud/sdk)
+- Examples: [examples/](examples/README.md)
 - The API: the OVHcloud developer hub, <https://developers.eu.ovhcloud.com/>, and its
   [API reference](https://developers.eu.ovhcloud.com/reference/)
 - Service accounts and IAM: [Managing OVHcloud service accounts](https://docs.ovhcloud.com/en/guides/manage-and-operate/api/manage-service-account),

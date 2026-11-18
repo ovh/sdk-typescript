@@ -10,9 +10,10 @@
  * Its operations are a client property, `client.licenseoffice`, or a class of their
  * own: `new LicenseofficeApi(client)`. Its types are exported here too.
  *
- * It has 8 operations, on the routes under /v1/license/office.
+ * It has 16 operations, on the routes under /v1/license/office.
  *
- * To start, list what the account has: listUsers.
+ * To start, list what the account has: listOffices, listDomains, listPendingTasks,
+ * listUsageStatistics, listUsers.
  *
  * To find the method for a route, search index/licenseoffice.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,

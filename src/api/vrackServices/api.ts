@@ -19,11 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 11 operations, on the routes under /v2/vrackServices.
+ * It has 9 operations, on the routes under /v2/vrackServices.
  *
  * To start, list what the account has: allResources, allReferenceCompatibleManagedServiceTypes,
- * allReferenceFeatureAvailabilities, allReferenceRegions,
- * allVrackServiceEligibleDedicatedServerInterfaces, allResourceEligibleManagedServices,
+ * allReferenceFeatureAvailabilities, allReferenceRegions, allResourceEligibleManagedServices,
  * allResourceTasks.
  *
  * To find the method for a route, search index/vrackServices.jsonl: one line per method, with its
@@ -273,69 +272,6 @@ export class VrackServicesApi extends SectionApi {
         body: body,
       },
       "json",
-      options,
-    );
-  }
-
-  /**
-   * getResourceEligibleBgpAllowedPrefixes calls GET /v2/vrackServices/resource/{vrackServicesId}/eligibleBgpAllowedPrefixes: List eligible IP prefixes for BGP Service
-   *
-   * Returns the Additional IPv4 and IPv6 blocks that can be used in the BGP Service of the vRack
-   * Services: blocks in the same region that are not used elsewhere.
-   *
-   * Requires the IAM action vrackServices:apiovh:resource/eligibleBgpAllowedPrefixes/get. May also
-   * use vrackServices:apiovh:bgp/ip/additionalIp/move, ip:apiovh:move.
-   *
-   * @param vrackServicesId - Vrack services ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns the {@link models.VrackServicesEligibleBgpAllowedPrefixes} the API sends back
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * const result = await client.vrackServices.getResourceEligibleBgpAllowedPrefixes(vrackServicesId);
-   */
-  getResourceEligibleBgpAllowedPrefixes(
-    vrackServicesId: string,
-    options?: RequestOptions,
-  ): Promise<models.VrackServicesEligibleBgpAllowedPrefixes> {
-    return this._call(
-      OPS.getResourceEligibleBgpAllowedPrefixes,
-      {
-        path: { vrackServicesId: vrackServicesId },
-      },
-      "json",
-      options,
-    );
-  }
-
-  /**
-   * allVrackServiceEligibleDedicatedServerInterfaces iterates over GET /v2/vrackServices/resource/{vrackServicesId}/eligibleDedicatedServerInterfaces (List eligible server interfaces).
-   *
-   * It yields one item at a time, and gets the next page only when the loop reaches it. An
-   * error is thrown and stops the loop.
-   *
-   * Returns, by availability zone, the dedicated server interfaces that can be added to the vRack
-   * Services, with the server each one belongs to.
-   *
-   * Requires the IAM action vrackServices:apiovh:resource/eligibleDedicatedServerInterfaces/get.
-   * May also use vrackServices:apiovh:dedicatedServer/vnicAttach,
-   * dedicatedServer:apiovh:vrackServices/vnicAttach.
-   *
-   * @param vrackServicesId - Vrack services ID
-   * @param options - the options of this call: signal, timeout, headers
-   * @returns each {@link models.VrackServicesEligibleDedicatedServerInterface}, one at a time: loop with `for await`
-   * @throws ForbiddenError when the policy lacks an IAM action this call requires
-   * @example
-   * for await (const item of client.vrackServices.allVrackServiceEligibleDedicatedServerInterfaces(vrackServicesId)) console.log(item);
-   */
-  allVrackServiceEligibleDedicatedServerInterfaces(
-    vrackServicesId: string,
-    options?: RequestOptions,
-  ): AsyncIterable<models.VrackServicesEligibleDedicatedServerInterface> {
-    return this._pages(
-      OPS.allVrackServiceEligibleDedicatedServerInterfaces,
-      {
-        path: { vrackServicesId: vrackServicesId },
-      },
       options,
     );
   }

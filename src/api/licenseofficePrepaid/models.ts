@@ -14,6 +14,666 @@
  * @module
  */
 
+/** IAM resource metadata embedded in services models */
+export interface IAMResourceMetadata {
+  /**
+   * Resource display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Unique identifier of the resource
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Resource state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: IAMResourceMetadataStateEnum | null | undefined;
+  /**
+   * Resource tags. Tags that were internally computed are prefixed with ovh:
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: Record<string, string> | null | undefined;
+  /**
+   * Unique resource name used in policies
+   *
+   * Read-only: the API sets it.
+   */
+  urn?: string | undefined;
+}
+
+/** Resource state */
+export const IAMResourceMetadataStateEnum = {
+  EXPIRED: "EXPIRED",
+  IN_CREATION: "IN_CREATION",
+  OK: "OK",
+  SUSPENDED: "SUSPENDED",
+} as const;
+/**
+ * Resource state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceMetadataStateEnum =
+  | (typeof IAMResourceMetadataStateEnum)[keyof typeof IAMResourceMetadataStateEnum]
+  | (string & {});
+
+/** Resource tag filter */
+export interface IAMResourceTagFilter {
+  /**
+   * Operator to use in order to filter on the value (defaults to 'EQ')
+   *
+   * Read-only: the API sets it.
+   */
+  operator?: IAMResourceTagFilterOperatorEnum | null | undefined;
+  /**
+   * Value to use in order to filter tags
+   *
+   * Read-only: the API sets it.
+   */
+  value?: string | undefined;
+}
+
+/** Operator that can be used in order to filter resources tags */
+export const IAMResourceTagFilterOperatorEnum = {
+  EQ: "EQ",
+  EXISTS: "EXISTS",
+  ILIKE: "ILIKE",
+  LIKE: "LIKE",
+  NEQ: "NEQ",
+  NEXISTS: "NEXISTS",
+} as const;
+/**
+ * Operator that can be used in order to filter resources tags
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceTagFilterOperatorEnum =
+  | (typeof IAMResourceTagFilterOperatorEnum)[keyof typeof IAMResourceTagFilterOperatorEnum]
+  | (string & {});
+
+/** ISO country codes */
+export const LicenseOfficePrepaidCountryEnum = {
+  AC: "ac",
+  AD: "ad",
+  AE: "ae",
+  AF: "af",
+  AG: "ag",
+  AI: "ai",
+  AL: "al",
+  AM: "am",
+  AN: "an",
+  AO: "ao",
+  AQ: "aq",
+  AR: "ar",
+  AS: "as",
+  AT: "at",
+  AU: "au",
+  AW: "aw",
+  AX: "ax",
+  AZ: "az",
+  BA: "ba",
+  BB: "bb",
+  BD: "bd",
+  BE: "be",
+  BF: "bf",
+  BG: "bg",
+  BH: "bh",
+  BI: "bi",
+  BJ: "bj",
+  BL: "bl",
+  BM: "bm",
+  BN: "bn",
+  BO: "bo",
+  BQ: "bq",
+  BR: "br",
+  BS: "bs",
+  BT: "bt",
+  BV: "bv",
+  BW: "bw",
+  BY: "by",
+  BZ: "bz",
+  CA: "ca",
+  CC: "cc",
+  CD: "cd",
+  CF: "cf",
+  CG: "cg",
+  CH: "ch",
+  CI: "ci",
+  CK: "ck",
+  CL: "cl",
+  CM: "cm",
+  CN: "cn",
+  CO: "co",
+  CR: "cr",
+  CS: "cs",
+  CU: "cu",
+  CV: "cv",
+  CW: "cw",
+  CX: "cx",
+  CY: "cy",
+  CZ: "cz",
+  DE: "de",
+  DJ: "dj",
+  DK: "dk",
+  DM: "dm",
+  DO: "do",
+  DZ: "dz",
+  EC: "ec",
+  EE: "ee",
+  EG: "eg",
+  EH: "eh",
+  ER: "er",
+  ES: "es",
+  ET: "et",
+  FC: "fc",
+  FD: "fd",
+  FI: "fi",
+  FJ: "fj",
+  FK: "fk",
+  FM: "fm",
+  FO: "fo",
+  FR: "fr",
+  FX: "fx",
+  GA: "ga",
+  GB: "gb",
+  GD: "gd",
+  GE: "ge",
+  GF: "gf",
+  GG: "gg",
+  GH: "gh",
+  GI: "gi",
+  GL: "gl",
+  GM: "gm",
+  GN: "gn",
+  GP: "gp",
+  GQ: "gq",
+  GR: "gr",
+  GS: "gs",
+  GT: "gt",
+  GU: "gu",
+  GW: "gw",
+  GY: "gy",
+  HK: "hk",
+  HM: "hm",
+  HN: "hn",
+  HR: "hr",
+  HT: "ht",
+  HU: "hu",
+  ID: "id",
+  IE: "ie",
+  IL: "il",
+  IM: "im",
+  IN: "in",
+  IO: "io",
+  IQ: "iq",
+  IR: "ir",
+  IS: "is",
+  IT: "it",
+  JE: "je",
+  JM: "jm",
+  JO: "jo",
+  JP: "jp",
+  KE: "ke",
+  KG: "kg",
+  KH: "kh",
+  KI: "ki",
+  KM: "km",
+  KN: "kn",
+  KP: "kp",
+  KR: "kr",
+  KW: "kw",
+  KY: "ky",
+  KZ: "kz",
+  LA: "la",
+  LB: "lb",
+  LC: "lc",
+  LI: "li",
+  LK: "lk",
+  LR: "lr",
+  LS: "ls",
+  LT: "lt",
+  LU: "lu",
+  LV: "lv",
+  LY: "ly",
+  MA: "ma",
+  MC: "mc",
+  MD: "md",
+  ME: "me",
+  MF: "mf",
+  MG: "mg",
+  MH: "mh",
+  MK: "mk",
+  ML: "ml",
+  MM: "mm",
+  MN: "mn",
+  MO: "mo",
+  MP: "mp",
+  MQ: "mq",
+  MR: "mr",
+  MS: "ms",
+  MT: "mt",
+  MU: "mu",
+  MV: "mv",
+  MW: "mw",
+  MX: "mx",
+  MY: "my",
+  MZ: "mz",
+  NA: "na",
+  NC: "nc",
+  NE: "ne",
+  NF: "nf",
+  NG: "ng",
+  NI: "ni",
+  NL: "nl",
+  NO: "no",
+  NP: "np",
+  NR: "nr",
+  NU: "nu",
+  NZ: "nz",
+  OM: "om",
+  PA: "pa",
+  PE: "pe",
+  PF: "pf",
+  PG: "pg",
+  PH: "ph",
+  PK: "pk",
+  PL: "pl",
+  PM: "pm",
+  PN: "pn",
+  PR: "pr",
+  PS: "ps",
+  PT: "pt",
+  PW: "pw",
+  PY: "py",
+  QA: "qa",
+  QC: "qc",
+  RE: "re",
+  RO: "ro",
+  RS: "rs",
+  RU: "ru",
+  RW: "rw",
+  SA: "sa",
+  SB: "sb",
+  SC: "sc",
+  SD: "sd",
+  SE: "se",
+  SG: "sg",
+  SH: "sh",
+  SI: "si",
+  SJ: "sj",
+  SK: "sk",
+  SL: "sl",
+  SM: "sm",
+  SN: "sn",
+  SO: "so",
+  SR: "sr",
+  SS: "ss",
+  ST: "st",
+  SV: "sv",
+  SX: "sx",
+  SY: "sy",
+  SZ: "sz",
+  TC: "tc",
+  TD: "td",
+  TF: "tf",
+  TG: "tg",
+  TH: "th",
+  TJ: "tj",
+  TK: "tk",
+  TL: "tl",
+  TM: "tm",
+  TN: "tn",
+  TO: "to",
+  TP: "tp",
+  TR: "tr",
+  TT: "tt",
+  TV: "tv",
+  TW: "tw",
+  TZ: "tz",
+  UA: "ua",
+  UG: "ug",
+  UK: "uk",
+  UM: "um",
+  US: "us",
+  UY: "uy",
+  UZ: "uz",
+  VA: "va",
+  VC: "vc",
+  VE: "ve",
+  VG: "vg",
+  VI: "vi",
+  VN: "vn",
+  VU: "vu",
+  WE: "we",
+  WF: "wf",
+  WS: "ws",
+  YE: "ye",
+  YT: "yt",
+  YU: "yu",
+  ZA: "za",
+  ZM: "zm",
+  ZW: "zw",
+} as const;
+/**
+ * ISO country codes
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidCountryEnum =
+  | (typeof LicenseOfficePrepaidCountryEnum)[keyof typeof LicenseOfficePrepaidCountryEnum]
+  | (string & {});
+
+/** ISO country codes */
+export const LicenseOfficePrepaidCountryUppercaseEnum = {
+  AC: "AC",
+  AD: "AD",
+  AE: "AE",
+  AF: "AF",
+  AG: "AG",
+  AI: "AI",
+  AL: "AL",
+  AM: "AM",
+  AN: "AN",
+  AO: "AO",
+  AQ: "AQ",
+  AR: "AR",
+  AS: "AS",
+  AT: "AT",
+  AU: "AU",
+  AW: "AW",
+  AX: "AX",
+  AZ: "AZ",
+  BA: "BA",
+  BB: "BB",
+  BD: "BD",
+  BE: "BE",
+  BF: "BF",
+  BG: "BG",
+  BH: "BH",
+  BI: "BI",
+  BJ: "BJ",
+  BL: "BL",
+  BM: "BM",
+  BN: "BN",
+  BO: "BO",
+  BQ: "BQ",
+  BR: "BR",
+  BS: "BS",
+  BT: "BT",
+  BV: "BV",
+  BW: "BW",
+  BY: "BY",
+  BZ: "BZ",
+  CA: "CA",
+  CC: "CC",
+  CD: "CD",
+  CF: "CF",
+  CG: "CG",
+  CH: "CH",
+  CI: "CI",
+  CK: "CK",
+  CL: "CL",
+  CM: "CM",
+  CN: "CN",
+  CO: "CO",
+  CR: "CR",
+  CS: "CS",
+  CU: "CU",
+  CV: "CV",
+  CW: "CW",
+  CX: "CX",
+  CY: "CY",
+  CZ: "CZ",
+  DE: "DE",
+  DJ: "DJ",
+  DK: "DK",
+  DM: "DM",
+  DO: "DO",
+  DZ: "DZ",
+  EC: "EC",
+  EE: "EE",
+  EG: "EG",
+  EH: "EH",
+  ER: "ER",
+  ES: "ES",
+  ET: "ET",
+  FC: "FC",
+  FD: "FD",
+  FI: "FI",
+  FJ: "FJ",
+  FK: "FK",
+  FM: "FM",
+  FO: "FO",
+  FR: "FR",
+  FX: "FX",
+  GA: "GA",
+  GB: "GB",
+  GD: "GD",
+  GE: "GE",
+  GF: "GF",
+  GG: "GG",
+  GH: "GH",
+  GI: "GI",
+  GL: "GL",
+  GM: "GM",
+  GN: "GN",
+  GP: "GP",
+  GQ: "GQ",
+  GR: "GR",
+  GS: "GS",
+  GT: "GT",
+  GU: "GU",
+  GW: "GW",
+  GY: "GY",
+  HK: "HK",
+  HM: "HM",
+  HN: "HN",
+  HR: "HR",
+  HT: "HT",
+  HU: "HU",
+  ID: "ID",
+  IE: "IE",
+  IL: "IL",
+  IM: "IM",
+  IN: "IN",
+  IO: "IO",
+  IQ: "IQ",
+  IR: "IR",
+  IS: "IS",
+  IT: "IT",
+  JE: "JE",
+  JM: "JM",
+  JO: "JO",
+  JP: "JP",
+  KE: "KE",
+  KG: "KG",
+  KH: "KH",
+  KI: "KI",
+  KM: "KM",
+  KN: "KN",
+  KP: "KP",
+  KR: "KR",
+  KW: "KW",
+  KY: "KY",
+  KZ: "KZ",
+  LA: "LA",
+  LB: "LB",
+  LC: "LC",
+  LI: "LI",
+  LK: "LK",
+  LR: "LR",
+  LS: "LS",
+  LT: "LT",
+  LU: "LU",
+  LV: "LV",
+  LY: "LY",
+  MA: "MA",
+  MC: "MC",
+  MD: "MD",
+  ME: "ME",
+  MF: "MF",
+  MG: "MG",
+  MH: "MH",
+  MK: "MK",
+  ML: "ML",
+  MM: "MM",
+  MN: "MN",
+  MO: "MO",
+  MP: "MP",
+  MQ: "MQ",
+  MR: "MR",
+  MS: "MS",
+  MT: "MT",
+  MU: "MU",
+  MV: "MV",
+  MW: "MW",
+  MX: "MX",
+  MY: "MY",
+  MZ: "MZ",
+  NA: "NA",
+  NC: "NC",
+  NE: "NE",
+  NF: "NF",
+  NG: "NG",
+  NI: "NI",
+  NL: "NL",
+  NO: "NO",
+  NP: "NP",
+  NR: "NR",
+  NU: "NU",
+  NZ: "NZ",
+  OM: "OM",
+  PA: "PA",
+  PE: "PE",
+  PF: "PF",
+  PG: "PG",
+  PH: "PH",
+  PK: "PK",
+  PL: "PL",
+  PM: "PM",
+  PN: "PN",
+  PR: "PR",
+  PS: "PS",
+  PT: "PT",
+  PW: "PW",
+  PY: "PY",
+  QA: "QA",
+  QC: "QC",
+  RE: "RE",
+  RO: "RO",
+  RS: "RS",
+  RU: "RU",
+  RW: "RW",
+  SA: "SA",
+  SB: "SB",
+  SC: "SC",
+  SD: "SD",
+  SE: "SE",
+  SG: "SG",
+  SH: "SH",
+  SI: "SI",
+  SJ: "SJ",
+  SK: "SK",
+  SL: "SL",
+  SM: "SM",
+  SN: "SN",
+  SO: "SO",
+  SR: "SR",
+  SS: "SS",
+  ST: "ST",
+  SV: "SV",
+  SX: "SX",
+  SY: "SY",
+  SZ: "SZ",
+  TC: "TC",
+  TD: "TD",
+  TF: "TF",
+  TG: "TG",
+  TH: "TH",
+  TJ: "TJ",
+  TK: "TK",
+  TL: "TL",
+  TM: "TM",
+  TN: "TN",
+  TO: "TO",
+  TP: "TP",
+  TR: "TR",
+  TT: "TT",
+  TV: "TV",
+  TW: "TW",
+  TZ: "TZ",
+  UA: "UA",
+  UG: "UG",
+  UK: "UK",
+  UM: "UM",
+  US: "US",
+  UY: "UY",
+  UZ: "UZ",
+  VA: "VA",
+  VC: "VC",
+  VE: "VE",
+  VG: "VG",
+  VI: "VI",
+  VN: "VN",
+  VU: "VU",
+  WE: "WE",
+  WF: "WF",
+  WS: "WS",
+  YE: "YE",
+  YT: "YT",
+  YU: "YU",
+  ZA: "ZA",
+  ZM: "ZM",
+  ZW: "ZW",
+} as const;
+/**
+ * ISO country codes
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidCountryUppercaseEnum =
+  | (typeof LicenseOfficePrepaidCountryUppercaseEnum)[keyof typeof LicenseOfficePrepaidCountryUppercaseEnum]
+  | (string & {});
+
+/** Office tenant type */
+export const LicenseOfficePrepaidLicenseEnum = {
+  OFFICE_BUSINESS: "officeBusiness",
+  OFFICE_PRO_PLUS: "officeProPlus",
+} as const;
+/**
+ * Office tenant type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidLicenseEnum =
+  | (typeof LicenseOfficePrepaidLicenseEnum)[keyof typeof LicenseOfficePrepaidLicenseEnum]
+  | (string & {});
+
+/** Office Current Statisitics */
+export interface LicenseOfficePrepaidOfficeCurrentStatisticsNative {
+  /**
+   * Date of the statistics
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  date?: string | undefined;
+  /**
+   * List of lines associated to this statistics entity.
+   *
+   * Read-only: the API sets it.
+   */
+  lines?: LicenseOfficePrepaidStatisticsLineNative[] | undefined;
+}
+
 /** Office tenant */
 export interface LicenseOfficePrepaidOfficeTaskNative {
   /**
@@ -52,6 +712,236 @@ export interface LicenseOfficePrepaidOfficeTaskNative {
   todoDate?: string | undefined;
 }
 
+/** Office tenant */
+export interface LicenseOfficePrepaidOfficeTenantNative {
+  /**
+   * Contact's address line
+   *
+   * Read-only: the API sets it.
+   */
+  address?: string | undefined;
+  /**
+   * Contact's city
+   *
+   * Read-only: the API sets it.
+   */
+  city?: string | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Tenant's display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Contact's first name
+   *
+   * Read-only: the API sets it.
+   */
+  firstName?: string | undefined;
+  /**
+   * Contact's last name
+   *
+   * Read-only: the API sets it.
+   */
+  lastName?: string | undefined;
+  /**
+   * MCA acceptance status
+   *
+   * Read-only: the API sets it.
+   */
+  mcaAgreed?: boolean | undefined;
+  /**
+   * Primary phone number
+   *
+   * Read-only: the API sets it.
+   */
+  phone?: PhoneNumber | undefined;
+  /**
+   * Tenant's service name
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * Tenant's service type
+   *
+   * Read-only: the API sets it.
+   */
+  serviceType?: LicenseOfficePrepaidServiceTypeEnum | undefined;
+  /**
+   * Tenant's status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: LicenseOfficePrepaidServiceStateEnum | undefined;
+  /**
+   * Contact's zip code
+   *
+   * Read-only: the API sets it.
+   */
+  zipCode?: string | undefined;
+}
+
+/** Office change password */
+export interface LicenseOfficePrepaidOfficeTenantPostChangePassword {
+  /** Email to send the new password to. Default is nicAdmin's email */
+  notifyEmail?: string | null | undefined;
+  /** New password or empty to receive a generated password by email */
+  password?: string | null | undefined;
+  /** Specify if the new password should be send via email or not */
+  shouldSendMail: boolean;
+}
+
+/** Office tenant. Without the read-only fields, which the API sets. */
+export interface LicenseOfficePrepaidOfficeTenantPutParentTenantWritable {
+  /** Parent tenant display name */
+  displayName?: string | undefined;
+}
+
+/** Office tenant */
+export interface LicenseOfficePrepaidOfficeUserNativeWithIAM {
+  /**
+   * Email used to activate Microsoft Office
+   *
+   * Read-only: the API sets it.
+   */
+  activationEmail?: string | undefined;
+  /**
+   * User's first name
+   *
+   * Read-only: the API sets it.
+   */
+  firstName?: string | undefined;
+  /**
+   * IAM resource metadata
+   *
+   * Read-only: the API sets it.
+   */
+  iam?: IAMResourceMetadata | null | undefined;
+  /**
+   * Specify if the user is actually a user slot (configureme) or a real user
+   *
+   * Read-only: the API sets it.
+   */
+  isVirtual?: boolean | undefined;
+  /**
+   * User's last name
+   *
+   * Read-only: the API sets it.
+   */
+  lastName?: string | undefined;
+  /**
+   * Licenses attributed to the user
+   *
+   * Read-only: the API sets it.
+   */
+  licences?: LicenseOfficePrepaidLicenseEnum[] | undefined;
+  /**
+   * User service name, used in invoices
+   *
+   * Read-only: the API sets it.
+   */
+  serviceName?: string | undefined;
+  /**
+   * User state
+   *
+   * Read-only: the API sets it.
+   */
+  status?: LicenseOfficePrepaidUserStateEnum | undefined;
+  /**
+   * Pending task id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+  /**
+   * User's tenant service name, used in invoices
+   *
+   * Read-only: the API sets it.
+   */
+  tenantServiceName?: string | undefined;
+  /**
+   * ISO 3166-1 alpha-2 country code where the user is using Office365 services
+   *
+   * Read-only: the API sets it.
+   */
+  usageLocation?: LicenseOfficePrepaidCountryEnum | undefined;
+}
+
+/** Office tenant */
+export interface LicenseOfficePrepaidPutOfficeUserNative {
+  /** Email used to activate Microsoft Office */
+  activationEmail?: string | undefined;
+  /** User's first name */
+  firstName?: string | undefined;
+  /** User's last name */
+  lastName?: string | undefined;
+  /** ISO 3166-1 alpha-2 country code where the user is using Office365 services */
+  usageLocation?: LicenseOfficePrepaidCountryEnum | undefined;
+}
+
+/** Office tenant state */
+export const LicenseOfficePrepaidServiceStateEnum = {
+  CREATING: "creating",
+  IN_MAINTENANCE: "inMaintenance",
+  OK: "ok",
+  REOPENING: "reopening",
+  SUSPENDED: "suspended",
+  SUSPENDING: "suspending",
+} as const;
+/**
+ * Office tenant state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidServiceStateEnum =
+  | (typeof LicenseOfficePrepaidServiceStateEnum)[keyof typeof LicenseOfficePrepaidServiceStateEnum]
+  | (string & {});
+
+/** Office tenant type */
+export const LicenseOfficePrepaidServiceTypeEnum = {
+  PAY_AS_YOU_GO: "payAsYouGo",
+  PREPAID: "prepaid",
+} as const;
+/**
+ * Office tenant type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidServiceTypeEnum =
+  | (typeof LicenseOfficePrepaidServiceTypeEnum)[keyof typeof LicenseOfficePrepaidServiceTypeEnum]
+  | (string & {});
+
+/** License usage statistics line. */
+export interface LicenseOfficePrepaidStatisticsLineNative {
+  /**
+   * Count of activated licenses at the end of the day.
+   *
+   * Read-only: the API sets it.
+   */
+  endOfDayCount?: number | undefined;
+  /**
+   * Type of the Office license.
+   *
+   * Read-only: the API sets it.
+   */
+  licenceType?: LicenseOfficePrepaidLicenseEnum | undefined;
+  /**
+   * Maximum count of simultaneous activated licences.
+   *
+   * Read-only: the API sets it.
+   */
+  peakCount?: number | undefined;
+}
+
 /** Excahnge task status */
 export const LicenseOfficePrepaidTaskStatusEnum = {
   CANCELLED: "cancelled",
@@ -68,3 +958,88 @@ export const LicenseOfficePrepaidTaskStatusEnum = {
 export type LicenseOfficePrepaidTaskStatusEnum =
   | (typeof LicenseOfficePrepaidTaskStatusEnum)[keyof typeof LicenseOfficePrepaidTaskStatusEnum]
   | (string & {});
+
+/** Office tenant type */
+export const LicenseOfficePrepaidUserStateEnum = {
+  CREATING: "creating",
+  DELETING: "deleting",
+  OK: "ok",
+  SUSPENDED: "suspended",
+  UNSPENDING: "unspending",
+} as const;
+/**
+ * Office tenant type
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type LicenseOfficePrepaidUserStateEnum =
+  | (typeof LicenseOfficePrepaidUserStateEnum)[keyof typeof LicenseOfficePrepaidUserStateEnum]
+  | (string & {});
+
+/** Create an attestation */
+export interface LicenseOfficePrepaidCreateAttestationPostPayload {
+  /** Signatory company name */
+  companyName?: string | undefined;
+  /** Signatory Country */
+  country?: LicenseOfficePrepaidCountryUppercaseEnum | undefined;
+  /** Signatory email email address */
+  emailAddress?: string | undefined;
+  /** Signatory language */
+  language?: NichandleLanguageEnum | undefined;
+  /** Signatory phone number */
+  phoneNumber?: string | undefined;
+  /** Signatory first name */
+  signatoryFirstName?: string | undefined;
+  /** Signatory last name */
+  signatoryLastName?: string | undefined;
+}
+
+/** Response for attestation creation */
+export interface LicenseOfficePrepaidCreateAttestationResponse {
+  /**
+   * Attestation id.
+   *
+   * Read-only: the API sets it.
+   */
+  attestationId?: string | undefined;
+  /**
+   * Link to iframable attestation
+   *
+   * Read-only: the API sets it.
+   */
+  attestationLink?: string | undefined;
+}
+
+/** Languages a nichandle can choose */
+export const NichandleLanguageEnum = {
+  CS_CZ: "cs_CZ",
+  DE_DE: "de_DE",
+  EN_AU: "en_AU",
+  EN_CA: "en_CA",
+  EN_GB: "en_GB",
+  EN_IE: "en_IE",
+  EN_US: "en_US",
+  ES_ES: "es_ES",
+  FI_FI: "fi_FI",
+  FR_CA: "fr_CA",
+  FR_FR: "fr_FR",
+  FR_MA: "fr_MA",
+  FR_SN: "fr_SN",
+  FR_TN: "fr_TN",
+  IT_IT: "it_IT",
+  LT_LT: "lt_LT",
+  NL_NL: "nl_NL",
+  PL_PL: "pl_PL",
+  PT_PT: "pt_PT",
+} as const;
+/**
+ * Languages a nichandle can choose
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type NichandleLanguageEnum =
+  | (typeof NichandleLanguageEnum)[keyof typeof NichandleLanguageEnum]
+  | (string & {});
+
+/** Phone number */
+export type PhoneNumber = string;

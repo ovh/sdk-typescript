@@ -31,6 +31,7 @@ import {
   type RequestOptions,
 } from "./engine.js";
 import { ConfigurationError } from "./errors.js";
+import { type AfterRequestHook, type BeforeRequestHook, checkHooks } from "./hooks.js";
 import { iterate } from "./pagination.js";
 import { Policy } from "./policy.js";
 import { Registry } from "./registry.js";
@@ -82,6 +83,28 @@ export interface ClientOptions {
   readOnly?: boolean | readonly string[] | undefined;
   /** Send only the operations whose name matches one of these patterns: "vrack.*", "*.get*". */
   allowedOperations?: readonly string[] | undefined;
+  /**
+   * Plan changes without making them. Calls that only read (GET and HEAD) are sent as usual,
+   * so the program sees the real state. Any other call is not sent: it throws a DryRunError
+   * with the URL, the headers and the body it would have sent. No token is fetched for it.
+   * The policy applies first: a call that readOnly or allowedOperations refuses stays a
+   * NotAllowedError. Like the Go SDK's WithDryRun.
+   */
+  dryRun?: boolean | undefined;
+  /**
+   * Hooks that run before each call, in order, to log it or to stop it by throwing. A hook
+   * runs once per call, before the first attempt: retries do not run it again. A call that the
+   * policy refuses, or that is malformed, never reaches it. The first hook that throws stops
+   * the call: nothing is sent, and the caller gets a HookRefusedError. Each page of a list is
+   * a separate call. Like the Go SDK's WithBeforeRequest.
+   */
+  beforeRequest?: BeforeRequestHook | readonly BeforeRequestHook[] | undefined;
+  /**
+   * Hooks that run after each call, in order, once its retries are over. They see every call,
+   * also those refused by the policy, by a before hook or by dryRun, so they can keep a full
+   * audit log. Each page of a list is a separate call. Like the Go SDK's WithAfterRequest.
+   */
+  afterRequest?: AfterRequestHook | readonly AfterRequestHook[] | undefined;
   /**
    * The fetch function to use. Default: the global fetch. Give your own for a proxy, your own
    * certificate authorities or mutual TLS (undici's fetch with a dispatcher), or for tests.
@@ -186,6 +209,9 @@ export class Client {
       registry,
       timeout,
       sleep: options.retrySleep ?? defaultSleep,
+      dryRun: Boolean(options.dryRun),
+      beforeRequest: checkHooks("beforeRequest", options.beforeRequest),
+      afterRequest: checkHooks("afterRequest", options.afterRequest),
     });
     this._region = region;
     this._sections = new Map();

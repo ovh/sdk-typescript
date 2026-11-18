@@ -114,6 +114,348 @@ export interface CreateExternalContactRequest {
   lastName?: string | undefined;
 }
 
+/** Aliases on this mailbox */
+export interface EmailProAccountAlias {
+  /**
+   * Alias
+   *
+   * Read-only: the API sets it.
+   */
+  alias?: string | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Pending task id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+}
+
+/** Account Diagnosis */
+export interface EmailProAccountDiagnosis {
+  /**
+   * Determines if ingoing message has been received
+   *
+   * Read-only: the API sets it.
+   */
+  canReceiveEmail?: boolean | undefined;
+  /**
+   * Determines if outgoing message has been delivered
+   *
+   * Read-only: the API sets it.
+   */
+  canSendEmail?: boolean | undefined;
+  /**
+   * Determines if possible to authenticate with credentials
+   *
+   * Read-only: the API sets it.
+   */
+  connectiveWebmail?: boolean | undefined;
+  /**
+   * Determines if account is locked
+   *
+   * Read-only: the API sets it.
+   */
+  isLocked?: boolean | undefined;
+  /**
+   * Determines if MX record for account's domain is properly set
+   *
+   * Read-only: the API sets it.
+   */
+  isMxValid?: boolean | undefined;
+  /**
+   * Determines if account is flagged as spammer
+   *
+   * Read-only: the API sets it.
+   */
+  isSpammer?: boolean | undefined;
+  /**
+   * Determines if SRV (autodiscovery) record for account's domain is properly set
+   *
+   * Read-only: the API sets it.
+   */
+  isSrvValid?: boolean | undefined;
+  /**
+   * Determines if account is suspended
+   *
+   * Read-only: the API sets it.
+   */
+  isSuspended?: boolean | undefined;
+  /**
+   * Last performed diagnostics date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastCheck?: string | undefined;
+}
+
+/** Users having full access on this mailbox */
+export interface EmailProAccountFullAccess {
+  /**
+   * Account id to give full access
+   *
+   * Read-only: the API sets it.
+   */
+  allowedAccountId?: number | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Pending task id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+}
+
+/** Mailbox */
+export interface EmailProAccountNative {
+  /**
+   * SAM account name
+   *
+   * Read-only: the API sets it.
+   */
+  SAMAccountName?: string | null | undefined;
+  /**
+   * Indicates if the account is configured
+   *
+   * Read-only: the API sets it.
+   */
+  configured?: boolean | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | null | undefined;
+  /**
+   * Mailbox usage
+   *
+   * Read-only: the API sets it.
+   */
+  currentUsage?: number | null | undefined;
+  /**
+   * delete at expiration
+   *
+   * Read-only: the API sets it.
+   */
+  deleteAtExpiration?: boolean | null | undefined;
+  /**
+   * Account display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Email domain
+   *
+   * Read-only: the API sets it.
+   */
+  domain?: string | undefined;
+  /**
+   * expiration date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expirationDate?: string | null | undefined;
+  /**
+   * expiration date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  expirationOutlookDate?: string | null | undefined;
+  /**
+   * Account first name
+   *
+   * Read-only: the API sets it.
+   */
+  firstName?: string | null | undefined;
+  /**
+   * Hide account in Global Address List
+   *
+   * Read-only: the API sets it.
+   */
+  hiddenFromGAL?: boolean | undefined;
+  /**
+   * Account id
+   *
+   * Read-only: the API sets it.
+   */
+  id?: number | undefined;
+  /**
+   * Account initials
+   *
+   * Read-only: the API sets it.
+   */
+  initial?: string | null | undefined;
+  /**
+   * Last logoff
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastLogoffDate?: string | null | undefined;
+  /**
+   * Last logon
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastLogonDate?: string | null | undefined;
+  /**
+   * Account last name
+   *
+   * Read-only: the API sets it.
+   */
+  lastName?: string | null | undefined;
+  /**
+   * Last update
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastUpdateDate?: string | null | undefined;
+  /**
+   * Account login
+   *
+   * Read-only: the API sets it.
+   */
+  login?: string | undefined;
+  /**
+   * Enable or disable anti-virus and anti-spam
+   *
+   * Read-only: the API sets it.
+   */
+  mailingFilter?: EmailProMailingFilterEnum[] | null | undefined;
+  /**
+   * Time of account's password last update
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  passwordLastUpdate?: string | null | undefined;
+  /**
+   * Default email for this mailbox
+   *
+   * Read-only: the API sets it.
+   */
+  primaryEmailAddress?: string | undefined;
+  /**
+   * Account maximum size
+   *
+   * Read-only: the API sets it.
+   */
+  quota?: number | undefined;
+  /**
+   * change the renew period
+   *
+   * Read-only: the API sets it.
+   */
+  renewPeriod?: EmailProRenewPeriodEnum | null | undefined;
+  /**
+   * Spam and Antivirus configuration
+   *
+   * Read-only: the API sets it.
+   */
+  spamAndVirusConfiguration?: EmailProSpamAndVirusConfiguration | undefined;
+  /**
+   * Account was sending spam
+   *
+   * Read-only: the API sets it.
+   */
+  spamDetected?: boolean | undefined;
+  /**
+   * Ticket number of spam detection
+   *
+   * Read-only: the API sets it.
+   */
+  spamTicketNumber?: number | null | undefined;
+  /**
+   * Account state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProObjectStateEnum | undefined;
+  /**
+   * Pending tasks for this account
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | null | undefined;
+}
+
+/** Users authorized to send mails from this mailbox */
+export interface EmailProAccountSendAs {
+  /**
+   * Account id to give send as
+   *
+   * Read-only: the API sets it.
+   */
+  allowedAccountId?: number | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Pending task id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+}
+
+/** Get users authorized to Send On Behalf To mails from this mailbox */
+export interface EmailProAccountSendOnBehalfTo {
+  /**
+   * Account id to give send on behalf to
+   *
+   * Read-only: the API sets it.
+   */
+  allowedAccountId?: number | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Pending task id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+}
+
 /** Mailbox. Without the read-only fields, which the API sets. */
 export interface EmailProAccountWritable {
   /** delete at expiration */
@@ -142,6 +484,292 @@ export interface EmailProAccountWritable {
   spamAndVirusConfiguration?: EmailProSpamAndVirusConfiguration | undefined;
 }
 
+/** Disclaimer attributes list */
+export const EmailProDisclaimerAttributeEnum = {
+  CITY: "City",
+  COMPANY: "Company",
+  COUNTRY: "Country",
+  DEPARTMENT: "Department",
+  DISPLAY_NAME: "DisplayName",
+  EMAIL: "Email",
+  FAX_NUMBER: "FaxNumber",
+  FIRST_NAME: "FirstName",
+  HOME_PHONE_NUMBER: "HomePhoneNumber",
+  INITIALS: "Initials",
+  LAST_NAME: "LastName",
+  MANAGER: "Manager",
+  MOBILE_NUMBER: "MobileNumber",
+  NOTES: "Notes",
+  OFFICE: "Office",
+  OTHER_FAX_NUMBER: "OtherFaxNumber",
+  OTHER_HOME_PHONE_NUMBER: "OtherHomePhoneNumber",
+  OTHER_PHONE_NUMBER: "OtherPhoneNumber",
+  PAGER_NUMBER: "PagerNumber",
+  PHONE_NUMBER: "PhoneNumber",
+  STATE: "State",
+  STREET: "Street",
+  TITLE: "Title",
+  USER_LOGON_NAME: "UserLogonName",
+  ZIP_CODE: "ZipCode",
+} as const;
+/**
+ * Disclaimer attributes list
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDisclaimerAttributeEnum =
+  | (typeof EmailProDisclaimerAttributeEnum)[keyof typeof EmailProDisclaimerAttributeEnum]
+  | (string & {});
+
+/** DKIM for a domain */
+export interface EmailProDkimAlt {
+  /**
+   * DNS CNAME validation passed
+   *
+   * Read-only: the API sets it.
+   */
+  cnameIsValid?: boolean | undefined;
+  /**
+   * Customer DNS record
+   *
+   * Read-only: the API sets it.
+   */
+  customerRecord?: string | undefined;
+  /**
+   * Header used for DKIM signature
+   *
+   * Read-only: the API sets it.
+   */
+  header?: string | undefined;
+  /**
+   * Last update date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastUpdate?: string | null | undefined;
+  /**
+   * Record type of the customer record
+   *
+   * Read-only: the API sets it.
+   */
+  recordType?: EmailProDkimRecordTypeEnumAlt | undefined;
+  /**
+   * Selector name
+   *
+   * Read-only: the API sets it.
+   */
+  selectorName?: string | undefined;
+  /**
+   * DKIM status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: EmailProDkimStatusEnumAlt | undefined;
+  /**
+   * Target of the customer record
+   *
+   * Read-only: the API sets it.
+   */
+  targetRecord?: string | null | undefined;
+  /**
+   * Pending task for this DKIM
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | null | undefined;
+}
+
+/** Record type of the customer record */
+export const EmailProDkimRecordTypeEnumAlt = {
+  CNAME: "CNAME",
+} as const;
+/**
+ * Record type of the customer record
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDkimRecordTypeEnumAlt =
+  | (typeof EmailProDkimRecordTypeEnumAlt)[keyof typeof EmailProDkimRecordTypeEnumAlt]
+  | (string & {});
+
+/** DKIM status */
+export const EmailProDkimStatusEnumAlt = {
+  DELETING: "deleting",
+  DISABLING: "disabling",
+  ENABLING: "enabling",
+  IN_PRODUCTION: "inProduction",
+  READY: "ready",
+  TODO: "todo",
+  WAITING_RECORD: "waitingRecord",
+} as const;
+/**
+ * DKIM status
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDkimStatusEnumAlt =
+  | (typeof EmailProDkimStatusEnumAlt)[keyof typeof EmailProDkimStatusEnumAlt]
+  | (string & {});
+
+/** Dkim selectors and DNS configuration state */
+export interface EmailProDomainDkimDiagnostics {
+  /**
+   * Error code related to misconfiguration of DKIM, if exists
+   *
+   * Read-only: the API sets it.
+   */
+  errorCode?: number | null | undefined;
+  /**
+   * DKIM misconfiguration description, if exists
+   *
+   * Read-only: the API sets it.
+   */
+  message?: string | null | undefined;
+  /**
+   * State of DKIM selectors
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProDomainDkimDiagnosticsStateEnum | null | undefined;
+}
+
+/** DKIM status */
+export const EmailProDomainDkimDiagnosticsStateEnum = {
+  ACTIVE: "active",
+  DISABLED: "disabled",
+  ERROR: "error",
+  IN_PROGRESS: "inProgress",
+  TO_CONFIGURE: "toConfigure",
+} as const;
+/**
+ * DKIM status
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDomainDkimDiagnosticsStateEnum =
+  | (typeof EmailProDomainDkimDiagnosticsStateEnum)[keyof typeof EmailProDomainDkimDiagnosticsStateEnum]
+  | (string & {});
+
+/** Domain */
+export interface EmailProDomainNative {
+  /**
+   * Cname that will be checked to prove the domain ownership
+   *
+   * Read-only: the API sets it.
+   */
+  cnameToCheck?: string | null | undefined;
+  /**
+   * Dkim selectors and DNS configuration state
+   *
+   * Read-only: the API sets it.
+   */
+  dkimDiagnostics?: EmailProDomainDkimDiagnostics | null | undefined;
+  /**
+   * List of aliases for this domain
+   *
+   * Read-only: the API sets it.
+   */
+  domainAliases?: string[] | undefined;
+  /**
+   * Domain validation status
+   *
+   * Read-only: the API sets it.
+   */
+  domainValidated?: boolean | undefined;
+  /**
+   * Expected SRV record on this domain
+   *
+   * Read-only: the API sets it.
+   */
+  expectedAutodiscoverSRV?: string | undefined;
+  /**
+   * Expected MX record(s) on this domain
+   *
+   * Read-only: the API sets it.
+   */
+  expectedMX?: string[] | undefined;
+  /**
+   * Expected SPF record on this domain
+   *
+   * Read-only: the API sets it.
+   */
+  expectedSPF?: string | undefined;
+  /**
+   * Indicate if this domain is an alias for another domain
+   *
+   * Read-only: the API sets it.
+   */
+  isAliasDomain?: boolean | undefined;
+  /**
+   * If true your DNS MX configuration is valid
+   *
+   * Read-only: the API sets it.
+   */
+  mxIsValid?: boolean | undefined;
+  /**
+   * Domain MX record configured in DNS
+   *
+   * Read-only: the API sets it.
+   */
+  mxRecord?: string[] | null | undefined;
+  /**
+   * If specified, emails to not existing address will be redirected to that domain
+   *
+   * Read-only: the API sets it.
+   */
+  mxRelay?: string | null | undefined;
+  /**
+   * Domain name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * SPF record validation passed
+   *
+   * Read-only: the API sets it.
+   */
+  spfIsValid?: boolean | undefined;
+  /**
+   * Domain's SPF record configured in the DNS
+   *
+   * Read-only: the API sets it.
+   */
+  spfRecord?: string[] | null | undefined;
+  /**
+   * If true your DNS SRV record is valid
+   *
+   * Read-only: the API sets it.
+   */
+  srvIsValid?: boolean | undefined;
+  /**
+   * Domain SRV record configured in DNS
+   *
+   * Read-only: the API sets it.
+   */
+  srvRecord?: string[] | null | undefined;
+  /**
+   * Domain state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProObjectStateEnum | undefined;
+  /**
+   * Pending tasks id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+  /**
+   * Domain type
+   *
+   * Read-only: the API sets it.
+   */
+  type?: EmailProDomainTypeEnum | undefined;
+}
+
 /** Domain type */
 export const EmailProDomainTypeEnum = {
   AUTHORITATIVE: "authoritative",
@@ -162,6 +790,72 @@ export interface EmailProDomainWritable {
   mxRelay?: string | null | undefined;
   /** Domain type */
   type?: EmailProDomainTypeEnum | undefined;
+}
+
+/** External contact for this pro service */
+export interface EmailProExternalContactNative {
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Contact display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | undefined;
+  /**
+   * Contact email
+   *
+   * Read-only: the API sets it.
+   */
+  externalEmailAddress?: string | undefined;
+  /**
+   * Contact first name
+   *
+   * Read-only: the API sets it.
+   */
+  firstName?: string | null | undefined;
+  /**
+   * Hide the contact in Global Address List
+   *
+   * Read-only: the API sets it.
+   */
+  hiddenFromGAL?: boolean | undefined;
+  /**
+   * Contact id
+   *
+   * Read-only: the API sets it.
+   */
+  id?: number | undefined;
+  /**
+   * Contact initals
+   *
+   * Read-only: the API sets it.
+   */
+  initials?: string | null | undefined;
+  /**
+   * Contact last name
+   *
+   * Read-only: the API sets it.
+   */
+  lastName?: string | null | undefined;
+  /**
+   * Contact state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProObjectStateEnum | undefined;
+  /**
+   * Task pending id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
 }
 
 /** External contact for this pro service. Without the read-only fields, which the API sets. */
@@ -191,6 +885,262 @@ export const EmailProMailingFilterEnum = {
  */
 export type EmailProMailingFilterEnum =
   | (typeof EmailProMailingFilterEnum)[keyof typeof EmailProMailingFilterEnum]
+  | (string & {});
+
+/** Current object state */
+export const EmailProObjectStateEnum = {
+  CREATING: "creating",
+  DELETING: "deleting",
+  OK: "ok",
+  REOPENING: "reopening",
+  SUSPENDED: "suspended",
+  SUSPENDING: "suspending",
+  UNKNOWN: "unknown",
+} as const;
+/**
+ * Current object state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProObjectStateEnum =
+  | (typeof EmailProObjectStateEnum)[keyof typeof EmailProObjectStateEnum]
+  | (string & {});
+
+/** Server */
+export interface EmailProServer {
+  /**
+   * Current disk usage in MB
+   *
+   * Read-only: the API sets it.
+   */
+  currentDiskUsage?: number | null | undefined;
+  /**
+   * Total disk size in MB
+   *
+   * Read-only: the API sets it.
+   */
+  diskSize?: number | null | undefined;
+  /**
+   * ipV4
+   *
+   * Read-only: the API sets it.
+   */
+  ip?: IPv4 | undefined;
+  /**
+   * ipV6
+   *
+   * Read-only: the API sets it.
+   */
+  ipV6?: IPv6 | null | undefined;
+  /**
+   * If true your dns A record is valid
+   *
+   * Read-only: the API sets it.
+   */
+  isAValid?: boolean | undefined;
+  /**
+   * If true your dns AAAA record is valid
+   *
+   * Read-only: the API sets it.
+   */
+  isAaaaValid?: boolean | undefined;
+  /**
+   * If true your dns ptrV6 record is valid
+   *
+   * Read-only: the API sets it.
+   */
+  isPtrV6Valid?: boolean | undefined;
+  /**
+   * If true your dns ptr record is valid
+   *
+   * Read-only: the API sets it.
+   */
+  isPtrValid?: boolean | undefined;
+  /**
+   * Server state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProServerStateEnum | undefined;
+  /**
+   * Task pending id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+  /**
+   * Server version
+   *
+   * Read-only: the API sets it.
+   */
+  version?: string | null | undefined;
+}
+
+/** Server State */
+export const EmailProServerStateEnum = {
+  CONFIGURATION_PENDING: "configurationPending",
+  NOT_CONFIGURED: "notConfigured",
+  OK: "ok",
+} as const;
+/**
+ * Server State
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProServerStateEnum =
+  | (typeof EmailProServerStateEnum)[keyof typeof EmailProServerStateEnum]
+  | (string & {});
+
+/** Email pro service */
+export interface EmailProServiceNativeWithIAM {
+  /**
+   * enable policy for strong and secure passwords
+   *
+   * Read-only: the API sets it.
+   */
+  complexityEnabled?: boolean | undefined;
+  /**
+   * service displayName
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Domain name of your service
+   *
+   * Read-only: the API sets it.
+   */
+  domain?: string | undefined;
+  /**
+   * Hostname of your service
+   *
+   * Read-only: the API sets it.
+   */
+  hostname?: string | null | undefined;
+  /**
+   * IAM resource metadata
+   *
+   * Read-only: the API sets it.
+   */
+  iam?: IAMResourceMetadata | null | undefined;
+  /**
+   * Update date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastUpdateDate?: string | null | undefined;
+  /**
+   * number of minutes account will remain locked if it occurs
+   *
+   * Read-only: the API sets it.
+   */
+  lockoutDuration?: number | undefined;
+  /**
+   * number of minutes that must elapse after a failed logon to reset lockout trigger
+   *
+   * Read-only: the API sets it.
+   */
+  lockoutObservationWindow?: number | undefined;
+  /**
+   * number of attempts before account to be locked
+   *
+   * Read-only: the API sets it.
+   */
+  lockoutThreshold?: number | null | undefined;
+  /**
+   * maximum number of days that account's password is valid before expiration
+   *
+   * Read-only: the API sets it.
+   */
+  maxPasswordAge?: number | null | undefined;
+  /**
+   * Maximum message size that You can receive in MB
+   *
+   * Read-only: the API sets it.
+   */
+  maxReceiveSize?: number | undefined;
+  /**
+   * Maximum message size that You can send in MB
+   *
+   * Read-only: the API sets it.
+   */
+  maxSendSize?: number | undefined;
+  /**
+   * minimum number of days before able to change account's password
+   *
+   * Read-only: the API sets it.
+   */
+  minPasswordAge?: number | null | undefined;
+  /**
+   * minimum number of characters password must contain
+   *
+   * Read-only: the API sets it.
+   */
+  minPasswordLength?: number | null | undefined;
+  /**
+   * Type of your offer
+   *
+   * Read-only: the API sets it.
+   */
+  offer?: EmailProServiceOfferEnum | undefined;
+  /**
+   * Spam and Antivirus configuration
+   *
+   * Read-only: the API sets it.
+   */
+  spamAndVirusConfiguration?: EmailProSpamAndVirusConfiguration | undefined;
+  /**
+   * State of your service
+   *
+   * Read-only: the API sets it.
+   */
+  state?: EmailProServiceStateEnum | undefined;
+  /**
+   * Task pending id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+  /**
+   * URL for web interface
+   *
+   * Read-only: the API sets it.
+   */
+  webUrl?: string | null | undefined;
+}
+
+/** Service Offer name */
+export const EmailProServiceOfferEnum = {
+  EMAILPRO: "emailpro",
+} as const;
+/**
+ * Service Offer name
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProServiceOfferEnum =
+  | (typeof EmailProServiceOfferEnum)[keyof typeof EmailProServiceOfferEnum]
+  | (string & {});
+
+/** Service State */
+export const EmailProServiceStateEnum = {
+  CREATING: "creating",
+  DELETING: "deleting",
+  IN_MAINTENANCE: "inMaintenance",
+  OK: "ok",
+  REOPENING: "reopening",
+  SUSPENDED: "suspended",
+  SUSPENDING: "suspending",
+} as const;
+/**
+ * Service State
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProServiceStateEnum =
+  | (typeof EmailProServiceStateEnum)[keyof typeof EmailProServiceStateEnum]
   | (string & {});
 
 /** Email pro service. Without the read-only fields, which the API sets. */
@@ -335,6 +1285,42 @@ export type EmailProTaskStatusEnum =
   | (typeof EmailProTaskStatusEnum)[keyof typeof EmailProTaskStatusEnum]
   | (string & {});
 
+/** disclaimer */
+export interface EmailProDisclaimerNative {
+  /**
+   * Signature, added at the bottom of your organization emails
+   *
+   * Read-only: the API sets it.
+   */
+  content?: string | undefined;
+  /**
+   * Creation date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  creationDate?: string | undefined;
+  /**
+   * Disclaimer name
+   *
+   * Read-only: the API sets it.
+   */
+  name?: string | undefined;
+  /**
+   * Activate the disclaimer only for external emails
+   *
+   * Read-only: the API sets it.
+   */
+  outsideOnly?: boolean | undefined;
+  /**
+   * task pending id
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | undefined;
+}
+
 /** disclaimer. Without the read-only fields, which the API sets. */
 export interface EmailProDisclaimerWritable {
   /** Signature, added at the bottom of your organization emails */
@@ -342,6 +1328,92 @@ export interface EmailProDisclaimerWritable {
   /** Activate the disclaimer only for external emails */
   outsideOnly?: boolean | undefined;
 }
+
+/** DKIM for a domain */
+export interface EmailProDkim {
+  /**
+   * customer DNS record
+   *
+   * Read-only: the API sets it.
+   */
+  customerRecord?: string | undefined;
+  /**
+   * header used for DKIM signature
+   *
+   * Read-only: the API sets it.
+   */
+  header?: string | undefined;
+  /**
+   * Last update date
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  lastUpdate?: string | null | undefined;
+  /**
+   * Record type of the customer record
+   *
+   * Read-only: the API sets it.
+   */
+  recordType?: EmailProDkimRecordTypeEnum | undefined;
+  /**
+   * selectorName
+   *
+   * Read-only: the API sets it.
+   */
+  selectorName?: string | undefined;
+  /**
+   * dkim status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: EmailProDkimStatusEnum | undefined;
+  /**
+   * Target of the customer record
+   *
+   * Read-only: the API sets it.
+   */
+  targetRecord?: string | null | undefined;
+  /**
+   * Pending task for this DKIM
+   *
+   * Read-only: the API sets it.
+   */
+  taskPendingId?: number | null | undefined;
+}
+
+/** Record type of the customer record */
+export const EmailProDkimRecordTypeEnum = {
+  CNAME: "CNAME",
+} as const;
+/**
+ * Record type of the customer record
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDkimRecordTypeEnum =
+  | (typeof EmailProDkimRecordTypeEnum)[keyof typeof EmailProDkimRecordTypeEnum]
+  | (string & {});
+
+/** dkim status */
+export const EmailProDkimStatusEnum = {
+  DELETING: "deleting",
+  DISABLING: "disabling",
+  ENABLING: "enabling",
+  IN_PRODUCTION: "inProduction",
+  READY: "ready",
+  TODO: "todo",
+  WAITING_RECORD: "waitingRecord",
+} as const;
+/**
+ * dkim status
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type EmailProDkimStatusEnum =
+  | (typeof EmailProDkimStatusEnum)[keyof typeof EmailProDkimStatusEnum]
+  | (string & {});
 
 /** Renew period */
 export const EmailProRenewPeriodEnum = {
@@ -374,6 +1446,96 @@ export interface EmailProSpamAndVirusConfiguration {
   /** If message is a virus change its subject */
   tagVirus?: boolean | undefined;
 }
+
+/** IAM resource metadata embedded in services models */
+export interface IAMResourceMetadata {
+  /**
+   * Resource display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Unique identifier of the resource
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Resource state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: IAMResourceMetadataStateEnum | null | undefined;
+  /**
+   * Resource tags. Tags that were internally computed are prefixed with ovh:
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: Record<string, string> | null | undefined;
+  /**
+   * Unique resource name used in policies
+   *
+   * Read-only: the API sets it.
+   */
+  urn?: string | undefined;
+}
+
+/** Resource state */
+export const IAMResourceMetadataStateEnum = {
+  EXPIRED: "EXPIRED",
+  IN_CREATION: "IN_CREATION",
+  OK: "OK",
+  SUSPENDED: "SUSPENDED",
+} as const;
+/**
+ * Resource state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceMetadataStateEnum =
+  | (typeof IAMResourceMetadataStateEnum)[keyof typeof IAMResourceMetadataStateEnum]
+  | (string & {});
+
+/** Resource tag filter */
+export interface IAMResourceTagFilter {
+  /**
+   * Operator to use in order to filter on the value (defaults to 'EQ')
+   *
+   * Read-only: the API sets it.
+   */
+  operator?: IAMResourceTagFilterOperatorEnum | null | undefined;
+  /**
+   * Value to use in order to filter tags
+   *
+   * Read-only: the API sets it.
+   */
+  value?: string | undefined;
+}
+
+/** Operator that can be used in order to filter resources tags */
+export const IAMResourceTagFilterOperatorEnum = {
+  EQ: "EQ",
+  EXISTS: "EXISTS",
+  ILIKE: "ILIKE",
+  LIKE: "LIKE",
+  NEQ: "NEQ",
+  NEXISTS: "NEXISTS",
+} as const;
+/**
+ * Operator that can be used in order to filter resources tags
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceTagFilterOperatorEnum =
+  | (typeof IAMResourceTagFilterOperatorEnum)[keyof typeof IAMResourceTagFilterOperatorEnum]
+  | (string & {});
+
+/** IPv4 address (e.g., 192.0.2.0) */
+export type IPv4 = string;
+
+/** IPv6 address (e.g., 2001:41d0:1:1994::1) */
+export type IPv6 = string;
 
 /** Map a possible renew for a specific service */
 export interface ServiceRenewType {

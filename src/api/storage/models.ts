@@ -14,28 +14,6 @@
  * @module
  */
 
-/** The request body of POST /v1/storage/nasha/{serviceName}/changeContact. */
-export interface ChangeContactNashaRequest {
-  /** The contact to set as admin contact */
-  contactAdmin?: string | undefined;
-  /** The contact to set as billing contact */
-  contactBilling?: string | undefined;
-  /** The contact to set as tech contact */
-  contactTech?: string | undefined;
-}
-
-/** The request body of POST /v1/storage/nasha/{serviceName}/confirmTermination. */
-export interface ConfirmTerminationNashaRequest {
-  /** Commentary about your termination request */
-  commentary?: string | undefined;
-  /** What next after your termination request */
-  futureUse?: ServiceTerminationFutureUseEnum | undefined;
-  /** Reason of your termination request */
-  reason?: ServiceTerminationReasonEnum | undefined;
-  /** The termination token sent by email to the admin contact */
-  token: string;
-}
-
 /** IAM resource metadata embedded in services models */
 export interface IAMResourceMetadata {
   /**

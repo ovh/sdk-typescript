@@ -103,6 +103,14 @@ export interface CreateOrganization409Response {
 }
 
 /** Common error model */
+export interface CreateRedirection404Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
 export interface GetAccount400Response {
   /** Class of the error */
   class?: string | undefined;
@@ -159,6 +167,14 @@ export interface GetPlatform404Response {
 }
 
 /** Common error model */
+export interface GetRedirection404Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
 export interface GetSlot400Response {
   /** Class of the error */
   class?: string | undefined;
@@ -208,6 +224,14 @@ export interface ListDomains404Response {
 
 /** Common error model */
 export interface ListOrganizations404Response {
+  /** Class of the error */
+  class?: string | undefined;
+  /** Error message */
+  message?: string | undefined;
+}
+
+/** Common error model */
+export interface ListRedirections404Response {
   /** Class of the error */
   class?: string | undefined;
   /** Error message */
@@ -1725,6 +1749,110 @@ export interface ZimbraQuota {
 export interface ZimbraQuotaPayload {
   /** Maximum space for account */
   limit?: number | null | undefined;
+}
+
+/** Object representing Redirection */
+export interface ZimbraRedirection {
+  /**
+   * Date of creation
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  createdAt?: string | undefined;
+  /**
+   * Destination email address to redirect to
+   *
+   * Read-only: the API sets it.
+   */
+  destination?: string | undefined;
+  /**
+   * Identifier of the domain
+   *
+   * Read-only: the API sets it.
+   */
+  domainId?: string | undefined;
+  /**
+   * Identifier of the organization
+   *
+   * Read-only: the API sets it.
+   */
+  organizationId?: string | undefined;
+  /**
+   * Label of the organization this redirection belongs to
+   *
+   * Read-only: the API sets it.
+   */
+  organizationLabel?: string | undefined;
+  /**
+   * Source email address to redirect
+   *
+   * Read-only: the API sets it.
+   */
+  source?: string | undefined;
+  /**
+   * Date of update
+   *
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date-time string.
+   */
+  updatedAt?: string | null | undefined;
+}
+
+/** Object representing Redirection */
+export interface ZimbraRedirectionBase {
+  /** Destination email address to redirect to */
+  destination: string;
+  /** Source email address to redirect */
+  source: string;
+}
+
+/** Payload for creating new Zimbra Redirection */
+export interface ZimbraRedirectionPostPayload {
+  /** Target redirection specification */
+  targetSpec: ZimbraRedirectionBase;
+}
+
+/** Response for get redirection */
+export interface ZimbraRedirectionResponse {
+  /**
+   * Checksum hash in MD5 representation
+   *
+   * Read-only: the API sets it.
+   */
+  checksum?: string | undefined;
+  /**
+   * Object representing Redirection
+   *
+   * Read-only: the API sets it.
+   */
+  currentState?: ZimbraRedirection | undefined;
+  /**
+   * An array containing tasks responses pending on resource extends AsyncResourceBase object
+   *
+   * Read-only: the API sets it.
+   */
+  currentTasks?: CommonCurrentTask[] | undefined;
+  /**
+   * Resource identifier in UUID representation
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Current resource status
+   *
+   * Read-only: the API sets it.
+   */
+  resourceStatus?: CommonResourceStatusEnum | undefined;
+  /**
+   * Object representing Redirection Target Spec
+   *
+   * Read-only: the API sets it.
+   */
+  targetSpec?: ZimbraRedirectionBase | undefined;
 }
 
 /** Object representing slot */

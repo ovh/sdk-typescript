@@ -707,6 +707,20 @@ export interface PostCartServiceOptionVmwareCloudDirectorRequest {
   quantity: number;
 }
 
+/** The request body of POST /v1/order/cartServiceOption/vrackServices/{serviceName}. */
+export interface PostCartServiceOptionVrackServicesRequest {
+  /** Cart identifier */
+  cartId: string;
+  /** Duration selected for the purchase of the product */
+  duration: string;
+  /** Identifier of the additional vrackServices offer */
+  planCode: string;
+  /** Pricing mode selected for the purchase of the product */
+  pricingMode: string;
+  /** Quantity of product desired */
+  quantity: number;
+}
+
 /** The request body of POST /v1/order/cartServiceOption/vrack/{serviceName}. */
 export interface PostCartServiceOptionVrackRequest {
   /** Cart identifier */

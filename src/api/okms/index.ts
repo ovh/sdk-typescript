@@ -10,10 +10,11 @@
  * Its operations are a client property, `client.okms`, or a class of their
  * own: `new OkmsApi(client)`. Its types are exported here too.
  *
- * It has 26 operations, on the routes under /v2/okms.
+ * It has 33 operations, on the routes under /v2/okms.
  *
  * To start, list what the account has: allResources, allReferenceRegions, allReferenceServiceKeys,
- * allResourceCredentials, allResourceSecrets, allResourceServiceKeys, allResourceSecretVersions.
+ * allResourceCredentials, allResourceSecrets, allResourceServiceKeys, allResourceLogKinds,
+ * allResourceLogSubscriptions, and 1 more.
  *
  * To find the method for a route, search index/okms.jsonl: one line per method, with its route, its
  * signature and the IAM actions it requires. It is at the root of the SDK repository, and in the

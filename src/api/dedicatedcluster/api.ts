@@ -19,9 +19,9 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 1 operation, on the routes under /v1/dedicated/cluster/availabilities.
+ * It has 9 operations, on the routes under /v1/dedicated/cluster.
  *
- * To start, list what the account has: listAvailabilities.
+ * To start, list what the account has: listClusters, listAvailabilities, listAvailabilitiesRaws.
  *
  * To find the method for a route, search index/dedicatedcluster.jsonl: one line per method, with
  * its route, its signature and the IAM actions it requires. It is at the root of the SDK
@@ -31,6 +31,36 @@ import { OPS } from "./registry.js";
  * dist/api/dedicatedcluster/models.d.ts.
  */
 export class DedicatedclusterApi extends SectionApi {
+  /**
+   * listClusters calls GET /v1/dedicated/cluster: List dedicated clusters
+   *
+   * Returns the IDs of the dedicated clusters of the account.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.listClusters();
+   */
+  listClusters(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listClusters,
+      {
+        query: [["iamTags", params?.iamTags]],
+      },
+      "json",
+      options,
+    );
+  }
+
   /**
    * listAvailabilities calls GET /v1/dedicated/cluster/availabilities: List cluster configuration availability
    *
@@ -75,6 +105,258 @@ export class DedicatedclusterApi extends SectionApi {
         ],
       },
       "json",
+      options,
+    );
+  }
+
+  /**
+   * listAvailabilitiesRaws calls GET /v1/dedicated/cluster/availabilities/raw: List the raw cluster hardware availability
+   *
+   * Returns the raw availability of cluster hardware: for each region, the real stock, the real
+   * stock including parent references, and the last rule applied. Filter by quantity, hardware
+   * parts, plan code and regions, and set excludeRegions to return every region except those
+   * listed.
+   *
+   * @param quantity - Node quantity
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @example
+   * const result = await client.dedicatedcluster.listAvailabilitiesRaws(quantity);
+   */
+  listAvailabilitiesRaws(
+    quantity: number,
+    params?: {
+      /** If true, all regions are returned except those listed in regions parameter */
+      excludeRegions?: boolean | undefined;
+      /** The name of the memory hardware part */
+      memory?: string | undefined;
+      /** The plan code in which the hardware is involved */
+      planCode?: string | undefined;
+      /** The names of regions separated by commas */
+      regions?: models.DedicatedServerAvailabilityRegionalizationEnum | undefined;
+      /** The name of the base hardware */
+      server?: string | undefined;
+      /** The name of the storage hardware part */
+      storage?: string | undefined;
+      /** The name of the system storage hardware part */
+      systemStorage?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.DedicatedClusterAvailabilitiesRaw[]> {
+    return this._call(
+      OPS.listAvailabilitiesRaws,
+      {
+        query: [
+          ["excludeRegions", params?.excludeRegions],
+          ["memory", params?.memory],
+          ["planCode", params?.planCode],
+          ["quantity", quantity],
+          ["regions", params?.regions],
+          ["server", params?.server],
+          ["storage", params?.storage],
+          ["systemStorage", params?.systemStorage],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getCluster calls GET /v1/dedicated/cluster/{serviceName}: Get a dedicated cluster
+   *
+   * Returns the ID, model, region and status of a dedicated cluster, and its nodes.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedClusterClusterWithIAM} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.getCluster(serviceName);
+   */
+  getCluster(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedClusterClusterWithIAM> {
+    return this._call(
+      OPS.getCluster,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allClusters iterates over GET /v1/dedicated/cluster (List dedicated clusters).
+   *
+   * It lists the IDs with {@link DedicatedclusterApi.listClusters}, then gets each object with
+   * {@link DedicatedclusterApi.getCluster}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action clusterDelivery:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DedicatedClusterClusterWithIAM}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedcluster.allClusters()) console.log(item);
+   */
+  allClusters(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.DedicatedClusterClusterWithIAM> {
+    return this._each(
+      () => this.listClusters(params, options),
+      (listedId) => this.getCluster(listedId, options),
+    );
+  }
+
+  /**
+   * changeContact calls POST /v1/dedicated/cluster/{serviceName}/changeContact: Launch a contact change procedure
+   *
+   * Starts a contact change procedure for the admin, billing or tech contact of the cluster.
+   * Returns the IDs of the contact change tasks.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:changeContact.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.changeContact(serviceName, body);
+   */
+  changeContact(
+    serviceName: string,
+    body: models.ServicesChangeContact,
+    options?: RequestOptions,
+  ): Promise<number[]> {
+    return this._call(
+      OPS.changeContact,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * confirmTermination calls POST /v1/dedicated/cluster/{serviceName}/confirmTermination: Confirm service termination
+   *
+   * Confirms the termination of the cluster with the token sent by email to the admin contact.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:confirmTermination.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.confirmTermination(serviceName, body);
+   */
+  confirmTermination(
+    serviceName: string,
+    body: models.ServicesConfirmTermination,
+    options?: RequestOptions,
+  ): Promise<string> {
+    return this._call(
+      OPS.confirmTermination,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "string",
+      options,
+    );
+  }
+
+  /**
+   * getServiceInfos calls GET /v1/dedicated/cluster/{serviceName}/serviceInfos: Get service information
+   *
+   * Returns the billing information of the cluster, such as creation and expiration dates, contacts
+   * and renewal settings.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:serviceInfos/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.ServicesService} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.getServiceInfos(serviceName);
+   */
+  getServiceInfos(serviceName: string, options?: RequestOptions): Promise<models.ServicesService> {
+    return this._call(
+      OPS.getServiceInfos,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateServiceInfos calls PUT /v1/dedicated/cluster/{serviceName}/serviceInfos: Update service information
+   *
+   * Updates the renewal settings of the cluster.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:serviceInfos/edit.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.dedicatedcluster.updateServiceInfos(serviceName, body);
+   */
+  updateServiceInfos(
+    serviceName: string,
+    body: models.ServicesServiceWritable,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.updateServiceInfos,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * terminate calls POST /v1/dedicated/cluster/{serviceName}/terminate: Ask for the termination of your service
+   *
+   * Starts the termination of the cluster and sends a confirmation token by email to the admin
+   * contact. Confirm it with the termination confirmation.
+   *
+   * Requires the IAM action clusterDelivery:apiovh:terminate.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedcluster.terminate(serviceName);
+   */
+  terminate(serviceName: string, options?: RequestOptions): Promise<string> {
+    return this._call(
+      OPS.terminate,
+      {
+        path: { serviceName: serviceName },
+      },
+      "string",
       options,
     );
   }

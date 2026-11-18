@@ -10,18 +10,21 @@
 
 import type { TokenSource } from "./auth.js";
 import { abortable } from "./auth.js";
-import { dumpRequest, dumpResponse, type Logger, redactDump } from "./debug.js";
+import { dumpRequest, dumpResponse, isSensitiveHeader, type Logger, redactDump } from "./debug.js";
 import {
   apiError,
   ConfigurationError,
   DecodeError,
+  DryRunError,
+  HookRefusedError,
   InvalidRequestError,
   RequestTimeoutError,
   ResponseTooLargeError,
   TransportError,
 } from "./errors.js";
+import type { AfterRequestHook, BeforeRequestHook, CallInfo, CallResult } from "./hooks.js";
 import type { Policy } from "./policy.js";
-import type { Operation, Registry } from "./registry.js";
+import { isReadOnly, type Operation, type Registry } from "./registry.js";
 import {
   buildHeaders,
   buildQuery,
@@ -30,6 +33,7 @@ import {
   encodeBody,
   escapeRawPath,
   isVersioned,
+  type Pairs,
   type Request,
   readBody,
   tooLarge,
@@ -93,6 +97,19 @@ export interface EngineConfig {
   readonly timeout: number;
   /** Waits between retry attempts. Tests replace it so they need not sleep. */
   readonly sleep: (ms: number, signal?: AbortSignal) => Promise<void>;
+  /** Do not send calls that write: throw DryRunError instead. */
+  readonly dryRun: boolean;
+  /** Run before each call, in order. */
+  readonly beforeRequest: readonly BeforeRequestHook[];
+  /** Run after each call, in order. */
+  readonly afterRequest: readonly AfterRequestHook[];
+}
+
+/** What a call learns while it sends: for the after hooks. */
+interface Exchange {
+  attempts: number;
+  status: number;
+  queryId: string;
 }
 
 /** Check the headers of an option and return them as pairs. */
@@ -159,11 +176,56 @@ export class Engine {
   // --- sending --------------------------------------------------------------------------
 
   /**
-   * Send a request: policy, token, retries, size cap. Return the body and headers of a 2xx
-   * response. Throw ApiError for any other status.
+   * Send a request: policy, hooks, dry run, token, retries, size cap. Return the body and
+   * headers of a 2xx response. Throw ApiError for any other status.
+   *
+   * The steps run in this order, as in the Go SDK: find the operation, check the request and
+   * the policy (readOnly, allowedOperations), encode it, run the before hooks, stop there in a
+   * dry run, then get a token and send it. The after hooks see every outcome, refusals too.
    */
   async send(req: Request, options?: RequestOptions): Promise<[Uint8Array, Headers]> {
+    const after = this.config.afterRequest;
+    if (after.length === 0) {
+      return this.#send(req, options, { call: undefined }, { attempts: 0, status: 0, queryId: "" });
+    }
+    const start = performance.now();
+    const seen: { call: CallInfo | undefined } = { call: undefined };
+    const exchange: Exchange = { attempts: 0, status: 0, queryId: "" };
+    let failed = false;
+    let error: unknown;
+    try {
+      return await this.#send(req, options, seen, exchange);
+    } catch (err) {
+      failed = true;
+      error = err;
+      throw err;
+    } finally {
+      const call = seen.call ?? callInfo(req, undefined, queryOf("", req.query), options);
+      const result: CallResult = Object.freeze({
+        status: exchange.status,
+        queryId: exchange.queryId,
+        error: failed ? error : undefined,
+        duration: performance.now() - start,
+        attempts: exchange.attempts,
+      });
+      for (const hook of after) {
+        await hook(call, result);
+      }
+    }
+  }
+
+  async #send(
+    req: Request,
+    options: RequestOptions | undefined,
+    seen: { call: CallInfo | undefined },
+    exchange: Exchange,
+  ): Promise<[Uint8Array, Headers]> {
+    const c = this.config;
+    const hooked = c.beforeRequest.length > 0 || c.afterRequest.length > 0;
     const op: Operation | undefined = req.operation ?? (await this.#match(req.method, req.path));
+    if (hooked) {
+      seen.call = callInfo(req, op, queryOf("", req.query), options);
+    }
     // First the path: the policy must check the route that is really sent.
     checkPath(req.path, req.method, op);
     this.config.policy.check(op, req.method, req.path);
@@ -196,13 +258,54 @@ export class Engine {
     // Set last, so neither the client's headers nor a request can replace them.
     setHeader(pairs, "User-Agent", this.config.userAgent);
     const signal = options?.signal;
+
+    if (hooked) {
+      const call = callInfo(req, op, new URLSearchParams(query), options);
+      seen.call = call;
+      for (const hook of c.beforeRequest) {
+        try {
+          await hook(call);
+        } catch (err) {
+          throw new HookRefusedError({
+            operation: op?.name ?? "",
+            method: req.method,
+            path: req.path,
+            cause: err,
+          });
+        }
+      }
+    }
+    if (c.dryRun && !isReadOnly(req.method)) {
+      const headers = new Headers();
+      for (const [k, v] of pairs) {
+        if (!isSensitiveHeader(k)) {
+          headers.append(k, v);
+        }
+      }
+      throw new DryRunError({
+        operation: op?.name ?? "",
+        method: req.method,
+        url: url.toString(),
+        headers,
+        body,
+      });
+    }
+
     const token = await (signal
       ? abortable(Promise.resolve(this.config.tokens.token(signal)), signal)
       : Promise.resolve(this.config.tokens.token()));
     checkHeader("Authorization", token);
     setHeader(pairs, "Authorization", `Bearer ${token}`);
 
-    const [response, content] = await this.#exchange(req.method, url, pairs, body, timeout, signal);
+    const [response, content] = await this.#exchange(
+      req.method,
+      url,
+      pairs,
+      body,
+      timeout,
+      signal,
+      exchange,
+    );
     if (response.status < 200 || response.status > 299) {
       throw apiError({
         method: req.method,
@@ -245,6 +348,7 @@ export class Engine {
     body: string | undefined,
     timeout: number,
     signal: AbortSignal | undefined,
+    exchange: Exchange,
   ): Promise<[Response, Uint8Array]> {
     const c = this.config;
     const attempts = retryAttempts(c.retry);
@@ -264,6 +368,7 @@ export class Engine {
         for (const [k, v] of pairs) {
           headers.append(k, v);
         }
+        exchange.attempts = attempt;
         response = await c.fetch(url, {
           ...c.fetchOptions,
           method,
@@ -278,6 +383,9 @@ export class Engine {
         // Not retried: a request that got no response may still have been applied.
         throw transportError(what, err, signal, timer, timeout);
       }
+      // The last response, also when the call then fails on it: too large, or cut short.
+      exchange.status = response.status;
+      exchange.queryId = response.headers.get("X-Ovh-Queryid") ?? "";
       let delay: number | undefined;
       try {
         let content: Uint8Array | undefined;
@@ -391,6 +499,36 @@ export function decode(body: Uint8Array, text: boolean): unknown {
       return s;
     }
     throw new DecodeError(`the response is not JSON: ${String(err)}`);
+  }
+}
+
+/** The call the hooks see. */
+function callInfo(
+  req: Request,
+  op: Operation | undefined,
+  query: URLSearchParams,
+  options: RequestOptions | undefined,
+): CallInfo {
+  return Object.freeze({
+    operation: op,
+    method: req.method,
+    path: req.path,
+    query,
+    body: req.body,
+    readOnly: isReadOnly(req.method),
+    signal: options?.signal,
+  });
+}
+
+/**
+ * The query of a call refused before it was encoded: its query parameters only, as far as
+ * they can be encoded.
+ */
+function queryOf(existing: string, pairs: Pairs | undefined): URLSearchParams {
+  try {
+    return new URLSearchParams(buildQuery(existing, pairs ?? []));
+  } catch {
+    return new URLSearchParams();
   }
 }
 

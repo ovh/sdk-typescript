@@ -255,6 +255,15 @@ export const OPS = {
     deprecated: false,
     schemasVersion: undefined,
   },
+  updateIpv6: {
+    name: "overTheBox.updateIpv6",
+    method: "PUT",
+    path: "/v1/overTheBox/{serviceName}/ipv6",
+    summary: "Update the IPv6 status of an OverTheBox service",
+    iamActions: ["overTheBox:apiovh:ipv6/edit"],
+    deprecated: false,
+    schemasVersion: undefined,
+  },
   linkDevice: {
     name: "overTheBox.linkDevice",
     method: "POST",

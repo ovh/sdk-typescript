@@ -19,7 +19,7 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 361 operations, on the routes under /v1/me.
+ * It has 362 operations, on the routes under /v1/me.
  *
  * To start, list what the account has: listAgreements, listBills, listConsents, listContacts,
  * listCorrectiveInvoices, listDeposits, listDepositRequests, listDocuments, and 76 more.
@@ -5362,6 +5362,20 @@ export class MeApi extends SectionApi {
    */
   deleteIdentityProvider(options?: RequestOptions): Promise<void> {
     return this._call(OPS.deleteIdentityProvider, {}, "none", options);
+  }
+
+  /**
+   * getMeIdentityProviderSamlServiceProviderInfo calls GET /v1/me/identity/provider/samlServiceProviderInfo: Get information related to OVHcloud as a SAMLv2 service provider
+   *
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.AuthServiceProviderInfo} the API sends back
+   * @example
+   * const result = await client.me.getMeIdentityProviderSamlServiceProviderInfo();
+   */
+  getMeIdentityProviderSamlServiceProviderInfo(
+    options?: RequestOptions,
+  ): Promise<models.AuthServiceProviderInfo> {
+    return this._call(OPS.getMeIdentityProviderSamlServiceProviderInfo, {}, "json", options);
   }
 
   /**

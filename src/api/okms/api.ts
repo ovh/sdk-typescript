@@ -19,10 +19,11 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 26 operations, on the routes under /v2/okms.
+ * It has 33 operations, on the routes under /v2/okms.
  *
  * To start, list what the account has: allResources, allReferenceRegions, allReferenceServiceKeys,
- * allResourceCredentials, allResourceSecrets, allResourceServiceKeys, allResourceSecretVersions.
+ * allResourceCredentials, allResourceSecrets, allResourceServiceKeys, allResourceLogKinds,
+ * allResourceLogSubscriptions, and 1 more.
  *
  * To find the method for a route, search index/okms.jsonl: one line per method, with its route, its
  * signature and the IAM actions it requires. It is at the root of the SDK repository, and in the
@@ -324,6 +325,229 @@ export class OkmsApi extends SectionApi {
       OPS.deleteResourceCredential,
       {
         path: { okmsId: okmsId, credentialId: credentialId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allResourceLogKinds iterates over GET /v2/okms/resource/{okmsId}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds the service emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action okms:apiovh:log/kind/get.
+   *
+   * @param okmsId - Okms ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DbaasLogsLogKind}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.okms.allResourceLogKinds(okmsId)) console.log(item);
+   */
+  allResourceLogKinds(
+    okmsId: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.DbaasLogsLogKind> {
+    return this._pages(
+      OPS.allResourceLogKinds,
+      {
+        path: { okmsId: okmsId },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getResourceLogKind calls GET /v2/okms/resource/{okmsId}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action okms:apiovh:log/kind/get.
+   *
+   * @param okmsId - Okms ID
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.okms.getResourceLogKind(okmsId, name);
+   */
+  getResourceLogKind(
+    okmsId: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getResourceLogKind,
+      {
+        path: { okmsId: okmsId, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allResourceLogSubscriptions iterates over GET /v2/okms/resource/{okmsId}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the log subscriptions of the service. Filter them by log kind with
+   * the `kind` parameter.
+   *
+   * Requires the IAM action okms:apiovh:log/subscription/get.
+   *
+   * @param okmsId - Okms ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DbaasLogsLogSubscription}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.okms.allResourceLogSubscriptions(okmsId)) console.log(item);
+   */
+  allResourceLogSubscriptions(
+    okmsId: string,
+    params?: {
+      /** Filter on a specific kind, for example audit */
+      kind?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.DbaasLogsLogSubscription> {
+    return this._pages(
+      OPS.allResourceLogSubscriptions,
+      {
+        path: { okmsId: okmsId },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createResourceLogSubscription calls POST /v2/okms/resource/{okmsId}/log/subscription: Create a log subscription
+   *
+   * Forwards the logs of one kind to a Logs Data Platform stream. The subscription is created
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM actions okms:apiovh:log/subscription/create,
+   * ldp:apiovh:output/graylog/stream/forwardTo.
+   *
+   * @param okmsId - Okms ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.okms.createResourceLogSubscription(okmsId, body);
+   */
+  createResourceLogSubscription(
+    okmsId: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createResourceLogSubscription,
+      {
+        path: { okmsId: okmsId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getResourceLogSubscription calls GET /v2/okms/resource/{okmsId}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action okms:apiovh:log/subscription/get.
+   *
+   * @param okmsId - Okms ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.okms.getResourceLogSubscription(okmsId, subscriptionId);
+   */
+  getResourceLogSubscription(
+    okmsId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getResourceLogSubscription,
+      {
+        path: { okmsId: okmsId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteResourceLogSubscription calls DELETE /v2/okms/resource/{okmsId}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding logs to the stream. The deletion runs
+   * asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM action okms:apiovh:log/subscription/delete.
+   *
+   * @param okmsId - Okms ID
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.okms.deleteResourceLogSubscription(okmsId, subscriptionId);
+   */
+  deleteResourceLogSubscription(
+    okmsId: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteResourceLogSubscription,
+      {
+        path: { okmsId: okmsId, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlResourceLog calls POST /v2/okms/resource/{okmsId}/log/url: Generate a temporary log URL
+   *
+   * Returns a temporary signed URL for read-only access to the logs of the given kind. The link
+   * expires.
+   *
+   * Requires the IAM action okms:apiovh:log/url/create.
+   *
+   * @param okmsId - Okms ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.okms.urlResourceLog(okmsId, body);
+   */
+  urlResourceLog(
+    okmsId: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlResourceLog,
+      {
+        path: { okmsId: okmsId },
+        body: body,
       },
       "json",
       options,

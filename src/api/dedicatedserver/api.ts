@@ -19,11 +19,11 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 104 operations, on the routes under /v1/dedicated/server.
+ * It has 132 operations, on the routes under /v1/dedicated/server and /v2/dedicated/server.
  *
  * To start, list what the account has: listServers, listOsAvailabilities,
- * listDatacenterAvailabilities, listBoots, listInterventions, listIpCountryAvailables, listIps,
- * listMrtgs, and 14 more.
+ * listDatacenterAvailabilities, getDedicatedServerRegionAvailabilities, listBoots,
+ * listInterventions, listIpCountryAvailables, listIps, and 22 more.
  *
  * To find the method for a route, search index/dedicatedserver.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,
@@ -186,6 +186,58 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
+   * getDedicatedServerRegionAvailabilities calls GET /v1/dedicated/server/region/availabilities: List server availability by region
+   *
+   * Returns the availability of each server hardware configuration in each region and its
+   * availability zones. Filter by plan code or hardware part, and choose regions with regions and
+   * excludeRegions. Unlike the datacenter route, this call requires authentication.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @example
+   * const result = await client.dedicatedserver.getDedicatedServerRegionAvailabilities();
+   */
+  getDedicatedServerRegionAvailabilities(
+    params?: {
+      /** If true, all regions are returned except those listed in regions parameter */
+      excludeRegions?: boolean | undefined;
+      /** The name of the gpu hardware part */
+      gpu?: string | undefined;
+      /** The name of the memory hardware part */
+      memory?: string | undefined;
+      /** The plan code in which the hardware is involved */
+      planCode?: string | undefined;
+      /** The names of regions */
+      regions?: models.DedicatedServerAvailabilityRegionalizationEnum[] | undefined;
+      /** The name of the base hardware */
+      server?: string | undefined;
+      /** The name of the storage hardware part */
+      storage?: string | undefined;
+      /** The name of the system storage hardware part */
+      systemStorage?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerRegionAvailability[]> {
+    return this._call(
+      OPS.getDedicatedServerRegionAvailabilities,
+      {
+        query: [
+          ["excludeRegions", params?.excludeRegions],
+          ["gpu", params?.gpu],
+          ["memory", params?.memory],
+          ["planCode", params?.planCode],
+          ["regions", params?.regions],
+          ["server", params?.server],
+          ["storage", params?.storage],
+          ["systemStorage", params?.systemStorage],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * getVirtualNetworkInterfaceByUuid calls GET /v1/dedicated/server/virtualNetworkInterface/{uuid}: Get a virtual network interface
    *
    * Returns a virtual network interface from its UUID alone, without the server name in the path.
@@ -325,6 +377,126 @@ export class DedicatedserverApi extends SectionApi {
       OPS.authenticationSecret,
       {
         path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getBackupCloudOfferDetails calls GET /v1/dedicated/server/{serviceName}/backupCloudOfferDetails: Get the cloud backup offer
+   *
+   * Returns the cloud backup offer available for the server: the maximum size and the monthly
+   * read/write volume of the storage and archive containers. When no offer is available, the call
+   * returns an error.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:backupCloudOfferDetails/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerBackupBackupOffer} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getBackupCloudOfferDetails(serviceName);
+   */
+  getBackupCloudOfferDetails(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerBackupBackupOffer> {
+    return this._call(
+      OPS.getBackupCloudOfferDetails,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getBiosSettings calls GET /v1/dedicated/server/{serviceName}/biosSettings: Get the BIOS settings
+   *
+   * Returns the configurable BIOS settings of the server. The response states whether SGX is
+   * supported and lists the SGX statuses and PRMRR sizes the server accepts.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:biosSettings/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedBiosSettingsBiosSettings} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getBiosSettings(serviceName);
+   */
+  getBiosSettings(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedBiosSettingsBiosSettings> {
+    return this._call(
+      OPS.getBiosSettings,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getBiosSettingsSgx calls GET /v1/dedicated/server/{serviceName}/biosSettings/sgx: Get the SGX settings
+   *
+   * Returns the SGX configuration of the server: the SGX status and the size of the Processor
+   * Reserved Memory (PRMRR). To change it, use the configure operation.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:biosSettings/sgx/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedBiosSettingsSgxBiosSettingsSgx} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getBiosSettingsSgx(serviceName);
+   */
+  getBiosSettingsSgx(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedBiosSettingsSgxBiosSettingsSgx> {
+    return this._call(
+      OPS.getBiosSettingsSgx,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * configureBiosSettingsSgx calls POST /v1/dedicated/server/{serviceName}/biosSettings/sgx/configure: Configure SGX
+   *
+   * Enables or disables SGX and sets the size of the Processor Reserved Memory (PRMRR). The server
+   * reboots one or several times. On a server without SGX BIOS settings, the call returns an error.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:biosSettings/sgx/configure.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.configureBiosSettingsSgx(serviceName, body);
+   */
+  configureBiosSettingsSgx(
+    serviceName: string,
+    body: models.ConfigureBiosSettingsSgxRequest,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerTask> {
+    return this._call(
+      OPS.configureBiosSettingsSgx,
+      {
+        path: { serviceName: serviceName },
+        body: body,
       },
       "json",
       options,
@@ -633,6 +805,121 @@ export class DedicatedserverApi extends SectionApi {
         body: body,
       },
       "string",
+      options,
+    );
+  }
+
+  /**
+   * getFeaturesBackupCloud calls GET /v1/dedicated/server/{serviceName}/features/backupCloud: Get the cloud backup
+   *
+   * Returns the cloud backup of the server: its storage and archive containers, its status and the
+   * agreements waiting for validation.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:features/backupCloud/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerBackupCloud} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getFeaturesBackupCloud(serviceName);
+   */
+  getFeaturesBackupCloud(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerBackupCloud> {
+    return this._call(
+      OPS.getFeaturesBackupCloud,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * createFeaturesBackupCloud calls POST /v1/dedicated/server/{serviceName}/features/backupCloud: Create the cloud backup
+   *
+   * Creates the cloud backup of the server, with storage and archive containers in a cloud project.
+   * Set cloudProjectId to use an existing project; otherwise a project is created, described by
+   * projectDescription.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:features/backupCloud/create.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerBackupCloud} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.createFeaturesBackupCloud(serviceName, body);
+   */
+  createFeaturesBackupCloud(
+    serviceName: string,
+    body: models.CreateFeaturesBackupCloudRequest,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerBackupCloud> {
+    return this._call(
+      OPS.createFeaturesBackupCloud,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteFeaturesBackupCloud calls DELETE /v1/dedicated/server/{serviceName}/features/backupCloud: Deactivate the cloud backup
+   *
+   * Deactivates the cloud backup of the server. The container data is not deleted.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:features/backupCloud/delete.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.dedicatedserver.deleteFeaturesBackupCloud(serviceName);
+   */
+  deleteFeaturesBackupCloud(serviceName: string, options?: RequestOptions): Promise<void> {
+    return this._call(
+      OPS.deleteFeaturesBackupCloud,
+      {
+        path: { serviceName: serviceName },
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * passwordFeaturesBackupCloud calls POST /v1/dedicated/server/{serviceName}/features/backupCloud/password: Regenerate cloud backup passwords
+   *
+   * Regenerates the cloud backup passwords and returns them: the Swift and SFTP passwords of the
+   * storage and archive containers.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:features/backupCloud/password/create.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerBackupBackupPassword} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.passwordFeaturesBackupCloud(serviceName);
+   */
+  passwordFeaturesBackupCloud(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerBackupBackupPassword> {
+    return this._call(
+      OPS.passwordFeaturesBackupCloud,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
       options,
     );
   }
@@ -1708,6 +1995,222 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
+   * allLogKinds iterates over GET /v2/dedicated/server/{serviceName}/log/kind (List log kinds).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the names of the log kinds Dedicated Servers emits, which can be forwarded to a stream.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/kind/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allLogKinds(serviceName)) console.log(item);
+   */
+  allLogKinds(serviceName: string, options?: RequestOptions): AsyncIterable<string> {
+    return this._pages(
+      OPS.allLogKinds,
+      {
+        path: { serviceName: serviceName },
+      },
+      options,
+    );
+  }
+
+  /**
+   * getLogKind calls GET /v2/dedicated/server/{serviceName}/log/kind/{name}: Get a log kind
+   *
+   * Returns a log kind and the additional fields its logs carry.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/kind/get.
+   *
+   * @param serviceName - Service name
+   * @param name - Name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogKind} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getLogKind(serviceName, name);
+   */
+  getLogKind(
+    serviceName: string,
+    name: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogKind> {
+    return this._call(
+      OPS.getLogKind,
+      {
+        path: { serviceName: serviceName, name: name },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allLogSubscriptions iterates over GET /v2/dedicated/server/{serviceName}/log/subscription (List log subscriptions).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the identifiers of the Dedicated Servers log subscriptions. Set `kind` to restrict the
+   * list to one log kind.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/subscription/get.
+   *
+   * @param serviceName - Service name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allLogSubscriptions(serviceName)) console.log(item);
+   */
+  allLogSubscriptions(
+    serviceName: string,
+    params?: {
+      /** Filter on a specific kind */
+      kind?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<string> {
+    return this._pages(
+      OPS.allLogSubscriptions,
+      {
+        path: { serviceName: serviceName },
+        query: [["kind", params?.kind]],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createLogSubscription calls POST /v2/dedicated/server/{serviceName}/log/subscription: Create a log subscription
+   *
+   * Forwards Dedicated Servers logs of one kind to a Logs Data Platform stream. The subscription is
+   * created asynchronously and the response returns the operation identifier.
+   *
+   * Requires the IAM actions dedicatedServer:apiovh:log/subscription,
+   * ldp:apiovh:output/graylog/stream/forwardTo.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.createLogSubscription(serviceName, body);
+   */
+  createLogSubscription(
+    serviceName: string,
+    body: models.DbaasLogsLogSubscriptionCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.createLogSubscription,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getLogSubscription calls GET /v2/dedicated/server/{serviceName}/log/subscription/{subscriptionId}: Get a log subscription
+   *
+   * Returns the log kind and the destination stream of a subscription.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/subscription/get.
+   *
+   * @param serviceName - Service name
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscription} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getLogSubscription(serviceName, subscriptionId);
+   */
+  getLogSubscription(
+    serviceName: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscription> {
+    return this._call(
+      OPS.getLogSubscription,
+      {
+        path: { serviceName: serviceName, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteLogSubscription calls DELETE /v2/dedicated/server/{serviceName}/log/subscription/{subscriptionId}: Delete a log subscription
+   *
+   * Deletes the subscription and stops forwarding Dedicated Servers logs to the stream.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/subscription/delete.
+   *
+   * @param serviceName - Service name
+   * @param subscriptionId - Subscription ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsLogSubscriptionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.deleteLogSubscription(serviceName, subscriptionId);
+   */
+  deleteLogSubscription(
+    serviceName: string,
+    subscriptionId: string,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsLogSubscriptionResponse> {
+    return this._call(
+      OPS.deleteLogSubscription,
+      {
+        path: { serviceName: serviceName, subscriptionId: subscriptionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * urlLog calls POST /v2/dedicated/server/{serviceName}/log/url: Generate a temporary log URL
+   *
+   * Generates a temporary URL to read the logs of one kind. The URL expires.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:log/url.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DbaasLogsTemporaryLogsLink} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.urlLog(serviceName, body);
+   */
+  urlLog(
+    serviceName: string,
+    body: models.DbaasLogsLogURLCreation,
+    options?: RequestOptions,
+  ): Promise<models.DbaasLogsTemporaryLogsLink> {
+    return this._call(
+      OPS.urlLog,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * listMrtgs calls GET /v1/dedicated/server/{serviceName}/mrtg: Get server traffic statistics
    *
    * Returns timestamped values of the server traffic, packets or errors, for the requested type and
@@ -1716,7 +2219,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:mrtg/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2018-04-23. Use
-   * /dedicated/server/{serviceName}/networkInterfaceController instead.
+   * /v1/dedicated/server/{serviceName}/networkInterfaceController instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param period - mrtg period
@@ -1725,7 +2228,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.listMrtgs(serviceName, period, type);
-   * @deprecated The API has deprecated this operation, to be removed on 2018-04-23. Use /dedicated/server/{serviceName}/networkInterfaceController instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2018-04-23. Use /v1/dedicated/server/{serviceName}/networkInterfaceController instead.
    */
   listMrtgs(
     serviceName: string,
@@ -1748,6 +2251,205 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
+   * listNetworkInterfaceControllers calls GET /v1/dedicated/server/{serviceName}/networkInterfaceController: List network interface controllers
+   *
+   * Returns the MAC addresses of the network interface controllers of the server. Filter them by
+   * link type with the linkType parameter.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:networkInterfaceController/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.listNetworkInterfaceControllers(serviceName);
+   */
+  listNetworkInterfaceControllers(
+    serviceName: string,
+    params?: {
+      /** Filter the value of linkType property (=) */
+      linkType?:
+        | models.DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum
+        | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.MacAddress[]> {
+    return this._call(
+      OPS.listNetworkInterfaceControllers,
+      {
+        path: { serviceName: serviceName },
+        query: [["linkType", params?.linkType]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getNetworkInterfaceController calls GET /v1/dedicated/server/{serviceName}/networkInterfaceController/{mac}: Get a network interface controller
+   *
+   * Returns the MAC address of a network interface controller, its link type, such as public,
+   * private or isolated, and the virtual network interface bound to it.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:networkInterfaceController/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param mac - NetworkInterfaceController mac
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedNetworkInterfaceControllerNetworkInterfaceController} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getNetworkInterfaceController(serviceName, mac);
+   */
+  getNetworkInterfaceController(
+    serviceName: string,
+    mac: models.MacAddress,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedNetworkInterfaceControllerNetworkInterfaceController> {
+    return this._call(
+      OPS.getNetworkInterfaceController,
+      {
+        path: { serviceName: serviceName, mac: mac },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allNetworkInterfaceControllers iterates over GET /v1/dedicated/server/{serviceName}/networkInterfaceController (List network interface controllers).
+   *
+   * It lists the IDs with {@link DedicatedserverApi.listNetworkInterfaceControllers}, then gets each object with
+   * {@link DedicatedserverApi.getNetworkInterfaceController}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action dedicatedServer:apiovh:networkInterfaceController/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DedicatedNetworkInterfaceControllerNetworkInterfaceController}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allNetworkInterfaceControllers(serviceName)) console.log(item);
+   */
+  allNetworkInterfaceControllers(
+    serviceName: string,
+    params?: {
+      /** Filter the value of linkType property (=) */
+      linkType?:
+        | models.DedicatedNetworkInterfaceControllerNetworkInterfaceControllerLinkTypeEnum
+        | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.DedicatedNetworkInterfaceControllerNetworkInterfaceController> {
+    return this._each(
+      () => this.listNetworkInterfaceControllers(serviceName, params, options),
+      (listedId) => this.getNetworkInterfaceController(serviceName, listedId, options),
+    );
+  }
+
+  /**
+   * listNetworkInterfaceControllerMrtgs calls GET /v1/dedicated/server/{serviceName}/networkInterfaceController/{mac}/mrtg: Get interface traffic statistics
+   *
+   * Returns timestamped values for one network interface controller, for the requested type and
+   * period. Types cover traffic, packets and errors, for download and upload.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:networkInterfaceController/mrtg/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param mac - NetworkInterfaceController mac
+   * @param period - mrtg period
+   * @param type - mrtg type
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.listNetworkInterfaceControllerMrtgs(serviceName, mac, period, type);
+   */
+  listNetworkInterfaceControllerMrtgs(
+    serviceName: string,
+    mac: models.MacAddress,
+    period: models.DedicatedServerMrtgPeriodEnum,
+    type: models.DedicatedServerMrtgTypeEnum,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerMrtgTimestampValue[]> {
+    return this._call(
+      OPS.listNetworkInterfaceControllerMrtgs,
+      {
+        path: { serviceName: serviceName, mac: mac },
+        query: [
+          ["period", period],
+          ["type", type],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getNetworking calls GET /v1/dedicated/server/{serviceName}/networking: Get the network configuration
+   *
+   * Returns the network configuration of the server: its interfaces or interface aggregations, and
+   * the status of the current operation, deploying or active.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:networking/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerNetworking} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getNetworking(serviceName);
+   */
+  getNetworking(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerNetworking> {
+    return this._call(
+      OPS.getNetworking,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * aggregationOla calls POST /v1/dedicated/server/{serviceName}/ola/aggregation: Aggregate network interfaces
+   *
+   * Groups virtual network interfaces into one link aggregation, under the given name. Returns a
+   * task.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:ola/aggregation/create.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.aggregationOla(serviceName, body);
+   */
+  aggregationOla(
+    serviceName: string,
+    body: models.AggregationOlaRequest,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerTask> {
+    return this._call(
+      OPS.aggregationOla,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * groupOla calls POST /v1/dedicated/server/{serviceName}/ola/group: Group network interfaces
    *
    * Groups virtual network interfaces into one link aggregation, under the given name. Deprecated:
@@ -1756,7 +2458,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:ola/group/create.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2021-04-08. Use
-   * /dedicated/server/{serviceName}/ola/aggregation instead.
+   * /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param body - the request body
@@ -1765,7 +2467,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.groupOla(serviceName, body);
-   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /dedicated/server/{serviceName}/ola/aggregation instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    */
   groupOla(
     serviceName: string,
@@ -1784,6 +2486,37 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
+   * resetOla calls POST /v1/dedicated/server/{serviceName}/ola/reset: Reset a network interface
+   *
+   * Resets a virtual network interface to its default configuration. Returns a task.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:ola/reset.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.resetOla(serviceName, body);
+   */
+  resetOla(
+    serviceName: string,
+    body: models.ResetOlaRequest,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerTask> {
+    return this._call(
+      OPS.resetOla,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
    * ungroupOla calls POST /v1/dedicated/server/{serviceName}/ola/ungroup: Ungroup a network interface
    *
    * Ungroups a virtual network interface and returns a list of tasks. Deprecated: use
@@ -1792,7 +2525,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:ola/ungroup.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2021-04-08. Use
-   * /dedicated/server/{serviceName}/ola/reset instead.
+   * /v1/dedicated/server/{serviceName}/ola/reset instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param body - the request body
@@ -1800,7 +2533,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.ungroupOla(serviceName, body);
-   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /dedicated/server/{serviceName}/ola/reset instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /v1/dedicated/server/{serviceName}/ola/reset instead.
    */
   ungroupOla(
     serviceName: string,
@@ -2211,6 +2944,170 @@ export class DedicatedserverApi extends SectionApi {
       },
       "json",
       options,
+    );
+  }
+
+  /**
+   * listPlannedChanges calls GET /v1/dedicated/server/{serviceName}/plannedChange: List planned changes
+   *
+   * Returns the UUIDs of the changes planned on the server. Get a change by its UUID to read its
+   * purpose, status and expected dates.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:plannedChange/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.listPlannedChanges(serviceName);
+   */
+  listPlannedChanges(serviceName: string, options?: RequestOptions): Promise<string[]> {
+    return this._call(
+      OPS.listPlannedChanges,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getPlannedChange calls GET /v1/dedicated/server/{serviceName}/plannedChange/{changeUuid}: Get a planned change
+   *
+   * Returns a change planned on the server: its purpose, its status, its wanted start date and its
+   * expected end date.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:plannedChange/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param changeUuid - UUID of the change
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerPlannedChange} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getPlannedChange(serviceName, changeUuid);
+   */
+  getPlannedChange(
+    serviceName: string,
+    changeUuid: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerPlannedChange> {
+    return this._call(
+      OPS.getPlannedChange,
+      {
+        path: { serviceName: serviceName, changeUuid: changeUuid },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allPlannedChanges iterates over GET /v1/dedicated/server/{serviceName}/plannedChange (List planned changes).
+   *
+   * It lists the IDs with {@link DedicatedserverApi.listPlannedChanges}, then gets each object with
+   * {@link DedicatedserverApi.getPlannedChange}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action dedicatedServer:apiovh:plannedChange/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DedicatedServerPlannedChange}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allPlannedChanges(serviceName)) console.log(item);
+   */
+  allPlannedChanges(
+    serviceName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.DedicatedServerPlannedChange> {
+    return this._each(
+      () => this.listPlannedChanges(serviceName, options),
+      (listedId) => this.getPlannedChange(serviceName, listedId, options),
+    );
+  }
+
+  /**
+   * listPlannedInterventions calls GET /v1/dedicated/server/{serviceName}/plannedIntervention: List planned interventions
+   *
+   * Returns the IDs of the interventions planned on the server. Get a planned intervention to read
+   * its type, status and dates.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:plannedIntervention/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.listPlannedInterventions(serviceName);
+   */
+  listPlannedInterventions(serviceName: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listPlannedInterventions,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getPlannedIntervention calls GET /v1/dedicated/server/{serviceName}/plannedIntervention/{interventionId}: Get a planned intervention
+   *
+   * Returns the type, status, wanted start date and expected end date of an intervention planned on
+   * the server. The status is todo, doing or done.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:plannedIntervention/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param interventionId - ID of the intervention
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedServerPlannedIntervention} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getPlannedIntervention(serviceName, interventionId);
+   */
+  getPlannedIntervention(
+    serviceName: string,
+    interventionId: number,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedServerPlannedIntervention> {
+    return this._call(
+      OPS.getPlannedIntervention,
+      {
+        path: { serviceName: serviceName, interventionId: interventionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allPlannedInterventions iterates over GET /v1/dedicated/server/{serviceName}/plannedIntervention (List planned interventions).
+   *
+   * It lists the IDs with {@link DedicatedserverApi.listPlannedInterventions}, then gets each object with
+   * {@link DedicatedserverApi.getPlannedIntervention}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action dedicatedServer:apiovh:plannedIntervention/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DedicatedServerPlannedIntervention}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allPlannedInterventions(serviceName)) console.log(item);
+   */
+  allPlannedInterventions(
+    serviceName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.DedicatedServerPlannedIntervention> {
+    return this._each(
+      () => this.listPlannedInterventions(serviceName, options),
+      (listedId) => this.getPlannedIntervention(serviceName, listedId, options),
     );
   }
 
@@ -3304,6 +4201,120 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
+   * listVirtualNetworkInterfaces calls GET /v1/dedicated/server/{serviceName}/virtualNetworkInterface: List virtual network interfaces
+   *
+   * Returns the UUIDs of the virtual network interfaces of the server. Filter them by enabled,
+   * mode, vrack or name.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:virtualNetworkInterface/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.listVirtualNetworkInterfaces(serviceName);
+   */
+  listVirtualNetworkInterfaces(
+    serviceName: string,
+    params?: {
+      /** Filter the value of enabled property (=) */
+      enabled?: boolean | undefined;
+      /** Filter the value of mode property (=) */
+      mode?: models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum | undefined;
+      /** Filter the value of name property (=) */
+      name?: string | undefined;
+      /** Filter the value of vrack property (=) */
+      vrack?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listVirtualNetworkInterfaces,
+      {
+        path: { serviceName: serviceName },
+        query: [
+          ["enabled", params?.enabled],
+          ["mode", params?.mode],
+          ["name", params?.name],
+          ["vrack", params?.vrack],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getByServiceNameVirtualNetworkInterfaceByUuid calls GET /v1/dedicated/server/{serviceName}/virtualNetworkInterface/{uuid}: Get a virtual network interface
+   *
+   * Returns the name, mode, activation state and vRack of a virtual network interface, and the
+   * network interface controllers bound to it.
+   *
+   * Requires the IAM action dedicatedServer:apiovh:virtualNetworkInterface/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param uuid - VirtualNetworkInterface unique id
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterface} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.dedicatedserver.getByServiceNameVirtualNetworkInterfaceByUuid(serviceName, uuid);
+   */
+  getByServiceNameVirtualNetworkInterfaceByUuid(
+    serviceName: string,
+    uuid: string,
+    options?: RequestOptions,
+  ): Promise<models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterface> {
+    return this._call(
+      OPS.getByServiceNameVirtualNetworkInterfaceByUuid,
+      {
+        path: { serviceName: serviceName, uuid: uuid },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allVirtualNetworkInterfaces iterates over GET /v1/dedicated/server/{serviceName}/virtualNetworkInterface (List virtual network interfaces).
+   *
+   * It lists the IDs with {@link DedicatedserverApi.listVirtualNetworkInterfaces}, then gets each object with
+   * {@link DedicatedserverApi.getByServiceNameVirtualNetworkInterfaceByUuid}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action dedicatedServer:apiovh:virtualNetworkInterface/get.
+   *
+   * @param serviceName - The internal name of your dedicated server
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterface}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.dedicatedserver.allVirtualNetworkInterfaces(serviceName)) console.log(item);
+   */
+  allVirtualNetworkInterfaces(
+    serviceName: string,
+    params?: {
+      /** Filter the value of enabled property (=) */
+      enabled?: boolean | undefined;
+      /** Filter the value of mode property (=) */
+      mode?: models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterfaceModeEnum | undefined;
+      /** Filter the value of name property (=) */
+      name?: string | undefined;
+      /** Filter the value of vrack property (=) */
+      vrack?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.DedicatedVirtualNetworkInterfaceVirtualNetworkInterface> {
+    return this._each(
+      () => this.listVirtualNetworkInterfaces(serviceName, params, options),
+      (listedId) =>
+        this.getByServiceNameVirtualNetworkInterfaceByUuid(serviceName, listedId, options),
+    );
+  }
+
+  /**
    * updateVirtualNetworkInterface calls PUT /v1/dedicated/server/{serviceName}/virtualNetworkInterface/{uuid}: Update a virtual network interface
    *
    * Updates the name or the mode of a virtual network interface. Deprecated: use
@@ -3312,7 +4323,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:virtualNetworkInterface/edit.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2021-04-08. Use
-   * /dedicated/server/{serviceName}/ola/aggregation instead.
+   * /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param uuid - VirtualNetworkInterface unique id
@@ -3321,7 +4332,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * await client.dedicatedserver.updateVirtualNetworkInterface(serviceName, uuid, body);
-   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /dedicated/server/{serviceName}/ola/aggregation instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    */
   updateVirtualNetworkInterface(
     serviceName: string,
@@ -3349,7 +4360,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:virtualNetworkInterface/disable.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2021-04-08. Use
-   * /dedicated/server/{serviceName}/ola/aggregation instead.
+   * /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param uuid - VirtualNetworkInterface unique id
@@ -3358,7 +4369,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.disableVirtualNetworkInterface(serviceName, uuid);
-   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /dedicated/server/{serviceName}/ola/aggregation instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    */
   disableVirtualNetworkInterface(
     serviceName: string,
@@ -3384,7 +4395,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:virtualNetworkInterface/enable.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2021-04-08. Use
-   * /dedicated/server/{serviceName}/ola/aggregation instead.
+   * /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param uuid - VirtualNetworkInterface unique id
@@ -3393,7 +4404,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.enableVirtualNetworkInterface(serviceName, uuid);
-   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /dedicated/server/{serviceName}/ola/aggregation instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2021-04-08. Use /v1/dedicated/server/{serviceName}/ola/aggregation instead.
    */
   enableVirtualNetworkInterface(
     serviceName: string,
@@ -3436,7 +4447,7 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
-   * getVrack calls GET /v1/dedicated/server/{serviceName}/vrack/{vrack}: Get a server link (legacy)
+   * getVrack calls GET /v1/dedicated/server/{serviceName}/vrack/{vrack}: Get an attached dedicated server (legacy)
    *
    * Returns the attached server and its vRack. This is the legacy whole-server link, not an
    * interface link.
@@ -3493,7 +4504,7 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
-   * deleteVrack calls DELETE /v1/dedicated/server/{serviceName}/vrack/{vrack}: Detach a server (legacy)
+   * deleteVrack calls DELETE /v1/dedicated/server/{serviceName}/vrack/{vrack}: Detach a dedicated server (legacy)
    *
    * Detaches a whole dedicated server from the vRack, in the legacy mode. Returns the task that
    * performs it.
@@ -3524,7 +4535,7 @@ export class DedicatedserverApi extends SectionApi {
   }
 
   /**
-   * listVrackMrtgs calls GET /v1/dedicated/server/{serviceName}/vrack/{vrack}/mrtg: Get traffic graph values (deprecated)
+   * listVrackMrtgs calls GET /v1/dedicated/server/{serviceName}/vrack/{vrack}/mrtg: Get dedicated server traffic values (deprecated)
    *
    * Returns the traffic, packets or errors measured on the vRack port of the server, for a period
    * from hourly to yearly. Deprecated: use the dedicated server statistics instead.
@@ -3532,7 +4543,7 @@ export class DedicatedserverApi extends SectionApi {
    * Requires the IAM action dedicatedServer:apiovh:vrack/mrtg/get.
    *
    * Deprecated: the API has deprecated this operation. Removal date: 2018-04-23. Use
-   * /dedicated/server/{serviceName}/networkInterfaceController instead.
+   * /v1/dedicated/server/{serviceName}/networkInterfaceController instead.
    *
    * @param serviceName - The internal name of your dedicated server
    * @param vrack - vrack name
@@ -3542,7 +4553,7 @@ export class DedicatedserverApi extends SectionApi {
    * @throws ForbiddenError when the policy lacks an IAM action this call requires
    * @example
    * const result = await client.dedicatedserver.listVrackMrtgs(serviceName, vrack, period, type);
-   * @deprecated The API has deprecated this operation, to be removed on 2018-04-23. Use /dedicated/server/{serviceName}/networkInterfaceController instead.
+   * @deprecated The API has deprecated this operation, to be removed on 2018-04-23. Use /v1/dedicated/server/{serviceName}/networkInterfaceController instead.
    */
   listVrackMrtgs(
     serviceName: string,

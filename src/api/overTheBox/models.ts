@@ -80,6 +80,12 @@ export interface UpdateAutoMTURequest {
   mtuAuto: OverTheBoxAvailableStatusEnum;
 }
 
+/** The request body of PUT /v1/overTheBox/{serviceName}/ipv6. */
+export interface UpdateIPv6Request {
+  /** Enabled/disabled IPv6 */
+  enabled: boolean;
+}
+
 /** Log kind */
 export interface DbaasLogsLogKind {
   /**
@@ -419,6 +425,7 @@ export interface OtbServiceGraphEndpoint {
 export const OtbServiceOperationModeEnum = {
   OVERTHEBOX: "overthebox",
   OVERTHEBOX_LEGACY: "overthebox-legacy",
+  UPATH: "upath",
   WIREGUARD: "wireguard",
 } as const;
 /**

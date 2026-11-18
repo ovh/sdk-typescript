@@ -19,10 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 26 operations, on the routes under /v2/zimbra/platform.
+ * It has 30 operations, on the routes under /v2/zimbra/platform.
  *
  * To start, list what the account has: allPlatforms, allAccounts, allAlias, allDomains,
- * allOrganizations, allSlots, allTasks.
+ * allOrganizations, allRedirections, allSlots, allTasks.
  *
  * To find the method for a route, search index/zimbra.jsonl: one line per method, with its route,
  * its signature and the IAM actions it requires. It is at the root of the SDK repository, and in
@@ -770,6 +770,145 @@ export class ZimbraApi extends SectionApi {
       OPS.deleteOrganization,
       {
         path: { platformId: platformId, organizationId: organizationId },
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * allRedirections iterates over GET /v2/zimbra/platform/{platformId}/redirection (List redirections).
+   *
+   * It yields one item at a time, and gets the next page only when the loop reaches it. An
+   * error is thrown and stops the loop.
+   *
+   * Returns the redirections of the platform with their current state. Filter them by `source`,
+   * `destination`, `domainId` or `organizationId`.
+   *
+   * Requires the IAM action zimbra:apiovh:platform/redirection/get.
+   *
+   * @param platformId - Platform ID
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.ZimbraRedirectionResponse}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.zimbra.allRedirections(platformId)) console.log(item);
+   */
+  allRedirections(
+    platformId: string,
+    params?: {
+      /** Filter by destination */
+      destination?: string | undefined;
+      /** Filter by domain id */
+      domainId?: string | undefined;
+      /** Filter by organization id */
+      organizationId?: string | undefined;
+      /** Filter by source */
+      source?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.ZimbraRedirectionResponse> {
+    return this._pages(
+      OPS.allRedirections,
+      {
+        path: { platformId: platformId },
+        query: [
+          ["destination", params?.destination],
+          ["domainId", params?.domainId],
+          ["organizationId", params?.organizationId],
+          ["source", params?.source],
+        ],
+      },
+      options,
+    );
+  }
+
+  /**
+   * createRedirection calls POST /v2/zimbra/platform/{platformId}/redirection: Create a redirection
+   *
+   * Creates a redirection from a `source` email address to a `destination` email address.
+   *
+   * Requires the IAM action zimbra:apiovh:platform/redirection/create.
+   *
+   * @param platformId - Platform ID
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.ZimbraRedirectionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.zimbra.createRedirection(platformId, body);
+   */
+  createRedirection(
+    platformId: string,
+    body: models.ZimbraRedirectionPostPayload,
+    options?: RequestOptions,
+  ): Promise<models.ZimbraRedirectionResponse> {
+    return this._call(
+      OPS.createRedirection,
+      {
+        path: { platformId: platformId },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getRedirection calls GET /v2/zimbra/platform/{platformId}/redirection/{redirectionId}: Get a redirection
+   *
+   * Returns the source and destination email addresses of the redirection, with its domain and
+   * organization.
+   *
+   * Requires the IAM action zimbra:apiovh:platform/redirection/get.
+   *
+   * @param platformId - Platform ID
+   * @param redirectionId - Redirection ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.ZimbraRedirectionResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.zimbra.getRedirection(platformId, redirectionId);
+   */
+  getRedirection(
+    platformId: string,
+    redirectionId: string,
+    options?: RequestOptions,
+  ): Promise<models.ZimbraRedirectionResponse> {
+    return this._call(
+      OPS.getRedirection,
+      {
+        path: { platformId: platformId, redirectionId: redirectionId },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * deleteRedirection calls DELETE /v2/zimbra/platform/{platformId}/redirection/{redirectionId}: Delete a redirection
+   *
+   * Deletes the redirection.
+   *
+   * Requires the IAM action zimbra:apiovh:platform/redirection/delete.
+   *
+   * @param platformId - Platform ID
+   * @param redirectionId - Redirection ID
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.zimbra.deleteRedirection(platformId, redirectionId);
+   */
+  deleteRedirection(
+    platformId: string,
+    redirectionId: string,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.deleteRedirection,
+      {
+        path: { platformId: platformId, redirectionId: redirectionId },
       },
       "none",
       options,

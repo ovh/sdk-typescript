@@ -19,7 +19,10 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 1 operation, on the routes under /v1/license/officePrepaid.
+ * It has 12 operations, on the routes under /v1/license/officePrepaid.
+ *
+ * To start, list what the account has: listOfficePrepaids, listTenantPendingTasks,
+ * listTenantUsageStatistics.
  *
  * To find the method for a route, search index/licenseofficePrepaid.jsonl: one line per method,
  * with its route, its signature and the IAM actions it requires. It is at the root of the SDK
@@ -29,6 +32,393 @@ import { OPS } from "./registry.js";
  * dist/api/licenseofficePrepaid/models.d.ts.
  */
 export class LicenseofficePrepaidApi extends SectionApi {
+  /**
+   * listOfficePrepaids calls GET /v1/license/officePrepaid: List prepaid users
+   *
+   * Returns the service names of the prepaid users.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.listOfficePrepaids();
+   */
+  listOfficePrepaids(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<string[]> {
+    return this._call(
+      OPS.listOfficePrepaids,
+      {
+        query: [["iamTags", params?.iamTags]],
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getOfficePrepaid calls GET /v1/license/officePrepaid/{serviceName}: Get a prepaid user
+   *
+   * Returns the names, activation email, licenses and state of the prepaid user, and the service
+   * names of the user and of its tenant. `isVirtual` tells whether it is a user slot or a real
+   * user.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficePrepaidOfficeUserNativeWithIAM} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.getOfficePrepaid(serviceName);
+   */
+  getOfficePrepaid(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidOfficeUserNativeWithIAM> {
+    return this._call(
+      OPS.getOfficePrepaid,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allOfficePrepaids iterates over GET /v1/license/officePrepaid (List prepaid users).
+   *
+   * It lists the IDs with {@link LicenseofficePrepaidApi.listOfficePrepaids}, then gets each object with
+   * {@link LicenseofficePrepaidApi.getOfficePrepaid}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action licenseOfficePrepaid:apiovh:get.
+   *
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.LicenseOfficePrepaidOfficeUserNativeWithIAM}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.licenseofficePrepaid.allOfficePrepaids()) console.log(item);
+   */
+  allOfficePrepaids(
+    params?: {
+      /** Filter resources on IAM tags */
+      iamTags?: Record<string, models.IAMResourceTagFilter[]> | undefined;
+    },
+    options?: RequestOptions,
+  ): AsyncIterable<models.LicenseOfficePrepaidOfficeUserNativeWithIAM> {
+    return this._each(
+      () => this.listOfficePrepaids(params, options),
+      (listedId) => this.getOfficePrepaid(listedId, options),
+    );
+  }
+
+  /**
+   * updateOfficePrepaid calls PUT /v1/license/officePrepaid/{serviceName}: Update a prepaid user
+   *
+   * Updates the first name, last name and activation email of the prepaid user.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:put.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.licenseofficePrepaid.updateOfficePrepaid(serviceName, body);
+   */
+  updateOfficePrepaid(
+    serviceName: string,
+    body: models.LicenseOfficePrepaidPutOfficeUserNative,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.updateOfficePrepaid,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * changePassword calls POST /v1/license/officePrepaid/{serviceName}/changePassword: Change a prepaid user password
+   *
+   * Changes the password of the prepaid user and returns the task. Leave `password` empty to
+   * receive a generated password by email. Set `shouldSendMail` to send the new password to
+   * `notifyEmail`, the admin contact email by default.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:changePassword.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficePrepaidOfficeTaskNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.changePassword(serviceName, body);
+   */
+  changePassword(
+    serviceName: string,
+    body: models.LicenseOfficePrepaidOfficeTenantPostChangePassword,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidOfficeTaskNative> {
+    return this._call(
+      OPS.changePassword,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getParentTenant calls GET /v1/license/officePrepaid/{serviceName}/parentTenant: Get the parent tenant
+   *
+   * Returns the tenant of the prepaid user: display name, contact details, service type, status,
+   * and whether the Microsoft Customer Agreement (MCA) is accepted.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:parentTenant/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficePrepaidOfficeTenantNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.getParentTenant(serviceName);
+   */
+  getParentTenant(
+    serviceName: string,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidOfficeTenantNative> {
+    return this._call(
+      OPS.getParentTenant,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateParentTenant calls PUT /v1/license/officePrepaid/{serviceName}/parentTenant: Update the parent tenant
+   *
+   * Updates the display name of the tenant of the prepaid user.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:parentTenant/edit.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.licenseofficePrepaid.updateParentTenant(serviceName, body);
+   */
+  updateParentTenant(
+    serviceName: string,
+    body: models.LicenseOfficePrepaidOfficeTenantPutParentTenantWritable,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return this._call(
+      OPS.updateParentTenant,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * acceptAgreementParentTenant calls POST /v1/license/officePrepaid/{serviceName}/parentTenant/acceptAgreement: Accept the Microsoft Customer Agreement
+   *
+   * Accepts the Microsoft Customer Agreement (MCA) for the parent tenant.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:acceptAgreement.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * await client.licenseofficePrepaid.acceptAgreementParentTenant(serviceName);
+   */
+  acceptAgreementParentTenant(serviceName: string, options?: RequestOptions): Promise<void> {
+    return this._call(
+      OPS.acceptAgreementParentTenant,
+      {
+        path: { serviceName: serviceName },
+      },
+      "none",
+      options,
+    );
+  }
+
+  /**
+   * createAttestationParentTenant calls POST /v1/license/officePrepaid/{serviceName}/parentTenant/createAttestation: Create an MCA attestation
+   *
+   * Creates a Microsoft Customer Agreement attestation for the parent tenant from the signatory
+   * company, names, email address, phone number, country and language. Returns the attestation ID
+   * and a link to the attestation that can be embedded in an iframe.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:createAttestation.
+   *
+   * @param serviceName - Service name
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficePrepaidCreateAttestationResponse} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.createAttestationParentTenant(serviceName, body);
+   */
+  createAttestationParentTenant(
+    serviceName: string,
+    body: models.LicenseOfficePrepaidCreateAttestationPostPayload,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidCreateAttestationResponse> {
+    return this._call(
+      OPS.createAttestationParentTenant,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * listTenantPendingTasks calls GET /v1/license/officePrepaid/{serviceName}/tenantPendingTask: List parent tenant tasks
+   *
+   * Returns the IDs of the pending tasks of the parent tenant.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:tenantPendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.listTenantPendingTasks(serviceName);
+   */
+  listTenantPendingTasks(serviceName: string, options?: RequestOptions): Promise<number[]> {
+    return this._call(
+      OPS.listTenantPendingTasks,
+      {
+        path: { serviceName: serviceName },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * getTenantPendingTask calls GET /v1/license/officePrepaid/{serviceName}/tenantPendingTask/{id}: Get a parent tenant task
+   *
+   * Returns the function, status, creation date and completion date of the task.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:tenantPendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param id - Id
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.LicenseOfficePrepaidOfficeTaskNative} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.getTenantPendingTask(serviceName, id);
+   */
+  getTenantPendingTask(
+    serviceName: string,
+    id: number,
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidOfficeTaskNative> {
+    return this._call(
+      OPS.getTenantPendingTask,
+      {
+        path: { serviceName: serviceName, id: id },
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * allTenantPendingTasks iterates over GET /v1/license/officePrepaid/{serviceName}/tenantPendingTask (List parent tenant tasks).
+   *
+   * It lists the IDs with {@link LicenseofficePrepaidApi.listTenantPendingTasks}, then gets each object with
+   * {@link LicenseofficePrepaidApi.getTenantPendingTask}, only when the loop reaches it. An object deleted in the
+   * meantime is skipped. Any other error is thrown and stops the loop.
+   *
+   * The two calls require the IAM action licenseOfficePrepaid:apiovh:tenantPendingTask/get.
+   *
+   * @param serviceName - Service name
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns each {@link models.LicenseOfficePrepaidOfficeTaskNative}, one at a time: loop with `for await`
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * for await (const item of client.licenseofficePrepaid.allTenantPendingTasks(serviceName)) console.log(item);
+   */
+  allTenantPendingTasks(
+    serviceName: string,
+    options?: RequestOptions,
+  ): AsyncIterable<models.LicenseOfficePrepaidOfficeTaskNative> {
+    return this._each(
+      () => this.listTenantPendingTasks(serviceName, options),
+      (listedId) => this.getTenantPendingTask(serviceName, listedId, options),
+    );
+  }
+
+  /**
+   * listTenantUsageStatistics calls GET /v1/license/officePrepaid/{serviceName}/tenantUsageStatistics: Get parent tenant usage statistics
+   *
+   * Returns, for each day between `from` and `to`, the peak and end-of-day counts of activated
+   * licenses of the parent tenant, by license type.
+   *
+   * Requires the IAM action licenseOfficePrepaid:apiovh:tenantUsageStatistics/get.
+   *
+   * @param serviceName - Service name
+   * @param params - the optional parameters
+   * @param options - the options of this call: signal, timeout, headers
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.licenseofficePrepaid.listTenantUsageStatistics(serviceName);
+   */
+  listTenantUsageStatistics(
+    serviceName: string,
+    params?: {
+      /** Period's start point. */
+      from?: string | undefined;
+      /** Period's end point. */
+      to?: string | undefined;
+    },
+    options?: RequestOptions,
+  ): Promise<models.LicenseOfficePrepaidOfficeCurrentStatisticsNative[]> {
+    return this._call(
+      OPS.listTenantUsageStatistics,
+      {
+        path: { serviceName: serviceName },
+        query: [
+          ["from", params?.from],
+          ["to", params?.to],
+        ],
+      },
+      "json",
+      options,
+    );
+  }
+
   /**
    * unconfigure calls POST /v1/license/officePrepaid/{serviceName}/unconfigure: Unconfigure a prepaid user
    *

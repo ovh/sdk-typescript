@@ -14,6 +14,154 @@
  * @module
  */
 
+/** Cluster availability */
+export interface DedicatedClusterAvailabilitiesRaw {
+  /**
+   * Plan code in which the hardware is involved
+   *
+   * Read-only: the API sets it.
+   */
+  clusterPlanCode?: string | undefined;
+  /**
+   * Fully qualified name and unique name of the hardware
+   *
+   * Read-only: the API sets it.
+   */
+  fqn?: string | undefined;
+  /**
+   * Name of the memory hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  memory?: string | undefined;
+  /**
+   * Plan code in which the hardware is involved
+   *
+   * Read-only: the API sets it.
+   */
+  planCode?: string | undefined;
+  /**
+   * A structure describing the hardware availability for each region
+   *
+   * Read-only: the API sets it.
+   */
+  regions?: DedicatedClusterAvailabilitiesRawRegion[] | undefined;
+  /**
+   * Name of the base hardware
+   *
+   * Read-only: the API sets it.
+   */
+  server?: string | undefined;
+  /**
+   * Name of the storage hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  storage?: string | undefined;
+  /**
+   * Name of the system storage hardware part
+   *
+   * Read-only: the API sets it.
+   */
+  systemStorage?: string | null | undefined;
+}
+
+/** A structure describing the hardware raw availability for each region */
+export interface DedicatedClusterAvailabilitiesRawRegion {
+  /**
+   * The availability
+   *
+   * Read-only: the API sets it.
+   */
+  availability?: DedicatedServerAvailabilityEnum | undefined;
+  /**
+   * Last availability rule applied
+   *
+   * Read-only: the API sets it.
+   */
+  lastRule?: string | null | undefined;
+  /**
+   * Real stock including parent references
+   *
+   * Read-only: the API sets it.
+   */
+  parentAvailable?: number | undefined;
+  /**
+   * The region code
+   *
+   * Read-only: the API sets it.
+   */
+  region?: DedicatedServerAvailabilityEnum | undefined;
+  /**
+   * Real stock
+   *
+   * Read-only: the API sets it.
+   */
+  trueAvailable?: number | undefined;
+}
+
+/** A structure describing the dedicated cluster */
+export interface DedicatedClusterClusterWithIAM {
+  /**
+   * IAM resource metadata
+   *
+   * Read-only: the API sets it.
+   */
+  iam?: IAMResourceMetadata | null | undefined;
+  /**
+   * Cluster's ID
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Model of the cluster
+   *
+   * Read-only: the API sets it.
+   */
+  model?: string | undefined;
+  /**
+   * Cluster's nodes
+   *
+   * Read-only: the API sets it.
+   */
+  nodes?: DedicatedClusterNode[] | undefined;
+  /**
+   * Region where cluster is located
+   *
+   * Read-only: the API sets it.
+   */
+  region?: string | undefined;
+  /**
+   * Cluster status
+   *
+   * Read-only: the API sets it.
+   */
+  status?: string | undefined;
+}
+
+/** A structure describing the nodes of the cluster */
+export interface DedicatedClusterNode {
+  /**
+   * ID of the node
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * ID of the server
+   *
+   * Read-only: the API sets it.
+   */
+  serverId?: number | undefined;
+  /**
+   * Name of the server
+   *
+   * Read-only: the API sets it.
+   */
+  serverName?: string | undefined;
+}
+
 /** A structure describing the availabilities of dedicated server */
 export interface DedicatedClusterRegionAvailability {
   /**
@@ -132,3 +280,264 @@ export const DedicatedServerAvailabilityRegionalizationEnum = {
 export type DedicatedServerAvailabilityRegionalizationEnum =
   | (typeof DedicatedServerAvailabilityRegionalizationEnum)[keyof typeof DedicatedServerAvailabilityRegionalizationEnum]
   | (string & {});
+
+/** IAM resource metadata embedded in services models */
+export interface IAMResourceMetadata {
+  /**
+   * Resource display name
+   *
+   * Read-only: the API sets it.
+   */
+  displayName?: string | null | undefined;
+  /**
+   * Unique identifier of the resource
+   *
+   * Read-only: the API sets it.
+   */
+  id?: string | undefined;
+  /**
+   * Resource state
+   *
+   * Read-only: the API sets it.
+   */
+  state?: IAMResourceMetadataStateEnum | null | undefined;
+  /**
+   * Resource tags. Tags that were internally computed are prefixed with ovh:
+   *
+   * Read-only: the API sets it.
+   */
+  tags?: Record<string, string> | null | undefined;
+  /**
+   * Unique resource name used in policies
+   *
+   * Read-only: the API sets it.
+   */
+  urn?: string | undefined;
+}
+
+/** Resource state */
+export const IAMResourceMetadataStateEnum = {
+  EXPIRED: "EXPIRED",
+  IN_CREATION: "IN_CREATION",
+  OK: "OK",
+  SUSPENDED: "SUSPENDED",
+} as const;
+/**
+ * Resource state
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceMetadataStateEnum =
+  | (typeof IAMResourceMetadataStateEnum)[keyof typeof IAMResourceMetadataStateEnum]
+  | (string & {});
+
+/** Resource tag filter */
+export interface IAMResourceTagFilter {
+  /**
+   * Operator to use in order to filter on the value (defaults to 'EQ')
+   *
+   * Read-only: the API sets it.
+   */
+  operator?: IAMResourceTagFilterOperatorEnum | null | undefined;
+  /**
+   * Value to use in order to filter tags
+   *
+   * Read-only: the API sets it.
+   */
+  value?: string | undefined;
+}
+
+/** Operator that can be used in order to filter resources tags */
+export const IAMResourceTagFilterOperatorEnum = {
+  EQ: "EQ",
+  EXISTS: "EXISTS",
+  ILIKE: "ILIKE",
+  LIKE: "LIKE",
+  NEQ: "NEQ",
+  NEXISTS: "NEXISTS",
+} as const;
+/**
+ * Operator that can be used in order to filter resources tags
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type IAMResourceTagFilterOperatorEnum =
+  | (typeof IAMResourceTagFilterOperatorEnum)[keyof typeof IAMResourceTagFilterOperatorEnum]
+  | (string & {});
+
+/** Map a possible renew for a specific service */
+export interface ServiceRenewType {
+  /** The service is automatically renewed */
+  automatic?: boolean | undefined;
+  /** The service will be deleted at expiration */
+  deleteAtExpiration?: boolean | undefined;
+  /** The service forced to be renewed */
+  forced?: boolean | undefined;
+  /** The service needs to be manually renewed and paid */
+  manualPayment?: boolean | null | undefined;
+  /** period of renew in month */
+  period?: number | null | undefined;
+}
+
+/** Detailed renewal type of a service */
+export const ServiceRenewalTypeEnum = {
+  AUTOMATIC_FORCED_PRODUCT: "automaticForcedProduct",
+  AUTOMATIC_V2012: "automaticV2012",
+  AUTOMATIC_V2014: "automaticV2014",
+  AUTOMATIC_V2016: "automaticV2016",
+  MANUAL: "manual",
+  ONE_SHOT: "oneShot",
+  OPTION: "option",
+} as const;
+/**
+ * Detailed renewal type of a service
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type ServiceRenewalTypeEnum =
+  | (typeof ServiceRenewalTypeEnum)[keyof typeof ServiceRenewalTypeEnum]
+  | (string & {});
+
+/** service.StateEnum */
+export const ServiceStateEnum = {
+  AUTORENEW_IN_PROGRESS: "autorenewInProgress",
+  EXPIRED: "expired",
+  IN_CREATION: "inCreation",
+  OK: "ok",
+  PENDING_DEBT: "pendingDebt",
+  UN_PAID: "unPaid",
+} as const;
+/**
+ * service.StateEnum
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type ServiceStateEnum =
+  | (typeof ServiceStateEnum)[keyof typeof ServiceStateEnum]
+  | (string & {});
+
+/** All future uses you can provide for a service termination */
+export const ServiceTerminationFutureUseEnum = {
+  NOT_REPLACING_SERVICE: "NOT_REPLACING_SERVICE",
+  OTHER: "OTHER",
+  SUBSCRIBE_AN_OTHER_SERVICE: "SUBSCRIBE_AN_OTHER_SERVICE",
+  SUBSCRIBE_OTHER_KIND_OF_SERVICE_WITH_COMPETITOR:
+    "SUBSCRIBE_OTHER_KIND_OF_SERVICE_WITH_COMPETITOR",
+  SUBSCRIBE_SIMILAR_SERVICE_WITH_COMPETITOR: "SUBSCRIBE_SIMILAR_SERVICE_WITH_COMPETITOR",
+} as const;
+/**
+ * All future uses you can provide for a service termination
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type ServiceTerminationFutureUseEnum =
+  | (typeof ServiceTerminationFutureUseEnum)[keyof typeof ServiceTerminationFutureUseEnum]
+  | (string & {});
+
+/** All reasons you can provide for a service termination */
+export const ServiceTerminationReasonEnum = {
+  FEATURES_DONT_SUIT_ME: "FEATURES_DONT_SUIT_ME",
+  LACK_OF_PERFORMANCES: "LACK_OF_PERFORMANCES",
+  MIGRATED_TO_ANOTHER_OVH_PRODUCT: "MIGRATED_TO_ANOTHER_OVH_PRODUCT",
+  MIGRATED_TO_COMPETITOR: "MIGRATED_TO_COMPETITOR",
+  NOT_ENOUGH_RECOGNITION: "NOT_ENOUGH_RECOGNITION",
+  NOT_NEEDED_ANYMORE: "NOT_NEEDED_ANYMORE",
+  NOT_RELIABLE: "NOT_RELIABLE",
+  NO_ANSWER: "NO_ANSWER",
+  OTHER: "OTHER",
+  PRODUCT_DIMENSION_DONT_SUIT_ME: "PRODUCT_DIMENSION_DONT_SUIT_ME",
+  PRODUCT_TOOLS_DONT_SUIT_ME: "PRODUCT_TOOLS_DONT_SUIT_ME",
+  TOO_EXPENSIVE: "TOO_EXPENSIVE",
+  TOO_HARD_TO_USE: "TOO_HARD_TO_USE",
+  UNSATIFIED_BY_CUSTOMER_SUPPORT: "UNSATIFIED_BY_CUSTOMER_SUPPORT",
+} as const;
+/**
+ * All reasons you can provide for a service termination
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type ServiceTerminationReasonEnum =
+  | (typeof ServiceTerminationReasonEnum)[keyof typeof ServiceTerminationReasonEnum]
+  | (string & {});
+
+/** Details about a Service */
+export interface ServicesService {
+  /**
+   * Indicates that the service can be set up to be deleted at expiration
+   *
+   * Read-only: the API sets it.
+   */
+  canDeleteAtExpiration?: boolean | undefined;
+  /** Read-only: the API sets it. */
+  contactAdmin?: string | undefined;
+  /** Read-only: the API sets it. */
+  contactBilling?: string | undefined;
+  /** Read-only: the API sets it. */
+  contactTech?: string | undefined;
+  /**
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  creation?: string | undefined;
+  /** Read-only: the API sets it. */
+  domain?: string | undefined;
+  /**
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  engagedUpTo?: string | null | undefined;
+  /**
+   * Read-only: the API sets it.
+   *
+   * An ISO 8601 date string: YYYY-MM-DD.
+   */
+  expiration?: string | undefined;
+  /**
+   * All the possible renew period of your service in month
+   *
+   * Read-only: the API sets it.
+   */
+  possibleRenewPeriod?: number[] | null | undefined;
+  /** Way of handling the renew */
+  renew?: ServiceRenewType | null | undefined;
+  /** Read-only: the API sets it. */
+  renewalType?: ServiceRenewalTypeEnum | undefined;
+  /** Read-only: the API sets it. */
+  serviceId?: number | undefined;
+  /** Read-only: the API sets it. */
+  status?: ServiceStateEnum | undefined;
+}
+
+/** {@link ServicesService} without its read-only fields, which the API sets: the form a request body takes. */
+export interface ServicesServiceWritable {
+  /** Way of handling the renew */
+  renew?: ServiceRenewType | null | undefined;
+}
+
+/** Service change contact payload */
+export interface ServicesChangeContact {
+  /** The contact to set as admin contact */
+  contactAdmin?: string | undefined;
+  /** The contact to set as billing contact */
+  contactBilling?: string | undefined;
+  /** The contact to set as tech contact */
+  contactTech?: string | undefined;
+}
+
+/** Service confirm termination payload */
+export interface ServicesConfirmTermination {
+  /** Commentary about your termination request */
+  commentary?: string | undefined;
+  /** Commentary about your future use */
+  commentaryFutureUse?: string | undefined;
+  /** Commentary about your reason for termination request */
+  commentaryReason?: string | undefined;
+  /** All future uses you can provide for a service termination */
+  futureUse?: ServiceTerminationFutureUseEnum | undefined;
+  /** All reasons you can provide for a service termination */
+  reason?: ServiceTerminationReasonEnum | undefined;
+  /** The termination token sent by email to the admin contact */
+  token: string;
+}

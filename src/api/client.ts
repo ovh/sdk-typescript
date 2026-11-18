@@ -52,6 +52,7 @@ import { LicensevirtuozzoApi } from "./licensevirtuozzo/api.js";
 import { LicensewindowsApi } from "./licensewindows/api.js";
 import { LicenseworklightApi } from "./licenseworklight/api.js";
 import { LocationApi } from "./location/api.js";
+import { ManagedCMSApi } from "./managedCms/api.js";
 import { MeApi } from "./me/api.js";
 import { MetricsApi } from "./metrics/api.js";
 import { MsServicesApi } from "./msServices/api.js";
@@ -66,12 +67,13 @@ import { OvhCloudConnectApi } from "./ovhCloudConnect/api.js";
 import { PacksiptrunkApi } from "./packsiptrunk/api.js";
 import { PackxdslApi } from "./packxdsl/api.js";
 import { PartnerApi } from "./partner/api.js";
-import { PriceApi } from "./price/api.js";
 import { PublicCloudApi } from "./publicCloud/api.js";
+import { Saascsp2Api } from "./saascsp2/api.js";
 import { SecretApi } from "./secret/api.js";
 import { ServicesApi } from "./services/api.js";
 import { SmsApi } from "./sms/api.js";
 import { SslApi } from "./ssl/api.js";
+import { SslGatewayApi } from "./sslGateway/api.js";
 import { StackmisApi } from "./stackmis/api.js";
 import { StartupApi } from "./startup/api.js";
 import { StorageApi } from "./storage/api.js";
@@ -80,6 +82,7 @@ import { SupportApi } from "./support/api.js";
 import { TelephonyApi } from "./telephony/api.js";
 import { VeeamCloudConnectApi } from "./veeamCloudConnect/api.js";
 import { VeeamveeamEnterpriseApi } from "./veeamveeamEnterprise/api.js";
+import { VideocenterApi } from "./videocenter/api.js";
 import { VipApi } from "./vip/api.js";
 import { VmwareCloudDirectorApi } from "./vmwareCloudDirector/api.js";
 import { VpsApi } from "./vps/api.js";
@@ -173,7 +176,7 @@ export class Client extends CoreClient {
     return this._section("dedicatedceph", (c) => new DedicatedcephApi(c));
   }
 
-  /** The dedicatedcluster section: 1 operations. */
+  /** The dedicatedcluster section: 9 operations. */
   get dedicatedcluster(): DedicatedclusterApi {
     return this._section("dedicatedcluster", (c) => new DedicatedclusterApi(c));
   }
@@ -196,7 +199,7 @@ export class Client extends CoreClient {
     return this._section("dedicatednasha", (c) => new DedicatednashaApi(c));
   }
 
-  /** The dedicatedserver section: 104 operations. */
+  /** The dedicatedserver section: 132 operations. */
   get dedicatedserver(): DedicatedserverApi {
     return this._section("dedicatedserver", (c) => new DedicatedserverApi(c));
   }
@@ -221,7 +224,7 @@ export class Client extends CoreClient {
     return this._section("emailmxplan", (c) => new EmailmxplanApi(c));
   }
 
-  /** The emailpro section: 32 operations. */
+  /** The emailpro section: 60 operations. */
   get emailpro(): EmailproApi {
     return this._section("emailpro", (c) => new EmailproApi(c));
   }
@@ -281,12 +284,12 @@ export class Client extends CoreClient {
     return this._section("licensehycu", (c) => new LicensehycuApi(c));
   }
 
-  /** The licenseoffice section: 8 operations. */
+  /** The licenseoffice section: 16 operations. */
   get licenseoffice(): LicenseofficeApi {
     return this._section("licenseoffice", (c) => new LicenseofficeApi(c));
   }
 
-  /** The licenseofficePrepaid section: 1 operations. */
+  /** The licenseofficePrepaid section: 12 operations. */
   get licenseofficePrepaid(): LicenseofficePrepaidApi {
     return this._section("licenseofficePrepaid", (c) => new LicenseofficePrepaidApi(c));
   }
@@ -321,7 +324,12 @@ export class Client extends CoreClient {
     return this._section("location", (c) => new LocationApi(c));
   }
 
-  /** The me section: 361 operations. */
+  /** The managedCMS section: 33 operations. */
+  get managedCms(): ManagedCMSApi {
+    return this._section("managedCms", (c) => new ManagedCMSApi(c));
+  }
+
+  /** The me section: 362 operations. */
   get me(): MeApi {
     return this._section("me", (c) => new MeApi(c));
   }
@@ -356,17 +364,17 @@ export class Client extends CoreClient {
     return this._section("nutanix", (c) => new NutanixApi(c));
   }
 
-  /** The okms section: 26 operations. */
+  /** The okms section: 33 operations. */
   get okms(): OkmsApi {
     return this._section("okms", (c) => new OkmsApi(c));
   }
 
-  /** The order section: 662 operations. */
+  /** The order section: 665 operations. */
   get order(): OrderApi {
     return this._section("order", (c) => new OrderApi(c));
   }
 
-  /** The overTheBox section: 46 operations. */
+  /** The overTheBox section: 47 operations. */
   get overTheBox(): OverTheBoxApi {
     return this._section("overTheBox", (c) => new OverTheBoxApi(c));
   }
@@ -391,14 +399,14 @@ export class Client extends CoreClient {
     return this._section("partner", (c) => new PartnerApi(c));
   }
 
-  /** The price section: 581 operations. */
-  get price(): PriceApi {
-    return this._section("price", (c) => new PriceApi(c));
-  }
-
-  /** The publicCloud section: 191 operations. */
+  /** The publicCloud section: 613 operations. */
   get publicCloud(): PublicCloudApi {
     return this._section("publicCloud", (c) => new PublicCloudApi(c));
+  }
+
+  /** The saascsp2 section: 17 operations. */
+  get saascsp2(): Saascsp2Api {
+    return this._section("saascsp2", (c) => new Saascsp2Api(c));
   }
 
   /** The secret section: 1 operations. */
@@ -421,6 +429,11 @@ export class Client extends CoreClient {
     return this._section("ssl", (c) => new SslApi(c));
   }
 
+  /** The sslGateway section: 23 operations. */
+  get sslGateway(): SslGatewayApi {
+    return this._section("sslGateway", (c) => new SslGatewayApi(c));
+  }
+
   /** The stackmis section: 4 operations. */
   get stackmis(): StackmisApi {
     return this._section("stackmis", (c) => new StackmisApi(c));
@@ -431,7 +444,7 @@ export class Client extends CoreClient {
     return this._section("startup", (c) => new StartupApi(c));
   }
 
-  /** The storage section: 45 operations. */
+  /** The storage section: 38 operations. */
   get storage(): StorageApi {
     return this._section("storage", (c) => new StorageApi(c));
   }
@@ -461,6 +474,11 @@ export class Client extends CoreClient {
     return this._section("veeamveeamEnterprise", (c) => new VeeamveeamEnterpriseApi(c));
   }
 
+  /** The videocenter section: 3 operations. */
+  get videocenter(): VideocenterApi {
+    return this._section("videocenter", (c) => new VideocenterApi(c));
+  }
+
   /** The vip section: 4 operations. */
   get vip(): VipApi {
     return this._section("vip", (c) => new VipApi(c));
@@ -481,7 +499,7 @@ export class Client extends CoreClient {
     return this._section("vrack", (c) => new VrackApi(c));
   }
 
-  /** The vrackServices section: 11 operations. */
+  /** The vrackServices section: 9 operations. */
   get vrackServices(): VrackServicesApi {
     return this._section("vrackServices", (c) => new VrackServicesApi(c));
   }
@@ -496,7 +514,7 @@ export class Client extends CoreClient {
     return this._section("xdsl", (c) => new XdslApi(c));
   }
 
-  /** The zimbra section: 26 operations. */
+  /** The zimbra section: 30 operations. */
   get zimbra(): ZimbraApi {
     return this._section("zimbra", (c) => new ZimbraApi(c));
   }

@@ -32,7 +32,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensecloudLinuxApi extends SectionApi {
   /**
-   * listCloudLinuxes calls GET /v1/license/cloudLinux: List available services
+   * listCloudLinuxes calls GET /v1/license/cloudLinux: List your CloudLinux licenses
+   *
+   * Returns the names of the CloudLinux licenses of the account; each name is the service name used
+   * by the other calls.
    *
    * Requires the IAM action licenseCloudLinux:apiovh:get.
    *
@@ -62,6 +65,8 @@ export class LicensecloudLinuxApi extends SectionApi {
   /**
    * listOrderableVersions calls GET /v1/license/cloudLinux/orderableVersions: Get the orderable CloudLinux versions
    *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
+   *
    * Requires the IAM action account:apiovh:licenseCloudLinux/orderableVersions/get.
    *
    * @param ip - Your license Ip
@@ -85,7 +90,10 @@ export class LicensecloudLinuxApi extends SectionApi {
   }
 
   /**
-   * getCloudLinux calls GET /v1/license/cloudLinux/{serviceName}: Get this object properties
+   * getCloudLinux calls GET /v1/license/cloudLinux/{serviceName}: Get a CloudLinux license
+   *
+   * Returns the license ID, version, status, the IP address the license is attached to, and the
+   * creation date.
    *
    * Requires the IAM action licenseCloudLinux:apiovh:get.
    *
@@ -111,7 +119,7 @@ export class LicensecloudLinuxApi extends SectionApi {
   }
 
   /**
-   * allCloudLinuxes iterates over GET /v1/license/cloudLinux (List available services).
+   * allCloudLinuxes iterates over GET /v1/license/cloudLinux (List your CloudLinux licenses).
    *
    * It lists the IDs with {@link LicensecloudLinuxApi.listCloudLinuxes}, then gets each object with
    * {@link LicensecloudLinuxApi.getCloudLinux}, only when the loop reaches it. An object deleted in the
@@ -228,7 +236,9 @@ export class LicensecloudLinuxApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/cloudLinux/{serviceName}/tasks: Tasks linked to this license
+   * listTasks calls GET /v1/license/cloudLinux/{serviceName}/tasks: List the tasks of a CloudLinux license
+   *
+   * Returns the IDs of the tasks linked to the license, which can be filtered by status and action.
    *
    * Requires the IAM action licenseCloudLinux:apiovh:tasks/get.
    *
@@ -264,7 +274,10 @@ export class LicensecloudLinuxApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/cloudLinux/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/cloudLinux/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseCloudLinux:apiovh:tasks/get.
    *
@@ -292,7 +305,7 @@ export class LicensecloudLinuxApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/cloudLinux/{serviceName}/tasks (Tasks linked to this license).
+   * allTasks iterates over GET /v1/license/cloudLinux/{serviceName}/tasks (List the tasks of a CloudLinux license).
    *
    * It lists the IDs with {@link LicensecloudLinuxApi.listTasks}, then gets each object with
    * {@link LicensecloudLinuxApi.getTasks}, only when the loop reaches it. An object deleted in the

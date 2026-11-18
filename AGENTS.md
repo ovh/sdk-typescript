@@ -18,7 +18,7 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 
 ## Find the right method
 
-- Each API section is a client property, in camelCase: `client.vrack`, `client.publicCloud`.
+- Each API section is a client property, in camelCase: `client.me`, `client.publicCloud`.
   Its types are exported by its subpath: `import type { X } from "@ovhcloud/sdk/api/publicCloud"`.
 - To find the method of a route, read `index/<section>.jsonl`. It has one JSON line per
   method, with the route, the TypeScript signature, the summary, the IAM actions (`iam`), and
@@ -29,7 +29,7 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 
   ```shell
   SDK="$(dirname "$(node -p 'require.resolve("@ovhcloud/sdk/package.json")')")"
-  grep -h '"path":"/v1/vrack/{serviceName}"' "$SDK"/index/*.jsonl
+  grep -h '"path":"/v1/me"' "$SDK"/index/*.jsonl
   ```
 
   The package also exports its docs: `require.resolve("@ovhcloud/sdk/llms.txt")`,
@@ -43,15 +43,15 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
   before you write a body or read a field:
 
   ```shell
-  grep -n -A 30 'export interface VrackVrackWithIAM ' "$SDK"/dist/api/vrack/models.d.ts
+  grep -n -A 30 'export interface NichandleNichandle ' "$SDK"/dist/api/me/models.d.ts
   ```
 
 - To tell the user what to grant the service account, collect the `iam` of the methods your
   program calls, from the index or from the doc comments. Find the methods that need one
-  action: `grep -h '"vrack:apiovh:get"' "$SDK"/index/*.jsonl`. An IAM policy for a program is
+  action: `grep -h '"account:apiovh:me/get"' "$SDK"/index/*.jsonl`. An IAM policy for a program is
   the list of those actions on its resources.
 - The doc comment of each method starts with its route:
-  `getVrack calls GET /v1/vrack/{serviceName}`. It then gives the API's description, the
+  `getAccountDetails calls GET /v1/me`. It then gives the API's description, the
   IAM actions the call needs, the parameters, and whether it is deprecated. A deprecated
   method names its replacement route when the API gives one: look it up in the index too.
   `allX` iterators say which list they walk, its parameters, and the IAM actions of both
@@ -59,8 +59,8 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 - The module doc of a section (`@ovhcloud/sdk/api/<section>`) gives its number of
   operations, its route prefixes, the list methods to start from, and its index file.
 - Routes start with their API version, `/v1/` or `/v2/`. The same path can exist in both.
-- At run time, `await lookupOperation("vrack.getVrack")` returns an operation's route,
-  summary and IAM actions, `await matchOperation("GET", "/v1/vrack/pn-1")` finds the
+- At run time, `await lookupOperation("me.getAccountDetails")` returns an operation's route,
+  summary and IAM actions, `await matchOperation("GET", "/v1/me/sshKey/my-key")` finds the
   operation of a concrete path, and `await operations()` lists them all.
 
 ## Write the call
@@ -72,7 +72,7 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 - Arguments come in this order: path parameters, required query parameters, the request
   body, then the optional parameters in one object, then the options of the call (`signal`,
   `timeout`, `headers`). Leave out what you do not set.
-- Methods and arguments are camelCase: `getVrack(serviceName)`. Types keep the API's acronyms
+- Methods and arguments are camelCase: `getSshKey(keyName)`. Types keep the API's acronyms
   upper case: `DedicatedServerIPBlock`. Properties of a type are the API's own names: the SDK
   never renames them. Enum members are UPPER_CASE: `CommonResourceStatusEnum.READY`.
 - A request body is a plain object. Its type has no read-only field: a body whose type has
@@ -137,10 +137,14 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
   method's name, on any `ApiError`. `JSON.stringify(err)` gives them all, with the body as
   text in `bodyText`.
 - A 403 means the service account lacks an IAM action. The message ends with the actions the
-  call needs (`requires the IAM action vrack:apiovh:get`), also in `iamActions`: report them
+  call needs (`requires the IAM action account:apiovh:me/get`), also in `iamActions`: report them
   to the user, who can grant them. Retrying does not help.
 - A request the client is configured to refuse throws `NotAllowedError`, and nothing is sent.
   Do not work around it: ask the user.
+- With `dryRun: true`, a call that would change something throws a `DryRunError`. It is not a
+  failure: it tells what would have been sent.
+- A call a `beforeRequest` hook refuses throws a `HookRefusedError`. What the hook threw is
+  its `cause`.
 - A timeout throws `RequestTimeoutError`, a `TransportError`. Match it with `instanceof`, not
   with `err.name === "TimeoutError"`. It is never retried: the server may have done the work.
   A timeout of the token request throws `TokenError`.
@@ -151,9 +155,17 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 
 - To explore an account safely, use a read-only client: `new Client({ readOnly: true })`
   sends only `GET` and `HEAD`. `readOnly: ["cloud.rebootProjectInstance"]` also allows that
-  one operation. `allowedOperations: ["vrack.*", "*.get*"]` sends only the operations whose
+  one operation. `allowedOperations: ["me.*", "*.get*"]` sends only the operations whose
   name matches. A request must pass both when both are set. The names are the `id` of the
   index: check them there, since a pattern that matches nothing is not an error.
+- To plan a change before making it, use `new Client({ dryRun: true })`. Reads are sent, so
+  you see the real state. Any other call is not sent: it throws a `DryRunError` with the
+  `method`, the full `url`, the `headers` and the JSON `body` it would have sent. Show these to
+  the user, then make the change with a normal client once they agree.
+- To log or veto calls, use the `beforeRequest` option (throw to stop the call) and
+  `afterRequest` (sees every call, with its `status`, `queryId`, `error`, `duration` and
+  `attempts`). The hooks get the call, so `call.operation?.name` and `call.readOnly` tell
+  what it does. Each page of an `all...` iterator is a separate call. A hook may be async.
 - There is no timeout by default. Set one: `new Client({ timeout: 30_000 })`. It bounds each
   attempt of a call, and the token request. `withOptions` and a per-call timeout do not
   change the token request. Durations are in milliseconds.

@@ -8,10 +8,9 @@
  * ```ts
  * import { Client } from "@ovhcloud/sdk";
  *
- * const client = new Client(); // OVH_CLIENT_ID, OVH_CLIENT_SECRET, OVH_REGION
- * for await (const vrack of client.vrack.allVracks()) {
- *   console.log(vrack.name);
- * }
+ * const client = new Client(); // reads OVH_CLIENT_ID, OVH_CLIENT_SECRET, OVH_REGION
+ * const account = await client.me.getAccountDetails(); // GET /v1/me
+ * console.log(account.nichandle);
  * ```
  *
  * Each API section is a property of the client. Its types are exported by

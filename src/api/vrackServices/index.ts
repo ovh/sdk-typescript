@@ -10,11 +10,10 @@
  * Its operations are a client property, `client.vrackServices`, or a class of their
  * own: `new VrackServicesApi(client)`. Its types are exported here too.
  *
- * It has 11 operations, on the routes under /v2/vrackServices.
+ * It has 9 operations, on the routes under /v2/vrackServices.
  *
  * To start, list what the account has: allResources, allReferenceCompatibleManagedServiceTypes,
- * allReferenceFeatureAvailabilities, allReferenceRegions,
- * allVrackServiceEligibleDedicatedServerInterfaces, allResourceEligibleManagedServices,
+ * allReferenceFeatureAvailabilities, allReferenceRegions, allResourceEligibleManagedServices,
  * allResourceTasks.
  *
  * To find the method for a route, search index/vrackServices.jsonl: one line per method, with its

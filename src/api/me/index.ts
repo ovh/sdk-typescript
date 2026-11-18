@@ -10,7 +10,7 @@
  * Its operations are a client property, `client.me`, or a class of their
  * own: `new MeApi(client)`. Its types are exported here too.
  *
- * It has 361 operations, on the routes under /v1/me.
+ * It has 362 operations, on the routes under /v1/me.
  *
  * To start, list what the account has: listAgreements, listBills, listConsents, listContacts,
  * listCorrectiveInvoices, listDeposits, listDepositRequests, listDocuments, and 76 more.

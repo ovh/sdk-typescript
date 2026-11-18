@@ -2473,6 +2473,8 @@ export interface TelephonyConferenceProperties {
   pin?: string | undefined;
   /** Whether conference is recorded */
   recordStatus?: boolean | undefined;
+  /** AI generated content (summary and/or transcript) appended to the conference report mail. Requires recordStatus and a reportStatus other than none; set it back to none before disabling them */
+  reportAiContent?: TelephonyConferenceReportAiContentEnum | undefined;
   /** The email address to send conference report to */
   reportEmail?: string | null | undefined;
   /** The status of the reporting */
@@ -2503,6 +2505,8 @@ export interface TelephonyConferencePropertiesWritable {
   pin?: string | undefined;
   /** Whether conference is recorded */
   recordStatus?: boolean | undefined;
+  /** AI generated content (summary and/or transcript) appended to the conference report mail. Requires recordStatus and a reportStatus other than none; set it back to none before disabling them */
+  reportAiContent?: TelephonyConferenceReportAiContentEnum | undefined;
   /** The email address to send conference report to */
   reportEmail?: string | null | undefined;
   /** The status of the reporting */
@@ -2510,6 +2514,22 @@ export interface TelephonyConferencePropertiesWritable {
   /** True if you want to receive a white-labelled mail report of your conference */
   whiteLabelReport?: boolean | undefined;
 }
+
+/** AI generated content added to the conference report */
+export const TelephonyConferenceReportAiContentEnum = {
+  NONE: "none",
+  SUMMARY: "summary",
+  TRANSCRIPT: "transcript",
+  TRANSCRIPT_SUMMARY: "transcript+summary",
+} as const;
+/**
+ * AI generated content added to the conference report
+ *
+ * Open: a value the SDK does not know yet is valid too.
+ */
+export type TelephonyConferenceReportAiContentEnum =
+  | (typeof TelephonyConferenceReportAiContentEnum)[keyof typeof TelephonyConferenceReportAiContentEnum]
+  | (string & {});
 
 /** Conference report receiver */
 export const TelephonyConferenceReportStatusEnum = {
@@ -2560,6 +2580,8 @@ export interface TelephonyConferenceRoom {
   pin?: string | undefined;
   /** Whether conference is recorded */
   recordStatus?: boolean | undefined;
+  /** AI generated content (summary and/or transcript) appended to the conference report mail. Requires recordStatus and a reportStatus other than none; set it back to none before disabling them */
+  reportAiContent?: TelephonyConferenceReportAiContentEnum | undefined;
   /** The email address to send conference report to */
   reportEmail?: string | null | undefined;
   /** The status of the reporting */
@@ -2596,6 +2618,8 @@ export interface TelephonyConferenceRoomWritable {
   pin?: string | undefined;
   /** Whether conference is recorded */
   recordStatus?: boolean | undefined;
+  /** AI generated content (summary and/or transcript) appended to the conference report mail. Requires recordStatus and a reportStatus other than none; set it back to none before disabling them */
+  reportAiContent?: TelephonyConferenceReportAiContentEnum | undefined;
   /** The email address to send conference report to */
   reportEmail?: string | null | undefined;
   /** The status of the reporting */
@@ -6601,7 +6625,7 @@ export interface TelephonySoftphoneTokenInput {
   email?: string | undefined;
 }
 
-/** List sounds */
+/** List sounds. Returns the identifiers of the sounds of the customer. Get a sound for its filename, description, size and download URL. */
 export interface TelephonySound {
   /**
    * Sound creation date

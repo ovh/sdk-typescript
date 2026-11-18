@@ -10,11 +10,11 @@
  * Its operations are a client property, `client.dedicatedserver`, or a class of their
  * own: `new DedicatedserverApi(client)`. Its types are exported here too.
  *
- * It has 104 operations, on the routes under /v1/dedicated/server.
+ * It has 132 operations, on the routes under /v1/dedicated/server and /v2/dedicated/server.
  *
  * To start, list what the account has: listServers, listOsAvailabilities,
- * listDatacenterAvailabilities, listBoots, listInterventions, listIpCountryAvailables, listIps,
- * listMrtgs, and 14 more.
+ * listDatacenterAvailabilities, getDedicatedServerRegionAvailabilities, listBoots,
+ * listInterventions, listIpCountryAvailables, listIps, and 22 more.
  *
  * To find the method for a route, search index/dedicatedserver.jsonl: one line per method, with its
  * route, its signature and the IAM actions it requires. It is at the root of the SDK repository,

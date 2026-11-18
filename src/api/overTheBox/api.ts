@@ -19,7 +19,7 @@ import { OPS } from "./registry.js";
  *
  * Each method's doc comment starts with the route it calls.
  *
- * It has 46 operations, on the routes under /v1/overTheBox.
+ * It has 47 operations, on the routes under /v1/overTheBox.
  *
  * To start, list what the account has: listOverTheBoxes, listAvailableOffers, listHardwares,
  * listHardwareAvailables, listAvailableReleaseChannels, listBackups, listRemoteAccesses, listTasks,
@@ -850,6 +850,37 @@ export class OverTheBoxApi extends SectionApi {
   ): Promise<models.OverTheBoxDeviceAction[]> {
     return this._call(
       OPS.restoreBackupDevice,
+      {
+        path: { serviceName: serviceName },
+        body: body,
+      },
+      "json",
+      options,
+    );
+  }
+
+  /**
+   * updateIpv6 calls PUT /v1/overTheBox/{serviceName}/ipv6: Update the IPv6 status of an OverTheBox service
+   *
+   * Enables or disables IPv6 on the service and returns the task that performs the change.
+   *
+   * Requires the IAM action overTheBox:apiovh:ipv6/edit.
+   *
+   * @param serviceName - The internal name of your overTheBox offer
+   * @param body - the request body
+   * @param options - the options of this call: signal, timeout, headers
+   * @returns the {@link models.OverTheBoxTask} the API sends back
+   * @throws ForbiddenError when the policy lacks an IAM action this call requires
+   * @example
+   * const result = await client.overTheBox.updateIpv6(serviceName, body);
+   */
+  updateIpv6(
+    serviceName: string,
+    body: models.UpdateIPv6Request,
+    options?: RequestOptions,
+  ): Promise<models.OverTheBoxTask> {
+    return this._call(
+      OPS.updateIpv6,
       {
         path: { serviceName: serviceName },
         body: body,

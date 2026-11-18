@@ -1,21 +1,21 @@
 # Operation index
 
 One file per API section, `<section>.jsonl` (the section's name), with one JSON object per
-line: each method of the SDK and the route it calls. 6925 methods in
-77 files. It is generated with the SDK's code at each release, from the
+line: each method of the SDK and the route it calls. 6962 methods in
+80 files. It is generated with the SDK's code at each release, from the
 same data, so it always matches it.
 
 Find the method of a route:
 
 ```shell
-grep -h '"path":"/v1/vrack/{serviceName}"' index/*.jsonl
+grep -h '"path":"/v1/me"' index/*.jsonl
 ```
 
 To list what a program needs, collect the `iam` of the methods it calls: those are the
 actions to grant its service account. Find the methods that need one action:
 
 ```shell
-grep -h '"vrack:apiovh:get"' index/*.jsonl
+grep -h '"account:apiovh:me/get"' index/*.jsonl
 ```
 
 The types a signature names (`models.X`) are in `dist/api/<section>/models.d.ts` of the
@@ -23,7 +23,7 @@ installed package, with their fields, which ones are required, and the enum valu
 one:
 
 ```shell
-grep -n 'export interface VrackVrackWithIAM ' dist/api/vrack/models.d.ts
+grep -n 'export interface NichandleNichandle ' dist/api/me/models.d.ts
 ```
 
 A request body takes the `<Type>Writable` form of a type when the type has read-only fields:

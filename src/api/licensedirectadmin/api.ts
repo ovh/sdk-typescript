@@ -33,7 +33,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensedirectadminApi extends SectionApi {
   /**
-   * listDirectadmins calls GET /v1/license/directadmin: List available services
+   * listDirectadmins calls GET /v1/license/directadmin: List your DirectAdmin licenses
+   *
+   * Returns the names of the DirectAdmin licenses of the account; each name is the service name
+   * used by the other calls.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:get.
    *
@@ -63,6 +66,8 @@ export class LicensedirectadminApi extends SectionApi {
   /**
    * listOrderableVersions calls GET /v1/license/directadmin/orderableVersions: Get the orderable DirectAdmin versions
    *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
+   *
    * Requires the IAM action account:apiovh:licenseDirectAdmin/orderableVersions/get.
    *
    * @param ip - Your license Ip
@@ -86,7 +91,10 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * getDirectadmin calls GET /v1/license/directadmin/{serviceName}: Get this object properties
+   * getDirectadmin calls GET /v1/license/directadmin/{serviceName}: Get a DirectAdmin license
+   *
+   * Returns the license ID, version, status, IP address, client ID, operating system and creation
+   * date.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:get.
    *
@@ -112,7 +120,7 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * allDirectadmins iterates over GET /v1/license/directadmin (List available services).
+   * allDirectadmins iterates over GET /v1/license/directadmin (List your DirectAdmin licenses).
    *
    * It lists the IDs with {@link LicensedirectadminApi.listDirectadmins}, then gets each object with
    * {@link LicensedirectadminApi.getDirectadmin}, only when the loop reaches it. An object deleted in the
@@ -141,7 +149,10 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * updateDirectadmin calls PUT /v1/license/directadmin/{serviceName}: Alter this object properties
+   * updateDirectadmin calls PUT /v1/license/directadmin/{serviceName}: Update a DirectAdmin license
+   *
+   * Changes the settings that can be modified: the operating system and the automatic deletion at
+   * expiration.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:put.
    *
@@ -169,7 +180,9 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * listAllowedDestinationIps calls GET /v1/license/directadmin/{serviceName}/allowedDestinationIp: Returns an array of ips where the license can be moved to
+   * listAllowedDestinationIps calls GET /v1/license/directadmin/{serviceName}/allowedDestinationIp: List the IPs a DirectAdmin license can be moved to
+   *
+   * Returns the IP blocks that can receive the license, so you can pick the destination of a move.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:allowedDestinationIp/get.
    *
@@ -194,7 +207,9 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * getCanLicenseBeMovedTo calls GET /v1/license/directadmin/{serviceName}/canLicenseBeMovedTo: Will tell if the ip can accept the license
+   * getCanLicenseBeMovedTo calls GET /v1/license/directadmin/{serviceName}/canLicenseBeMovedTo: Check whether a DirectAdmin license can be moved to an IP
+   *
+   * Returns whether the destination IP can receive the license, with the reason when it cannot.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:canLicenseBeMovedTo/get.
    *
@@ -223,7 +238,9 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * changeIp calls POST /v1/license/directadmin/{serviceName}/changeIp: Move this license to another Ip
+   * changeIp calls POST /v1/license/directadmin/{serviceName}/changeIp: Move a DirectAdmin license to another IP
+   *
+   * Starts the move of the license to the given IP and returns the task that performs it.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:changeIp.
    *
@@ -252,7 +269,9 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * changeOs calls POST /v1/license/directadmin/{serviceName}/changeOs: Change the Operating System for a license
+   * changeOs calls POST /v1/license/directadmin/{serviceName}/changeOs: Change the operating system of a DirectAdmin license
+   *
+   * Sets the operating system and returns the task that performs the change.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:changeOs.
    *
@@ -369,7 +388,9 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/directadmin/{serviceName}/tasks: tasks linked to this license
+   * listTasks calls GET /v1/license/directadmin/{serviceName}/tasks: List the tasks of a DirectAdmin license
+   *
+   * Returns the IDs of the tasks linked to the license, which can be filtered by status and action.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:tasks/get.
    *
@@ -405,7 +426,10 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/directadmin/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/directadmin/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseDirectAdmin:apiovh:tasks/get.
    *
@@ -433,7 +457,7 @@ export class LicensedirectadminApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/directadmin/{serviceName}/tasks (tasks linked to this license).
+   * allTasks iterates over GET /v1/license/directadmin/{serviceName}/tasks (List the tasks of a DirectAdmin license).
    *
    * It lists the IDs with {@link LicensedirectadminApi.listTasks}, then gets each object with
    * {@link LicensedirectadminApi.getTasks}, only when the loop reaches it. An object deleted in the

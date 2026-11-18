@@ -10,9 +10,9 @@
  * Its operations are a client property, `client.dedicatedcluster`, or a class of their
  * own: `new DedicatedclusterApi(client)`. Its types are exported here too.
  *
- * It has 1 operation, on the routes under /v1/dedicated/cluster/availabilities.
+ * It has 9 operations, on the routes under /v1/dedicated/cluster.
  *
- * To start, list what the account has: listAvailabilities.
+ * To start, list what the account has: listClusters, listAvailabilities, listAvailabilitiesRaws.
  *
  * To find the method for a route, search index/dedicatedcluster.jsonl: one line per method, with
  * its route, its signature and the IAM actions it requires. It is at the root of the SDK

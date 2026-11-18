@@ -33,7 +33,10 @@ import { OPS } from "./registry.js";
  */
 export class LicensevirtuozzoApi extends SectionApi {
   /**
-   * listVirtuozzos calls GET /v1/license/virtuozzo: List available services
+   * listVirtuozzos calls GET /v1/license/virtuozzo: List your Virtuozzo licenses
+   *
+   * Returns the names of the Virtuozzo licenses of the account; each name is the service name used
+   * by the other calls.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:get.
    *
@@ -63,6 +66,8 @@ export class LicensevirtuozzoApi extends SectionApi {
   /**
    * listOrderableVersions calls GET /v1/license/virtuozzo/orderableVersions: Get the orderable Virtuozzo versions
    *
+   * Returns the versions that can be ordered for the given IP, grouped by service type.
+   *
    * Requires the IAM action account:apiovh:licenseVirtuozzo/orderableVersions/get.
    *
    * @param ip - Your license Ip
@@ -86,7 +91,10 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * getVirtuozzo calls GET /v1/license/virtuozzo/{serviceName}: Get this object properties
+   * getVirtuozzo calls GET /v1/license/virtuozzo/{serviceName}: Get a Virtuozzo license
+   *
+   * Returns the license ID, version, status, IP address, container number and the product and
+   * information keys.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:get.
    *
@@ -112,7 +120,7 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * allVirtuozzos iterates over GET /v1/license/virtuozzo (List available services).
+   * allVirtuozzos iterates over GET /v1/license/virtuozzo (List your Virtuozzo licenses).
    *
    * It lists the IDs with {@link LicensevirtuozzoApi.listVirtuozzos}, then gets each object with
    * {@link LicensevirtuozzoApi.getVirtuozzo}, only when the loop reaches it. An object deleted in the
@@ -141,7 +149,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * updateVirtuozzo calls PUT /v1/license/virtuozzo/{serviceName}: Alter this object properties
+   * updateVirtuozzo calls PUT /v1/license/virtuozzo/{serviceName}: Update a Virtuozzo license
+   *
+   * Changes the settings that can be modified: the automatic deletion at expiration.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:put.
    *
@@ -169,7 +179,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * listAllowedDestinationIps calls GET /v1/license/virtuozzo/{serviceName}/allowedDestinationIp: Returns an array of ips where the license can be moved to
+   * listAllowedDestinationIps calls GET /v1/license/virtuozzo/{serviceName}/allowedDestinationIp: List the IPs a Virtuozzo license can be moved to
+   *
+   * Returns the IP blocks that can receive the license, so you can pick the destination of a move.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:allowedDestinationIp/get.
    *
@@ -194,7 +206,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * getCanLicenseBeMovedTo calls GET /v1/license/virtuozzo/{serviceName}/canLicenseBeMovedTo: Will tell if the ip can accept the license
+   * getCanLicenseBeMovedTo calls GET /v1/license/virtuozzo/{serviceName}/canLicenseBeMovedTo: Check whether a Virtuozzo license can be moved to an IP
+   *
+   * Returns whether the destination IP can receive the license, with the reason when it cannot.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:canLicenseBeMovedTo/get.
    *
@@ -223,7 +237,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * changeIp calls POST /v1/license/virtuozzo/{serviceName}/changeIp: Move this license to another Ip
+   * changeIp calls POST /v1/license/virtuozzo/{serviceName}/changeIp: Move a Virtuozzo license to another IP
+   *
+   * Starts the move of the license to the given IP and returns the task that performs it.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:changeIp.
    *
@@ -283,7 +299,10 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * listOptions calls GET /v1/license/virtuozzo/{serviceName}/option: Options linked to this license
+   * listOptions calls GET /v1/license/virtuozzo/{serviceName}/option: List the options of a Virtuozzo license
+   *
+   * Returns the labels of the options attached to the license; get an option for its version,
+   * quantity and expiration date.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:option/get.
    *
@@ -314,7 +333,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * getOption calls GET /v1/license/virtuozzo/{serviceName}/option/{label}: Get this object properties
+   * getOption calls GET /v1/license/virtuozzo/{serviceName}/option/{label}: Get an option of a license
+   *
+   * Returns the label, version, quantity, expiration date and whether the option can be released.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:option/get.
    *
@@ -342,7 +363,7 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * allOptions iterates over GET /v1/license/virtuozzo/{serviceName}/option (Options linked to this license).
+   * allOptions iterates over GET /v1/license/virtuozzo/{serviceName}/option (List the options of a Virtuozzo license).
    *
    * It lists the IDs with {@link LicensevirtuozzoApi.listOptions}, then gets each object with
    * {@link LicensevirtuozzoApi.getOption}, only when the loop reaches it. An object deleted in the
@@ -373,7 +394,9 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * deleteOption calls DELETE /v1/license/virtuozzo/{serviceName}/option/{label}: release this Option
+   * deleteOption calls DELETE /v1/license/virtuozzo/{serviceName}/option/{label}: Release an option from a license
+   *
+   * Removes the option from the license and returns the task that performs the release.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:option/delete.
    *
@@ -458,7 +481,10 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * listTasks calls GET /v1/license/virtuozzo/{serviceName}/tasks: tasks linked to this license
+   * listTasks calls GET /v1/license/virtuozzo/{serviceName}/tasks: List the tasks of a Virtuozzo license
+   *
+   * Returns the IDs of the tasks linked to the license, each task records an action such as a
+   * version upgrade, an option change or an IP change.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:tasks/get.
    *
@@ -494,7 +520,10 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * getTasks calls GET /v1/license/virtuozzo/{serviceName}/tasks/{taskId}: Get this object properties
+   * getTasks calls GET /v1/license/virtuozzo/{serviceName}/tasks/{taskId}: Get a license task
+   *
+   * Returns the action, status, creation date, completion date and last update of a task linked to
+   * a license.
    *
    * Requires the IAM action licenseVirtuozzo:apiovh:tasks/get.
    *
@@ -522,7 +551,7 @@ export class LicensevirtuozzoApi extends SectionApi {
   }
 
   /**
-   * allTasks iterates over GET /v1/license/virtuozzo/{serviceName}/tasks (tasks linked to this license).
+   * allTasks iterates over GET /v1/license/virtuozzo/{serviceName}/tasks (List the tasks of a Virtuozzo license).
    *
    * It lists the IDs with {@link LicensevirtuozzoApi.listTasks}, then gets each object with
    * {@link LicensevirtuozzoApi.getTasks}, only when the loop reaches it. An object deleted in the

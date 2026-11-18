@@ -1,7 +1,7 @@
 # OVHcloud TypeScript SDK
 
-> The TypeScript client for the OVHcloud API (github.com/ovh/sdk-typescript): 77
-> API sections and 6173 operations, as typed methods on one client. OAuth2
+> The TypeScript client for the OVHcloud API (github.com/ovh/sdk-typescript): 80
+> API sections and 6180 operations, as typed methods on one client. OAuth2
 > service-account authentication, typed errors, async iterators over lists, helpers that wait
 > for asynchronous work, and a read-only mode to explore an account safely. No runtime
 > dependency: it runs on Node.js, Deno and Bun. Most of the code is generated from the API's
@@ -23,9 +23,9 @@ it escapes them.
 ## Docs
 
 - [Guide](README.md): install and run on Node.js, Deno, Bun and edge workers, first program, coming from node-ovh, finding an operation and its types, arguments, updating an object, pagination, waiting for asynchronous work, errors, configuration, raw calls, testing, observability, troubleshooting
-- [Examples](examples/README.md): small programs to run or copy: list with an iterator, create then wait, a DNS record, a cart order, a raw call with `path()`, error handling
+- [Examples](examples/README.md): small programs to run or copy: GET /me, list with an iterator, create then wait, a DNS record, a cart order, a raw call with `path()`, error handling, vRack
 - [Agent notes](AGENTS.md): the conventions in short, for AI coding agents
-- [Operation index](index/README.md): one index/<section>.jsonl per section, 6925 methods in all, each line a method with its route, TypeScript signature and IAM actions
+- [Operation index](index/README.md): one index/<section>.jsonl per section, 6962 methods in all, each line a method with its route, TypeScript signature and IAM actions
 
 ## Optional
 
