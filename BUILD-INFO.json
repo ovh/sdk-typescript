@@ -1,10 +1,10 @@
 {
-  "version": "0.3.0",
-  "npmVersion": "0.3.0",
+  "version": "0.3.1",
+  "npmVersion": "0.3.1",
   "sections": 80,
   "operations": 6180,
   "methods": 6962,
   "models": 8878,
   "snapshot": "snapshot/2026.11.18-1654",
-  "generator": "v0.6.1"
+  "generator": "v0.6.4"
 }

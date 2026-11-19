@@ -2,6 +2,12 @@
 
 Notable changes to the SDK. Changes of behaviour are called out.
 
+## 0.3.1 (2026-11-19)
+
+Compared with 0.3.0.
+
+No change to the generated sections.
+
 ## 0.3.0 (2026-11-18)
 
 Compared with 0.2.2.

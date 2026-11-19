@@ -14,16 +14,13 @@ dist/api/<section>/models.d.ts of the installed package: grep `export interface 
 
 This is not node-ovh (`npm install ovh`, `require("ovh")`, `requestPromised`). Here:
 `import { Client } from "@ovhcloud/sdk"`, an OAuth2 service account instead of application
-keys and consumer keys, paths with `/v1/` or `/v2/` instead of `/1.0/`, and
-`client.get("/v1/me")` for a route with no method yet. A raw call takes its body as an
-argument, `client.post(path, body)`, and a type for its result, `client.get<T>(...)`, that
-nothing checks at run time. Build a path with values in it with `path("/v1/ip/{ip}", { ip })`:
-it escapes them.
+keys and consumer keys, and a typed method for each API call: node-ovh's
+`requestPromised("GET", "/me")` is `client.me.getAccountDetails()`.
 
 ## Docs
 
 - [Guide](README.md): install and run on Node.js, Deno, Bun and edge workers, first program, coming from node-ovh, finding an operation and its types, arguments, updating an object, pagination, waiting for asynchronous work, errors, configuration, raw calls, testing, observability, troubleshooting
-- [Examples](examples/README.md): small programs to run or copy: GET /me, list with an iterator, create then wait, a DNS record, a cart order, a raw call with `path()`, error handling, vRack
+- [Examples](examples/README.md): small programs to run or copy: your account, list with an iterator, create then wait, a DNS record, a cart order, a raw call with `path()`, error handling, vRack
 - [Agent notes](AGENTS.md): the conventions in short, for AI coding agents
 - [Operation index](index/README.md): one index/<section>.jsonl per section, 6962 methods in all, each line a method with its route, TypeScript signature and IAM actions
 

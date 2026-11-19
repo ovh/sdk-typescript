@@ -152,11 +152,11 @@ export interface RawRequestOptions extends RequestOptions {
  * import { Client } from "@ovhcloud/sdk";
  *
  * const client = new Client();
- * console.log(await client.me.getMe());
+ * console.log(await client.me.getAccountDetails());
  * ```
  *
  * Each API section is a property of the client from "@ovhcloud/sdk": `client.vrack`,
- * `client.publicCloud`. Call any route with `client.get("/v1/me")`.
+ * `client.publicCloud`. Each API call has its own method.
  */
 export class Client {
   /** @internal The engine: what the sections send their requests with. */

@@ -3,6 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/@ovhcloud/sdk.svg)](https://www.npmjs.com/package/@ovhcloud/sdk)
 [![API reference](https://img.shields.io/badge/API_reference-jsDocs.io-blue.svg)](https://www.jsdocs.io/package/@ovhcloud/sdk)
 
+> **Early version.** This SDK is in active development, and v0.x releases can include breaking
+> changes. Pin a version and read the [changelog](CHANGELOG.md) before you upgrade. We will release
+> v1.0 once the SDK is stable, in the coming weeks. From v1.0, every stable release follows semantic
+> versioning: a breaking change means a new major version.
+
 The TypeScript SDK for the [OVHcloud API](https://developers.eu.ovhcloud.com/): a typed method
 for every public operation, with OAuth2 service-account authentication, retries, typed errors
 and async iterators over lists. No runtime dependency: it runs on Node.js, Deno and Bun.
@@ -61,11 +66,21 @@ it needs.
 
 ### Run it
 
+The program of [Your first program](#2-your-first-program) is
+[examples/account.ts](examples/account.ts), and the package ships it. After the install, copy
+it into your project:
+
+```shell
+cp node_modules/@ovhcloud/sdk/examples/account.ts .
+```
+
+With Deno, take it from [examples/account.ts](examples/account.ts). Then run it:
+
 | Runtime | Command | Notes |
 |---|---|---|
-| Node.js 22.18+ | `node main.ts` | Node.js runs TypeScript as it is. Before 22.18, compile with `tsc` first. |
-| Deno 2 | `deno run --allow-net=api.eu.ovhcloud.com,www.ovh.com --allow-env=OVH_CLIENT_ID,OVH_CLIENT_SECRET,OVH_REGION main.ts` | The API host and the token host of your region (see [Choosing your region](#choosing-your-region)). Without `--allow-env`, the SDK sees no credentials. |
-| Bun | `bun main.ts` | |
+| Node.js 22.18+ | `node account.ts` | Node.js runs TypeScript as it is. Before 22.18, compile with `tsc` first. |
+| Deno 2 | `deno run --allow-net=api.eu.ovhcloud.com,www.ovh.com --allow-env=OVH_CLIENT_ID,OVH_CLIENT_SECRET,OVH_REGION account.ts` | The API host and the token host of your region (see [Choosing your region](#choosing-your-region)). Without `--allow-env`, the SDK sees no credentials. |
+| Bun | `bun account.ts` | |
 | Edge workers | your platform's tool | No environment variables: pass the credentials, as below. |
 
 Where there is no `process.env` (Cloudflare Workers, other edge runtimes), give the
@@ -115,8 +130,8 @@ Older TypeScript versions refuse `require` of an ES module (error TS1479).
 
 ## 2. Your first program
 
-This prints the details of your account: `GET /v1/me`. Copy it, set your credentials,
-run it.
+This prints the details of your account. It is [examples/account.ts](examples/account.ts):
+copy it, set your credentials, run it.
 
 ```ts
 import { Client } from "@ovhcloud/sdk";
@@ -132,7 +147,7 @@ console.log("country:", account.country);
 ```shell
 export OVH_CLIENT_ID=...  OVH_CLIENT_SECRET=...
 export OVH_REGION=eu    # eu (default), ca or us
-node first.ts           # Node.js 22.18 or later runs TypeScript as it is
+node account.ts         # Node.js 22.18 or later runs TypeScript as it is
 ```
 
 More examples: [examples/](examples/README.md).
@@ -163,19 +178,16 @@ This SDK is not [node-ovh](https://github.com/ovh/node-ovh) (`npm install ovh`,
   create one.
 - **Region:** `OVH_REGION=eu`, `ca` or `us`, instead of the endpoint `ovh-eu`, `ovh-ca` or
   `ovh-us`.
-- **Paths** start with their API version: `/v1/me`, not `/me` or `/1.0/me`. A path without
-  `/v1/` or `/v2/` is refused with `InvalidRequestError`, with a hint:
-  `did you mean /v1/me?`.
-- **Typed methods** replace most raw calls. `client.get` still exists for a route with no
-  method yet. A body is the second argument: `client.post(path, body)`.
+- **Typed methods** replace the raw calls: each API call has its own method, with typed
+  arguments and a typed result. `GET /me` is `client.me.getAccountDetails()`.
 - **Errors** are classes: `instanceof NotFoundError`, not a check of `err.error === 404`.
 
 | node-ovh | This SDK |
 |---|---|
 | `require("ovh")({ endpoint: "ovh-eu", appKey, appSecret, consumerKey })` | `new Client({ region: "eu", clientId, clientSecret })` |
-| `await ovh.requestPromised("GET", "/me")` | `await client.me.getAccountDetails()`, or `await client.get("/v1/me")` |
+| `await ovh.requestPromised("GET", "/me")` | `await client.me.getAccountDetails()` |
 | `await ovh.requestPromised("GET", "/me/sshKey")` | `await client.me.listSshKeys()` |
-| `await ovh.requestPromised("POST", "/me/contact", { email })` | `await client.post("/v1/me/contact", { email })` |
+| `await ovh.requestPromised("POST", "/me/contact", contact)` | `await client.me.createContact(contact)` |
 | `ovh.request("GET", "/me", (err, me) => ...)` | `await`: every method returns a Promise |
 | an error with `error: 404` | `NotFoundError`, an `ApiError` with `status` 404 |
 
@@ -871,8 +883,9 @@ it to 22.12 or later, which the package requires.
 **Deno: `no credentials`, or a permission prompt**: add `--allow-env` and `--allow-net` (see
 [Run it](#run-it)).
 
-**`path "/me": it must start with the API version`** (`InvalidRequestError`): raw call paths
-take their version, as the hint says: `/v1/me`.
+**`path "/me": it must start with the API version`** (`InvalidRequestError`): a raw call (see
+[Calling any endpoint](#8-calling-any-endpoint)) takes the path with its version, as the hint
+says. Better: call the method of the route.
 
 **`Array.fromAsync` does not exist in my types**: set `"lib": ["esnext"]` in your
 `tsconfig.json`, or add `"esnext.array"` to your lib list. TypeScript declares it only there.

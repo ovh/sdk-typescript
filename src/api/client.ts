@@ -108,7 +108,7 @@ export const registry: Registry = new Registry(SECTIONS);
  * import { Client } from "@ovhcloud/sdk";
  *
  * const client = new Client();
- * console.log(await client.me.getMe());
+ * console.log(await client.me.getAccountDetails());
  * ```
  */
 export class Client extends CoreClient {

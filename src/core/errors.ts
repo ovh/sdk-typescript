@@ -291,7 +291,7 @@ export class HookRefusedError extends OvhError {
  *
  * ```ts
  * try {
- *   await client.post("/v1/me/contact", { email: "ops@example.com" });
+ *   await client.vrack.createCloudProject("pn-1", { project: "0123456789abcdef" });
  * } catch (err) {
  *   if (err instanceof DryRunError) {
  *     console.log(err.method, err.url, err.body);

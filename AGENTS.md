@@ -9,12 +9,8 @@ Notes for AI coding agents that write code with this SDK, or work in this reposi
 - Credentials are an OAuth2 service account (`OVH_CLIENT_ID`, `OVH_CLIENT_SECRET`,
   `OVH_REGION`). No application key, application secret or consumer key (`appKey`,
   `appSecret`, `consumerKey`).
-- Prefer the typed method: `await client.me.getAccountDetails()`. For a raw call, paths take
-  their version: node-ovh's `requestPromised("GET", "/me")` is `client.get("/v1/me")`. A path
-  without `/v1/` or `/v2/` (`/me`, `/1.0/me`) throws `InvalidRequestError`, with the path to
-  use.
-- A raw body is the second argument of `client.post(path, body)`, `put` and `patch`. With
-  `client.request(method, path, options)`, the body goes in `options.body`.
+- Each API call has its own typed method: node-ovh's `requestPromised("GET", "/me")` is
+  `await client.me.getAccountDetails()`. Find the method of a route in the index (below).
 
 ## Find the right method
 

@@ -10,7 +10,7 @@ comment first: it lists the environment variables it needs.
 | [create-and-wait.ts](create-and-wait.ts) | create a Public Cloud network, `waitReady`, delete it, `waitGone` | yes |
 | [dns-record.ts](dns-record.ts) | create a DNS record, then refresh the zone | yes |
 | [cart-order.ts](cart-order.ts) | order with a cart: add a domain, read the price, stop before payment | no order is placed |
-| [raw-call.ts](raw-call.ts) | a raw call with `path()` and a type for the result | no |
+| [raw-call.ts](raw-call.ts) | a route with no method yet: a raw call with `path()` and a type for the result | no |
 | [errors.ts](errors.ts) | `instanceof NotFoundError`, `ForbiddenError`, `ApiError` | no |
 | [vrack.ts](vrack.ts) | every vRack, with the Public Cloud projects in it | no |
 
